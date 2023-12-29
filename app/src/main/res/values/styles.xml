@@ -7,4 +7,9 @@
         <item name="android:textColor">#27713C</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#27713C</item>
+        <item name="colorPrimaryDark">#27713C</item>
+    </style>
+
 </resources>
