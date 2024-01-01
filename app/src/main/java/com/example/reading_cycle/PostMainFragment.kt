@@ -18,11 +18,11 @@ class PostMainFragment : Fragment() {
     ): View? {
         fragmentPostMainBinding = FragmentPostMainBinding.inflate(inflater)
         // 타이틀 아이콘 작업
-        val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_recycling_title_40)
-        fragmentPostMainBinding.toolbarTitle.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
-        fragmentPostMainBinding.toolbarTitle.compoundDrawablePadding = resources.getDimensionPixelSize(R.dimen.icon_text_padding)
+        val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
+        fragmentPostMainBinding.toolbarTitlePostMain.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
+        fragmentPostMainBinding.toolbarTitlePostMain.compoundDrawablePadding = resources.getDimensionPixelSize(R.dimen.icon_text_padding)
         // 텍스트 설정
-        fragmentPostMainBinding.toolbarTitle.text = "Reading\nCycle"
+        fragmentPostMainBinding.toolbarTitlePostMain.text = "Reading\nCycle"
 
 
         return fragmentPostMainBinding.root

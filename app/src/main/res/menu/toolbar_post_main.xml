@@ -7,7 +7,7 @@
         android:id="@+id/postMenuItemNotify"
         android:icon="@drawable/baseline_notifications_none_40"
         android:title="알림"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/postMenuItemSearch"

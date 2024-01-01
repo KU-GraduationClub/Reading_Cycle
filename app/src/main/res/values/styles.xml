@@ -8,8 +8,8 @@
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">#27713C</item>
-        <item name="colorPrimaryDark">#27713C</item>
+        <item name="colorPrimary">#618F6E</item>
+        <item name="colorPrimaryDark">#618F6E</item>
     </style>
 
 </resources>
