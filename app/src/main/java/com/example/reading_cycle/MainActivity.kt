@@ -11,6 +11,10 @@ class MainActivity : AppCompatActivity() {
     var oldFragment: Fragment? = null
     companion object{
         val POST_MAIN_FRAGMENT = "PostMainFragment"
+        val ADD_SALE_POST_FRAGMENT = "AddSalePostFragment"
+        val ADD_SWAP_POST_FRAGMENT = "AddSwapPostFragment"
+        val SALE_POST_FRAGMENT = "SalePostFragment"
+        val SWAP_POST_FRAGMENT = "SwapPostFragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(POST_MAIN_FRAGMENT, false, null)
+        replaceFragment(ADD_SWAP_POST_FRAGMENT, false, null)
     }
 
         fun replaceFragment(name:String, addToBackStack:Boolean, bundle:Bundle? = null) {
@@ -38,6 +42,10 @@ class MainActivity : AppCompatActivity() {
             // 새로운 Fragment를 담을 변수
             newFragment = when(name){
                 POST_MAIN_FRAGMENT -> PostMainFragment()
+                ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
+                ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
+                SALE_POST_FRAGMENT -> SalePostFragment()
+                SWAP_POST_FRAGMENT -> SwapPostFragment()
                 else -> Fragment()
             }
 
