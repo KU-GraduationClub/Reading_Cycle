@@ -16,7 +16,7 @@ class AddSalePostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        fragmentAddSalePostBinding = FragmentAddSalePostBinding.inflate(inflater)
 
         return fragmentAddSalePostBinding.root
     }

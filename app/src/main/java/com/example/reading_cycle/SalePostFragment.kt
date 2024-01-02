@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.reading_cycle.databinding.FragmentAddSalePostBinding
+import com.example.reading_cycle.databinding.FragmentAddSwapPostBinding
 import com.example.reading_cycle.databinding.FragmentSalePostBinding
 
 class SalePostFragment : Fragment() {
@@ -16,7 +17,7 @@ class SalePostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        fragmentSalePostBinding = FragmentSalePostBinding.inflate(inflater)
 
         return fragmentSalePostBinding.root
     }

@@ -16,7 +16,7 @@ class SwapPostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        fragmentSwapPostBinding = FragmentSwapPostBinding.inflate(inflater)
 
         return fragmentSwapPostBinding.root
     }
