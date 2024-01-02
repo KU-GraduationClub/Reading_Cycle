@@ -5,14 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.reading_cycle.databinding.FragmentSalePostBinding
+import com.example.reading_cycle.databinding.FragmentSwapPostBinding
 
 class SwapPostFragment : Fragment() {
+
+    private lateinit var fragmentSwapPostBinding: FragmentSwapPostBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_swap_post, container, false)
+
+
+        return fragmentSwapPostBinding.root
     }
 }
