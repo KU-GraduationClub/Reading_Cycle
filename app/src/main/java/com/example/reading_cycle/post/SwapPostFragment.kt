@@ -1,4 +1,4 @@
-package com.example.reading_cycle
+package com.example.reading_cycle.post
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import com.example.reading_cycle.databinding.FragmentSalePostBinding
+import com.example.reading_cycle.MainActivity
+import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentSwapPostBinding
 
 class SwapPostFragment : Fragment() {
@@ -28,9 +29,13 @@ class SwapPostFragment : Fragment() {
         }
 
         // 타이틀 아이콘 및 텍스트 설정
-        val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_currency_exchange_40_red)
+        val iconDrawable = ContextCompat.getDrawable(requireContext(),
+            R.drawable.baseline_currency_exchange_40_red
+        )
         fragmentSwapPostBinding.toolbarTitleSwapPost.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
-        fragmentSwapPostBinding.toolbarTitleSwapPost.compoundDrawablePadding = resources.getDimensionPixelSize(R.dimen.icon_text_padding)
+        fragmentSwapPostBinding.toolbarTitleSwapPost.compoundDrawablePadding = resources.getDimensionPixelSize(
+            R.dimen.icon_text_padding
+        )
         fragmentSwapPostBinding.toolbarTitleSwapPost.text = "도서 판매"
 
         return fragmentSwapPostBinding.root
