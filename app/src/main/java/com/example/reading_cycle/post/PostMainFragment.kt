@@ -18,6 +18,7 @@ class PostMainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         fragmentPostMainBinding = FragmentPostMainBinding.inflate(inflater)
+
         // 타이틀 아이콘 작업
         val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
         fragmentPostMainBinding.toolbarTitlePostMain.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
@@ -26,7 +27,6 @@ class PostMainFragment : Fragment() {
         )
         // 텍스트 설정
         fragmentPostMainBinding.toolbarTitlePostMain.text = "Reading\nCycle"
-
 
         return fragmentPostMainBinding.root
     }
