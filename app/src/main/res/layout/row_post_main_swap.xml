@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="61dp"
+        android:layout_height="89dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="#9A9393"
+        android:elevation="3dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imgRowPostSwap"
+            android:layout_width="60dp"
+            android:layout_height="88dp"
+            android:background="#FFFFFF"
+            app:srcCompat="@drawable/baseline_image_24" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/editTextBookTitle"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="책 제목"
+        android:textColor="#000000"
+        android:textSize="15dp"
+        app:layout_constraintStart_toEndOf="@+id/frameLayout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewRowPostSwap1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="작가_"
+        android:textColor="#000000"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/frameLayout"
+        app:layout_constraintTop_toBottomOf="@+id/editTextBookTitle" />
+
+    <TextView
+        android:id="@+id/editTextBookWriter"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="작가 이름"
+        android:textColor="#000000"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/textViewRowPostSwap1"
+        app:layout_constraintTop_toBottomOf="@+id/editTextBookTitle" />
+
+    <Button
+        android:id="@+id/btnPostMainCate1"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:backgroundTint="#BA7525"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:padding="1dp"
+        android:text="도서 종류"
+        android:textColor="#F9FBF4"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/frameLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwap1" />
+
+    <Button
+        android:id="@+id/btnPostMainCate"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:backgroundTint="#5A69EF"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:padding="1dp"
+        android:text="도서 종류"
+        android:textColor="#F9FBF4"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/editTextBookWriter" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        app:layout_constraintStart_toEndOf="@+id/btnPostMainCate1"
+        app:layout_constraintTop_toBottomOf="@+id/editTextBookWriter"
+        app:srcCompat="@drawable/baseline_sync_40_blue" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
