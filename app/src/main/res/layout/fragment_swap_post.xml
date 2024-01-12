@@ -23,7 +23,7 @@
             android:background="@color/background"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-            app:layout_constraintEnd_toEndOf="@id/divider"
+            app:layout_constraintEnd_toEndOf="@id/dividerPostMain1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/toolbar_post"
@@ -45,7 +45,7 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/divider"
+            android:id="@+id/dividerPostMain1"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="#27713C" />

@@ -18,7 +18,6 @@ class PostMainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         fragmentPostMainBinding = FragmentPostMainBinding.inflate(inflater)
-
         // 타이틀 아이콘 작업
         val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
         fragmentPostMainBinding.toolbarTitlePostMain.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)

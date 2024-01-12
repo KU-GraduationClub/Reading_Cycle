@@ -42,7 +42,7 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/divider"
+            android:id="@+id/dividerPostMain1"
             android:layout_width="wrap_content"
             android:layout_height="2dp"
             android:layout_marginTop="0dp"
@@ -60,13 +60,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <HorizontalScrollView
+            android:id="@+id/ScrollViewPostMain1"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginTop="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -224,7 +226,45 @@
 
             </LinearLayout>
         </HorizontalScrollView>
+
+        <ImageView
+            android:id="@+id/iconSortPostMain"
+            android:layout_width="20dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="1dp"
+            android:src="@drawable/round_arrow_downward_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ScrollViewPostMain1" />
+
+        <TextView
+            android:id="@+id/textSortPostMain"
+            android:layout_width="30dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:gravity="center"
+            android:text="정렬"
+            android:textColor="#000000"
+            android:textSize="14dp"
+            app:layout_constraintStart_toEndOf="@+id/iconSortPostMain"
+            app:layout_constraintTop_toBottomOf="@+id/ScrollViewPostMain1" />
+
+        <View
+            android:id="@+id/dividerPostMain2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="10dp"
+            android:background="#9A9393"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ScrollViewPostMain1" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
