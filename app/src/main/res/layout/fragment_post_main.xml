@@ -237,17 +237,40 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ScrollViewPostMain1" />
 
+        <ImageView
+            android:id="@+id/iconSortPostMain2"
+            android:layout_width="20dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/outline_location_on_40"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ScrollViewPostMain1" />
+
         <TextView
             android:id="@+id/textSortPostMain"
-            android:layout_width="30dp"
+            android:layout_width="60dp"
             android:layout_height="23dp"
             android:layout_marginTop="1dp"
             android:fontFamily="@font/soyo_maple_regular"
-            android:gravity="center"
-            android:text="정렬"
+            android:gravity="center|left"
+            android:text="최신 순"
             android:textColor="#000000"
             android:textSize="14dp"
             app:layout_constraintStart_toEndOf="@+id/iconSortPostMain"
+            app:layout_constraintTop_toBottomOf="@+id/ScrollViewPostMain1" />
+
+        <TextView
+            android:id="@+id/textLocationPostMain"
+            android:layout_width="200dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:gravity="center|right"
+            android:text="위치"
+            android:textColor="#000000"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/iconSortPostMain2"
             app:layout_constraintTop_toBottomOf="@+id/ScrollViewPostMain1" />
 
         <View
@@ -259,6 +282,14 @@
             android:layout_marginEnd="10dp"
             android:background="#9A9393"
             android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ScrollViewPostMain1" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="85dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ScrollViewPostMain1" />
