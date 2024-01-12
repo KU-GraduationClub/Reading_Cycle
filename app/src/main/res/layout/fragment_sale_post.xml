@@ -23,7 +23,7 @@
             android:background="@color/background"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-            app:layout_constraintEnd_toEndOf="@id/dividerPostMain1"
+            app:layout_constraintEnd_toEndOf="@id/dividerPostMain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/toolbar_post"
@@ -33,19 +33,19 @@
                 android:id="@+id/toolbarTitleSalePost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
                 android:fontFamily="@font/soyo_maple_bold"
                 android:gravity="center"
+                android:layout_marginTop="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#152BF9"
-                tools:fontFamily="@font/soyo_maple_bold" />
+                android:textColor="#DE2222"
+                tools:fontFamily="@font/soyo_maple_bold"
+                android:layout_gravity="center"/>
 
 
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/dividerPostMain1"
+            android:id="@+id/dividerPostMain"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="#27713C" />

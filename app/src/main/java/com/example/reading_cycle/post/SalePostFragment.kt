@@ -30,13 +30,13 @@ class SalePostFragment : Fragment() {
 
         // 타이틀 아이콘 및 텍스트 설정
         val iconDrawable = ContextCompat.getDrawable(requireContext(),
-            R.drawable.baseline_sync_40_blue
+            R.drawable.baseline_currency_exchange_40_red
         )
         fragmentSalePostBinding.toolbarTitleSalePost.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
         fragmentSalePostBinding.toolbarTitleSalePost.compoundDrawablePadding = resources.getDimensionPixelSize(
             R.dimen.icon_text_padding
         )
-        fragmentSalePostBinding.toolbarTitleSalePost.text = "도서 교환"
+        fragmentSalePostBinding.toolbarTitleSalePost.text = "도서 판매"
 
         return fragmentSalePostBinding.root
     }

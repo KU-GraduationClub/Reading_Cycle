@@ -42,7 +42,7 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/dividerPostMain1"
+            android:id="@+id/dividerPostMain"
             android:layout_width="wrap_content"
             android:layout_height="2dp"
             android:layout_marginTop="0dp"

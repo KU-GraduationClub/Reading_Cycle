@@ -30,13 +30,13 @@ class SwapPostFragment : Fragment() {
 
         // 타이틀 아이콘 및 텍스트 설정
         val iconDrawable = ContextCompat.getDrawable(requireContext(),
-            R.drawable.baseline_currency_exchange_40_red
+            R.drawable.baseline_sync_40_blue
         )
         fragmentSwapPostBinding.toolbarTitleSwapPost.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
         fragmentSwapPostBinding.toolbarTitleSwapPost.compoundDrawablePadding = resources.getDimensionPixelSize(
             R.dimen.icon_text_padding
         )
-        fragmentSwapPostBinding.toolbarTitleSwapPost.text = "도서 판매"
+        fragmentSwapPostBinding.toolbarTitleSwapPost.text = "도서 교환"
 
         return fragmentSwapPostBinding.root
     }
