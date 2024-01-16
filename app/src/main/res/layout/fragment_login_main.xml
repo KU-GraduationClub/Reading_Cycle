@@ -10,7 +10,7 @@
 
 
     <EditText
-        android:id="@+id/type_password"
+        android:id="@+id/typePW"
         android:layout_width="350dp"
         android:layout_height="40dp"
         android:layout_marginTop="140dp"
@@ -26,10 +26,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_title" />
+        app:layout_constraintTop_toBottomOf="@+id/appTitle" />
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/loginBtn"
         android:layout_width="200dp"
         android:layout_height="55dp"
         android:layout_marginTop="32dp"
@@ -44,11 +44,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/type_password"
+        app:layout_constraintTop_toBottomOf="@+id/typePW"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/app_title"
+        android:id="@+id/appTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
@@ -59,11 +59,11 @@
         android:textColor="#27713C"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/app_logo"
+        app:layout_constraintStart_toEndOf="@+id/appLogo"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/type_email"
+        android:id="@+id/typeEMAIL"
         android:layout_width="350dp"
         android:layout_height="40dp"
         android:layout_marginTop="80dp"
@@ -79,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_title" />
+        app:layout_constraintTop_toBottomOf="@+id/appTitle" />
 
     <TextView
         android:id="@+id/subTitle"
@@ -96,10 +96,10 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_title" />
+        app:layout_constraintTop_toBottomOf="@+id/appTitle" />
 
     <Button
-        android:id="@+id/register"
+        android:id="@+id/registerBtn"
         android:layout_width="74dp"
         android:layout_height="43dp"
         android:layout_marginStart="105dp"
@@ -110,14 +110,14 @@
         android:fontFamily="@font/soyo_maple_regular"
         android:text="회원가입"
         android:textColor="#000000"
-        android:textSize="12sp"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/vertical_bar"
+        app:layout_constraintEnd_toStartOf="@+id/verticalBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login" />
+        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
     <Button
-        android:id="@+id/password_find"
+        android:id="@+id/searchPWBtn"
         android:layout_width="97dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
@@ -128,14 +128,14 @@
         android:fontFamily="@font/soyo_maple_regular"
         android:text="비밀번호 찾기"
         android:textColor="#000000"
-        android:textSize="12sp"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/vertical_bar"
-        app:layout_constraintTop_toBottomOf="@+id/login" />
+        app:layout_constraintStart_toEndOf="@+id/verticalBar"
+        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
     <View
-        android:id="@+id/vertical_bar"
+        android:id="@+id/verticalBar"
         android:layout_width="1dp"
         android:layout_height="20dp"
         android:layout_centerInParent="true"
@@ -145,47 +145,47 @@
         android:layout_marginBottom="253dp"
         android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/password_find"
-        app:layout_constraintStart_toEndOf="@+id/register"
+        app:layout_constraintEnd_toStartOf="@+id/searchPWBtn"
+        app:layout_constraintStart_toEndOf="@+id/registerBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/app_logo"
+        android:id="@+id/appLogo"
         android:layout_width="59dp"
         android:layout_height="56dp"
         android:layout_marginStart="58dp"
         android:layout_marginTop="112dp"
         android:src="@drawable/baseline_sync_24"
         app:tint="#27713C"
-        app:layout_constraintEnd_toStartOf="@+id/app_title"
+        app:layout_constraintEnd_toStartOf="@+id/appTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/view_email"
+        android:id="@+id/visibleEMAIL"
         android:layout_width="30dp"
         android:layout_height="40dp"
         android:layout_marginStart="310dp"
-        app:layout_constraintBottom_toBottomOf="@id/type_email"
-        app:layout_constraintEnd_toEndOf="@id/type_email"
+        app:layout_constraintBottom_toBottomOf="@id/typeEMAIL"
+        app:layout_constraintEnd_toEndOf="@id/typeEMAIL"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/type_email"
-        app:layout_constraintStart_toStartOf="@id/type_email"
-        app:layout_constraintTop_toTopOf="@id/type_email"
+        app:layout_constraintStart_toEndOf="@+id/typeEMAIL"
+        app:layout_constraintStart_toStartOf="@id/typeEMAIL"
+        app:layout_constraintTop_toTopOf="@id/typeEMAIL"
         app:srcCompat="@drawable/baseline_visibility_40"
         app:tint="#6A3F0D" />
 
     <ImageView
-        android:id="@+id/view_password3"
+        android:id="@+id/visiblePW"
         android:layout_width="30dp"
         android:layout_height="40dp"
         android:layout_marginStart="310dp"
-        app:layout_constraintBottom_toBottomOf="@id/type_password"
-        app:layout_constraintEnd_toEndOf="@id/type_password"
+        app:layout_constraintBottom_toBottomOf="@id/typePW"
+        app:layout_constraintEnd_toEndOf="@id/typePW"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/type_password"
-        app:layout_constraintStart_toStartOf="@id/type_password"
-        app:layout_constraintTop_toTopOf="@id/type_password"
+        app:layout_constraintStart_toEndOf="@+id/typePW"
+        app:layout_constraintStart_toStartOf="@id/typePW"
+        app:layout_constraintTop_toTopOf="@id/typePW"
         app:srcCompat="@drawable/baseline_visibility_40"
         app:tint="#6A3F0D" />
 
