@@ -17,19 +17,19 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imgRowPostSwap"
+            android:id="@+id/imgBookRowPostSwap"
             android:layout_width="60dp"
             android:layout_height="88dp"
-            android:background="#FFFFFF"
+            android:background="@color/white"
             app:srcCompat="@drawable/baseline_image_24" />
 
     </FrameLayout>
 
     <TextView
-        android:id="@+id/editTextBookTitle"
-        android:layout_width="200dp"
+        android:id="@+id/textViewRowPostSwapTitle"
+        android:layout_width="190dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/soyo_maple_regular"
         android:text="책 제목"
@@ -42,17 +42,17 @@
         android:id="@+id/textViewRowPostSwap1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/soyo_maple_regular"
         android:text="작가_"
         android:textColor="#000000"
         android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
-        app:layout_constraintTop_toBottomOf="@+id/editTextBookTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwapTitle" />
 
     <TextView
-        android:id="@+id/editTextBookWriter"
+        android:id="@+id/textViewRowPostSwapWriter"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
@@ -62,30 +62,30 @@
         android:textColor="#000000"
         android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@+id/textViewRowPostSwap1"
-        app:layout_constraintTop_toBottomOf="@+id/editTextBookTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwapTitle" />
 
     <Button
-        android:id="@+id/btnPostMainCate1"
+        android:id="@+id/btnRowPostMainSwap1"
         android:layout_width="80dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="21dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="17dp"
         android:layout_marginTop="7dp"
         android:layout_weight="1"
-        android:backgroundTint="#BA7525"
+        android:backgroundTint="#9E6320"
         android:clickable="false"
         android:fontFamily="@font/soyo_maple_regular"
         android:padding="1dp"
         android:text="도서 종류"
-        android:textColor="#F9FBF4"
+        android:textColor="#FFFFFF"
         android:textSize="10dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
         app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwap1" />
 
     <Button
-        android:id="@+id/btnPostMainCate"
+        android:id="@+id/btnRowPostMainSwap2"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="43dp"
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:backgroundTint="#5A69EF"
@@ -93,19 +93,19 @@
         android:fontFamily="@font/soyo_maple_regular"
         android:padding="1dp"
         android:text="도서 종류"
-        android:textColor="#F9FBF4"
+        android:textColor="#FFFFFF"
         android:textSize="10dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/editTextBookWriter" />
+        app:layout_constraintStart_toEndOf="@+id/imgRowPostMainSwap"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwapWriter" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imgRowPostMainSwap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        app:layout_constraintStart_toEndOf="@+id/btnPostMainCate1"
-        app:layout_constraintTop_toBottomOf="@+id/editTextBookWriter"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/btnRowPostMainSwap1"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwapWriter"
         app:srcCompat="@drawable/baseline_sync_40_blue" />
 
     <View
@@ -120,5 +120,87 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/BorderRowPostMain1"
+        android:layout_width="95dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/border_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewRowPostSwap2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="도서 정가"
+        android:textColor="#000000"
+        android:textSize="8dp"
+        app:layout_constraintStart_toStartOf="@+id/BorderRowPostMain1"
+        app:layout_constraintTop_toTopOf="@+id/BorderRowPostMain1" />
+
+    <TextView
+        android:id="@+id/textViewRowPostSwapPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="0"
+        android:textColor="#000000"
+        android:textSize="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/BorderRowPostMain1"
+        app:layout_constraintTop_toTopOf="@+id/BorderRowPostMain1" />
+
+    <TextView
+        android:id="@+id/textViewRowPostSwap3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="도서 상태"
+        android:textColor="#000000"
+        android:textSize="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/BorderRowPostMain1"
+        app:layout_constraintStart_toStartOf="@+id/BorderRowPostMain1" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/BorderRowPostMain1"
+        app:layout_constraintEnd_toStartOf="@+id/textViewRowPostSwapState"
+        app:srcCompat="@drawable/baseline_sentiment_neutral_24" />
+
+    <TextView
+        android:id="@+id/textViewRowPostSwapState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="상태"
+        android:textColor="#000000"
+        android:textSize="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/BorderRowPostMain1"
+        app:layout_constraintEnd_toEndOf="@+id/BorderRowPostMain1" />
+
+    <View
+        android:id="@+id/BorderRowPostMain2"
+        android:layout_width="95dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/border_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BorderRowPostMain1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
