@@ -80,7 +80,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <Button
-                    android:id="@+id/btnRowPostMainSwap1"
+                    android:id="@+id/btnRowPostMainSwapType1"
                     android:layout_width="95dp"
                     android:layout_height="45dp"
                     android:layout_marginLeft="8.5dp"

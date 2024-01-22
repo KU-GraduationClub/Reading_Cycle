@@ -26,7 +26,7 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/textViewRowPostSwapTitle"
+        android:id="@+id/textrowPostSwapTitle"
         android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewRowPostSwap1"
+        android:id="@+id/textRowPostSwap1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -49,10 +49,10 @@
         android:textColor="#000000"
         android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwapTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textrowPostSwapTitle" />
 
     <TextView
-        android:id="@+id/textViewRowPostSwapWriter"
+        android:id="@+id/textRowPostSwapWriter"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
@@ -61,11 +61,11 @@
         android:text="작가 이름"
         android:textColor="#000000"
         android:textSize="12dp"
-        app:layout_constraintStart_toEndOf="@+id/textViewRowPostSwap1"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwapTitle" />
+        app:layout_constraintStart_toEndOf="@+id/textRowPostSwap1"
+        app:layout_constraintTop_toBottomOf="@+id/textrowPostSwapTitle" />
 
     <Button
-        android:id="@+id/btnRowPostMainSwap1"
+        android:id="@+id/btnRowPostMainSwapType1"
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="17dp"
@@ -80,10 +80,10 @@
         android:textSize="10dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwap1" />
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwap1" />
 
     <Button
-        android:id="@+id/btnRowPostMainSwap2"
+        android:id="@+id/btnRowPostMainSwapType2"
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginTop="7dp"
@@ -96,43 +96,30 @@
         android:textColor="#FFFFFF"
         android:textSize="10dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imgRowPostMainSwap"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwapWriter" />
+        app:layout_constraintStart_toEndOf="@+id/imgRowPostMainSwapType"
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapWriter" />
 
     <ImageView
-        android:id="@+id/imgRowPostMainSwap"
+        android:id="@+id/imgRowPostMainSwapType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/btnRowPostMainSwap1"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRowPostSwapWriter"
+        app:layout_constraintStart_toEndOf="@+id/btnRowPostMainSwapType1"
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapWriter"
         app:srcCompat="@drawable/baseline_sync_40_blue" />
-
-    <View
-        android:id="@+id/dividerRowPostMain"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="110dp"
-        android:layout_marginEnd="10dp"
-        android:background="#9A9393"
-        android:elevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/BorderRowPostMain1"
         android:layout_width="95dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/border_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewRowPostSwap2"
+        android:id="@+id/textRowPostSwap2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
@@ -141,11 +128,12 @@
         android:text="도서 정가"
         android:textColor="#000000"
         android:textSize="8dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/BorderRowPostMain1"
         app:layout_constraintTop_toTopOf="@+id/BorderRowPostMain1" />
 
     <TextView
-        android:id="@+id/textViewRowPostSwapPrice"
+        android:id="@+id/textRowPostSwapPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -158,7 +146,7 @@
         app:layout_constraintTop_toTopOf="@+id/BorderRowPostMain1" />
 
     <TextView
-        android:id="@+id/textViewRowPostSwap3"
+        android:id="@+id/textRowPostSwap3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
@@ -167,21 +155,22 @@
         android:text="도서 상태"
         android:textColor="#000000"
         android:textSize="8dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/BorderRowPostMain1"
         app:layout_constraintStart_toStartOf="@+id/BorderRowPostMain1" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/imgRowPostSwapState"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/BorderRowPostMain1"
-        app:layout_constraintEnd_toStartOf="@+id/textViewRowPostSwapState"
+        app:layout_constraintEnd_toStartOf="@+id/textRowPostSwapState"
         app:srcCompat="@drawable/baseline_sentiment_neutral_24" />
 
     <TextView
-        android:id="@+id/textViewRowPostSwapState"
+        android:id="@+id/textRowPostSwapState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
@@ -196,11 +185,64 @@
     <View
         android:id="@+id/BorderRowPostMain2"
         android:layout_width="95dp"
-        android:layout_height="40dp"
+        android:layout_height="46dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/border_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BorderRowPostMain1" />
+
+    <ImageView
+        android:id="@+id/imgRowPostSwapUser"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="@+id/BorderRowPostMain2"
+        app:layout_constraintTop_toTopOf="@+id/BorderRowPostMain2"
+        app:srcCompat="@drawable/baseline_account_circle_24" />
+
+    <TextView
+        android:id="@+id/textViewRowPostSwapUser"
+        android:layout_width="61dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center|left"
+        android:text="유저 이름"
+        android:textColor="#000000"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@+id/imgRowPostSwapUser"
+        app:layout_constraintTop_toTopOf="@+id/BorderRowPostMain2" />
+
+    <Button
+        android:id="@+id/btnRowPostSwapUser"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:backgroundTint="#CFD1CC"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="님의 라이브러리"
+        android:textColor="#000000"
+        android:textSize="8dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/BorderRowPostMain2"
+        app:layout_constraintEnd_toEndOf="@+id/BorderRowPostMain2"
+        app:layout_constraintStart_toStartOf="@+id/BorderRowPostMain2" />
+
+    <View
+        android:id="@+id/dividerRowPostMain"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginEnd="10dp"
+        android:background="#9A9393"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
