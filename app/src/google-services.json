@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "910747760271",
+    "project_id": "reading-cycle",
+    "storage_bucket": "reading-cycle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910747760271:android:f0258a4512aa7696e1a2fa",
+        "android_client_info": {
+          "package_name": "com.example.reading_cycle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY237V_Mo4yj7PLIDjLxTXD1q4quL8wrQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
