@@ -9,34 +9,68 @@ import com.example.reading_cycle.R
 data class SwapDataClass(val title: String, val author: String)
 data class SaleDataClass(val title: String, val author: String)
 
-class PostMainAdapter(private val swapBookList: List<SwapDataClass>, private val saleList: List<SaleDataClass>) : RecyclerView.Adapter<PostMainAdapter.PostViewHolder>() {
+class PostMainAdapter(private val swapBookList: List<SwapDataClass>, private val saleBookList: List<SaleDataClass>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // 여기에 ViewHolder의 뷰들을 초기화하는 코드를 추가할 수 있습니다.
+    // View Type 상수 정의
+    private val VIEW_TYPE_SWAP = 1
+    private val VIEW_TYPE_SALE = 2
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            VIEW_TYPE_SWAP -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.row_post_main_swap, parent, false)
+                SwapViewHolder(view)
+            }
+            VIEW_TYPE_SALE -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.row_post_main_sale, parent, false)
+                SaleViewHolder(view)
+            }
+            else -> throw IllegalArgumentException("Invalid view type")
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        // ViewHolder를 생성하고 초기화합니다.
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.row_post_main_swap, parent, false)
-        return PostViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        // ViewHolder의 데이터를 설정합니다.
-        when {
-            position < swapBookList.size -> {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder.itemViewType) {
+            VIEW_TYPE_SWAP -> {
                 val swapData = swapBookList[position]
-                // TODO: SwapViewHolder에 데이터 바인딩
+                (holder as SwapViewHolder).bind(swapData)
             }
-            else -> {
-                val saleData = saleList[position - swapBookList.size]
-                // TODO: SaleViewHolder에 데이터 바인딩
+            VIEW_TYPE_SALE -> {
+                val saleData = saleBookList[position - swapBookList.size]
+                (holder as SaleViewHolder).bind(saleData)
             }
+            else -> throw IllegalArgumentException("Invalid view type")
         }
     }
 
     override fun getItemCount(): Int {
-        return swapBookList.size + saleList.size
+        return swapBookList.size + saleBookList.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when {
+            position < swapBookList.size -> VIEW_TYPE_SWAP
+            else -> VIEW_TYPE_SALE
+        }
+    }
+
+    // SwapViewHolder 구현
+    class SwapViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // TODO: SwapViewHolder의 뷰들을 초기화하는 코드를 추가할 수 있습니다.
+
+        fun bind(swapData: SwapDataClass) {
+            // TODO: SwapDataClass 데이터를 뷰에 바인딩하는 코드를 추가할 수 있습니다.
+        }
+    }
+
+    // SaleViewHolder 구현
+    class SaleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // TODO: SaleViewHolder의 뷰들을 초기화하는 코드를 추가할 수 있습니다.
+
+        fun bind(saleData: SaleDataClass) {
+            // TODO: SaleDataClass 데이터를 뷰에 바인딩하는 코드를 추가할 수 있습니다.
+        }
     }
 }
