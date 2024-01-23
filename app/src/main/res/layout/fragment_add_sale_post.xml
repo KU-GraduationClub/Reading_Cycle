@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".post.PostMainFragment"
-    android:transitionGroup="true">
+    android:background="@color/background"
+    android:transitionGroup="true"
+    tools:context=".post.PostMainFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutAddSalePost"
@@ -33,22 +34,24 @@
                 android:id="@+id/toolbarTitleAddSalePost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/soyo_maple_bold"
                 android:gravity="center"
-                android:layout_marginTop="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#DE2222"
-                tools:fontFamily="@font/soyo_maple_bold"
-                android:layout_gravity="center"/>
+                tools:fontFamily="@font/soyo_maple_bold" />
 
 
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/dividerPostMain"
-            android:layout_width="match_parent"
+            android:id="@+id/dividerAddSalePost"
+            android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:background="#27713C" />
+            android:layout_marginTop="0dp"
+            android:background="#27713C"
+            android:elevation="0dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

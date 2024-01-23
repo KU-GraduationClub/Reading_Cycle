@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".post.PostMainFragment"
-    android:transitionGroup="true">
+    android:transitionGroup="true"
+    android:background="@color/background">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutAddSwapPost"
@@ -27,7 +28,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/toolbar_post"
-            app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
+            app:navigationIcon="@drawable/baseline_arrow_back_ios_28"
+            android:elevation="0dp">
 
             <TextView
                 android:id="@+id/toolbarTitleAddSwapPost"
@@ -45,12 +47,24 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/dividerPostMain"
-            android:layout_width="match_parent"
+            android:id="@+id/dividerAddSwapPost"
+            android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:background="#27713C" />
+            android:layout_marginTop="0dp"
+            android:background="#27713C"
+            android:elevation="0dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutAddSwapPost">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
