@@ -26,7 +26,7 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/textrowPostSwapTitle"
+        android:id="@+id/textRowPostSwapTitle"
         android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -49,7 +49,7 @@
         android:textColor="#000000"
         android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
-        app:layout_constraintTop_toBottomOf="@+id/textrowPostSwapTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapTitle" />
 
     <TextView
         android:id="@+id/textRowPostSwapWriter"
@@ -62,10 +62,10 @@
         android:textColor="#000000"
         android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@+id/textRowPostSwap1"
-        app:layout_constraintTop_toBottomOf="@+id/textrowPostSwapTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapTitle" />
 
     <Button
-        android:id="@+id/btnRowPostMainSwapType1"
+        android:id="@+id/btnPostMainCate1"
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="17dp"
@@ -83,7 +83,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSwap1" />
 
     <Button
-        android:id="@+id/btnRowPostMainSwapType2"
+        android:id="@+id/btnRowPostSwapType2"
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginTop="7dp"
@@ -96,15 +96,15 @@
         android:textColor="#FFFFFF"
         android:textSize="10dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imgRowPostMainSwapType"
+        app:layout_constraintStart_toEndOf="@+id/imgRowPostSwapType"
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapWriter" />
 
     <ImageView
-        android:id="@+id/imgRowPostMainSwapType"
+        android:id="@+id/imgRowPostSwapType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/btnRowPostMainSwapType1"
+        app:layout_constraintStart_toEndOf="@+id/btnPostMainCate1"
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapWriter"
         app:srcCompat="@drawable/baseline_sync_40_blue" />
 

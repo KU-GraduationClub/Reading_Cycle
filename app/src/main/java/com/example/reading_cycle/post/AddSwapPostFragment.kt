@@ -38,6 +38,7 @@ class AddSwapPostFragment : Fragment() {
         )
         fragmentAddSwapPostBinding.toolbarTitleAddSwapPost.text = "도서 교환 게시"
 
+
         return fragmentAddSwapPostBinding.root
     }
 }

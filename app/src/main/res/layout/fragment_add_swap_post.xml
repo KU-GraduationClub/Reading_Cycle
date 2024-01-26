@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".post.PostMainFragment"
+    android:background="@color/background"
     android:transitionGroup="true"
-    android:background="@color/background">
+    tools:context=".post.PostMainFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutAddSwapPost"
@@ -22,14 +22,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background"
+            android:elevation="0dp"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
             app:layout_constraintEnd_toEndOf="@id/dividerPostMain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/toolbar_post"
-            app:navigationIcon="@drawable/baseline_arrow_back_ios_28"
-            android:elevation="0dp">
+            app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
 
             <TextView
                 android:id="@+id/toolbarTitleAddSwapPost"
@@ -57,12 +57,93 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ConstraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="57dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayoutAddSwapPost">
+
+        <TextView
+            android:id="@+id/textAddSwapPost1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="13dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:text="이미지"
+            android:textColor="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost1">
+
+            <LinearLayout
+                android:id="@+id/linearImagesAddSwapPost"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <FrameLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/border_background">
+
+                    <ImageView
+                        android:id="@+id/imageViewPlaceholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <View
+            android:id="@+id/dividerAddSwapPost2"
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:background="#413F3F"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+
+        <TextView
+            android:id="@+id/textAddSwapPost2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:text="도서"
+            android:textColor="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dividerAddSwapPost2" />
+
+        <EditText
+            android:id="@+id/edtTitleAddSwapPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

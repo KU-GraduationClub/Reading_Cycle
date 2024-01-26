@@ -26,14 +26,14 @@ class PostMainFragment : Fragment() {
         fragmentPostMainBinding = FragmentPostMainBinding.inflate(inflater)
         // 타이틀 아이콘 작업
         val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
-        fragmentPostMainBinding.toolbarTitlePostMain.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
-        fragmentPostMainBinding.toolbarTitlePostMain.compoundDrawablePadding = resources.getDimensionPixelSize(
+        fragmentPostMainBinding.toolbarPostMainTitle.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
+        fragmentPostMainBinding.toolbarPostMainTitle.compoundDrawablePadding = resources.getDimensionPixelSize(
             R.dimen.icon_text_padding
         )
         // 텍스트 설정
-        fragmentPostMainBinding.toolbarTitlePostMain.text = "Reading\nCycle"
+        fragmentPostMainBinding.toolbarPostMainTitle.text = "Reading\nCycle"
         // 정렬 아이콘 클릭 시 팝업 메뉴 보이기
-        fragmentPostMainBinding.iconSortPostMain.setOnClickListener { view ->
+        fragmentPostMainBinding.iconPostMainSort.setOnClickListener { view ->
             showPopupMenu(view)
         }
 
@@ -104,7 +104,7 @@ class PostMainFragment : Fragment() {
 
     private fun updateSortText(sortText: String) {
         // 정렬 텍스트 업데이트
-        fragmentPostMainBinding.textSortPostMain.text = sortText
+        fragmentPostMainBinding.textPostMainSort.text = sortText
     }
 
     private fun createPostMainAdapter(): PostMainAdapter {
