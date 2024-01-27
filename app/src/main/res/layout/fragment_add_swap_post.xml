@@ -70,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/soyo_maple_regular"
             android:text="이미지"
             android:textColor="#000000"
@@ -97,7 +97,8 @@
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_marginLeft="8dp"
-                    android:background="@drawable/border_background">
+                    android:background="@drawable/border_add_post_edit_img"
+                    android:elevation="3dp">
 
                     <ImageView
                         android:id="@+id/imageViewPlaceholder"
@@ -113,11 +114,13 @@
 
         <View
             android:id="@+id/dividerAddSwapPost2"
-            android:layout_width="wrap_content"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="5dp"
-            android:background="#413F3F"
-            android:elevation="0dp"
+            android:layout_width="400dp"
+            android:layout_height="1.3dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="5dp"
+            android:background="#999999"
+            android:elevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
@@ -127,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/soyo_maple_regular"
             android:text="도서"
             android:textColor="#000000"
@@ -135,15 +138,54 @@
             app:layout_constraintTop_toBottomOf="@+id/dividerAddSwapPost2" />
 
         <EditText
-            android:id="@+id/edtTitleAddSwapPost"
+            android:id="@+id/edtAddSwapPostTitle"
+            android:layout_width="388dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="13dp"
+            android:background="@drawable/border_add_post_edit_text"
+            android:elevation="2dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:hint="도서 제목을 입력해주세요"
+            android:inputType="text"
+            android:padding="5dp"
+            android:paddingStart="6dp"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost2" />
+
+        <TextView
+            android:id="@+id/textAddSwapPost3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
-            android:ems="10"
-            android:inputType="text"
-            android:text="Name"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:text="작가"
+            android:textColor="#000000"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost2" />
+            app:layout_constraintTop_toBottomOf="@+id/edtAddSwapPostTitle" />
+
+        <EditText
+            android:id="@+id/edtAddSwapPostAuthor"
+            android:layout_width="388dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="13dp"
+            android:background="@drawable/border_add_post_edit_text"
+            android:elevation="2dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:hint="작가 이름을 입력해주세요"
+            android:inputType="text"
+            android:padding="5dp"
+            android:paddingStart="6dp"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
