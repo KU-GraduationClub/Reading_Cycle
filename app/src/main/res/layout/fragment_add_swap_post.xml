@@ -74,6 +74,7 @@
             android:fontFamily="@font/soyo_maple_regular"
             android:text="이미지"
             android:textColor="#000000"
+            android:textSize="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -88,7 +89,7 @@
 
             <LinearLayout
                 android:id="@+id/linearImagesAddSwapPost"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:padding="5dp">
@@ -134,6 +135,7 @@
             android:fontFamily="@font/soyo_maple_regular"
             android:text="도서"
             android:textColor="#000000"
+            android:textSize="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dividerAddSwapPost2" />
 
@@ -151,7 +153,7 @@
             android:inputType="text"
             android:padding="5dp"
             android:paddingStart="6dp"
-            android:textSize="14dp"
+            android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost2" />
@@ -161,10 +163,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/soyo_maple_regular"
             android:text="작가"
             android:textColor="#000000"
+            android:textSize="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edtAddSwapPostTitle" />
 
@@ -182,10 +185,36 @@
             android:inputType="text"
             android:padding="5dp"
             android:paddingStart="6dp"
-            android:textSize="14dp"
+            android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost3" />
+
+        <TextView
+            android:id="@+id/textAddSwapPost4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:text="도서 종류"
+            android:textColor="#000000"
+            android:textSize="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtAddSwapPostAuthor" />
+
+        <TextView
+            android:id="@+id/textAddSwapPost5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:text="등록할 도서의 종류를 선택해주세요"
+            android:textColor="#787878"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@+id/textAddSwapPost4"
+            app:layout_constraintTop_toBottomOf="@+id/edtAddSwapPostAuthor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
