@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imgRowPostSalePost"
+            android:id="@+id/imgRowPostSalePoster"
             android:layout_width="60dp"
             android:layout_height="88dp"
             android:background="@color/white"

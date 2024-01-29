@@ -153,6 +153,7 @@
             android:inputType="text"
             android:padding="5dp"
             android:paddingStart="6dp"
+            android:textColorHint="#787878"
             android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -185,6 +186,7 @@
             android:inputType="text"
             android:padding="5dp"
             android:paddingStart="6dp"
+            android:textColorHint="#787878"
             android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -195,7 +197,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/soyo_maple_regular"
             android:text="도서 종류"
             android:textColor="#000000"
@@ -208,13 +210,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/soyo_maple_regular"
             android:text="등록할 도서의 종류를 선택해주세요"
             android:textColor="#787878"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@+id/textAddSwapPost4"
             app:layout_constraintTop_toBottomOf="@+id/edtAddSwapPostAuthor" />
+
+        <FrameLayout
+            android:id="@+id/FrameAddSwapPost1"
+            android:layout_width="148dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost4">
+
+            <Button
+                android:id="@+id/btnAddSwapPostType1"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:backgroundTint="#27713C"
+                android:clickable="false"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:padding="1dp"
+                android:text="소설"
+                android:textColor="#F9FBF4"
+                android:textSize="16dp" />
+
+            <ImageView
+                android:id="@+id/arrowIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                app:srcCompat="@drawable/baseline_keyboard_arrow_down_30" />
+
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
