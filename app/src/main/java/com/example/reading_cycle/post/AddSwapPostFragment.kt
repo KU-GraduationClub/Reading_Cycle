@@ -1,6 +1,7 @@
 package com.example.reading_cycle.post
 
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,10 @@ class AddSwapPostFragment : Fragment() {
 
         // FrameLayout 클릭 이벤트 처리
         fragmentAddSwapPostBinding.FrameAddSwapPost1.setOnClickListener {
+            showBookTypeMenu(it)
+        }
+        // 추가된 FrameLayout 클릭 이벤트 처리
+        fragmentAddSwapPostBinding.FrameAddSwapPost2.setOnClickListener {
             showBookTypeMenu(it)
         }
 
@@ -89,7 +94,6 @@ class AddSwapPostFragment : Fragment() {
             }
             true
         }
-
         // 팝업 메뉴 표시
         popupMenu.show()
     }
