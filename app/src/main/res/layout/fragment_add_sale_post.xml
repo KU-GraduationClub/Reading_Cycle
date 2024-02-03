@@ -268,54 +268,32 @@
                 android:layout_marginStart="13dp"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/soyo_maple_regular"
-                android:text="교환 도서 종류"
+                android:text="도서 판매 가격"
                 android:textColor="#000000"
                 android:textSize="15dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/FrameAddSalePost1" />
 
-            <TextView
-                android:id="@+id/textAddSalePost7"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edtAddSalePostPrice2"
+                android:layout_width="388dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:fontFamily="@font/soyo_maple_regular"
-                android:text="교환할 도서의 종류를 선택해주세요"
-                android:textColor="#787878"
-                android:textSize="12dp"
-                app:layout_constraintBottom_toTopOf="@+id/FrameAddSalePost2"
-                app:layout_constraintStart_toEndOf="@+id/textAddSalePost6" />
-
-            <FrameLayout
-                android:id="@+id/FrameAddSalePost2"
-                android:layout_width="148dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
+                android:layout_marginStart="13dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="13dp"
+                android:background="@drawable/border_add_post_edit_text"
+                android:elevation="2dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:hint="도서 판매가를 입력해주세요"
+                android:inputType="number"
+                android:minLines="1"
+                android:padding="5dp"
+                android:paddingStart="6dp"
+                android:textColorHint="#787878"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textAddSalePost6">
-
-                <Button
-                    android:id="@+id/btnAddSalePostType2"
-                    android:layout_width="120dp"
-                    android:layout_height="48dp"
-                    android:backgroundTint="#5A69EF"
-                    android:clickable="false"
-                    android:elevation="3dp"
-                    android:fontFamily="@font/soyo_maple_regular"
-                    android:padding="1dp"
-                    android:text="소설"
-                    android:textColor="#F9FBF4"
-                    android:textSize="16dp" />
-
-                <ImageView
-                    android:id="@+id/iconAddSalePost2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    app:srcCompat="@drawable/baseline_keyboard_arrow_down_30" />
-
-            </FrameLayout>
+                app:layout_constraintTop_toBottomOf="@+id/textAddSalePost6" />
 
             <TextView
                 android:id="@+id/textAddSalePost8"
@@ -328,7 +306,7 @@
                 android:textColor="#000000"
                 android:textSize="15dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/FrameAddSalePost2" />
+                app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostPrice2" />
 
             <EditText
                 android:id="@+id/edtAddSalePostPrice"
@@ -341,7 +319,7 @@
                 android:elevation="2dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:hint="도서 정가를 입력해주세요"
-                android:inputType="text"
+                android:inputType="number"
                 android:minLines="1"
                 android:padding="5dp"
                 android:paddingStart="6dp"

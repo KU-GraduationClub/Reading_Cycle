@@ -44,7 +44,6 @@ class AddSwapPostFragment : Fragment() {
         fragmentAddSwapPostBinding.FrameAddSwapPost1.setOnClickListener {
             showBookTypeMenu(it)
         }
-        // 추가된 FrameLayout 클릭 이벤트 처리
         fragmentAddSwapPostBinding.FrameAddSwapPost2.setOnClickListener {
             showBookTypeMenu(it)
         }
