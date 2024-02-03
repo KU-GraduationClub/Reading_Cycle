@@ -71,7 +71,6 @@
         tools:context=".post.PostMainFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ConstraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="1dp"
@@ -93,7 +92,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <HorizontalScrollView
-                android:id="@+id/horizontalScrollView"
+                android:id="@+id/ScrollAddSwapPost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -102,7 +101,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost1">
 
                 <LinearLayout
-                    android:id="@+id/linearImagesAddSwapPost"
+                    android:id="@+id/linearAddSwapPostImg"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
@@ -116,7 +115,7 @@
                         android:elevation="3dp">
 
                         <ImageView
-                            android:id="@+id/imageViewPlaceholder"
+                            android:id="@+id/imgAddSwapPost1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerInside"
@@ -138,7 +137,7 @@
                 android:elevation="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+                app:layout_constraintTop_toBottomOf="@+id/ScrollAddSwapPost" />
 
             <TextView
                 android:id="@+id/textAddSwapPost2"
@@ -544,7 +543,7 @@
                     android:layout_gravity="bottom|center"
                     android:layout_marginBottom="5dp"
                     android:fontFamily="@font/soyo_maple_regular"
-                    android:text="좋음"
+                    android:text="매우 좋음"
                     android:textColor="#000000"
                     android:textSize="11dp"
                     app:layout_constraintBottom_toBottomOf="@+id/textAddSwapPost9"
@@ -590,6 +589,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost11" />
 
             <Button
+                android:id="@+id/btnAddSwapPostComplete"
                 android:layout_width="370dp"
                 android:layout_height="63dp"
                 android:layout_marginTop="20dp"
