@@ -1,7 +1,9 @@
+// build.gradle 파일
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt") // 추가
+    id("kotlin-kapt")
 }
 
 android {
@@ -60,6 +62,5 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
     kapt("com.github.bumptech.glide:compiler:4.12.0")
 }
-
 
 
