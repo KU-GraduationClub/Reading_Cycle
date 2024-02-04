@@ -232,6 +232,120 @@
                 app:layout_constraintEnd_toEndOf="@+id/borderPostSwap"
                 app:layout_constraintStart_toStartOf="@+id/borderPostSwap" />
 
+            <FrameLayout
+                android:layout_width="365dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="11dp"
+                android:background="@drawable/border_swap_post"
+                android:clickable="true"
+                android:elevation="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameSwapPost">
+
+                <FrameLayout
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/border_swap_post"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgSwapPostBook1"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_image_24" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="85dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/border_swap_post"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgSwapPostBook2"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_image_24" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="155dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/border_swap_post"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgSwapPostBook3"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_image_24" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="225dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/border_swap_post"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgSwapPostBook4"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_image_24" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="295dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/border_swap_post"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgSwapPostBook5"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_image_24" />
+
+                </FrameLayout>
+            </FrameLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
