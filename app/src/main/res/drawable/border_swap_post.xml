@@ -7,7 +7,7 @@
 
     <!-- Border settings -->
     <stroke
-        android:width="1.5dp"
+        android:width="1.3dp"
         android:color="#27713C"/>
 
 </shape>

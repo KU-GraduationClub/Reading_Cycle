@@ -77,9 +77,9 @@
             <FrameLayout
                 android:id="@+id/frameSwapPost"
                 android:layout_width="120dp"
-                android:layout_height="184dp"
+                android:layout_height="173dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:background="#9A9393"
                 android:elevation="3dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +101,7 @@
                 android:layout_width="215dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="책 제목"
                 android:textColor="#000000"
@@ -136,10 +136,10 @@
 
             <Button
                 android:id="@+id/btnSwapPostCate3"
-                android:layout_width="93dp"
-                android:layout_height="50dp"
+                android:layout_width="90dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="22dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="11dp"
                 android:layout_weight="1"
                 android:backgroundTint="#9E6320"
                 android:clickable="false"
@@ -155,9 +155,9 @@
 
             <Button
                 android:id="@+id/btnSwapPostType4"
-                android:layout_width="93dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="13dp"
+                android:layout_width="90dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="11dp"
                 android:layout_weight="1"
                 android:backgroundTint="#5A69EF"
                 android:clickable="false"
@@ -173,16 +173,16 @@
 
             <ImageView
                 android:id="@+id/imgSwapPostType4"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="15dp"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_marginTop="13dp"
                 android:elevation="2dp"
                 app:layout_constraintStart_toEndOf="@+id/btnSwapPostCate3"
                 app:layout_constraintTop_toBottomOf="@+id/textSwapPostWriter4"
                 app:srcCompat="@drawable/baseline_sync_40_blue" />
 
             <View
-                android:id="@+id/borderPostSwap"
+                android:id="@+id/borderSwapPost"
                 android:layout_width="220dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="27dp"
@@ -192,17 +192,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnSwapPostCate3" />
 
             <ImageView
-                android:id="@+id/imgPostSwapUser"
+                android:id="@+id/imgSwapPostUser"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="3dp"
-                app:layout_constraintStart_toStartOf="@+id/borderPostSwap"
-                app:layout_constraintTop_toTopOf="@+id/borderPostSwap"
+                app:layout_constraintStart_toStartOf="@+id/borderSwapPost"
+                app:layout_constraintTop_toTopOf="@+id/borderSwapPost"
                 app:srcCompat="@drawable/baseline_account_circle_24" />
 
             <TextView
-                android:id="@+id/textPostSwapUser"
+                android:id="@+id/textSwapPostUser"
                 android:layout_width="155dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="3dp"
@@ -212,11 +212,11 @@
                 android:text="유저 이름"
                 android:textColor="#000000"
                 android:textSize="18dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imgPostSwapUser"
-                app:layout_constraintStart_toEndOf="@+id/imgPostSwapUser" />
+                app:layout_constraintBottom_toBottomOf="@+id/imgSwapPostUser"
+                app:layout_constraintStart_toEndOf="@+id/imgSwapPostUser" />
 
             <Button
-                android:id="@+id/btnPostSwapUser"
+                android:id="@+id/btnSwapPostUser"
                 android:layout_width="205dp"
                 android:layout_height="30dp"
                 android:layout_marginBottom="1dp"
@@ -226,17 +226,18 @@
                 android:padding="1dp"
                 android:text="님의 라이브러리"
                 android:textColor="#FFFFFF"
-                android:textSize="14dp"
+                android:textSize="12dp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/borderPostSwap"
-                app:layout_constraintEnd_toEndOf="@+id/borderPostSwap"
-                app:layout_constraintStart_toStartOf="@+id/borderPostSwap" />
+                app:layout_constraintBottom_toBottomOf="@+id/borderSwapPost"
+                app:layout_constraintEnd_toEndOf="@+id/borderSwapPost"
+                app:layout_constraintStart_toStartOf="@+id/borderSwapPost" />
 
             <FrameLayout
+                android:id="@+id/frameLayout4"
                 android:layout_width="365dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="11dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="11dp"
                 android:background="@drawable/border_swap_post"
                 android:clickable="true"
@@ -345,6 +346,130 @@
 
                 </FrameLayout>
             </FrameLayout>
+
+            <TextView
+                android:id="@+id/textSwapPost2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="18dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서 정가"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout4" />
+
+            <TextView
+                android:id="@+id/textSwapPostPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="0"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="@+id/textSwapPost2"
+                app:layout_constraintStart_toEndOf="@+id/textSwapPost2" />
+
+            <TextView
+                android:id="@+id/textSwapPost3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서 상태"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSwapPost2" />
+
+            <FrameLayout
+                android:id="@+id/frameSwapPostEmotion"
+                android:layout_width="80dp"
+                android:layout_height="43dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/border_add_post_gray"
+                android:clickable="true"
+                android:elevation="3dp"
+                app:layout_constraintStart_toEndOf="@+id/textSwapPost3"
+                app:layout_constraintTop_toBottomOf="@+id/textSwapPostPrice">
+
+                <ImageView
+                    android:id="@+id/imgSwapPostEmotion"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center|top"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/baseline_sentiment_neutral_10" />
+
+                <TextView
+                    android:id="@+id/textSwapPostEmotion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="상태"
+                    android:textColor="#000000"
+                    android:textSize="12dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textAddSwapPost9"
+                    app:layout_constraintStart_toEndOf="@+id/textAddSwapPost9" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textSwapPost4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서 설명"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSwapPost3" />
+
+            <TextView
+                android:id="@+id/textSwapPostExplain"
+                android:layout_width="365dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="11dp"
+                android:background="@drawable/border_swap_post"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:padding="10dp"
+                android:text="도서 설명 내용"
+                android:textColor="#000000"
+                android:textSize="13dp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSwapPost4" />
+
+            <Button
+                android:id="@+id/btnSwapPostComplete"
+                android:layout_width="370dp"
+                android:layout_height="63dp"
+                android:layout_marginBottom="18dp"
+                android:backgroundTint="#27713C"
+                android:elevation="3dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:padding="1dp"
+                android:text="작성 완료"
+                android:textColor="#F9FBF4"
+                android:textSize="23dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
