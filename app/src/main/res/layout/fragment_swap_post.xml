@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".post.PostMainFragment"
+    android:background="@color/background"
     android:transitionGroup="true"
-    android:background="@color/background">
+    tools:context=".post.PostMainFragment">
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutSwapPost"
@@ -22,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background"
+            android:elevation="0dp"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
             app:layout_constraintEnd_toEndOf="@id/dividerPostMain"
@@ -46,12 +48,193 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/dividerPostMain"
-            android:layout_width="match_parent"
+            android:id="@+id/dividerSwapPost"
+            android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:background="#27713C" />
+            android:layout_marginTop="0dp"
+            android:background="#27713C"
+            android:elevation="0dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:background="@color/background"
+        android:fillViewport="true"
+        android:nestedScrollingEnabled="true"
+        android:transitionGroup="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutSwapPost"
+        tools:context=".post.PostMainFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/frameSwapPost"
+                android:layout_width="120dp"
+                android:layout_height="184dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:background="#9A9393"
+                android:elevation="3dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@drawable/border_add_post_gray">
+
+                <ImageView
+                    android:id="@+id/imgSwapPostPoster"
+                    android:layout_width="116dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    android:background="@color/white"
+                    app:srcCompat="@drawable/baseline_image_24" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textSwapPostTitle"
+                android:layout_width="215dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="책 제목"
+                android:textColor="#000000"
+                android:textSize="19dp"
+                app:layout_constraintStart_toEndOf="@+id/frameSwapPost"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textSwapPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="작가_"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toEndOf="@+id/frameSwapPost"
+                app:layout_constraintTop_toBottomOf="@+id/textSwapPostTitle" />
+
+            <TextView
+                android:id="@+id/textSwapPostWriter4"
+                android:layout_width="172dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="작가 이름"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textSwapPost"
+                app:layout_constraintStart_toEndOf="@+id/textSwapPost" />
+
+            <Button
+                android:id="@+id/btnSwapPostCate3"
+                android:layout_width="93dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="13dp"
+                android:layout_weight="1"
+                android:backgroundTint="#9E6320"
+                android:clickable="false"
+                android:elevation="4dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:padding="1dp"
+                android:text="도서 종류"
+                android:textColor="#FFFFFF"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/frameSwapPost"
+                app:layout_constraintTop_toBottomOf="@+id/textSwapPostWriter4" />
+
+            <Button
+                android:id="@+id/btnSwapPostType4"
+                android:layout_width="93dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="13dp"
+                android:layout_weight="1"
+                android:backgroundTint="#5A69EF"
+                android:clickable="false"
+                android:elevation="4dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:padding="1dp"
+                android:text="도서 종류"
+                android:textColor="#FFFFFF"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/imgSwapPostType4"
+                app:layout_constraintTop_toBottomOf="@+id/textSwapPostWriter4" />
+
+            <ImageView
+                android:id="@+id/imgSwapPostType4"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="15dp"
+                android:elevation="2dp"
+                app:layout_constraintStart_toEndOf="@+id/btnSwapPostCate3"
+                app:layout_constraintTop_toBottomOf="@+id/textSwapPostWriter4"
+                app:srcCompat="@drawable/baseline_sync_40_blue" />
+
+            <View
+                android:id="@+id/borderPostSwap"
+                android:layout_width="220dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="27dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/border_post_main"
+                app:layout_constraintStart_toEndOf="@+id/frameSwapPost"
+                app:layout_constraintTop_toBottomOf="@+id/btnSwapPostCate3" />
+
+            <ImageView
+                android:id="@+id/imgPostSwapUser"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="3dp"
+                app:layout_constraintStart_toStartOf="@+id/borderPostSwap"
+                app:layout_constraintTop_toTopOf="@+id/borderPostSwap"
+                app:srcCompat="@drawable/baseline_account_circle_24" />
+
+            <TextView
+                android:id="@+id/textPostSwapUser"
+                android:layout_width="155dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginBottom="3dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:gravity="center|left"
+                android:text="유저 이름"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPostSwapUser"
+                app:layout_constraintStart_toEndOf="@+id/imgPostSwapUser" />
+
+            <Button
+                android:id="@+id/btnPostSwapUser"
+                android:layout_width="205dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="1dp"
+                android:backgroundTint="#27713C"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:gravity="center"
+                android:padding="1dp"
+                android:text="님의 라이브러리"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/borderPostSwap"
+                app:layout_constraintEnd_toEndOf="@+id/borderPostSwap"
+                app:layout_constraintStart_toStartOf="@+id/borderPostSwap" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

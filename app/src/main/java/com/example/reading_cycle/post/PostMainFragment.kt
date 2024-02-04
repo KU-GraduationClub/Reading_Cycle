@@ -41,9 +41,12 @@ class PostMainFragment : Fragment() {
         val swapBookList = listOf(
             SwapDataClass("책 제목1", "작가1"),
             SwapDataClass("책 제목2", "작가2"),
+            SwapDataClass("책 제목2", "작가2"),
             )
         val saleList = listOf(
             SaleDataClass("책 제목3", "작가3"),
+            SaleDataClass("책 제목4", "작가4"),
+            SaleDataClass("책 제목4", "작가4"),
             SaleDataClass("책 제목4", "작가4"),
         )
 
