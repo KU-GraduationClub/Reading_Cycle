@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".post.PostMainFragment"
+    android:background="@color/background"
     android:transitionGroup="true"
-    android:background="@color/background">
+    tools:context=".post.PostMainFragment">
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutSalePost"
@@ -22,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background"
+            android:elevation="0dp"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
             app:layout_constraintEnd_toEndOf="@id/dividerPostMain"
@@ -34,24 +36,446 @@
                 android:id="@+id/toolbarTitleSalePost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/soyo_maple_bold"
                 android:gravity="center"
-                android:layout_marginTop="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#DE2222"
-                tools:fontFamily="@font/soyo_maple_bold"
-                android:layout_gravity="center"/>
+                android:textColor="#E05B5B"
+                tools:fontFamily="@font/soyo_maple_bold" />
 
 
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/dividerPostMain"
-            android:layout_width="match_parent"
+            android:id="@+id/dividerSalePost"
+            android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:background="#27713C" />
+            android:layout_marginTop="0dp"
+            android:background="#27713C"
+            android:elevation="0dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:background="@color/background"
+        android:fillViewport="true"
+        android:nestedScrollingEnabled="true"
+        android:transitionGroup="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutSalePost"
+        tools:context=".post.PostMainFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/frameSalePost"
+                android:layout_width="120dp"
+                android:layout_height="173dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:background="#9A9393"
+                android:elevation="3dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@drawable/border_add_post_gray">
+
+                <ImageView
+                    android:id="@+id/imgSalePostPoster"
+                    android:layout_width="116dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    android:background="@color/white"
+                    app:srcCompat="@drawable/baseline_image_24" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textSalePostTitle"
+                android:layout_width="215dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="책 제목"
+                android:textColor="#000000"
+                android:textSize="19dp"
+                app:layout_constraintStart_toEndOf="@+id/frameSalePost"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textSalePost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="작가_"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toEndOf="@+id/frameSalePost"
+                app:layout_constraintTop_toBottomOf="@+id/textSalePostTitle" />
+
+            <TextView
+                android:id="@+id/textSalePostWriter4"
+                android:layout_width="172dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="작가 이름"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textSalePost"
+                app:layout_constraintStart_toEndOf="@+id/textSalePost" />
+
+            <Button
+                android:id="@+id/btnSalePostCate3"
+                android:layout_width="90dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="11dp"
+                android:layout_weight="1"
+                android:backgroundTint="#9E6320"
+                android:clickable="false"
+                android:elevation="4dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:padding="1dp"
+                android:text="도서 종류"
+                android:textColor="#FFFFFF"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/frameSalePost"
+                app:layout_constraintTop_toBottomOf="@+id/textSalePostWriter4" />
+
+            <Button
+                android:id="@+id/btnSalePostType4"
+                android:layout_width="90dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="11dp"
+                android:layout_weight="1"
+                android:backgroundTint="#E05B5B"
+                android:clickable="false"
+                android:elevation="4dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:padding="1dp"
+                android:text="가격"
+                android:textColor="#000000"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/imgSalePostType4"
+                app:layout_constraintTop_toBottomOf="@+id/textSalePostWriter4" />
+
+            <ImageView
+                android:id="@+id/imgSalePostType4"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="17dp"
+                android:elevation="2dp"
+                app:layout_constraintStart_toEndOf="@+id/btnSalePostCate3"
+                app:layout_constraintTop_toBottomOf="@+id/textSalePostWriter4"
+                app:srcCompat="@drawable/baseline_currency_exchange_40_red" />
+
+            <View
+                android:id="@+id/borderSalePost"
+                android:layout_width="220dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="27dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/border_s_post"
+                app:layout_constraintStart_toEndOf="@+id/frameSalePost"
+                app:layout_constraintTop_toBottomOf="@+id/btnSalePostCate3" />
+
+            <ImageView
+                android:id="@+id/imgSalePostUser"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="3dp"
+                app:layout_constraintStart_toStartOf="@+id/borderSalePost"
+                app:layout_constraintTop_toTopOf="@+id/borderSalePost"
+                app:srcCompat="@drawable/baseline_account_circle_24" />
+
+            <TextView
+                android:id="@+id/textSalePostUser"
+                android:layout_width="155dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginBottom="3dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:gravity="center|left"
+                android:text="유저 이름"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgSalePostUser"
+                app:layout_constraintStart_toEndOf="@+id/imgSalePostUser" />
+
+            <Button
+                android:id="@+id/btnSalePostUser"
+                android:layout_width="205dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="1dp"
+                android:backgroundTint="#27713C"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:gravity="center"
+                android:padding="1dp"
+                android:text="님의 라이브러리"
+                android:textColor="#FFFFFF"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/borderSalePost"
+                app:layout_constraintEnd_toEndOf="@+id/borderSalePost"
+                app:layout_constraintStart_toStartOf="@+id/borderSalePost" />
+
+            <FrameLayout
+                android:id="@+id/frameSalePost2"
+                android:layout_width="365dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="11dp"
+                android:background="@drawable/border_s_post_brown"
+                android:clickable="true"
+                android:elevation="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameSalePost">
+
+                <FrameLayout
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/border_s_post_brown"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgSalePostBook1"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_image_24" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="85dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/border_s_post_brown"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgSalePostBook2"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_image_24" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="155dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/border_s_post_brown"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgSalePostBook3"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_image_24" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="225dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/border_s_post_brown"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgSalePostBook4"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_image_24" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="295dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/border_s_post_brown"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgSalePostBook5"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_image_24" />
+
+                </FrameLayout>
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textSalePost2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서 정가"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameSalePost2" />
+
+            <TextView
+                android:id="@+id/textSalePostPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="0"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="@+id/textSalePost2"
+                app:layout_constraintStart_toEndOf="@+id/textSalePost2" />
+
+            <TextView
+                android:id="@+id/textSalePost3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서 상태"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSalePost2" />
+
+            <FrameLayout
+                android:id="@+id/frameSalePostEmotion"
+                android:layout_width="80dp"
+                android:layout_height="43dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/border_add_post_gray"
+                android:clickable="true"
+                android:elevation="3dp"
+                app:layout_constraintStart_toEndOf="@+id/textSalePost3"
+                app:layout_constraintTop_toBottomOf="@+id/textSalePostPrice">
+
+                <ImageView
+                    android:id="@+id/imgSalePostEmotion"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center|top"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/baseline_sentiment_neutral_10" />
+
+                <TextView
+                    android:id="@+id/textSalePostEmotion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="상태"
+                    android:textColor="#000000"
+                    android:textSize="12dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textAddSalePost9"
+                    app:layout_constraintStart_toEndOf="@+id/textAddSalePost9" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textSalePost4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서 설명"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSalePost3" />
+
+            <TextView
+                android:id="@+id/textSalePostExplain"
+                android:layout_width="365dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="11dp"
+                android:background="@drawable/border_post_main"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:padding="10dp"
+                android:text="도서 설명 내용"
+                android:textColor="#000000"
+                android:textSize="13dp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSalePost4" />
+
+            <Button
+                android:id="@+id/btnSalePostComplete"
+                android:layout_width="370dp"
+                android:layout_height="63dp"
+                android:layout_marginBottom="18dp"
+                android:backgroundTint="#27713C"
+                android:elevation="3dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:padding="1dp"
+                android:text="작성 완료"
+                android:textColor="#F9FBF4"
+                android:textSize="23dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
