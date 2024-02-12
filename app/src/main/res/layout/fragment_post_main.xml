@@ -288,7 +288,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="78dp"
-            android:layout_marginBottom="60dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -306,15 +305,6 @@
             android:src="@drawable/round_add_box_60"
             app:layout_constraintBottom_toBottomOf="@+id/recyclerViewPostMain"
             app:layout_constraintEnd_toEndOf="parent" />
-
-        <View
-            android:id="@+id/dividerPostMain3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="60dp"
-            android:background="#9A9393"
-            android:elevation="0dp"
-            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
