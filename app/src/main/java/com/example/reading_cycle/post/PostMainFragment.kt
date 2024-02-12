@@ -1,5 +1,6 @@
 package com.example.reading_cycle.post
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -35,6 +36,10 @@ class PostMainFragment : Fragment() {
         // 정렬 팝업 메뉴
         fragmentPostMainBinding.conPostMainSort.setOnClickListener {
             showPopupMenu(it)
+        }
+        // 이미지 버튼 클릭 이벤트 처리
+        fragmentPostMainBinding.imgBtnPostMain.setOnClickListener {
+            showPostTypeDialog()
         }
 
         // 데이터 생성 (임시)
@@ -118,5 +123,31 @@ class PostMainFragment : Fragment() {
         // TODO: 데이터 추가
 
         return PostMainAdapter(swapBookList, saleList)
+    }
+
+    private fun showPostTypeDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("게시글 유형을 선택해 주세요")
+
+        val postTypes = arrayOf("교환 게시글", "판매 게시글")
+
+        builder.setItems(postTypes) { _, which ->
+            // 사용자가 선택한 항목에 따라 해당 프래그먼트로 이동하는 로직 추가
+            when (which) {
+                0 -> navigateToFragment(AddSwapPostFragment())
+                1 -> navigateToFragment(AddSalePostFragment())
+            }
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun navigateToFragment(fragment: Fragment) {
+        // 프래그먼트로 이동하는 코드
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.hostFragmentMain, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }
