@@ -32,9 +32,9 @@ class PostMainFragment : Fragment() {
         )
         // 텍스트 설정
         fragmentPostMainBinding.toolbarPostMainTitle.text = "Reading\nCycle"
-        // 정렬 아이콘 클릭 시 팝업 메뉴 보이기
-        fragmentPostMainBinding.iconPostMainSort.setOnClickListener { view ->
-            showPopupMenu(view)
+        // 정렬 팝업 메뉴
+        fragmentPostMainBinding.conPostMainSort.setOnClickListener {
+            showPopupMenu(it)
         }
 
         // 데이터 생성 (임시)
