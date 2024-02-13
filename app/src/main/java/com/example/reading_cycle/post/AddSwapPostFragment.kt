@@ -24,10 +24,9 @@ class AddSwapPostFragment : Fragment() {
         mainActivity = activity as MainActivity
         fragmentAddSwapPostBinding = FragmentAddSwapPostBinding.inflate(inflater)
 
-        // 뒤로 가기 버튼 클릭 리스너 설정
+        // 뒤로 가기 버튼 클릭 리스너
         fragmentAddSwapPostBinding.toolbarLayoutAddSwapPost.setNavigationOnClickListener {
-            // 뒤로 가기 버튼을 눌렀을 때의 동작
-            // mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
+            mainActivity.removeFragment(MainActivity.ADD_SWAP_POST_FRAGMENT)
         }
 
         // 타이틀 아이콘 및 텍스트 설정

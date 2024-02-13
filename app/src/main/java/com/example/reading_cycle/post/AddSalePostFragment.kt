@@ -1,6 +1,7 @@
 package com.example.reading_cycle.post
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,10 +24,9 @@ class AddSalePostFragment : Fragment() {
         mainActivity = activity as MainActivity
         fragmentAddSalePostBinding = FragmentAddSalePostBinding.inflate(inflater)
 
-        // 뒤로 가기 버튼 클릭 리스너 설정
+        // 뒤로 가기 버튼 클릭 리스너
         fragmentAddSalePostBinding.toolbarLayoutAddSalePost.setNavigationOnClickListener {
-            // 뒤로 가기 버튼을 눌렀을 때의 동작
-            // mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
+            mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
         }
 
         // 타이틀 아이콘 및 텍스트 설정
