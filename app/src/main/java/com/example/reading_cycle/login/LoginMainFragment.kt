@@ -1,7 +1,6 @@
 package com.example.reading_cycle.login
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +12,12 @@ class LoginMainFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     private lateinit var fragmentLoginMainBinding : FragmentLoginMainBinding
     private fun setupUiListeners() {
-        fragmentLoginMainBinding.registerBtn.setOnClickListener {// 회원가입 버튼
+        fragmentLoginMainBinding.btnRegister.setOnClickListener {// 회원가입 버튼
 
             mainActivity.replaceFragment(MainActivity.Companion.USER_REGISTER_FRAGMENT, true, null)
         }
 
-        fragmentLoginMainBinding.searchPWBtn.setOnClickListener {// 비밀번호 찾기 버튼
+        fragmentLoginMainBinding.btnResetPassword.setOnClickListener {// 비밀번호 찾기 버튼
 
             mainActivity.replaceFragment(MainActivity.Companion.PASSWORD_RESET_FRAGMENT, true, null)
         }

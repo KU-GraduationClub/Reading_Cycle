@@ -10,29 +10,30 @@
 
 
     <EditText
-        android:id="@+id/typePW"
-        android:layout_width="350dp"
+        android:id="@+id/edtLoginPassword"
+        android:layout_width="330dp"
         android:layout_height="40dp"
         android:layout_marginTop="140dp"
+        android:background="@drawable/border"
         android:ems="10"
         android:fontFamily="@font/soyo_maple_regular"
+        android:hint="비밀번호"
         android:inputType="text"
         android:paddingStart="10dp"
-        android:hint="비밀번호"
-        android:textColorHint="#6A3F0D"
-        android:background="@drawable/border"
         android:textColor="#6A3F0D"
+        android:textColorHint="#6A3F0D"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textTitleMain" />
 
     <Button
-        android:id="@+id/loginBtn"
+        android:id="@+id/btnLogin"
         android:layout_width="200dp"
         android:layout_height="55dp"
         android:layout_marginTop="32dp"
+        android:layout_marginBottom="37dp"
         android:background="@drawable/shape_stroke"
         android:backgroundTint="@color/theme_brown"
         android:fontFamily="@font/soyo_maple_regular"
@@ -44,11 +45,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/typePW"
+        app:layout_constraintTop_toBottomOf="@+id/edtLoginPassword"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/appTitle"
+        android:id="@+id/textTitleMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
@@ -59,30 +60,30 @@
         android:textColor="#27713C"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/appLogo"
+        app:layout_constraintStart_toEndOf="@+id/imgLogoMain"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/typeEMAIL"
-        android:layout_width="350dp"
+        android:id="@+id/edtLoginEmail"
+        android:layout_width="330dp"
         android:layout_height="40dp"
         android:layout_marginTop="80dp"
+        android:background="@drawable/border"
         android:ems="10"
         android:fontFamily="@font/soyo_maple_regular"
-        android:inputType="text"
         android:hint="이메일"
-        android:textColorHint="#6A3F0D"
+        android:inputType="text"
         android:paddingStart="10dp"
-        android:background="@drawable/border"
         android:textColor="#6A3F0D"
+        android:textColorHint="#6A3F0D"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textTitleMain" />
 
     <TextView
-        android:id="@+id/subTitle"
+        android:id="@+id/textSubtitleMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="168dp"
@@ -96,96 +97,77 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textTitleMain" />
 
     <Button
-        android:id="@+id/registerBtn"
+        android:id="@+id/btnRegister"
         android:layout_width="74dp"
         android:layout_height="43dp"
         android:layout_marginStart="105dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="243dp"
         android:background="#00000000"
         android:fontFamily="@font/soyo_maple_regular"
         android:text="회원가입"
         android:textColor="#000000"
-        android:textSize="14dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/verticalBar"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/dividerBtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     <Button
-        android:id="@+id/searchPWBtn"
+        android:id="@+id/btnResetPassword"
         android:layout_width="97dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="103dp"
-        android:layout_marginBottom="241dp"
         android:background="#00000000"
         android:fontFamily="@font/soyo_maple_regular"
         android:text="비밀번호 찾기"
         android:textColor="#000000"
-        android:textSize="14dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/verticalBar"
-        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+        app:layout_constraintStart_toEndOf="@+id/dividerBtn"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     <View
-        android:id="@+id/verticalBar"
+        android:id="@+id/dividerBtn"
         android:layout_width="1dp"
         android:layout_height="20dp"
         android:layout_centerInParent="true"
         android:layout_marginStart="15dp"
         android:layout_marginTop="458dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="253dp"
         android:background="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/searchPWBtn"
-        app:layout_constraintStart_toEndOf="@+id/registerBtn"
+        app:layout_constraintEnd_toStartOf="@+id/btnResetPassword"
+        app:layout_constraintStart_toEndOf="@+id/btnRegister"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/appLogo"
+        android:id="@+id/imgLogoMain"
         android:layout_width="59dp"
         android:layout_height="56dp"
         android:layout_marginStart="58dp"
         android:layout_marginTop="112dp"
         android:src="@drawable/baseline_sync_24"
         app:tint="#27713C"
-        app:layout_constraintEnd_toStartOf="@+id/appTitle"
+        app:layout_constraintEnd_toStartOf="@+id/textTitleMain"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/visibleEMAIL"
+        android:id="@+id/imgBtnVisiblePWLogin"
         android:layout_width="30dp"
         android:layout_height="40dp"
         android:layout_marginStart="310dp"
-        app:layout_constraintBottom_toBottomOf="@id/typeEMAIL"
-        app:layout_constraintEnd_toEndOf="@id/typeEMAIL"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/typeEMAIL"
-        app:layout_constraintStart_toStartOf="@id/typeEMAIL"
-        app:layout_constraintTop_toTopOf="@id/typeEMAIL"
-        app:srcCompat="@drawable/baseline_visibility_40"
-        app:tint="#6A3F0D" />
-
-    <ImageView
-        android:id="@+id/visiblePW"
-        android:layout_width="30dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="310dp"
-        app:layout_constraintBottom_toBottomOf="@id/typePW"
-        app:layout_constraintEnd_toEndOf="@id/typePW"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/typePW"
-        app:layout_constraintStart_toStartOf="@id/typePW"
-        app:layout_constraintTop_toTopOf="@id/typePW"
+        android:layout_marginEnd="57dp"
+        app:layout_constraintBottom_toBottomOf="@id/edtLoginPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/edtLoginPassword"
+        app:layout_constraintStart_toStartOf="@id/edtLoginPassword"
+        app:layout_constraintTop_toTopOf="@id/edtLoginPassword"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/baseline_visibility_40"
         app:tint="#6A3F0D" />
 
