@@ -38,6 +38,9 @@ class FriendMainFragment : Fragment() {
         val friendList = listOf(
             FriendDateClass("닉네임1"),
             FriendDateClass("닉네임2"),
+            FriendDateClass("닉네임3"),
+            FriendDateClass("닉네임4"),
+            FriendDateClass("닉네임5"),
         )
 
         //어댑터 초기화

@@ -47,9 +47,9 @@
     <!-- 프로필 이미지 -->
     <ImageView
         android:id="@+id/profile_image"
-        android:layout_width="84dp"
-        android:layout_height="81dp"
-        android:src="@drawable/profile"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/profile4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayoutPostMain" />
 
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="@+id/profile_image"
-        android:text="호두"
+        android:text="사용자"
         android:textSize="25dp"
         android:textStyle="bold" />
 
@@ -81,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
-        android:text="게시물: 4"
+        android:text="게시물:0"
         android:textSize="15dp"
         app:layout_constraintStart_toEndOf="@+id/library"
         app:layout_constraintTop_toTopOf="@+id/library"
@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="프렌드: 10"
+        android:text="프렌드:0"
         android:textSize="15dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/post_count"
@@ -110,13 +110,13 @@
         android:src="@drawable/baseline_location_on_40" />
     <!--위치정보-->
     <TextView
-        android:id="@+id/position"
+        android:id="@+id/iconPostMainLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/location_icon"
         app:layout_constraintTop_toTopOf="@+id/location_icon"
         app:layout_constraintBottom_toBottomOf="@+id/location_icon"
-        android:text="경상남도 창원시 의창구 중동"
+        android:text="주소지"
         android:textSize="15dp"/>
 
     <!--친구추가버튼-->
@@ -130,14 +130,14 @@
         android:text="친구 추가"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/position" />
+        app:layout_constraintTop_toBottomOf="@+id/iconPostMainLocation" />
 
     <!--채팅버튼-->
     <Button
         android:id="@+id/add_chat_button"
         android:layout_width="100dp"
         android:layout_height="33dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="80dp"
         android:background="#964b00"
         android:text=" 채팅 "
         android:textColor="#FFFFFF"
@@ -156,7 +156,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewLibraryMain"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/imgBtnPostMain"
         app:layout_constraintEnd_toEndOf="parent"
@@ -169,7 +169,6 @@
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="90dp"
         android:background="#FFFFFF"
         android:src="@drawable/plus"
         app:layout_constraintBottom_toBottomOf="parent"

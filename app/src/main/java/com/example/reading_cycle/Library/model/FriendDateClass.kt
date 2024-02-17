@@ -16,7 +16,7 @@ class FriendMainAdapter(private val friendList: List<FriendDateClass>) : Recycle
         val view = when (viewType) {
             VIEW_TYPE_FRIEND -> {
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.friend_item_layout, parent, false)
+                    .inflate(R.layout.row_friend_item_layout, parent, false)
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }

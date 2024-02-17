@@ -24,8 +24,7 @@
             android:background="@color/background"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-            app:menu="@menu/toolbar_library_main"
-            app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
+            app:menu="@menu/toolbar_library_main">
 
             <TextView
                 android:id="@+id/toolbarTitle"
@@ -50,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        android:text="프렌드 5"
+        android:text="프렌드 0"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayoutMain" />
@@ -68,6 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@+id/divider3"
-        tools:layout_editor_absoluteX="-16dp" />
+        tools:layout_editor_absoluteX="0dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
