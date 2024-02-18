@@ -8,7 +8,7 @@
     android:background="@color/background">
 
     <TextView
-        android:id="@+id/textTitle"
+        android:id="@+id/textOpponent"
         android:textColor="#27713C"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,9 +28,9 @@
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/textTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/textOpponent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textTitle"
+        app:layout_constraintTop_toTopOf="@+id/textOpponent"
         android:src="@drawable/baseline_arrow_back_ios_28"
         />
 
@@ -44,7 +44,7 @@
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:src="@drawable/baseline_settings_24"
-        app:layout_constraintBottom_toBottomOf="@+id/textTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/textOpponent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/imgBtnQuit" />
@@ -63,7 +63,7 @@
         android:text="오늘"
         app:layout_constraintEnd_toStartOf="@+id/dividerRight"
         app:layout_constraintStart_toEndOf="@+id/dividerLeft"
-        app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textOpponent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dividerLeft"
