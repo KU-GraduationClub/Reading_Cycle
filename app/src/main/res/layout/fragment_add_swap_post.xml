@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:transitionGroup="true"
+    tools:context=".post.PostMainFragment">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutAddSwapPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarLayoutAddSwapPost"
+            style="@style/Theme.Reading_cycle.ToolbarTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:elevation="0dp"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
+            app:layout_constraintEnd_toEndOf="@id/dividerPostMain"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/toolbar_post"
+            app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
+
+            <TextView
+                android:id="@+id/toolbarTitleAddSwapPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/soyo_maple_bold"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#152BF9"
+                tools:fontFamily="@font/soyo_maple_bold" />
+
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:id="@+id/dividerAddSwapPost"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_marginTop="0dp"
+            android:background="#27713C"
+            android:elevation="0dp" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:background="@color/background"
+        android:fillViewport="true"
+        android:nestedScrollingEnabled="true"
+        android:transitionGroup="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/appBarLayoutAddSwapPost"
+        tools:context=".post.PostMainFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutAddSwapPost">
+
+            <TextView
+                android:id="@+id/textAddSwapPost1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="이미지"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <HorizontalScrollView
+                android:id="@+id/ScrollAddSwapPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost1">
+
+                <LinearLayout
+                    android:id="@+id/linearAddSwapPostImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <FrameLayout
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/border_add_post_edit_img"
+                        android:elevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/imgAddSwapPost1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerInside"
+                            app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+                    </FrameLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <View
+                android:id="@+id/dividerAddSwapPost2"
+                android:layout_width="400dp"
+                android:layout_height="1.3dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="5dp"
+                android:background="#999999"
+                android:elevation="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ScrollAddSwapPost" />
+
+            <TextView
+                android:id="@+id/textAddSwapPost2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dividerAddSwapPost2" />
+
+            <EditText
+                android:id="@+id/edtAddSwapPostTitle"
+                android:layout_width="388dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="13dp"
+                android:background="@drawable/border_add_post_edit_text"
+                android:elevation="2dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:hint="도서 제목을 입력해주세요"
+                android:inputType="text"
+                android:minLines="1"
+                android:padding="5dp"
+                android:paddingStart="6dp"
+                android:textColorHint="#787878"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost2" />
+
+            <TextView
+                android:id="@+id/textAddSwapPost3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="작가"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtAddSwapPostTitle" />
+
+            <EditText
+                android:id="@+id/edtAddSwapPostAuthor"
+                android:layout_width="388dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="13dp"
+                android:background="@drawable/border_add_post_edit_text"
+                android:elevation="2dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:hint="작가 이름을 입력해주세요"
+                android:inputType="text"
+                android:minLines="1"
+                android:padding="5dp"
+                android:paddingStart="6dp"
+                android:textColorHint="#787878"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost3" />
+
+            <TextView
+                android:id="@+id/textAddSwapPost4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서 종류"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtAddSwapPostAuthor" />
+
+            <TextView
+                android:id="@+id/textAddSwapPost5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="등록할 도서의 종류를 선택해주세요"
+                android:textColor="#787878"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textAddSwapPost4"
+                app:layout_constraintStart_toEndOf="@+id/textAddSwapPost4" />
+
+            <FrameLayout
+                android:id="@+id/FrameAddSwapPost1"
+                android:layout_width="148dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost4">
+
+                <Button
+                    android:id="@+id/btnAddSwapPostType1"
+                    android:layout_width="120dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#9E6320"
+                    android:clickable="false"
+                    android:elevation="3dp"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:padding="1dp"
+                    android:text="소설"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:id="@+id/iconAddSwapPost1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    app:srcCompat="@drawable/baseline_keyboard_arrow_down_30" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textAddSwapPost6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="교환 도서 종류"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/FrameAddSwapPost1" />
+
+            <TextView
+                android:id="@+id/textAddSwapPost7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="교환할 도서의 종류를 선택해주세요"
+                android:textColor="#787878"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/FrameAddSwapPost2"
+                app:layout_constraintStart_toEndOf="@+id/textAddSwapPost6" />
+
+            <FrameLayout
+                android:id="@+id/FrameAddSwapPost2"
+                android:layout_width="148dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost6">
+
+                <Button
+                    android:id="@+id/btnAddSwapPostType2"
+                    android:layout_width="120dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#5A69EF"
+                    android:clickable="false"
+                    android:elevation="3dp"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:padding="1dp"
+                    android:text="소설"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:id="@+id/iconAddSwapPost2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    app:srcCompat="@drawable/baseline_keyboard_arrow_down_30" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textAddSwapPost8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서 정가"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/FrameAddSwapPost2" />
+
+            <EditText
+                android:id="@+id/edtAddSwapPostPrice"
+                android:layout_width="388dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="13dp"
+                android:background="@drawable/border_add_post_edit_text"
+                android:elevation="2dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:hint="도서 정가를 입력해주세요"
+                android:inputType="text"
+                android:minLines="1"
+                android:padding="5dp"
+                android:paddingStart="6dp"
+                android:textColorHint="#787878"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost8" />
+
+            <TextView
+                android:id="@+id/textAddSwapPost9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서 상태"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtAddSwapPostPrice" />
+
+            <TextView
+                android:id="@+id/textAddSwapPost10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="도서를 살펴보고 상태를 선택해주세요"
+                android:textColor="#787878"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textAddSwapPost9"
+                app:layout_constraintStart_toEndOf="@+id/textAddSwapPost9" />
+
+            <FrameLayout
+                android:id="@+id/FrameAddSwapPostVeryBad"
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/border_add_post_red"
+                android:clickable="true"
+                android:elevation="3dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost9">
+
+                <ImageView
+                    android:id="@+id/imgAddSwapPostVeryBad"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center|top"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/round_sentiment_very_dissatisfied_10" />
+
+                <TextView
+                    android:id="@+id/textAddSwapPostVeryBad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="매우 나쁨"
+                    android:textColor="#000000"
+                    android:textSize="11dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textAddSwapPost9"
+                    app:layout_constraintStart_toEndOf="@+id/textAddSwapPost9" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/FrameAddSwapPostBad"
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/border_add_post_orange"
+                android:clickable="true"
+                android:elevation="3dp"
+                app:layout_constraintStart_toEndOf="@+id/FrameAddSwapPostVeryBad"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost9">
+
+                <ImageView
+                    android:id="@+id/imgAddSwapPostBad"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center|top"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/baseline_sentiment_very_dissatisfied_10" />
+
+                <TextView
+                    android:id="@+id/textAddSwapPostBad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="나쁨"
+                    android:textColor="#000000"
+                    android:textSize="11dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textAddSwapPost9"
+                    app:layout_constraintStart_toEndOf="@+id/textAddSwapPost9" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/FrameAddSwapPostCommon"
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/border_add_post_gray"
+                android:clickable="true"
+                android:elevation="3dp"
+                app:layout_constraintEnd_toStartOf="@+id/FrameAddSwapPostGood"
+                app:layout_constraintStart_toEndOf="@+id/FrameAddSwapPostBad"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost9">
+
+                <ImageView
+                    android:id="@+id/imgAddSwapPostCommon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center|top"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/baseline_sentiment_neutral_10" />
+
+                <TextView
+                    android:id="@+id/textAddSwapPostCommon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="보통"
+                    android:textColor="#000000"
+                    android:textSize="11dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textAddSwapPost9"
+                    app:layout_constraintStart_toEndOf="@+id/textAddSwapPost9" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/FrameAddSwapPostGood"
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/border_add_post_green"
+                app:layout_constraintEnd_toStartOf="@+id/FrameAddSwapPostVeryGood"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost9">
+
+                <ImageView
+                    android:id="@+id/imgAddSwapPostGood"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center|top"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/baseline_sentiment_satisfied_alt_10" />
+
+                <TextView
+                    android:id="@+id/textAddSwapPostGood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="좋음"
+                    android:textColor="#000000"
+                    android:textSize="11dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textAddSwapPost9"
+                    app:layout_constraintStart_toEndOf="@+id/textAddSwapPost9" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/FrameAddSwapPostVeryGood"
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="11dp"
+                android:background="@drawable/border_add_post_blue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost9">
+
+                <ImageView
+                    android:id="@+id/imgAddSwapPostVeryGood"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center|top"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/sharp_sentiment_very_satisfied_10" />
+
+                <TextView
+                    android:id="@+id/textAddSwapPostVeryGood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="매우 좋음"
+                    android:textColor="#000000"
+                    android:textSize="11dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textAddSwapPost9"
+                    app:layout_constraintStart_toEndOf="@+id/textAddSwapPost9" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textAddSwapPost11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="설명"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/FrameAddSwapPostCommon" />
+
+            <EditText
+                android:id="@+id/edtAddSwapPostExplain"
+                android:layout_width="388dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="13dp"
+                android:background="@drawable/border_add_post_edit_text"
+                android:elevation="2dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:gravity="start"
+                android:hint="도서와 거래 설명을 입력해주세요"
+                android:inputType="text|textMultiLine"
+                android:maxLength="150"
+                android:maxLines="8"
+                android:minLines="1"
+                android:padding="5dp"
+                android:paddingStart="6dp"
+                android:textColorHint="#787878"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textAddSwapPost11" />
+
+            <Button
+                android:id="@+id/btnAddSwapPostComplete"
+                android:layout_width="370dp"
+                android:layout_height="63dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="25dp"
+                android:backgroundTint="#27713C"
+                android:elevation="3dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:padding="1dp"
+                android:text="작성 완료"
+                android:textColor="#F9FBF4"
+                android:textSize="23dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtAddSwapPostExplain" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
