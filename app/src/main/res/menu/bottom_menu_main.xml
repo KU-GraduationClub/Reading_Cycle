@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_main"
+        android:menuCategory="secondary"
+        android:title="메인"
+        android:icon="@drawable/round_home_24"/>
+
+    <item
+        android:id="@+id/bottom_chat"
+        android:menuCategory="secondary"
+        android:title="채팅"
+        android:icon="@drawable/round_chat_24"/>
+
+    <item
+        android:id="@+id/bottom_frd"
+        android:menuCategory="secondary"
+        android:title="프렌드"
+        android:icon="@drawable/round_people_alt_24"/>
+
+    <item
+        android:id="@+id/bottom_lib"
+        android:menuCategory="secondary"
+        android:title="라이브러리"
+        android:icon="@drawable/baseline_menu_book_24"/>
+
+</menu>

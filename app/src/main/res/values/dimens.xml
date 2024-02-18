@@ -4,4 +4,7 @@
     <dimen name="your_padding_top">0dp</dimen>
     <dimen name="your_padding_end">0dp</dimen>
     <dimen name="your_padding_bottom">0dp</dimen>
+
+    <dimen name="icon_text_padding">6dp</dimen>
 </resources>
+
