@@ -2,44 +2,49 @@ package com.example.reading_cycle
 
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
+import com.example.reading_cycle.library.FriendMainFragment
+import com.example.reading_cycle.library.LibraryMainFragment
+import com.example.reading_cycle.location.model.LocSetFragment
+import com.example.reading_cycle.login.LoginMainFragment
+import com.example.reading_cycle.login.PasswordResetFragment
+import com.example.reading_cycle.login.UserRegisterFragment
 import com.example.reading_cycle.post.AddSalePostFragment
 import com.example.reading_cycle.post.AddSwapPostFragment
 import com.example.reading_cycle.post.PostMainFragment
 import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.example.reading_cycle.databinding.ActivityMainBinding
-import com.example.reading_cycle.location.model.LocSetFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.example.reading_cycle.chat.ChatListFragment
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
-   private var mMap: GoogleMap? = null
+    private var mMap: GoogleMap? = null
     var newFragment: Fragment? = null
     var oldFragment: Fragment? = null
     private lateinit var mainBinding: ActivityMainBinding
 
-  
     companion object{
         val POST_MAIN_FRAGMENT = "PostMainFragment"
         val ADD_SALE_POST_FRAGMENT = "AddSalePostFragment"
         val ADD_SWAP_POST_FRAGMENT = "AddSwapPostFragment"
         val SALE_POST_FRAGMENT = "SalePostFragment"
         val SWAP_POST_FRAGMENT = "SwapPostFragment"
-        val CHAT_LIST_FRAGMENT = "ChatListFragment"
         val LOC_SET_FRAGMENT = "LocSetFragment"
+        val LOGIN_MAIN_FRAGMENT = "LoginMainFragment"
+        val PASSWORD_RESET_FRAGMENT = "PasswordResetFragment"
+        val USER_REGISTER_FRAGMENT = "UserRegisterFragment"
+        val CHAT_LIST_FRAGMENT = "ChatListFragment"
+        val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
+        val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +84,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 SALE_POST_FRAGMENT -> SalePostFragment()
                 SWAP_POST_FRAGMENT -> SwapPostFragment()
                 LOC_SET_FRAGMENT -> LocSetFragment()
+                LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
+                USER_REGISTER_FRAGMENT -> UserRegisterFragment()
+                PASSWORD_RESET_FRAGMENT -> PasswordResetFragment()
+                CHAT_LIST_FRAGMENT -> ChatListFragment()
+                LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
+                FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
                 else -> Fragment()
             }
 
@@ -104,11 +115,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     fun removeFragment(name: String) {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
-}
 
-        
-         // Handle the Google Map when it's ready
-        override fun onMapReady(googleMap: GoogleMap) {
+    override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         val SEOUL = LatLng(37.556, 126.97)
         val markerOptions = MarkerOptions()
@@ -118,5 +126,4 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap?.addMarker(markerOptions)
         mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 10f))
     }
- }
-
+}
