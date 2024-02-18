@@ -4,12 +4,22 @@ import android.os.Bundle
 import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.reading_cycle.databinding.ActivityMainBinding
+import com.example.reading_cycle.location.model.LocSetFragment
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.example.reading_cycle.chat.ChatListFragment
 
-class MainActivity : AppCompatActivity() {
 
+class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+
+   private var mMap: GoogleMap? = null
     var newFragment: Fragment? = null
     var oldFragment: Fragment? = null
+    private lateinit var mainBinding: ActivityMainBinding
   
     companion object{
         val POST_MAIN_FRAGMENT = "PostMainFragment"
@@ -18,16 +28,18 @@ class MainActivity : AppCompatActivity() {
         val SALE_POST_FRAGMENT = "SalePostFragment"
         val SWAP_POST_FRAGMENT = "SwapPostFragment"
         val CHAT_LIST_FRAGMENT = "ChatListFragment"
+        val LOC_SET_FRAGMENT = "LocSetFragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mainBinding = ActivityMainBinding.inflate(layoutInflater)
 
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(ADD_SWAP_POST_FRAGMENT, false, null)
+        replaceFragment(POST_MAIN_FRAGMENT, false, null)
     }
 
         fun replaceFragment(name:String, addToBackStack:Boolean, bundle:Bundle? = null) {
@@ -49,6 +61,7 @@ class MainActivity : AppCompatActivity() {
                 ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
                 SALE_POST_FRAGMENT -> SalePostFragment()
                 SWAP_POST_FRAGMENT -> SwapPostFragment()
+                LOC_SET_FRAGMENT -> LocSetFragment()
                 else -> Fragment()
             }
 
@@ -63,4 +76,17 @@ class MainActivity : AppCompatActivity() {
             // 교체 명령 동작.
             fragmentTransaction.commit()
         }
-     }
+        
+         // Handle the Google Map when it's ready
+        override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        val SEOUL = LatLng(37.556, 126.97)
+        val markerOptions = MarkerOptions()
+        markerOptions.position(SEOUL)
+        markerOptions.title("서울")
+        markerOptions.snippet("한국 수도")
+        mMap?.addMarker(markerOptions)
+        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 10f))
+    }
+ }
+
