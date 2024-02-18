@@ -10,6 +10,8 @@ import com.example.reading_cycle.Library.LibraryMainFragment
 
 class MainActivity : AppCompatActivity() {
 
+    var newFragment: Fragment? = null
+    var oldFragment: Fragment? = null
     companion object {
         const val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
         const val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
@@ -28,6 +30,11 @@ class MainActivity : AppCompatActivity() {
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
+
+        // newFragment 에 Fragment가 들어있으면 oldFragment에 넣어준다.
+        if(newFragment != null){
+            oldFragment = newFragment
+        }
 
         // 이전 Fragment 제거
         supportFragmentManager.findFragmentById(R.id.hostFragmentMain)?.let { oldFragment ->
