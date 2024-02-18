@@ -1,20 +1,23 @@
 package com.example.reading_cycle
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.reading_cycle.chat.ChatListFragment
 
 class MainActivity : AppCompatActivity() {
 
     var newFragment: Fragment? = null
     var oldFragment: Fragment? = null
+  
     companion object{
         val POST_MAIN_FRAGMENT = "PostMainFragment"
         val ADD_SALE_POST_FRAGMENT = "AddSalePostFragment"
         val ADD_SWAP_POST_FRAGMENT = "AddSwapPostFragment"
         val SALE_POST_FRAGMENT = "SalePostFragment"
         val SWAP_POST_FRAGMENT = "SwapPostFragment"
+        val CHAT_LIST_FRAGMENT = "ChatListFragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +64,3 @@ class MainActivity : AppCompatActivity() {
             fragmentTransaction.commit()
         }
      }
-
-
-
