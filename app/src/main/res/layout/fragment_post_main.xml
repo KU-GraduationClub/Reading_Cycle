@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".post.PostMainFragment"
+    android:transitionGroup="true"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutPostMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="0dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarLayoutPostMain"
+            style="@style/Theme.Reading_cycle.ToolbarTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/toolbar_post_main"
+            android:elevation="0dp">
+
+        <TextView
+            android:id="@+id/toolbarPostMainTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#27713C" />
+
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:id="@+id/dividerPostMain"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_marginTop="0dp"
+            android:background="#27713C"
+            android:elevation="0dp" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="57dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <HorizontalScrollView
+            android:id="@+id/scrollPostMain"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="1dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="#F9FBF4"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <Button
+                    android:id="@+id/btnRowPostSwapCate1"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="8.5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="전체"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/btnPostMainCate2"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="소설"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/btnPostMainCate3"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="강의/문제"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/btnPostMainCate4"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:padding="1dp"
+                    android:text="에세이/수필"
+                    android:textColor="#F9FBF4"
+                    android:textSize="15dp" />
+
+                <Button
+                    android:id="@+id/btnPostMainCate5"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="만화"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/btnPostMainCate6"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="시집"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/btnPostMainCate7"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="역사/철학"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/btnPostMainCate8"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="정치/사회"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/btnPostMainCate9"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="취미/예술"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/btnPostMainCate10"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="과학/건강"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/btnPostMainCate11"
+                    android:layout_width="95dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#27713C"
+                    android:fontFamily="@font/soyo_maple_regular"
+                    android:text="기타"
+                    android:textColor="#F9FBF4"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/conPostMainSort"
+            android:layout_width="80dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollPostMain">
+
+            <ImageView
+                android:id="@+id/iconPostMainSort"
+                android:layout_width="20dp"
+                android:layout_height="23dp"
+                android:layout_margin="1dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/baseline_keyboard_arrow_down_30"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textPostMainSort"
+                android:layout_width="50dp"
+                android:layout_height="23dp"
+                android:layout_margin="1dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:gravity="center"
+                android:text="최신 순"
+                android:textColor="#000000"
+                android:textSize="14dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iconPostMainSort"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/conPostMainLocation"
+            android:layout_width="80dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollPostMain">
+
+            <ImageView
+                android:id="@+id/iconPostMainLocation"
+                android:layout_width="20dp"
+                android:layout_height="23dp"
+                android:layout_margin="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/outline_location_on_40"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textPostMainLocation"
+                android:layout_width="200dp"
+                android:layout_height="23dp"
+                android:layout_margin="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:gravity="center|right"
+                android:text="위치"
+                android:textColor="#000000"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iconPostMainLocation"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/dividerPostMain2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="27dp"
+            android:background="#9A9393"
+            android:elevation="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/scrollPostMain" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewPostMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="79dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollPostMain"
+            app:layout_constraintVertical_bias="0.0">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <ImageButton
+            android:id="@+id/imgBtnPostMain"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="40dp"
+            android:background="#FFFFFF"
+            android:src="@drawable/round_add_box_60"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerViewPostMain"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
