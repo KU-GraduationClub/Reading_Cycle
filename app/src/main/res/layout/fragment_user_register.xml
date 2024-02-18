@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".login.UserRegisterFragment"
+    tools:ignore="ExtraText">
+
+    <Button
+        android:id="@+id/btnRegisterFin"
+        android:layout_width="330dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center_vertical"
+
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shape_stroke"
+        android:backgroundTint="@color/theme_green"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="가입완료"
+        android:textColor="@color/background"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtUsername"
+        app:layout_constraintVertical_bias="0.933" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarUserRegister"
+            style="@style/Theme.Reading_cycle.ToolbarTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:gravity="center_vertical"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/toolbar_password_reset"
+            app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
+
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/soyo_maple_bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#27713C"
+                android:textSize="20dp" />
+
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:id="@+id/toolbarDivider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#27713C" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <EditText
+        android:id="@+id/edtLoginEmail"
+        android:layout_width="232dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="98dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:hint="이메일"
+        android:inputType="text"
+        android:paddingStart="10dp"
+        android:textColorHint="#6A3F0D"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/btnSendAuthCode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSetProfile" />
+
+    <EditText
+        android:id="@+id/edtLoginPassword"
+        android:layout_width="330dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="31dp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:hint="비밀번호"
+        android:inputType="text"
+        android:paddingStart="10dp"
+        android:textColorHint="#6A3F0D"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtAuthCode" />
+
+    <EditText
+        android:id="@+id/edtAuthCode"
+        android:layout_width="330dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="31dp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:hint="인증코드"
+        android:inputType="text"
+        android:paddingStart="10dp"
+        android:textColorHint="#6A3F0D"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSendAuthCode" />
+
+    <EditText
+        android:id="@+id/editPasswordCheck"
+        android:layout_width="330dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="31dp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:hint="비밀번호 확인"
+        android:inputType="text"
+        android:paddingStart="10dp"
+        android:textColorHint="#6A3F0D"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtLoginPassword" />
+
+    <ImageView
+        android:id="@+id/imgBtnVisiblePW"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginEnd="57dp"
+        android:src="@drawable/baseline_visibility_40"
+        app:layout_constraintBottom_toBottomOf="@id/edtLoginPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/edtLoginPassword"
+        app:layout_constraintTop_toTopOf="@id/edtLoginPassword"
+        app:tint="#6A3F0D" />
+
+    <ImageView
+        android:id="@+id/imgBtnVisiblePWCheck"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginEnd="57dp"
+        android:src="@drawable/baseline_visibility_40"
+        app:layout_constraintBottom_toBottomOf="@id/editPasswordCheck"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/editPasswordCheck"
+        app:layout_constraintTop_toTopOf="@id/editPasswordCheck"
+        app:tint="#6A3F0D" />
+
+    <EditText
+        android:id="@+id/edtUsername"
+        android:layout_width="330dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="31dp"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:hint="유저 닉네임"
+        android:inputType="text"
+        android:paddingStart="10dp"
+        android:textColorHint="#6A3F0D"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPasswordCheck" />
+
+    <Button
+        android:id="@+id/btnSendAuthCode"
+        android:layout_width="93dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="126dp"
+        android:layout_marginEnd="100dp"
+        android:backgroundTint="@color/theme_green"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="인증코드 전송"
+        android:textColor="@color/background"
+        android:textSize="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/edtLoginEmail"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarLayout" />
+
+    <ImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="90dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="150dp"
+        android:src="@drawable/baseline_account_circle_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarLayout" />
+
+    <Button
+        android:id="@+id/btnSetProfile"
+        android:layout_width="135dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="140dp"
+        android:backgroundTint="@color/theme_brown"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="프로필 이미지 설정"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgProfile" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
