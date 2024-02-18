@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/baseline_dehaze_24" />
+
+    <TextView
+        android:id="@+id/textUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imgProfile"
+        android:layout_marginStart="8dp"
+        android:text="Username"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textLastMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textUsername"
+        android:layout_toEndOf="@id/imgProfile"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Last message" />
+
+    <TextView
+        android:id="@+id/textLastMessageTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textLastMessage"
+        android:layout_marginStart="272dp"
+        android:layout_marginTop="-19dp"
+        android:layout_toEndOf="@id/imgProfile"
+        android:text="chat" />
+
+    <TextView
+        android:id="@+id/textUnseenCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/baseline_notifications_24"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="1" />
+
+</RelativeLayout>

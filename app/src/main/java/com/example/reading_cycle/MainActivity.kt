@@ -53,6 +53,4 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-
-
 }
