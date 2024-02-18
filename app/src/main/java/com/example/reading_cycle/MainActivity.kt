@@ -99,6 +99,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         fragmentTransaction.commit()
     }
 
+
     // Fragment를 BackStack에서 제거.
     fun removeFragment(name: String) {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
