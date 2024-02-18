@@ -4,14 +4,6 @@ plugins {
 }
 
 android {
-    signingConfigs {
-        getByName("debug") {
-            keyPassword = "android"
-            keyAlias = "androiddebugkey"
-            storePassword = "android"
-            storeFile = file("D:\\Android\\.android\\debug.keystore")
-        }
-    }
     namespace = "com.example.reading_cycle"
     compileSdk = 34
 
@@ -41,10 +33,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
     viewBinding{
         enable = true
     }
+}
 
 
 dependencies {
@@ -56,9 +48,10 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    
+
     // Map 관련
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.1.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
-}
+ }
+
