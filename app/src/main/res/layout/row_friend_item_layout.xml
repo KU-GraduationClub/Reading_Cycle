@@ -40,7 +40,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/add_chat_button"
+            android:id="@+id/add_chat_btn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="#964b00"

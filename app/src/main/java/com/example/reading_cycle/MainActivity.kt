@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(LIBRARY_MAIN_FRAGMENT, false, null)
+        replaceFragment(FRIEND_MAIN_FRAGMENT, false, null)
     }
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {

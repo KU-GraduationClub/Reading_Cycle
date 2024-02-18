@@ -121,7 +121,7 @@
 
     <!--친구추가버튼-->
     <Button
-        android:id="@+id/add_friend_button"
+        android:id="@+id/add_friend_btn"
         android:layout_width="100dp"
         android:layout_height="33dp"
         android:layout_marginTop="8dp"
@@ -134,15 +134,15 @@
 
     <!--채팅버튼-->
     <Button
-        android:id="@+id/add_chat_button"
+        android:id="@+id/add_chat_btn"
         android:layout_width="100dp"
         android:layout_height="33dp"
         android:layout_marginStart="80dp"
         android:background="#964b00"
         android:text=" 채팅 "
         android:textColor="#FFFFFF"
-        app:layout_constraintStart_toEndOf="@+id/add_friend_button"
-        app:layout_constraintTop_toTopOf="@+id/add_friend_button" />
+        app:layout_constraintStart_toEndOf="@+id/add_friend_btn"
+        app:layout_constraintTop_toTopOf="@+id/add_friend_btn" />
 
     <!--구분선-->
     <View
@@ -151,7 +151,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:background="#808080"
-        app:layout_constraintTop_toBottomOf="@+id/add_friend_button"
+        app:layout_constraintTop_toBottomOf="@+id/add_friend_btn"
         tools:layout_editor_absoluteX="0dp" />
 
     <androidx.recyclerview.widget.RecyclerView
