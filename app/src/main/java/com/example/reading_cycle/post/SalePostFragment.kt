@@ -24,8 +24,7 @@ class SalePostFragment : Fragment() {
 
         // 뒤로 가기 버튼 클릭 리스너 설정
         fragmentSalePostBinding.toolbarLayoutSalePost.setNavigationOnClickListener {
-            // 뒤로 가기 버튼을 눌렀을 때의 동작
-            // mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
+             mainActivity.removeFragment(MainActivity.SALE_POST_FRAGMENT)
         }
 
         // 타이틀 아이콘 및 텍스트 설정
