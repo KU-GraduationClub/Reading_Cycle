@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/btnRowPostSwapCate1"
+        android:layout_width="50dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="7dp"
+        android:backgroundTint="#9E6320"
+        android:clickable="false"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:padding="1dp"
+        android:text="도서 종류"
+        android:textColor="#FFFFFF"
+        android:textSize="8dp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imgRowPostSwapType"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="13dp"
+        android:src="@drawable/baseline_currency_exchange_40_red" />
+
+    <Button
+        android:id="@+id/btnRowPostSwapType2"
+        android:layout_width="50dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="7dp"
+        android:backgroundTint="#5A69EF"
+        android:clickable="false"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:padding="1dp"
+        android:text="도서 종류"
+        android:textColor="#FFFFFF"
+        android:textSize="8dp"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="121dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="50dp"
+        android:background="#9A9393"
+        android:elevation="3dp">
+
+        <ImageView
+            android:id="@+id/imgRowPostSalePoster"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:src="@drawable/baseline_image_24" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textRowPostSwapTitle"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center"
+        android:text="책 제목"
+        android:textColor="#000000"
+        android:textSize="15dp" />
+
+</FrameLayout>
