@@ -10,7 +10,7 @@ import com.example.reading_cycle.databinding.FragmentUserRegisterBinding
 
 class UserRegisterFragment : Fragment() {
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentUserRegisterBinding: FragmentUserRegisterBinding
 
     override fun onCreateView(
@@ -19,6 +19,7 @@ class UserRegisterFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentUserRegisterBinding = FragmentUserRegisterBinding.inflate(inflater)
+        mainActivity.hideBottomNavigation()
 
         // 텍스트 설정
         fragmentUserRegisterBinding.toolbarTitle.text = "회원가입"

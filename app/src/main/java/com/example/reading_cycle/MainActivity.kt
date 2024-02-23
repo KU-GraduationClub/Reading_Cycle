@@ -2,6 +2,7 @@ package com.example.reading_cycle
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -49,8 +50,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
+        val view = mainBinding.root
+        setContentView(view)
 
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
@@ -113,6 +115,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     // Fragment를 BackStack에서 제거.
     fun removeFragment(name: String) {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    // BottomNavigationView를 숨기는 메서드
+    fun hideBottomNavigation() {
+        mainBinding.bottomNavigation.visibility = View.GONE
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
