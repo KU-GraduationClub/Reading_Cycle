@@ -21,6 +21,7 @@ class SwapPostFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentSwapPostBinding = FragmentSwapPostBinding.inflate(inflater)
+        mainActivity.hideBottomNavigation()
 
         // 뒤로 가기 버튼 클릭 리스너 설정
         fragmentSwapPostBinding.toolbarLayoutSwapPost.setNavigationOnClickListener {

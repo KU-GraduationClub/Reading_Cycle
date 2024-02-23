@@ -21,6 +21,7 @@ class SalePostFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentSalePostBinding = FragmentSalePostBinding.inflate(inflater)
+        mainActivity.hideBottomNavigation()
 
         // 뒤로 가기 버튼 클릭 리스너 설정
         fragmentSalePostBinding.toolbarLayoutSalePost.setNavigationOnClickListener {

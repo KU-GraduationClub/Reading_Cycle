@@ -9,7 +9,7 @@ import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.databinding.FragmentLoginMainBinding
 class LoginMainFragment : Fragment() {
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentLoginMainBinding : FragmentLoginMainBinding
     private fun setupUiListeners() {
         fragmentLoginMainBinding.btnRegister.setOnClickListener {// 회원가입 버튼
@@ -30,6 +30,7 @@ class LoginMainFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentLoginMainBinding = FragmentLoginMainBinding.inflate(inflater)
+        mainActivity.hideBottomNavigation()
 
         setupUiListeners()
 
