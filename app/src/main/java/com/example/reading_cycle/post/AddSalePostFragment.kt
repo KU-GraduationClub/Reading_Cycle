@@ -14,7 +14,7 @@ import com.example.reading_cycle.databinding.FragmentAddSalePostBinding
 
 class AddSalePostFragment : Fragment() {
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentAddSalePostBinding: FragmentAddSalePostBinding
 
     override fun onCreateView(

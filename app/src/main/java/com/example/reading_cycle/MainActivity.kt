@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(POST_MAIN_FRAGMENT, false, null)
+        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -119,7 +119,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
-    // BottomNavigationView를 숨기는 메서드
+    // BottomNavigationView Visible 메서드
+    fun showBottomNavigation() {
+        mainBinding.bottomNavigation.visibility = View.VISIBLE
+    }
     fun hideBottomNavigation() {
         mainBinding.bottomNavigation.visibility = View.GONE
     }
