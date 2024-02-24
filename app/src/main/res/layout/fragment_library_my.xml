@@ -28,10 +28,11 @@
 
             <TextView
                 android:id="@+id/toolbarTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#27713C" />
+                android:textColor="#27713C"
+                android:gravity="center"/>
 
         </com.google.android.material.appbar.MaterialToolbar>
 
@@ -84,7 +85,7 @@
         android:id="@+id/post_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="118dp"
+        android:layout_marginStart="70dp"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="15dp"
         android:text="게시물:0"

@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(FRIEND_MAIN_FRAGMENT, false, null)
+        replaceFragment(LIBRARY_MY_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         /*mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item ->

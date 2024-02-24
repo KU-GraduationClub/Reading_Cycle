@@ -21,7 +21,7 @@
             style="@style/Theme.Reading_cycle.ToolbarTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background"
+            android:background="#F9FBF4"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
             app:menu="@menu/toolbar_library_main"
@@ -29,11 +29,11 @@
 
             <TextView
                 android:id="@+id/toolbarTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#27713C" />
-
+                android:textColor="#27713C"
+                android:gravity="center"/>
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
@@ -60,7 +60,7 @@
         android:id="@+id/nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="3dp"
         android:text="사용자"
         android:textSize="20dp"
@@ -122,7 +122,7 @@
         android:id="@+id/iconPostMainLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="3dp"
         android:text="경상남도 창원시 동읍"
         android:textSize="15dp"

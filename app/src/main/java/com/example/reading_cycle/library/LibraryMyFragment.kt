@@ -49,6 +49,7 @@ class LibraryMyFragment : Fragment() {
         // 텍스트 설정
         fragmentLibraryMyBinding.toolbarTitle.text = "라이브러리"
 
+
         // 데이터 생성(임시)
         val swapBooknameList = listOf(
             SwapBooknameDataClass("책 제목1"),
