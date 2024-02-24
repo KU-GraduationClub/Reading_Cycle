@@ -22,6 +22,11 @@ class LoginMainFragment : Fragment() {
             mainActivity.replaceFragment(MainActivity.Companion.PASSWORD_RESET_FRAGMENT, true, null)
         }
 
+        fragmentLoginMainBinding.btnLogin.setOnClickListener {
+            // 로그인 성공 시 PostMainFragment로 이동
+
+            mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
+        }
     }
 
     override fun onCreateView(

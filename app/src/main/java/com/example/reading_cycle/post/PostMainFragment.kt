@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
+import com.example.reading_cycle.databinding.FragmentAddSwapPostBinding
 import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
 import com.example.reading_cycle.post.model.SaleDataClass
@@ -19,6 +20,7 @@ import com.example.reading_cycle.post.model.SwapDataClass
 
 class PostMainFragment : Fragment() {
 
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentPostMainBinding : FragmentPostMainBinding
     private lateinit var postMainAdapter : PostMainAdapter
 
@@ -26,7 +28,10 @@ class PostMainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainActivity = activity as MainActivity
         fragmentPostMainBinding = FragmentPostMainBinding.inflate(inflater)
+        mainActivity.showBottomNavigation()
+
         // 타이틀 아이콘 작업
         val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
         fragmentPostMainBinding.toolbarPostMainTitle.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)

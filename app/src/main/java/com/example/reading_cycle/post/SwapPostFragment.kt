@@ -12,7 +12,7 @@ import com.example.reading_cycle.databinding.FragmentSwapPostBinding
 
 class SwapPostFragment : Fragment() {
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentSwapPostBinding: FragmentSwapPostBinding
 
     override fun onCreateView(

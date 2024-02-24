@@ -12,7 +12,7 @@ import com.example.reading_cycle.databinding.FragmentSalePostBinding
 
 class SalePostFragment : Fragment() {
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentSalePostBinding: FragmentSalePostBinding
 
     override fun onCreateView(
