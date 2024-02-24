@@ -8,7 +8,8 @@ import androidx.fragment.app.FragmentManager
 import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.library.FriendMainFragment
-import com.example.reading_cycle.library.LibraryMainFragment
+import com.example.reading_cycle.library.LibraryFragment
+import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.location.model.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.PasswordResetFragment
@@ -32,19 +33,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     var oldFragment: Fragment? = null
     private lateinit var mainBinding: ActivityMainBinding
 
-    companion object{
-        val POST_MAIN_FRAGMENT = "PostMainFragment"
-        val ADD_SALE_POST_FRAGMENT = "AddSalePostFragment"
-        val ADD_SWAP_POST_FRAGMENT = "AddSwapPostFragment"
-        val SALE_POST_FRAGMENT = "SalePostFragment"
-        val SWAP_POST_FRAGMENT = "SwapPostFragment"
-        val LOC_SET_FRAGMENT = "LocSetFragment"
-        val LOGIN_MAIN_FRAGMENT = "LoginMainFragment"
-        val PASSWORD_RESET_FRAGMENT = "PasswordResetFragment"
-        val USER_REGISTER_FRAGMENT = "UserRegisterFragment"
-        val CHAT_LIST_FRAGMENT = "ChatListFragment"
-        val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
-        val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
+    companion object {
+        const val POST_MAIN_FRAGMENT = "PostMainFragment"
+        const val ADD_SALE_POST_FRAGMENT = "AddSalePostFragment"
+        const val ADD_SWAP_POST_FRAGMENT = "AddSwapPostFragment"
+        const val SALE_POST_FRAGMENT = "SalePostFragment"
+        const val SWAP_POST_FRAGMENT = "SwapPostFragment"
+        const val LOC_SET_FRAGMENT = "LocSetFragment"
+        const val LOGIN_MAIN_FRAGMENT = "LoginMainFragment"
+        const val PASSWORD_RESET_FRAGMENT = "PasswordResetFragment"
+        const val USER_REGISTER_FRAGMENT = "UserRegisterFragment"
+        const val CHAT_LIST_FRAGMENT = "ChatListFragment"
+        const val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
+        const val LIBRARY_FRAGMENT = "LibraryFragment"
+        const val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,19 +57,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(POST_MAIN_FRAGMENT, false, null)
+        replaceFragment(FRIEND_MAIN_FRAGMENT, false, null)
 
-//        // 네비게이션 바 아이템 클릭 이벤트 처리
-//        mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
-//            when (item.itemId) {
-//                R.id.bottom_main -> replaceFragment(POST_MAIN_FRAGMENT, true)
-//                R.id.bottom_chat -> replaceFragment(CHAT_FRAGMENT, true)
-//                R.id.bottom_frd -> replaceFragment(FRIEND_FRAGMENT, true)
-//                R.id.bottom_lib -> replaceFragment(LIBRARY_FRAGMENT, true)
-//            }
-//            true
-//        }
-
+        // 네비게이션 바 아이템 클릭 이벤트 처리
+        /*mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.bottom_main -> replaceFragment(POST_MAIN_FRAGMENT, true)
+                R.id.bottom_chat -> replaceFragment(CHAT_FRAGMENT, true)
+                R.id.bottom_frd -> replaceFragment(FRIEND_FRAGMENT, true)
+                R.id.bottom_lib -> replaceFragment(LIBRARY_FRAGMENT, true)
+            }
+            true
+        }*/
     }
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
@@ -76,22 +77,23 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-            // 새로운 Fragment를 담을 변수
-            newFragment = when(name){
-                POST_MAIN_FRAGMENT -> PostMainFragment()
-                ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
-                ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
-                SALE_POST_FRAGMENT -> SalePostFragment()
-                SWAP_POST_FRAGMENT -> SwapPostFragment()
-                LOC_SET_FRAGMENT -> LocSetFragment()
-                LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
-                USER_REGISTER_FRAGMENT -> UserRegisterFragment()
-                PASSWORD_RESET_FRAGMENT -> PasswordResetFragment()
-                CHAT_LIST_FRAGMENT -> ChatListFragment()
-                LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
-                FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
-                else -> Fragment()
-            }
+        // 새로운 Fragment를 담을 변수
+        newFragment = when (name) {
+            POST_MAIN_FRAGMENT -> PostMainFragment()
+            ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
+            ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
+            SALE_POST_FRAGMENT -> SalePostFragment()
+            SWAP_POST_FRAGMENT -> SwapPostFragment()
+            LOC_SET_FRAGMENT -> LocSetFragment()
+            LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
+            USER_REGISTER_FRAGMENT -> UserRegisterFragment()
+            PASSWORD_RESET_FRAGMENT -> PasswordResetFragment()
+            CHAT_LIST_FRAGMENT -> ChatListFragment()
+            LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
+            FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+            LIBRARY_FRAGMENT -> LibraryFragment()
+            else -> Fragment()
+        }
 
         // newFragment 에 Fragment가 들어있으면 oldFragment에 넣어준다.
         if (newFragment != null) {
@@ -101,7 +103,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Fragment를 교체한다.
         fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
 
-        if (addToBackStack == true) {
+        if (addToBackStack) {
             // Fragment를 Backstack에 넣어 이전으로 돌아가는 기능이 동작할 수 있도록 한다.
             fragmentTransaction.addToBackStack(name)
         }
