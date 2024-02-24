@@ -2,6 +2,7 @@ package com.example.reading_cycle
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -59,16 +60,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         replaceFragment(POST_MAIN_FRAGMENT, false, null)
 
-//        // 네비게이션 바 아이템 클릭 이벤트 처리
-//        mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
-//            when (item.itemId) {
-//                R.id.bottom_main -> replaceFragment(POST_MAIN_FRAGMENT, true)
-//                R.id.bottom_chat -> replaceFragment(CHAT_FRAGMENT, true)
-//                R.id.bottom_frd -> replaceFragment(FRIEND_FRAGMENT, true)
-//                R.id.bottom_lib -> replaceFragment(LIBRARY_FRAGMENT, true)
-//            }
-//            true
-//        }
+        // 네비게이션 바 아이템 클릭 이벤트 처리
+        mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
+            when (item.itemId) {
+                R.id.bottom_main -> replaceFragment(POST_MAIN_FRAGMENT, true)
+                R.id.bottom_chat -> replaceFragment(CHAT_LIST_FRAGMENT, true)
+                R.id.bottom_frd -> replaceFragment(FRIEND_MAIN_FRAGMENT, true)
+                R.id.bottom_lib -> replaceFragment(LIBRARY_MAIN_FRAGMENT, true)
+            }
+            true
+        }
 
     }
 
