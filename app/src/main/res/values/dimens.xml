@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="your_padding_start">30dp</dimen>
+    <dimen name="your_padding_top">0dp</dimen>
+    <dimen name="your_padding_end">0dp</dimen>
+    <dimen name="your_padding_bottom">0dp</dimen>
+
+    <dimen name="icon_text_padding">6dp</dimen>
+</resources>
+
