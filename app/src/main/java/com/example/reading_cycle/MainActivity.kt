@@ -29,16 +29,6 @@ class MainActivity : AppCompatActivity() {
 
         replaceFragment(FRIEND_MAIN_FRAGMENT, false, null)
 
-        // 네비게이션 바 아이템 클릭 이벤트 처리
-        /*mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.bottom_main -> replaceFragment(POST_MAIN_FRAGMENT, true)
-                R.id.bottom_chat -> replaceFragment(CHAT_FRAGMENT, true)
-                R.id.bottom_frd -> replaceFragment(FRIEND_FRAGMENT, true)
-                R.id.bottom_lib -> replaceFragment(LIBRARY_FRAGMENT, true)
-            }
-            true
-        }*/
     }
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
