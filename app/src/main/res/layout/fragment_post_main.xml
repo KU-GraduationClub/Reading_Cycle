@@ -31,12 +31,13 @@
             app:menu="@menu/toolbar_post_main"
             android:elevation="0dp">
 
-        <TextView
-            android:id="@+id/toolbarPostMainTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#27713C" />
+            <TextView
+                android:id="@+id/toolbarPostMainTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#27713C" />
 
 
         </com.google.android.material.appbar.MaterialToolbar>
