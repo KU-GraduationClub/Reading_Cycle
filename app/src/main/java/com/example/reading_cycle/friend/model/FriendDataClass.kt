@@ -76,12 +76,10 @@ class FriendMainAdapter(private val friendList: MutableList<FriendDataClass>) : 
                     toggleBookmark(friendData, position)
                     true
                 }
-
                 R.id.menuItemSortByelimination -> {
                     deleteFriend(friendData, position)
                     true
                 }
-
                 else -> false
             }
         }
@@ -97,36 +95,15 @@ class FriendMainAdapter(private val friendList: MutableList<FriendDataClass>) : 
 
     // 즐겨 찾기 아이콘 토글
     private fun toggleBookmark(friendData: FriendDataClass, position: Int) {
-        if (friendData.isBookmarked) {
-            // 이미 즐겨찾기 상태인 경우, 상단 고정을 해제합니다.
-            friendData.isBookmarked = false
-            // 현재 위치에서 제거하고, 원래 위치에 다시 추가합니다.
-            friendList.removeAt(position)
-            friendList.add(position, friendData)
-            notifyItemMoved(position, friendList.indexOf(friendData))
-        } else {
-            // 즐겨찾기 상태가 아닌 경우, 상단 고정을 수행합니다.
-            friendData.isBookmarked = true
-            // 현재 위치에서 제거하고, 리스트의 맨 앞에 추가합니다.
-            friendList.removeAt(position)
-            friendList.add(0, friendData)
-            notifyItemMoved(position, 0)
-        }
-        notifyItemChanged(0) // 첫 번째 아이템을 갱신하여 아이콘이 생성될 수 있도록 합니다.
+        friendData.isBookmarked = !friendData.isBookmarked
+        notifyItemChanged(position) // 아이템 변경 사항을 알림
     }
 
-}
     // 즐겨 찾기 아이콘 삭제
     private fun deleteBookmark(friendData: FriendDataClass, position: Int) {
         friendData.isBookmarked = false
-
+        notifyItemChanged(position) // 아이템 변경 사항을 알림
     }
-
-
-
-
-
-
-
+}
 
 
