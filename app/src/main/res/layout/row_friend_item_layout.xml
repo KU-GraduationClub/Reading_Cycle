@@ -50,13 +50,17 @@
         android:layout_height="30dp"
         android:layout_marginStart="200dp"
         android:clickable="true"
-        android:background="#CB8D45"
+        android:background="#FFFFFFFF"
         android:src="@drawable/outline_settings_suggest_24"
         app:layout_constraintBottom_toBottomOf="@+id/nickname"
         app:layout_constraintStart_toEndOf="@+id/nickname" />
+
+    <ImageView
+        android:id="@+id/star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:src="@drawable/baseline_grade_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/profile_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-

@@ -6,8 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.reading_cycle.databinding.ActivityMainBinding
-import com.example.reading_cycle.friend.FriendMainFragment
-
+import com.example.reading_cycle.friend.model.FriendMainFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,18 +20,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(mainBinding.root) // mainBinding.root를 setContentView에 전달
 
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
         replaceFragment(FRIEND_MAIN_FRAGMENT, false, null)
-
     }
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
-
         SystemClock.sleep(200)
 
         // Fragment 교체 상태로 설정한다.
@@ -60,11 +57,8 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-
     // Fragment를 BackStack에서 제거.
     fun removeFragment(name: String) {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
-
-
 }
