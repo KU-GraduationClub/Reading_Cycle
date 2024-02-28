@@ -50,7 +50,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="200dp"
         android:clickable="true"
-        android:background="#CB8D45"
+        android:background="#FFFFFFFF"
         android:src="@drawable/outline_settings_suggest_24"
         app:layout_constraintBottom_toBottomOf="@+id/nickname"
         app:layout_constraintStart_toEndOf="@+id/nickname" />

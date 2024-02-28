@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentFriendMainBinding
-import com.example.reading_cycle.databinding.RowFriendItemLayoutBinding
 import com.example.reading_cycle.friend.model.FriendDataClass
 import com.example.reading_cycle.friend.model.FriendMainAdapter
 
@@ -19,14 +18,13 @@ class FriendMainFragment : Fragment() {
 
     private lateinit var fragmentFriendMainBinding: FragmentFriendMainBinding
     private lateinit var friendMainAdapter: FriendMainAdapter
-    private lateinit var rowFriendItemLayoutBinding: RowFriendItemLayoutBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         fragmentFriendMainBinding = FragmentFriendMainBinding.inflate(inflater)
-        rowFriendItemLayoutBinding = RowFriendItemLayoutBinding.inflate(inflater, container, false)
+        // 기존 코드에서 rowFriendItemLayoutBinding을 사용하는 부분을 삭제합니다.
 
         // 타이틀 아이콘 작업
         fragmentFriendMainBinding.toolbarTitle.setCompoundDrawablesWithIntrinsicBounds(
@@ -58,11 +56,10 @@ class FriendMainFragment : Fragment() {
         fragmentFriendMainBinding.recyclerViewFriendMain.adapter = friendMainAdapter
 
         // 이미지 버튼에 클릭 이벤트 핸들러 설정
-        rowFriendItemLayoutBinding.imgBtnFriendMain.setOnClickListener {
+        fragmentFriendMainBinding.imgBtnFriendMain.setOnClickListener {
             showBookTypeMenu(it)
         }
 
-        return rowFriendItemLayoutBinding.root
         return fragmentFriendMainBinding.root
 
     }
@@ -77,6 +74,7 @@ class FriendMainFragment : Fragment() {
             when (menuItem.itemId) {
                 R.id.menuItemSortBybookmark -> {
                     // "즐겨 찾기" 선택 시 처리 상단 고정 처리
+
                 }
                 R.id.menuItemSortByelimination -> {
                     // "삭제" 선택 시 처리
@@ -91,6 +89,4 @@ class FriendMainFragment : Fragment() {
         popupMenu.show()
     }
 
-
-}
-
+} 

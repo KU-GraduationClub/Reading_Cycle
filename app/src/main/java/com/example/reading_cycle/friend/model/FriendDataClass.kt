@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.reading_cycle.R
 
 data class FriendDataClass(val title: String)
-data
 
-class FriendMainAdapter(private val friendList: List<FriendDataClass>) : RecyclerView.Adapter<FriendMainAdapter.FriendViewHolder>() {
+class FriendMainAdapter(var currentList: List<FriendDataClass>) : RecyclerView.Adapter<FriendMainAdapter.FriendViewHolder>() {
+
     // View Type 상수 정의
     private val VIEW_TYPE_FRIEND = 0
 
@@ -25,7 +25,7 @@ class FriendMainAdapter(private val friendList: List<FriendDataClass>) : Recycle
     }
 
     override fun getItemCount(): Int {
-        return friendList.size
+        return currentList.size
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -33,8 +33,11 @@ class FriendMainAdapter(private val friendList: List<FriendDataClass>) : Recycle
     }
 
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
-        holder.bind(friendList[position])
+        holder.bind(currentList[position])
     }
+
+
+
 
     // FriendViewHolder 구현
     class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
