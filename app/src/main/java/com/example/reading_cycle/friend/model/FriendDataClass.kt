@@ -76,13 +76,21 @@ class FriendMainAdapter(private val friendList: MutableList<FriendDataClass>) : 
                     toggleBookmark(friendData, position)
                     true
                 }
-                // 나머지 코드 생략
+                R.id.menuItemSortByelimination -> {
+                    deleteFriend(friendData, position)
+                    true
+                }
                 else -> false
             }
         }
 
         // 팝업 메뉴 표시
         popupMenu.show()
+    }
+
+    private fun deleteFriend(friendData: FriendDataClass, position: Int) {
+        friendList.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     // 즐겨 찾기 아이콘 토글
