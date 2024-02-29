@@ -1,37 +1,32 @@
-package com.example.reading_cycle.chat.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.reading_cycle.R
 import com.example.reading_cycle.chat.model.ChatItem
+import com.example.reading_cycle.databinding.RowChatListBinding
 
 class ChatListAdapter(private val chatList: List<ChatItem>) :
     RecyclerView.Adapter<ChatListAdapter.ChatViewHolder>() {
 
-    class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgProfile: ImageView = itemView.findViewById(R.id.imgProfile)
-        val txtName: TextView = itemView.findViewById(R.id.textUsername)
-        val textLastMessage: TextView = itemView.findViewById(R.id.textLastMessage)
-        val textLastMessageTime: TextView = itemView.findViewById(R.id.textLastMessageTime)
+    class ChatViewHolder(private val binding: RowChatListBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(chatItem: ChatItem) {
+            binding.apply {
+                imgProfile.setImageResource(chatItem.profileImage)
+                textUsername.text = chatItem.name
+                textLastMessage.text = chatItem.lastMessage
+                textLastMessageTime.text = chatItem.lastMessageTime
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.row_chat_list, parent, false)
-        return ChatViewHolder(view)
+        val binding = RowChatListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ChatViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         val chatItem = chatList[position]
-
-        holder.imgProfile.setImageResource(chatItem.profileImage)
-        holder.txtName.text = chatItem.name
-        holder.textLastMessage.text = chatItem.lastMessage
-        holder.textLastMessageTime.text = chatItem.lastMessageTime
+        holder.bind(chatItem)
     }
 
     override fun getItemCount(): Int {
