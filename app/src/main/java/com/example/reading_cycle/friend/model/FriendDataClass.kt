@@ -1,3 +1,4 @@
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,18 +12,15 @@ data class FriendDataClass(val title: String, var isBookmarked: Boolean = false)
 class FriendMainAdapter(private val friendList: MutableList<FriendDataClass>) : RecyclerView.Adapter<FriendMainAdapter.FriendViewHolder>() {
 
     inner class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imgBtnFriendMain: ImageView = itemView.findViewById(R.id.imgBtnFriendMain)
-        private val imgBookmark: ImageView = itemView.findViewById(R.id.star) // 즐겨찾기 아이콘
+        val imgBtnFriendMain: ImageView = itemView.findViewById(R.id.imgBtnFriendMain)
+        val imgBookmark: ImageView = itemView.findViewById(R.id.star)
 
         init {
-            // 이미지 버튼에 클릭 이벤트 핸들러 설정
-            imgBtnFriendMain.setOnClickListener {
-                // 현재 아이템의 위치(position)에 대한 클릭 이벤트 처리
+            imgBtnFriendMain.setOnClickListener { clickedView ->
+                val friendData = friendList[adapterPosition]
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    val friendData = friendList[position]
-                    // 클릭된 아이템에 대한 작업 수행
-                    // 여기서는 팝업 메뉴를 표시하는 로직을 호출하도록 합니다.
+                    // 이미지 버튼 클릭 이벤트 이후에만 팝업 메뉴를 표시하도록 합니다.
                     showBookTypeMenu(imgBtnFriendMain, friendData, position)
                 }
             }
@@ -54,6 +52,18 @@ class FriendMainAdapter(private val friendList: MutableList<FriendDataClass>) : 
 
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
         holder.bind(friendList[position])
+
+        holder.itemView.setOnClickListener {
+            // 아이템 클릭 시 해당 아이템의 위치를 전달
+            val friendData = friendList[position]
+            showBookTypeMenu(holder.imgBtnFriendMain, friendData, position)
+        }
+
+        holder.imgBookmark.setOnClickListener {
+            // 즐겨 찾기 아이콘 클릭 시 해당 아이템의 위치를 전달
+            val friendData = friendList[position]
+            deleteBookmark(friendData, position)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -61,39 +71,60 @@ class FriendMainAdapter(private val friendList: MutableList<FriendDataClass>) : 
     }
 
     private fun showBookTypeMenu(view: View, friendData: FriendDataClass, position: Int) {
-        // 팝업 메뉴를 위한 PopupMenu 객체 생성
         val popupMenu = PopupMenu(view.context, view)
-
-        // 팝업 메뉴에 XML 리소스 연결
         popupMenu.inflate(R.menu.popup_menu_friend_main)
-
-        // 팝업 메뉴 아이템 클릭 리스너 설정
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menuItemSortBybookmark -> {
-                    // "즐겨 찾기" 선택 시 처리
-                    // 여기에 즐겨 찾기 관련 작업을 추가하세요.
                     toggleBookmark(friendData, position)
                     true
                 }
-
                 R.id.menuItemSortByelimination -> {
-                    deleteFriend(friendData, position)
+                    // "삭제" 메뉴를 선택했을 때 처리
+                    // showDeleteConfirmationDialog(view, friendData, position)
                     true
                 }
-
                 else -> false
             }
         }
 
-        // 팝업 메뉴 표시
+        // 팝업 메뉴의 "삭제" 메뉴를 찾아서 클릭 이벤트 핸들러를 설정합니다.
+        val menuItemSortByelimination = popupMenu.menu.findItem(R.id.menuItemSortByelimination)
+        menuItemSortByelimination.setOnMenuItemClickListener {
+            showDeleteConfirmationDialog(view, friendData, position)
+            true
+        }
+
         popupMenu.show()
     }
 
-    private fun deleteFriend(friendData: FriendDataClass, position: Int) {
-        friendList.removeAt(position)
-        notifyItemRemoved(position)
+
+    private fun deleteFriend(clickedView: View, friendData: FriendDataClass, position: Int) {
+        showDeleteConfirmationDialog(clickedView, friendData, position)
     }
+
+    private fun showDeleteConfirmationDialog(clickedView: View, friendData: FriendDataClass, position: Int) {
+        val builder = AlertDialog.Builder(clickedView.context) // 클릭된 뷰의 컨텍스트를 가져옵니다.
+        builder.setTitle("삭제 확인")
+        builder.setMessage("정말 삭제하시겠습니까?")
+
+        builder.setPositiveButton("삭제") { dialog, which ->
+            // "삭제" 버튼을 클릭한 경우에만 삭제 작업을 수행합니다.
+            friendList.removeAt(position)
+            notifyItemRemoved(position)
+        }
+
+        builder.setNegativeButton("취소") { dialog, which ->
+            // "취소" 버튼을 클릭한 경우 아무 작업도 수행하지 않습니다.
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+
+
+
 
     // 즐겨 찾기 아이콘 토글
     private fun toggleBookmark(friendData: FriendDataClass, position: Int) {
@@ -121,6 +152,7 @@ class FriendMainAdapter(private val friendList: MutableList<FriendDataClass>) : 
         friendData.isBookmarked = false
 
     }
+
 
 
 
