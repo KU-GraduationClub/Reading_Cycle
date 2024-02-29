@@ -27,10 +27,8 @@
         app:itemIconSize="33dp"
         app:itemTextAppearanceActive="@style/bottom_bar_text_appearance"
         app:itemTextAppearanceInactive="@style/bottom_bar_text_appearance"
-        app:labelVisibilityMode="labeled" />
+        app:menu="@menu/bottom_menu_main"
+        app:labelVisibilityMode="labeled"
+       />
 
 </LinearLayout>
-
-
-
-

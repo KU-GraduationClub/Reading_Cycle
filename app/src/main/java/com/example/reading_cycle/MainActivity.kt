@@ -1,65 +1,76 @@
 package com.example.reading_cycle
 
-
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.reading_cycle.Library.FriendMainFragment
-import com.example.reading_cycle.Library.LibraryMainFragment
+import androidx.fragment.app.FragmentManager
+import com.example.reading_cycle.Library.LibraryFragment
+import com.example.reading_cycle.databinding.ActivityMainBinding
+import com.example.reading_cycle.library.LibraryMyFragment
 
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(){
+
 
     var newFragment: Fragment? = null
     var oldFragment: Fragment? = null
+    private lateinit var mainBinding: ActivityMainBinding
+
     companion object {
-        const val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
-        const val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
+
+        const val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
+        const val LIBRARY_FRAGMENT = "LibraryFragment"
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mainBinding = ActivityMainBinding.inflate(layoutInflater)
 
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(FRIEND_MAIN_FRAGMENT, false, null)
+        replaceFragment(LIBRARY_FRAGMENT, false, null)
+
     }
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
+
+
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-
-        // newFragment 에 Fragment가 들어있으면 oldFragment에 넣어준다.
-        if(newFragment != null){
-            oldFragment = newFragment
-        }
-
-        // 이전 Fragment 제거
-        supportFragmentManager.findFragmentById(R.id.hostFragmentMain)?.let { oldFragment ->
-            fragmentTransaction.remove(oldFragment)
-        }
-
         // 새로운 Fragment를 담을 변수
-        val newFragment = when (name) {
-            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
-            FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+        newFragment = when (name) {
+            LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
+            LIBRARY_FRAGMENT -> LibraryFragment()
             else -> Fragment()
         }
 
-        // Fragment를 교체한다.
-        fragmentTransaction.replace(R.id.hostFragmentMain, newFragment)
+        // newFragment 에 Fragment가 들어있으면 oldFragment에 넣어준다.
+        if (newFragment != null) {
+            oldFragment = newFragment
+        }
 
-        if (addToBackStack == true) {
-            // Fragment를 Backstack에 추가하여 이전으로 돌아가는 기능이 동작할 수 있도록 한다.
+        // Fragment를 교체한다.
+        fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
+
+        if (addToBackStack) {
+            // Fragment를 Backstack에 넣어 이전으로 돌아가는 기능이 동작할 수 있도록 한다.
             fragmentTransaction.addToBackStack(name)
         }
 
         // 교체 명령 동작.
         fragmentTransaction.commit()
     }
+
+
+    // Fragment를 BackStack에서 제거.
+    fun removeFragment(name: String) {
+        supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+
+
 }
-
-
-

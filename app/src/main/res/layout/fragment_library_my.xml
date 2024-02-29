@@ -17,22 +17,22 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarLayoutPostMain"
+            android:id="@+id/toolbarLayoutLibrary"
             style="@style/Theme.Reading_cycle.ToolbarTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-            app:menu="@menu/toolbar_library_main"
-            app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
+            app:menu="@menu/toolbar_library_main">
 
             <TextView
                 android:id="@+id/toolbarTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#27713C" />
+                android:textColor="#27713C"
+                android:gravity="center"/>
 
         </com.google.android.material.appbar.MaterialToolbar>
 
@@ -49,7 +49,9 @@
         android:id="@+id/profile_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/profile4"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="3dp"
+        android:src="@drawable/baseline_account_circle_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayoutPostMain" />
 
@@ -58,21 +60,24 @@
         android:id="@+id/nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toTopOf="@+id/profile_image"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="3dp"
         android:text="사용자"
-        android:textSize="25dp"
-        android:textStyle="bold" />
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
     <!--닉네임2-->
     <TextView
         android:id="@+id/library"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/nickname"
-        app:layout_constraintTop_toBottomOf="@+id/nickname"
+        android:layout_marginTop="3dp"
         android:text="님의 라이브러리"
-        android:textSize="20dp"/>
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="@+id/nickname"
+        app:layout_constraintTop_toBottomOf="@+id/nickname" />
 
 
     <!-- 게시물 카운트 -->
@@ -81,12 +86,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="15dp"
         android:text="게시물:0"
         android:textSize="15dp"
-        app:layout_constraintStart_toEndOf="@+id/library"
-        app:layout_constraintTop_toTopOf="@+id/library"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/library"
-        android:textStyle="bold"/>
+        app:layout_constraintStart_toEndOf="@+id/library"
+        app:layout_constraintTop_toTopOf="@+id/library" />
 
     <!-- 프렌드 카운트 -->
     <TextView
@@ -105,31 +112,37 @@
         android:id="@+id/location_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="3dp"
+        android:src="@drawable/baseline_location_on_40"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image"
-        android:src="@drawable/baseline_location_on_40" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
     <!--위치정보-->
     <TextView
         android:id="@+id/iconPostMainLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/location_icon"
-        app:layout_constraintTop_toTopOf="@+id/location_icon"
-        app:layout_constraintBottom_toBottomOf="@+id/location_icon"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="3dp"
         android:text="주소지"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/location_icon"
+        app:layout_constraintStart_toEndOf="@+id/location_icon"
+        app:layout_constraintTop_toTopOf="@+id/location_icon" />
 
     <!--친구추가버튼-->
     <Button
         android:id="@+id/add_friend_btn"
         android:layout_width="100dp"
         android:layout_height="33dp"
+        android:layout_marginStart="70dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="240dp"
         android:background="#964b00"
         android:text="친구 추가"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iconPostMainLocation" />
 
     <!--채팅버튼-->
@@ -137,10 +150,12 @@
         android:id="@+id/add_chat_btn"
         android:layout_width="100dp"
         android:layout_height="33dp"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
         android:background="#964b00"
         android:text=" 채팅 "
         android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_friend_btn"
         app:layout_constraintTop_toTopOf="@+id/add_friend_btn" />
 
@@ -158,6 +173,10 @@
         android:id="@+id/recyclerViewLibraryMain"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="3dp"
         app:layout_constraintBottom_toTopOf="@+id/imgBtnPostMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -169,8 +188,9 @@
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="24dp"
         android:background="#FFFFFF"
-        android:src="@drawable/plus"
+        android:src="@drawable/round_add_box_60"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/recyclerViewLibraryMain" />
 

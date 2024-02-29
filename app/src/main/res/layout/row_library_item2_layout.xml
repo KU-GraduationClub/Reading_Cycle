@@ -20,10 +20,10 @@
     <ImageView
         android:id="@+id/imgRowPostSwapType"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="13dp"
-        android:src="@drawable/baseline_attach_money_24" />
+        android:src="@drawable/baseline_currency_exchange_40_red" />
 
     <Button
         android:id="@+id/btnRowPostSwapType2"
