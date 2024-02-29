@@ -2,6 +2,7 @@ package com.example.reading_cycle
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -14,6 +15,7 @@ import com.example.reading_cycle.location.model.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.PasswordResetFragment
 import com.example.reading_cycle.login.UserRegisterFragment
+import com.example.reading_cycle.notify.NotifyFragment
 import com.example.reading_cycle.post.AddSalePostFragment
 import com.example.reading_cycle.post.AddSwapPostFragment
 import com.example.reading_cycle.post.PostMainFragment
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         const val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
         const val LIBRARY_FRAGMENT = "LibraryFragment"
         const val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
+        const val NOTIFY_FRAGMENT = "NotifyFragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +60,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(LIBRARY_MY_FRAGMENT, false, null)
+        replaceFragment(NOTIFY_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         /*mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
@@ -92,6 +95,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
             FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
             LIBRARY_FRAGMENT -> LibraryFragment()
+            NOTIFY_FRAGMENT -> NotifyFragment()
             else -> Fragment()
         }
 
@@ -110,6 +114,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // 교체 명령 동작.
         fragmentTransaction.commit()
+    }
+
+    // BottomNavigationView Visible 메서드
+    fun showBottomNavigation() {
+        mainBinding.bottomNavigation.visibility = View.VISIBLE
+    }
+    fun hideBottomNavigation() {
+        mainBinding.bottomNavigation.visibility = View.GONE
     }
 
 
