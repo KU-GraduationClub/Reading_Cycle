@@ -124,7 +124,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainBinding.bottomNavigation.visibility = View.GONE
     }
 
-
     // Fragment를 BackStack에서 제거.
     fun removeFragment(name: String) {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
