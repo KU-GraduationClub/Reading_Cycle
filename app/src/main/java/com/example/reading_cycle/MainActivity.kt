@@ -144,4 +144,3 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 10f))
     }
 }
-
