@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.MenuItem
 import android.view.View
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -18,6 +17,7 @@ import com.example.reading_cycle.location.model.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.PasswordResetFragment
 import com.example.reading_cycle.login.UserRegisterFragment
+import com.example.reading_cycle.notify.NotifyFragment
 import com.example.reading_cycle.post.AddSalePostFragment
 import com.example.reading_cycle.post.AddSwapPostFragment
 import com.example.reading_cycle.post.PostMainFragment
@@ -49,7 +49,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val USER_REGISTER_FRAGMENT = "UserRegisterFragment"
         val CHAT_LIST_FRAGMENT = "ChatListFragment"
         val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
+        val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
         val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
+        val NOTIFY_FRAGMENT = "NotifyFragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,7 +97,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 PASSWORD_RESET_FRAGMENT -> PasswordResetFragment()
                 CHAT_LIST_FRAGMENT -> ChatListFragment()
                 LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
+                LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
                 FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+                NOTIFY_FRAGMENT -> NotifyFragment()
                 else -> Fragment()
             }
 
