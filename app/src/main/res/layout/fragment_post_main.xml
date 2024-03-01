@@ -31,12 +31,13 @@
             app:menu="@menu/toolbar_post_main"
             android:elevation="0dp">
 
-        <TextView
-            android:id="@+id/toolbarPostMainTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#27713C" />
+            <TextView
+                android:id="@+id/toolbarPostMainTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#27713C" />
 
 
         </com.google.android.material.appbar.MaterialToolbar>
@@ -332,7 +333,7 @@
             android:layout_width="43dp"
             android:layout_height="43dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="60dp"
             android:background="#FFFFFF"
             android:src="@drawable/round_add_box_60"
             app:layout_constraintBottom_toBottomOf="@+id/recyclerViewPostMain"
