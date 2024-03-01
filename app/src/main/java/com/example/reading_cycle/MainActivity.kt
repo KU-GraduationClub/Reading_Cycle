@@ -23,16 +23,11 @@ import com.example.reading_cycle.post.AddSwapPostFragment
 import com.example.reading_cycle.post.PostMainFragment
 import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+
+class MainActivity : AppCompatActivity() {
 
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private var mMap: GoogleMap? = null
     var newFragment: Fragment? = null
     var oldFragment: Fragment? = null
     private lateinit var mainBinding: ActivityMainBinding
@@ -53,6 +48,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
         val NOTIFY_FRAGMENT = "NotifyFragment"
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

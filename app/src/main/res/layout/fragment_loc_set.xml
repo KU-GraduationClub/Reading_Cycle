@@ -1,42 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".MainActivity"
-    android:transitionGroup="true">
+    android:transitionGroup="true"
+    android:visibility="visible"
+    tools:context=".MainActivity">
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/AppBarLayoutPostMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint=" 현재주소를 입력하시오."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/ToolBarLayoutPostMain"
-            style="@style/Theme.Reading_cycle.ToolbarTheme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/toolbar_post_main">
-
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#27713C" />
-
-
-        </com.google.android.material.appbar.MaterialToolbar>
 
         <View
             android:id="@+id/divider"
@@ -47,60 +27,57 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
-    <TextView
-        android:id="@+id/text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:text="현재위치"
-        android:textSize="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints,TextSizeCheck"
-        tools:layout_editor_absoluteY="358dp" />
-
-    <TextView
-        android:id="@+id/text3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:text="나중위치"
-        android:textSize="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints,TextSizeCheck"
-        tools:layout_editor_absoluteY="453dp" />
-
-    <EditText
-        android:id="@+id/edt2"
-        android:layout_width="328dp"
-        android:layout_height="68dp"
-        android:ems="10"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:inputType="textPostalAddress"
-        tools:ignore="MissingConstraints,SpeakableTextPresentCheck"
-        tools:layout_editor_absoluteX="76dp"
-        tools:layout_editor_absoluteY="342dp" />
-
-    <EditText
-        android:id="@+id/edt3"
-        android:layout_width="328dp"
-        android:layout_height="68dp"
-        android:ems="10"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:inputType="textPostalAddress"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map_view"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.811"
-        tools:ignore="MissingConstraints,SpeakableTextPresentCheck"
-        tools:layout_editor_absoluteX="76dp" />
+        app:layout_constraintVertical_bias="0.186"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <EditText
+        android:id="@+id/edit_firstaddress"
+        android:layout_width="330dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/border"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:hint=" 현재주소를 입력하시오."
+        android:textColor="@color/theme_brown"
+        android:textColorHint="@color/theme_brown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map_view"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/edit_lastaddress"
+        android:layout_width="330dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/border"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:hint=" 바꿀주소를 입력하시오."
+        android:textColor="#6A3F0D"
+        android:textColorHint="@color/theme_brown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_firstaddress"
+        tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/btn1"
+        android:id="@+id/btn_finsh"
         android:layout_width="370dp"
         android:layout_height="63dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginBottom="24dp"
         android:backgroundTint="#CF8127"
         android:elevation="3dp"
         android:fontFamily="@font/soyo_maple_regular"
@@ -110,9 +87,41 @@
         android:textSize="23dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.39"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="NotSibling,UnknownId" />
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/ToolBarLayoutPostMain"
+        style="@style/Theme.Reading_cycle.ToolbarTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/toolbar_post_main"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="2dp">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#27713C" />
 
 
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
