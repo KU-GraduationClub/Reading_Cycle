@@ -17,6 +17,7 @@
         android:layout_toEndOf="@id/imgProfile"
         android:layout_marginStart="8dp"
         android:text="Username"
+        android:fontFamily="@font/soyo_maple_bold"
         android:textStyle="bold" />
 
     <TextView
@@ -27,6 +28,7 @@
         android:layout_toEndOf="@id/imgProfile"
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
+        android:fontFamily="@font/soyo_maple_regular"
         android:text="Last message" />
 
     <TextView
@@ -37,6 +39,7 @@
         android:layout_marginStart="272dp"
         android:layout_marginTop="-19dp"
         android:layout_toEndOf="@id/imgProfile"
+        android:fontFamily="@font/soyo_maple_bold"
         android:text="chat" />
 
     <TextView
