@@ -12,7 +12,7 @@ import com.example.reading_cycle.databinding.FragmentSwapPostBinding
 
 class SwapPostFragment : Fragment() {
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentSwapPostBinding: FragmentSwapPostBinding
 
     override fun onCreateView(
@@ -21,6 +21,7 @@ class SwapPostFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentSwapPostBinding = FragmentSwapPostBinding.inflate(inflater)
+        mainActivity.hideBottomNavigation()
 
         // 뒤로 가기 버튼 클릭 리스너 설정
         fragmentSwapPostBinding.toolbarLayoutSwapPost.setNavigationOnClickListener {

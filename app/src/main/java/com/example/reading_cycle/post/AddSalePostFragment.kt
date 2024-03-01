@@ -14,7 +14,7 @@ import com.example.reading_cycle.databinding.FragmentAddSalePostBinding
 
 class AddSalePostFragment : Fragment() {
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentAddSalePostBinding: FragmentAddSalePostBinding
 
     override fun onCreateView(
@@ -23,6 +23,7 @@ class AddSalePostFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentAddSalePostBinding = FragmentAddSalePostBinding.inflate(inflater)
+        mainActivity.hideBottomNavigation()
 
         // 뒤로 가기 버튼 클릭 리스너
         fragmentAddSalePostBinding.toolbarLayoutAddSalePost.setNavigationOnClickListener {

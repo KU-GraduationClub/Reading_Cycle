@@ -10,7 +10,7 @@ import com.example.reading_cycle.databinding.FragmentPasswordResetBinding
 
 class PasswordResetFragment : Fragment() {
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentPasswordResetBinding: FragmentPasswordResetBinding
 
     override fun onCreateView(
@@ -19,6 +19,7 @@ class PasswordResetFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentPasswordResetBinding = FragmentPasswordResetBinding.inflate(inflater)
+        mainActivity.hideBottomNavigation()
 
         // 텍스트 설정
         fragmentPasswordResetBinding.toolbarTitle.text = "비밀번호 재설정"
