@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.MenuItem
 import android.view.View
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -11,6 +12,8 @@ import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.library.FriendMainFragment
 import com.example.reading_cycle.library.LibraryMainFragment
+import com.example.reading_cycle.library.LibraryFragment
+import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.location.model.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.PasswordResetFragment
@@ -70,7 +73,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             true
         }
-
     }
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
@@ -79,6 +81,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
+        
             // 새로운 Fragment를 담을 변수
             newFragment = when(name){
                 POST_MAIN_FRAGMENT -> PostMainFragment()
@@ -104,7 +107,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Fragment를 교체한다.
         fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
 
-        if (addToBackStack == true) {
+        if (addToBackStack) {
             // Fragment를 Backstack에 넣어 이전으로 돌아가는 기능이 동작할 수 있도록 한다.
             fragmentTransaction.addToBackStack(name)
         }
@@ -137,3 +140,4 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 10f))
     }
 }
+

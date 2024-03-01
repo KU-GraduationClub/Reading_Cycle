@@ -23,6 +23,9 @@ class LocSetFragment : Fragment() {
         fragmentLocSetBinding = FragmentLocSetBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
 
+        val view = inflater.inflate(R.layout.fragment_loc_set, container, false)
+        fragmentLocSetBinding = FragmentLocSetBinding.inflate(inflater)
+
         return fragmentLocSetBinding.root
     }
 }
