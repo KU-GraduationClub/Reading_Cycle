@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
+import com.example.reading_cycle.databinding.FragmentAddSwapPostBinding
 import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
 import com.example.reading_cycle.post.model.SaleDataClass
@@ -19,6 +20,7 @@ import com.example.reading_cycle.post.model.SwapDataClass
 
 class PostMainFragment : Fragment() {
 
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentPostMainBinding : FragmentPostMainBinding
     private lateinit var postMainAdapter : PostMainAdapter
 
@@ -26,15 +28,18 @@ class PostMainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainActivity = activity as MainActivity
         fragmentPostMainBinding = FragmentPostMainBinding.inflate(inflater)
+        mainActivity.showBottomNavigation()
+
         // 타이틀 아이콘 작업
-        val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
+        val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_reading_cycle)
         fragmentPostMainBinding.toolbarPostMainTitle.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
         fragmentPostMainBinding.toolbarPostMainTitle.compoundDrawablePadding = resources.getDimensionPixelSize(
             R.dimen.icon_text_padding
         )
         // 텍스트 설정
-        fragmentPostMainBinding.toolbarPostMainTitle.text = "Reading\nCycle"
+        fragmentPostMainBinding.toolbarPostMainTitle.text = "리딩 사이클"
         // 정렬 팝업 메뉴
         fragmentPostMainBinding.conPostMainSort.setOnClickListener {
             showPopupMenu(it)

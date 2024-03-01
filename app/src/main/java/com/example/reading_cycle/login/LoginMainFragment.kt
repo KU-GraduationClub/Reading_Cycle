@@ -9,7 +9,7 @@ import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.databinding.FragmentLoginMainBinding
 class LoginMainFragment : Fragment() {
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentLoginMainBinding : FragmentLoginMainBinding
     private fun setupUiListeners() {
         fragmentLoginMainBinding.btnRegister.setOnClickListener {// 회원가입 버튼
@@ -22,6 +22,11 @@ class LoginMainFragment : Fragment() {
             mainActivity.replaceFragment(MainActivity.Companion.PASSWORD_RESET_FRAGMENT, true, null)
         }
 
+        fragmentLoginMainBinding.btnLogin.setOnClickListener {
+            // 로그인 성공 시 PostMainFragment로 이동
+
+            mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
+        }
     }
 
     override fun onCreateView(
@@ -30,6 +35,7 @@ class LoginMainFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentLoginMainBinding = FragmentLoginMainBinding.inflate(inflater)
+        mainActivity.hideBottomNavigation()
 
         setupUiListeners()
 
