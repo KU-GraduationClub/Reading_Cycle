@@ -18,16 +18,11 @@ import com.example.reading_cycle.post.AddSwapPostFragment
 import com.example.reading_cycle.post.PostMainFragment
 import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+
+class MainActivity : AppCompatActivity() {
 
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private var mMap: GoogleMap? = null
     var newFragment: Fragment? = null
     var oldFragment: Fragment? = null
     private lateinit var mainBinding: ActivityMainBinding
@@ -47,15 +42,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
+
+
 
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(POST_MAIN_FRAGMENT, false, null)
+        replaceFragment(LOC_SET_FRAGMENT, false, null)
 
 //        // 네비게이션 바 아이템 클릭 이벤트 처리
 //        mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -116,14 +116,5 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        val SEOUL = LatLng(37.556, 126.97)
-        val markerOptions = MarkerOptions()
-        markerOptions.position(SEOUL)
-        markerOptions.title("서울")
-        markerOptions.snippet("한국 수도")
-        mMap?.addMarker(markerOptions)
-        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 10f))
-    }
+
 }
