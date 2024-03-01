@@ -11,10 +11,13 @@ import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.library.FriendMainFragment
 import com.example.reading_cycle.library.LibraryMainFragment
+import com.example.reading_cycle.library.LibraryFragment
+import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.location.model.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.PasswordResetFragment
 import com.example.reading_cycle.login.UserRegisterFragment
+import com.example.reading_cycle.notify.NotifyFragment
 import com.example.reading_cycle.post.AddSalePostFragment
 import com.example.reading_cycle.post.AddSwapPostFragment
 import com.example.reading_cycle.post.PostMainFragment
@@ -46,7 +49,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val USER_REGISTER_FRAGMENT = "UserRegisterFragment"
         val CHAT_LIST_FRAGMENT = "ChatListFragment"
         val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
+        val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
         val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
+        val NOTIFY_FRAGMENT = "NotifyFragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +75,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             true
         }
-
     }
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
@@ -79,6 +83,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
+        
             // 새로운 Fragment를 담을 변수
             newFragment = when(name){
                 POST_MAIN_FRAGMENT -> PostMainFragment()
@@ -92,7 +97,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 PASSWORD_RESET_FRAGMENT -> PasswordResetFragment()
                 CHAT_LIST_FRAGMENT -> ChatListFragment()
                 LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
+                LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
                 FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+                NOTIFY_FRAGMENT -> NotifyFragment()
                 else -> Fragment()
             }
 
@@ -104,7 +111,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Fragment를 교체한다.
         fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
 
-        if (addToBackStack == true) {
+        if (addToBackStack) {
             // Fragment를 Backstack에 넣어 이전으로 돌아가는 기능이 동작할 수 있도록 한다.
             fragmentTransaction.addToBackStack(name)
         }
@@ -112,7 +119,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // 교체 명령 동작.
         fragmentTransaction.commit()
     }
-
 
     // Fragment를 BackStack에서 제거.
     fun removeFragment(name: String) {
