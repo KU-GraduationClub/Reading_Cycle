@@ -6,53 +6,34 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/linear_layout"
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="50dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:src="@drawable/baseline_account_circle_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/nickname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/profile_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/baseline_account_circle_24"
-            android:background="@color/white"
-            android:layout_gravity="center_vertical" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/nickname2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="닉네임"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/add_chat_btn"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="#964b00"
-            android:text="삭제"
-            android:textColor="#FFFFFF" />
-
-    </LinearLayout>
+        android:layout_marginStart="10dp"
+        android:text="닉네임"
+        android:textSize="20sp"
+        android:fontFamily="@font/soyo_maple_bold"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
     <View
         android:id="@+id/dividerRowPostMain"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="11dp"
@@ -61,8 +42,28 @@
         android:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
+    <ImageView
+        android:id="@+id/imgBtnFriendMain"
+        android:layout_width="45dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFFFF"
+        android:clickable="true"
+        android:src="@drawable/outline_settings_suggest_24"
+        app:layout_constraintBottom_toBottomOf="@+id/nickname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/nickname"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/star"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/baseline_grade_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/profile_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-

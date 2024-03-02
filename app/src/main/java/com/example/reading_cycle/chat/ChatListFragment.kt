@@ -25,14 +25,14 @@ class ChatListFragment : Fragment() {
 
         val ChatItems = listOf(
             ChatItem(R.drawable.baseline_account_circle_24, "김민재", "안녕하세요!", "12:30 PM"),
-            ChatItem(R.drawable.baseline_account_circle_24, "손흥민", "오늘 날씨 어때?", "1:45 PM"),
-            ChatItem(R.drawable.baseline_account_circle_24, "이강인", "뭐해?", "3:20 PM"),
-            ChatItem(R.drawable.baseline_account_circle_24, "박지성", "안녕하세요!", "12:30 PM"),
-            ChatItem(R.drawable.baseline_account_circle_24, "이승우", "오늘 날씨 어때?", "1:45 PM"),
-            ChatItem(R.drawable.baseline_account_circle_24, "차두리", "뭐해?", "3:20 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "손흥민", "데미안 구매하고 싶습니다", "1:45 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "이강인", "15000원에 거래합니다.", "3:20 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "박지성", "안녕하세요~", "12:30 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "이승우", "사거리 앞에 있습니다.", "1:45 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "차두리", "네 감사합니다", "3:20 PM"),
             ChatItem(R.drawable.baseline_account_circle_24, "차범근", "안녕하세요!", "12:30 PM"),
-            ChatItem(R.drawable.baseline_account_circle_24, "이청용", "오늘 날씨 어때?", "1:45 PM"),
-            ChatItem(R.drawable.baseline_account_circle_24, "기성룡", "뭐해?", "3:20 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "이청용", "3000원 네고 가능한가요?", "1:45 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "기성룡", "안녕하세요", "3:20 PM"),
             // ... 다른 채팅 아이템들을 추가할 수 있습니다.
         )
         /*lateinit var mainActivity: MainActivity

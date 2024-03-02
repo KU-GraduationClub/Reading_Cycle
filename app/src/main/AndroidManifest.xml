@@ -25,16 +25,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyACsHtv1tMM0pqTfSVlSggH5gScZa_RzIg" />
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-
+        <activity android:name=".SplashActivity" android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" android:exported="true"> </activity>
     </application>
 
 </manifest>

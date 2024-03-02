@@ -11,15 +11,17 @@
 
     <EditText
         android:id="@+id/edtLoginPassword"
+        android:drawableLeft="@drawable/baseline_lock_open_40"
+        android:drawablePadding="3dp"
         android:layout_width="330dp"
         android:layout_height="40dp"
         android:layout_marginTop="140dp"
         android:background="@drawable/border"
-        android:ems="10"
+        android:ems="20"
         android:fontFamily="@font/soyo_maple_regular"
         android:hint="비밀번호"
-        android:inputType="text"
-        android:paddingStart="10dp"
+        android:inputType="textPassword"
+        android:paddingStart="5dp"
         android:textColor="#6A3F0D"
         android:textColorHint="#6A3F0D"
         android:textSize="18sp"
@@ -53,32 +55,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
-        android:layout_marginEnd="92dp"
+        android:layout_marginEnd="84dp"
         android:fontFamily="@font/soyo_maple_bold"
         android:gravity="center"
         android:text="리딩 사이클"
         android:textColor="#27713C"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgLogoMain"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edtLoginEmail"
+        android:drawableLeft="@drawable/baseline_mail_outline_40"
+        android:drawablePadding="3dp"
         android:layout_width="330dp"
         android:layout_height="40dp"
         android:layout_marginTop="80dp"
         android:background="@drawable/border"
-        android:ems="10"
+        android:ems="20"
         android:fontFamily="@font/soyo_maple_regular"
         android:hint="이메일"
         android:inputType="text"
-        android:paddingStart="10dp"
+        android:paddingStart="5dp"
         android:textColor="#6A3F0D"
         android:textColorHint="#6A3F0D"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textTitleMain" />
 
@@ -91,11 +94,12 @@
         android:layout_marginEnd="165dp"
         android:fontFamily="@font/soyo_maple_bold"
         android:gravity="center"
-        android:text="Re-Cycle"
+        android:text="Reading Cycle"
         android:textAlignment="center"
         android:textColor="#27713C"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.325"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textTitleMain" />
 
@@ -145,18 +149,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imgLogoMain"
-        android:layout_width="59dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="112dp"
-        android:src="@drawable/logo_reading_cycle"
-        app:tint="#27713C"
-        app:layout_constraintEnd_toStartOf="@+id/textTitleMain"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
         android:id="@+id/imgBtnVisiblePWLogin"
         android:layout_width="30dp"
         android:layout_height="40dp"
@@ -170,5 +162,17 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/baseline_visibility_40"
         app:tint="#6A3F0D" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="68dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="108dp"
+        android:src="@drawable/logo_reading_cycle"
+        app:layout_constraintEnd_toStartOf="@+id/textTitleMain"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

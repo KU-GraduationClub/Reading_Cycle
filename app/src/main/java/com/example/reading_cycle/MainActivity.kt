@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
-import com.example.reading_cycle.library.FriendMainFragment
+import com.example.reading_cycle.friend.FriendMainFragment
 import com.example.reading_cycle.library.LibraryMainFragment
 import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.location.LocSetFragment
