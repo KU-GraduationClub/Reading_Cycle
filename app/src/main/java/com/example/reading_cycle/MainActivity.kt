@@ -11,9 +11,8 @@ import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.library.FriendMainFragment
 import com.example.reading_cycle.library.LibraryMainFragment
-import com.example.reading_cycle.library.LibraryFragment
 import com.example.reading_cycle.library.LibraryMyFragment
-import com.example.reading_cycle.location.model.LocSetFragment
+import com.example.reading_cycle.location.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.PasswordResetFragment
 import com.example.reading_cycle.login.UserRegisterFragment
@@ -26,27 +25,25 @@ import com.example.reading_cycle.post.SwapPostFragment
 
 class MainActivity : AppCompatActivity() {
 
-
-
-    var newFragment: Fragment? = null
-    var oldFragment: Fragment? = null
     private lateinit var mainBinding: ActivityMainBinding
+    private var newFragment: Fragment? = null
+    private var oldFragment: Fragment? = null
 
     companion object{
-        val POST_MAIN_FRAGMENT = "PostMainFragment"
-        val ADD_SALE_POST_FRAGMENT = "AddSalePostFragment"
-        val ADD_SWAP_POST_FRAGMENT = "AddSwapPostFragment"
-        val SALE_POST_FRAGMENT = "SalePostFragment"
-        val SWAP_POST_FRAGMENT = "SwapPostFragment"
-        val LOC_SET_FRAGMENT = "LocSetFragment"
-        val LOGIN_MAIN_FRAGMENT = "LoginMainFragment"
-        val PASSWORD_RESET_FRAGMENT = "PasswordResetFragment"
-        val USER_REGISTER_FRAGMENT = "UserRegisterFragment"
-        val CHAT_LIST_FRAGMENT = "ChatListFragment"
-        val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
-        val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
-        val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
-        val NOTIFY_FRAGMENT = "NotifyFragment"
+        const val POST_MAIN_FRAGMENT = "PostMainFragment"
+        const val ADD_SALE_POST_FRAGMENT = "AddSalePostFragment"
+        const val ADD_SWAP_POST_FRAGMENT = "AddSwapPostFragment"
+        const val SALE_POST_FRAGMENT = "SalePostFragment"
+        const val SWAP_POST_FRAGMENT = "SwapPostFragment"
+        const val LOC_SET_FRAGMENT = "LocSetFragment"
+        const val LOGIN_MAIN_FRAGMENT = "LoginMainFragment"
+        const val PASSWORD_RESET_FRAGMENT = "PasswordResetFragment"
+        const val USER_REGISTER_FRAGMENT = "UserRegisterFragment"
+        const val CHAT_LIST_FRAGMENT = "ChatListFragment"
+        const val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
+        const val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
+        const val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
+        const val NOTIFY_FRAGMENT = "NotifyFragment"
     }
 
 
@@ -129,14 +126,4 @@ class MainActivity : AppCompatActivity() {
         mainBinding.bottomNavigation.visibility = View.GONE
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        val SEOUL = LatLng(37.556, 126.97)
-        val markerOptions = MarkerOptions()
-        markerOptions.position(SEOUL)
-        markerOptions.title("서울")
-        markerOptions.snippet("한국 수도")
-        mMap?.addMarker(markerOptions)
-        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 10f))
-    }
 }

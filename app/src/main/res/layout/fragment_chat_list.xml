@@ -12,6 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarLayoutFriendMain"
@@ -25,10 +27,10 @@
 
             <TextView
                 android:id="@+id/toolbarTitle"
-                android:text="채팅 목록"
-                android:fontFamily="@font/soyo_maple_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/soyo_maple_bold"
+                android:text="채팅 목록"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#27713C" />
 
@@ -38,7 +40,7 @@
             android:id="@+id/topDivider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#27713C"/> <!-- 배경색 직접 설정 -->
+            android:background="#27713C" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

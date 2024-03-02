@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
@@ -71,15 +73,39 @@ class PostMainFragment : Fragment() {
             adapter = postMainAdapter
         }
 
-//        // RecyclerView 초기화
-//        val layoutManager = LinearLayoutManager(requireContext())
-//        fragmentPostMainBinding.recyclerViewPostMain.layoutManager = layoutManager
-//
-//        // 어댑터 초기화
-//        postMainAdapter = createPostMainAdapter()
-//        fragmentPostMainBinding.recyclerViewPostMain.adapter = postMainAdapter
+        // 툴바의 알림 메뉴 아이템에 대한 클릭 이벤트 처리
+        fragmentPostMainBinding.toolbarLayoutPostMain.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.postMenuItemNotify -> {
+                    navigateToNotifyFragment()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // 위치 설정 버튼 클릭 이벤트 처리
+        fragmentPostMainBinding.conPostMainLocation.setOnClickListener {
+            navigateToLocSetFragment()
+        }
 
         return fragmentPostMainBinding.root
+    }
+
+    private fun navigateToNotifyFragment() {
+        // 알림 화면으로 이동
+        (requireActivity() as MainActivity).replaceFragment(
+            MainActivity.NOTIFY_FRAGMENT,
+            true
+        )
+    }
+
+    private fun navigateToLocSetFragment() {
+        // 위치 설정 화면으로 이동
+        (requireActivity() as MainActivity).replaceFragment(
+            MainActivity.LOC_SET_FRAGMENT,
+            true
+        )
     }
 
     private fun showPopupMenu(view: View) {

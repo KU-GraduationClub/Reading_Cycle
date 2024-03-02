@@ -1,58 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imgProfile"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/baseline_dehaze_24" />
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="13dp"
+        android:src="@drawable/baseline_dehaze_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_account_circle_24" />
 
     <TextView
         android:id="@+id/textUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/imgProfile"
-        android:layout_marginStart="8dp"
-        android:text="Username"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="19dp"
         android:fontFamily="@font/soyo_maple_bold"
-        android:textStyle="bold" />
+        android:text="Username"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imgProfile"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textLastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textUsername"
-        android:layout_toEndOf="@id/imgProfile"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="3dp"
         android:fontFamily="@font/soyo_maple_regular"
-        android:text="Last message" />
+        android:text="Last message"
+        app:layout_constraintStart_toEndOf="@+id/imgProfile"
+        app:layout_constraintTop_toBottomOf="@+id/textUsername" />
 
     <TextView
         android:id="@+id/textLastMessageTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textLastMessage"
-        android:layout_marginStart="272dp"
-        android:layout_marginTop="-19dp"
-        android:layout_toEndOf="@id/imgProfile"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
         android:fontFamily="@font/soyo_maple_bold"
-        android:text="chat" />
+        android:text="chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textUnseenCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/baseline_notifications_none_24"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="1" />
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="5dp"
+        android:background="@android:drawable/radiobutton_off_background"
+        android:gravity="center"
+        android:padding="0dp"
+        android:text="0"
+        app:layout_constraintEnd_toEndOf="@+id/textLastMessageTime"
+        app:layout_constraintTop_toBottomOf="@+id/textLastMessageTime" />
 
-</RelativeLayout>
+    <View
+        android:id="@+id/dividerRowChatList"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="4dp"
+        android:background="#BAB6B6"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgProfile" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

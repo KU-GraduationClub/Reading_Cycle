@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reading_cycle.chat.model.ChatItem
 import com.example.reading_cycle.databinding.FragmentChatListBinding
-import com.google.android.material.R
+import com.example.reading_cycle.R
 
 
 class ChatListFragment : Fragment() {
@@ -24,15 +24,15 @@ class ChatListFragment : Fragment() {
         fragmentChatListBinding = FragmentChatListBinding.inflate(inflater, container, false)
 
         val ChatItems = listOf(
-            ChatItem(R.drawable.design_ic_visibility, "김민수", "안녕하세요!", "12:30 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "손흥민", "오늘 날씨 어때?", "1:45 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "한문철", "뭐해?", "3:20 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "박지성", "안녕하세요!", "12:30 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "이승우", "오늘 날씨 어때?", "1:45 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "차두리", "뭐해?", "3:20 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "차범근", "안녕하세요!", "12:30 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "이청용", "오늘 날씨 어때?", "1:45 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "기성룡", "뭐해?", "3:20 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "김민재", "안녕하세요!", "12:30 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "손흥민", "오늘 날씨 어때?", "1:45 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "이강인", "뭐해?", "3:20 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "박지성", "안녕하세요!", "12:30 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "이승우", "오늘 날씨 어때?", "1:45 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "차두리", "뭐해?", "3:20 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "차범근", "안녕하세요!", "12:30 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "이청용", "오늘 날씨 어때?", "1:45 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "기성룡", "뭐해?", "3:20 PM"),
             // ... 다른 채팅 아이템들을 추가할 수 있습니다.
         )
         /*lateinit var mainActivity: MainActivity

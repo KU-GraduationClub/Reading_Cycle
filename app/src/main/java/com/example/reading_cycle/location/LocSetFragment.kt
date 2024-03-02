@@ -1,4 +1,4 @@
-package com.example.reading_cycle.location.model
+package com.example.reading_cycle.location
 
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 class LocSetFragment : Fragment(), OnMapReadyCallback {
 
+    private lateinit var mainActivity: MainActivity
     private lateinit var mapView: MapView
     private lateinit var googleMap: GoogleMap
     private var _binding: FragmentLocSetBinding? = null
@@ -28,6 +29,8 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainActivity = activity as MainActivity
+        mainActivity.hideBottomNavigation()
         _binding = FragmentLocSetBinding.inflate(inflater)
         mapView = binding.mapView
         mapView.onCreate(savedInstanceState)
@@ -45,7 +48,6 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         // 읽어온 값을 사용하거나 처리하는 로직을 여기에 추가
         Log.d("LocSetFragment", "First EditText: $textFromFirstEditText, Last EditText: $textFromLastEditText")
         return binding.root
-
 
     }
 
