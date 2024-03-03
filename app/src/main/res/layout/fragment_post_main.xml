@@ -252,14 +252,14 @@
 
             <TextView
                 android:id="@+id/textPostMainSort"
-                android:layout_width="50dp"
+                android:layout_width="55dp"
                 android:layout_height="23dp"
                 android:layout_margin="1dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:gravity="center"
                 android:text="최신 순"
                 android:textColor="#000000"
-                android:textSize="14dp"
+                android:textSize="13dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iconPostMainSort"
                 app:layout_constraintTop_toTopOf="parent" />

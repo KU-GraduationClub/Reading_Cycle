@@ -15,7 +15,7 @@ class FriendMainAdapter(private val friendList: MutableList<FriendDataClass>) : 
 
     inner class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgBtnFriendMain: ImageView = itemView.findViewById(R.id.imgBtnFriendMain)
-        val imgBookmark: ImageView = itemView.findViewById(R.id.star)
+        val imgBookmark: ImageView = itemView.findViewById(R.id.imgFriendStar)
 
         init {
             imgBtnFriendMain.setOnClickListener { clickedView ->

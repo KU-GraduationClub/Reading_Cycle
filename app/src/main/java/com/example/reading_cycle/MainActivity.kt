@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.bottom_main -> replaceFragment(POST_MAIN_FRAGMENT, true)
                 R.id.bottom_chat -> replaceFragment(CHAT_LIST_FRAGMENT, true)
                 R.id.bottom_frd -> replaceFragment(FRIEND_MAIN_FRAGMENT, true)
-                R.id.bottom_lib -> replaceFragment(LIBRARY_MAIN_FRAGMENT, true)
+                R.id.bottom_lib -> replaceFragment(LIBRARY_MY_FRAGMENT, true)
             }
             true
         }

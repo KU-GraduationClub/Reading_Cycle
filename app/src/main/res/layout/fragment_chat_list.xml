@@ -26,10 +26,12 @@
             app:menu="@menu/toolbar_library_main">
 
             <TextView
-                android:id="@+id/toolbarTitle"
+                android:id="@+id/toolbarLibraryMyTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:fontFamily="@font/soyo_maple_bold"
+                android:gravity="center"
                 android:text="채팅 목록"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#27713C" />
@@ -37,10 +39,12 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/topDivider"
-            android:layout_width="match_parent"
+            android:id="@+id/dividerLibraryMy"
+            android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:background="#27713C" />
+            android:layout_marginTop="0dp"
+            android:background="#27713C"
+            android:elevation="0dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -49,9 +53,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="top"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        android:layout_marginTop="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

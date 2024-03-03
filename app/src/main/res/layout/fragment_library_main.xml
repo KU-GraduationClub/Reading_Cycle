@@ -28,7 +28,7 @@
             app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
 
             <TextView
-                android:id="@+id/toolbarTitle"
+                android:id="@+id/toolbarLibraryMyTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
@@ -46,7 +46,7 @@
 
     <!-- 프로필 이미지 -->
     <ImageView
-        android:id="@+id/profile_image"
+        android:id="@+id/imgLibraryMyProfile"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/baseline_account_circle_24"
@@ -55,50 +55,50 @@
 
     <!-- 닉네임1-->
     <TextView
-        android:id="@+id/nickname"
+        android:id="@+id/textLibraryMyUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toTopOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/imgLibraryMyProfile"
+        app:layout_constraintTop_toTopOf="@+id/imgLibraryMyProfile"
         android:text="사용자"
         android:textSize="25dp"
         android:textStyle="bold" />
 
     <!--닉네임2-->
     <TextView
-        android:id="@+id/library"
+        android:id="@+id/textLibraryMy1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/nickname"
-        app:layout_constraintTop_toBottomOf="@+id/nickname"
+        app:layout_constraintStart_toStartOf="@+id/textLibraryMyUser"
+        app:layout_constraintTop_toBottomOf="@+id/textLibraryMyUser"
         android:text="님의 라이브러리"
         android:textSize="20dp"/>
 
 
     <!-- 게시물 카운트 -->
     <TextView
-        android:id="@+id/post_count"
+        android:id="@+id/textLibraryMy2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:text="게시물:0"
         android:textSize="15dp"
-        app:layout_constraintStart_toEndOf="@+id/library"
-        app:layout_constraintTop_toTopOf="@+id/library"
-        app:layout_constraintBottom_toBottomOf="@+id/library"
+        app:layout_constraintStart_toEndOf="@+id/textLibraryMy1"
+        app:layout_constraintTop_toTopOf="@+id/textLibraryMy1"
+        app:layout_constraintBottom_toBottomOf="@+id/textLibraryMy1"
         android:textStyle="bold"/>
 
     <!-- 프렌드 카운트 -->
     <TextView
-        android:id="@+id/friend_count"
+        android:id="@+id/textLibraryMy3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="프렌드:0"
         android:textSize="15dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/post_count"
-        app:layout_constraintTop_toBottomOf="@+id/post_count" />
+        app:layout_constraintStart_toStartOf="@+id/textLibraryMy2"
+        app:layout_constraintTop_toBottomOf="@+id/textLibraryMy2" />
 
     <!-- 위치 아이콘 -->
     <ImageView
@@ -106,7 +106,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image"
+        app:layout_constraintTop_toBottomOf="@+id/imgLibraryMyProfile"
         android:src="@drawable/baseline_location_on_40" />
     <!--위치정보-->
     <TextView
@@ -158,21 +158,9 @@
         android:id="@+id/recyclerViewLibraryMain"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/imgBtnPostMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-
-    <ImageButton
-        android:id="@+id/imgBtnPostMain"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        android:layout_marginEnd="10dp"
-        android:background="#FFFFFF"
-        android:src="@drawable/round_add_box_60"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerViewLibraryMain" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
