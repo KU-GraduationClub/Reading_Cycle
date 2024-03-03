@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.reading_cycle.MainActivity
-import com.example.reading_cycle.R
-import com.example.reading_cycle.databinding.FragmentLocSetBinding
+import com.example.reading_cycle.databinding.FragmentAddSalePostBinding
+import com.example.reading_cycle.databinding.FragmentLocResetBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -16,12 +16,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-class LocSetFragment : Fragment(), OnMapReadyCallback {
+class LocReSetFragment : Fragment(), OnMapReadyCallback {
 
+    private lateinit var fragmentLocResetBinding : FragmentLocResetBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var mapView: MapView
     private lateinit var googleMap: GoogleMap
-    private var _binding: FragmentLocSetBinding? = null
+    private var _binding: FragmentLocResetBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -31,20 +32,30 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         mainActivity = activity as MainActivity
         mainActivity.hideBottomNavigation()
-        _binding = FragmentLocSetBinding.inflate(inflater)
-        mapView = binding.mapViewLocSet
+        _binding = FragmentLocResetBinding.inflate(inflater)
+        fragmentLocResetBinding = FragmentLocResetBinding.inflate(inflater)
+        mapView = binding.mapView
         mapView.onCreate(savedInstanceState)
         mapView.onResume()
         mapView.getMapAsync(this)
 
+        // 뒤로 가기 버튼 클릭 리스너
+        fragmentLocResetBinding.toolbarLayoutLocReset.setNavigationOnClickListener {
+            mainActivity.removeFragment(MainActivity.LOC_RESET_FRAGMENT)
+        }
+
         // 각각의 EditText 참조
-        val editTextFirst = binding.edtLocSet
+        val editTextFirst = binding.edtLocResetNow
+        val editTextLast = binding.edtLocResetChange
+
         // 각각의 EditText에서 텍스트 읽어오기 예제
         val textFromFirstEditText = editTextFirst.text.toString()
+        val textFromLastEditText = editTextLast.text.toString()
 
         // 읽어온 값을 사용하거나 처리하는 로직을 여기에 추가
-        Log.d("LocSetFragment", "First EditText: $textFromFirstEditText")
-        return binding.root
+        Log.d("LocSetFragment", "First EditText: $textFromFirstEditText, Last EditText: $textFromLastEditText")
+
+        return fragmentLocResetBinding.root
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

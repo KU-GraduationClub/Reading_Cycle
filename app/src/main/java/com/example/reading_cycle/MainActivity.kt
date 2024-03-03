@@ -13,6 +13,7 @@ import com.example.reading_cycle.friend.FriendMainFragment
 import com.example.reading_cycle.library.LibraryMainFragment
 import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.location.LocSetFragment
+import com.example.reading_cycle.location.LocReSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.PasswordResetFragment
 import com.example.reading_cycle.login.UserRegisterFragment
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         const val SALE_POST_FRAGMENT = "SalePostFragment"
         const val SWAP_POST_FRAGMENT = "SwapPostFragment"
         const val LOC_SET_FRAGMENT = "LocSetFragment"
+        const val LOC_RESET_FRAGMENT = "LocResetFragment"
         const val LOGIN_MAIN_FRAGMENT = "LoginMainFragment"
         const val PASSWORD_RESET_FRAGMENT = "PasswordResetFragment"
         const val USER_REGISTER_FRAGMENT = "UserRegisterFragment"
@@ -56,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar를 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
+        replaceFragment(POST_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -85,6 +87,7 @@ class MainActivity : AppCompatActivity() {
                 SALE_POST_FRAGMENT -> SalePostFragment()
                 SWAP_POST_FRAGMENT -> SwapPostFragment()
                 LOC_SET_FRAGMENT -> LocSetFragment()
+                LOC_RESET_FRAGMENT -> LocReSetFragment()
                 LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
                 USER_REGISTER_FRAGMENT -> UserRegisterFragment()
                 PASSWORD_RESET_FRAGMENT -> PasswordResetFragment()
@@ -131,6 +134,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun navigateToLocSetFragment() {
-        replaceFragment(LOC_SET_FRAGMENT, true)
+        replaceFragment(LOC_RESET_FRAGMENT, true)
     }
 }
