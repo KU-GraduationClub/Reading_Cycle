@@ -8,7 +8,7 @@
     android:background="@color/background">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+        android:id="@+id/appBarLayoutChatList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarLayoutFriendMain"
+            android:id="@+id/toolbarLayoutChatList"
             style="@style/Theme.Reading_cycle.ToolbarTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             app:menu="@menu/toolbar_library_main">
 
             <TextView
-                android:id="@+id/toolbarLibraryMyTitle"
+                android:id="@+id/toolbarChatListTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -39,7 +39,7 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/dividerLibraryMy"
+            android:id="@+id/dividerChatList"
             android:layout_width="wrap_content"
             android:layout_height="2dp"
             android:layout_marginTop="0dp"
@@ -53,10 +53,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="top"
-        android:layout_marginTop="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutChatList" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

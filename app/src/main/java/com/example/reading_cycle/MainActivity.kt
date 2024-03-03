@@ -126,4 +126,11 @@ class MainActivity : AppCompatActivity() {
         mainBinding.bottomNavigation.visibility = View.GONE
     }
 
+    fun navigateToNotifyFragment() {
+        replaceFragment(NOTIFY_FRAGMENT, true)
+    }
+
+    fun navigateToLocSetFragment() {
+        replaceFragment(LOC_SET_FRAGMENT, true)
+    }
 }

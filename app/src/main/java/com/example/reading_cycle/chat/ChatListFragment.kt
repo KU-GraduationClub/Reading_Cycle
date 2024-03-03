@@ -9,19 +9,25 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.chat.model.ChatItem
 import com.example.reading_cycle.databinding.FragmentChatListBinding
 import com.example.reading_cycle.R
 
 
 class ChatListFragment : Fragment() {
+
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentChatListBinding : FragmentChatListBinding
     private lateinit var chatListAdapter: ChatListAdapter //채팅리스트 어댑터
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainActivity = activity as MainActivity
         fragmentChatListBinding = FragmentChatListBinding.inflate(inflater, container, false)
+        mainActivity.showBottomNavigation()
 
         val ChatItems = listOf(
             ChatItem(R.drawable.baseline_account_circle_24, "김민재", "안녕하세요!", "12:30 PM"),
@@ -42,6 +48,17 @@ class ChatListFragment : Fragment() {
                 mainActivity.removeFragment(MainActivity.AUTH_JOIN_FRAGMENT)
             }*/
         initRecyclerView(ChatItems)
+
+        // 툴바 알림 메뉴 클릭 이벤트 처리
+        fragmentChatListBinding.toolbarLayoutChatList.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.libraryMenuItemNotify -> {
+                    mainActivity.navigateToNotifyFragment()
+                    true
+                }
+                else -> false
+            }
+        }
 
         return fragmentChatListBinding.root
     }

@@ -18,6 +18,7 @@ import com.example.reading_cycle.library.model.SwapBooknameDataClass
 
 class LibraryMyFragment : Fragment() {
 
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentLibraryMyBinding: FragmentLibraryMyBinding
     private lateinit var libraryMainAdapter: LibraryMainAdapter
 
@@ -33,7 +34,9 @@ class LibraryMyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainActivity = activity as MainActivity
         fragmentLibraryMyBinding = FragmentLibraryMyBinding.inflate(inflater)
+        mainActivity.showBottomNavigation()
 
         // 타이틀 아이콘 작업
         val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
@@ -74,6 +77,17 @@ class LibraryMyFragment : Fragment() {
 
         //어댑터 설정
         fragmentLibraryMyBinding.recyclerViewLibraryMain.adapter = libraryMainAdapter
+
+        // 툴바 알림 메뉴 클릭 이벤트 처리
+        fragmentLibraryMyBinding.toolbarLayoutLibraryMy.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.libraryMenuItemNotify -> {
+                    mainActivity.navigateToNotifyFragment()
+                    true
+                }
+                else -> false
+            }
+        }
 
         return fragmentLibraryMyBinding.root
     }
