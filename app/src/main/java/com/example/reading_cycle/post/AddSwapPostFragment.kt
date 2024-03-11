@@ -30,16 +30,6 @@ class AddSwapPostFragment : Fragment() {
             mainActivity.removeFragment(MainActivity.ADD_SWAP_POST_FRAGMENT)
         }
 
-        // 타이틀 아이콘 및 텍스트 설정
-        val iconDrawable = ContextCompat.getDrawable(requireContext(),
-            R.drawable.baseline_sync_40_blue
-        )
-        fragmentAddSwapPostBinding.toolbarTitleAddSwapPost.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
-        fragmentAddSwapPostBinding.toolbarTitleAddSwapPost.compoundDrawablePadding = resources.getDimensionPixelSize(
-            R.dimen.icon_text_padding
-        )
-        fragmentAddSwapPostBinding.toolbarTitleAddSwapPost.text = "도서 교환 게시"
-
         // FrameLayout 클릭 이벤트 처리
         fragmentAddSwapPostBinding.FrameAddSwapPost1.setOnClickListener {
             showBookTypeMenu(it)

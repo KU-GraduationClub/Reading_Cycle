@@ -30,16 +30,6 @@ class AddSalePostFragment : Fragment() {
             mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
         }
 
-        // 타이틀 아이콘 및 텍스트 설정
-        val iconDrawable = ContextCompat.getDrawable(requireContext(),
-            R.drawable.baseline_currency_exchange_40_red
-        )
-        fragmentAddSalePostBinding.toolbarTitleAddSalePost.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
-        fragmentAddSalePostBinding.toolbarTitleAddSalePost.compoundDrawablePadding = resources.getDimensionPixelSize(
-            R.dimen.icon_text_padding
-        )
-        fragmentAddSalePostBinding.toolbarTitleAddSalePost.text = "도서 판매 게시"
-
         // FrameLayout 클릭 이벤트 처리
         fragmentAddSalePostBinding.FrameAddSalePost1.setOnClickListener {
             showBookTypeMenu(it)

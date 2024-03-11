@@ -34,12 +34,6 @@ class PostMainFragment : Fragment() {
         fragmentPostMainBinding = FragmentPostMainBinding.inflate(inflater)
         mainActivity.showBottomNavigation()
 
-        // 타이틀 아이콘 작업
-        val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_reading_cycle)
-        fragmentPostMainBinding.toolbarPostMainTitle.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
-        fragmentPostMainBinding.toolbarPostMainTitle.compoundDrawablePadding = resources.getDimensionPixelSize(
-            R.dimen.icon_text_padding
-        )
         // 텍스트 설정
         fragmentPostMainBinding.toolbarPostMainTitle.text = "리딩 사이클"
         // 정렬 팝업 메뉴

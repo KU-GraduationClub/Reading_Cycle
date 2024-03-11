@@ -11,7 +11,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutAddSalePost"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,35 +30,53 @@
             app:menu="@menu/toolbar_post"
             app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
 
-            <TextView
-                android:id="@+id/toolbarTitleAddSalePost"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/soyo_maple_bold"
                 android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#DE2222"
-                tools:fontFamily="@font/soyo_maple_bold" />
+                android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/iconAddSalePostTitle"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:gravity="center"
+                    android:src="@drawable/baseline_currency_exchange_40_red" />
+
+                <TextView
+                    android:id="@+id/toolbarAddSalePostTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="1dp"
+                    android:fontFamily="@font/soyo_maple_bold"
+                    android:gravity="center"
+                    android:text="도서 판매 게시"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#DE2222"
+                    android:textSize="16dp"
+                    tools:fontFamily="@font/soyo_maple_bold" />
+            </LinearLayout>
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <View
-            android:id="@+id/dividerAddSalePost"
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:layout_marginTop="0dp"
-            android:background="#27713C"
-            android:elevation="0dp" />
-
     </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:id="@+id/dividerAddSalePost"
+        android:layout_width="wrap_content"
+        android:layout_height="1.5dp"
+        android:background="#B2C8AA"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutAddSalePost" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="48dp"
         android:background="@color/background"
         android:fillViewport="true"
         android:nestedScrollingEnabled="true"
