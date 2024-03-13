@@ -11,7 +11,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutLocReset"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +21,8 @@
             style="@style/Theme.Reading_cycle.ToolbarTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F9FBF4"
+            android:background="@color/background"
+            android:elevation="0dp"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
             app:menu="@menu/toolbar_notify"
@@ -33,28 +34,34 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="위치변경"
+                android:text="내 위치 변경"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/theme_green"
                 tools:fontFamily="@font/soyo_maple_bold" />
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <View
-            android:id="@+id/dividerLocReset"
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:layout_marginTop="0dp"
-            android:background="#27713C"
-            android:elevation="0dp" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
 
+    <View
+        android:id="@+id/dividerLocReset"
+        android:layout_width="wrap_content"
+        android:layout_height="1.5dp"
+        android:background="#B2C8AA"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutLocReset" />
+
     <com.google.android.gms.maps.MapView
-        android:id="@+id/map_view"
+        android:id="@+id/mapViewLocReset"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="350dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/border_dark_brown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -64,7 +71,7 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
-        android:id="@+id/textLocReset"
+        android:id="@+id/textLocReset1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -73,26 +80,32 @@
         android:text="현재 위치"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map_view" />
+        app:layout_constraintTop_toBottomOf="@+id/mapViewLocReset" />
 
-    <EditText
-        android:id="@+id/edtLocResetNow"
+    <TextView
+        android:id="@+id/textLocResetNow"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
-        android:paddingStart="10dp"
-        android:background="@drawable/border"
+        android:background="@drawable/border_dark_brown"
         android:fontFamily="@font/soyo_maple_regular"
-        android:hint="현재 위치를 입력해주세요"
-        android:textColor="@color/theme_brown"
-        android:textColorHint="@color/theme_brown"
+        android:gravity="center|start"
+        android:padding="5dp"
+        android:paddingStart="10dp"
+        android:text="현재 위치"
+        android:textColor="#373737"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLocReset"
+        app:layout_constraintTop_toBottomOf="@+id/textLocReset1"
         tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#373737" />
 
     <TextView
         android:id="@+id/textLocReset2"
@@ -104,21 +117,22 @@
         android:text="바꿀 위치"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtLocResetNow" />
+        app:layout_constraintTop_toBottomOf="@+id/textLocResetNow" />
 
-    <EditText
-        android:id="@+id/edtLocResetChange"
+    <TextView
+        android:id="@+id/textLocResetChange"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
-        android:paddingStart="10dp"
-        android:background="@drawable/border"
+        android:background="@drawable/border_dark_brown"
         android:fontFamily="@font/soyo_maple_regular"
-        android:hint="바꿀 위치를 입력해주세요"
-        android:textColor="#6A3F0D"
-        android:textColorHint="@color/theme_brown"
+        android:gravity="center|start"
+        android:padding="5dp"
+        android:paddingStart="10dp"
+        android:text="바꿀 위치"
+        android:textColor="#373737"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLocReset2"
@@ -128,10 +142,11 @@
         android:id="@+id/btnLocResetFinish"
         android:layout_width="370dp"
         android:layout_height="63dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#CF8127"
         android:elevation="3dp"
-        android:fontFamily="@font/soyo_maple_regular"
+        android:fontFamily="@font/soyo_maple_bold"
         android:padding="1dp"
         android:text="작성 완료"
         android:textColor="#F9FBF4"
@@ -140,6 +155,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLocResetChange"
         tools:ignore="NotSibling,UnknownId" />
 
 

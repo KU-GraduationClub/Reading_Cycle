@@ -37,13 +37,6 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         mapView.onResume()
         mapView.getMapAsync(this)
 
-        // 각각의 EditText 참조
-        val editTextFirst = binding.edtLocSet
-        // 각각의 EditText에서 텍스트 읽어오기 예제
-        val textFromFirstEditText = editTextFirst.text.toString()
-
-        // 읽어온 값을 사용하거나 처리하는 로직을 여기에 추가
-        Log.d("LocSetFragment", "First EditText: $textFromFirstEditText")
         return binding.root
     }
 

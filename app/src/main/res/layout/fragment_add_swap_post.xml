@@ -615,7 +615,7 @@
                 android:layout_height="63dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="25dp"
-                android:backgroundTint="#27713C"
+                android:backgroundTint="#CF8127"
                 android:elevation="3dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:padding="1dp"

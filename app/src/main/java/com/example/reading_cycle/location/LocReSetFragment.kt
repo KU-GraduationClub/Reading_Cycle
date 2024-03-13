@@ -34,7 +34,7 @@ class LocReSetFragment : Fragment(), OnMapReadyCallback {
         mainActivity.hideBottomNavigation()
         _binding = FragmentLocResetBinding.inflate(inflater)
         fragmentLocResetBinding = FragmentLocResetBinding.inflate(inflater)
-        mapView = binding.mapView
+        mapView = binding.mapViewLocReset
         mapView.onCreate(savedInstanceState)
         mapView.onResume()
         mapView.getMapAsync(this)
@@ -43,17 +43,6 @@ class LocReSetFragment : Fragment(), OnMapReadyCallback {
         fragmentLocResetBinding.toolbarLayoutLocReset.setNavigationOnClickListener {
             mainActivity.removeFragment(MainActivity.LOC_RESET_FRAGMENT)
         }
-
-        // 각각의 EditText 참조
-        val editTextFirst = binding.edtLocResetNow
-        val editTextLast = binding.edtLocResetChange
-
-        // 각각의 EditText에서 텍스트 읽어오기 예제
-        val textFromFirstEditText = editTextFirst.text.toString()
-        val textFromLastEditText = editTextLast.text.toString()
-
-        // 읽어온 값을 사용하거나 처리하는 로직을 여기에 추가
-        Log.d("LocSetFragment", "First EditText: $textFromFirstEditText, Last EditText: $textFromLastEditText")
 
         return fragmentLocResetBinding.root
     }
