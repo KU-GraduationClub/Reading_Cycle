@@ -6,49 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".login.LoginMainFragment">
+    tools:context=".login.LoginMainFragment"
+    android:transitionGroup="true">
 
 
-    <EditText
-        android:id="@+id/edtLoginPassword"
-        android:drawableLeft="@drawable/baseline_lock_open_40"
-        android:drawablePadding="3dp"
-        android:layout_width="330dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="140dp"
-        android:background="@drawable/border_dark_brown"
-        android:ems="20"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:hint="비밀번호"
-        android:inputType="textPassword"
-        android:paddingStart="5dp"
-        android:textColor="#6A3F0D"
-        android:textColorHint="#6A3F0D"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="68dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="108dp"
+        android:src="@drawable/logo_reading_cycle"
+        app:layout_constraintEnd_toStartOf="@+id/textTitleMain"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTitleMain" />
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="200dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="37dp"
-        android:background="@drawable/shape_stroke"
-        android:backgroundTint="@color/theme_brown"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:gravity="center"
-        android:text="로그인"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtLoginPassword"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textTitleMain"
@@ -64,33 +36,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/edtLoginEmail"
-        android:drawableLeft="@drawable/baseline_mail_outline_40"
-        android:drawablePadding="3dp"
-        android:layout_width="330dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="80dp"
-        android:background="@drawable/border_dark_brown"
-        android:ems="20"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:hint="이메일"
-        android:inputType="text"
-        android:paddingStart="5dp"
-        android:textColor="#6A3F0D"
-        android:textColorHint="#6A3F0D"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTitleMain" />
-
     <TextView
         android:id="@+id/textSubtitleMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="168dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="165dp"
         android:fontFamily="@font/soyo_maple_bold"
         android:gravity="center"
@@ -103,12 +54,79 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textTitleMain" />
 
+    <EditText
+        android:id="@+id/edtLoginEmail"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/border_dark_brown"
+        android:drawableLeft="@drawable/baseline_mail_outline_30"
+        android:drawablePadding="10dp"
+        android:ems="20"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center|left"
+        android:hint="이메일"
+        android:inputType="text"
+        android:paddingStart="10dp"
+        android:paddingRight="10dp"
+        android:textColor="#6A3F0D"
+        android:textColorHint="#6A3F0D"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textSubtitleMain" />
+
+    <EditText
+        android:id="@+id/edtLoginPassword"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/border_dark_brown"
+        android:drawableLeft="@drawable/baseline_lock_open_30"
+        android:drawableRight="@drawable/baseline_remove_red_eye_34"
+        android:drawablePadding="10dp"
+        android:ems="20"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center|left"
+        android:hint="비밀번호"
+        android:inputType="textPassword"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="#6A3F0D"
+        android:textColorHint="#6A3F0D"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtLoginEmail" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="200dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/shape_stroke"
+        android:backgroundTint="@color/theme_brown"
+        android:elevation="0dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center"
+        android:text="로그인"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtLoginPassword"
+        tools:ignore="MissingConstraints" />
+
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="74dp"
         android:layout_height="43dp"
         android:layout_marginStart="105dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="15dp"
         android:background="#00000000"
         android:fontFamily="@font/soyo_maple_regular"
@@ -124,7 +142,6 @@
         android:layout_width="97dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="103dp"
         android:background="#00000000"
         android:fontFamily="@font/soyo_maple_regular"
@@ -133,7 +150,7 @@
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/dividerBtn"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+        app:layout_constraintTop_toTopOf="@+id/btnRegister" />
 
     <View
         android:id="@+id/dividerBtn"
@@ -141,38 +158,11 @@
         android:layout_height="20dp"
         android:layout_centerInParent="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="458dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:background="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/btnResetPassword"
         app:layout_constraintStart_toEndOf="@+id/btnRegister"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imgBtnVisiblePWLogin"
-        android:layout_width="30dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="310dp"
-        android:layout_marginEnd="57dp"
-        app:layout_constraintBottom_toBottomOf="@id/edtLoginPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/edtLoginPassword"
-        app:layout_constraintStart_toStartOf="@id/edtLoginPassword"
-        app:layout_constraintTop_toTopOf="@id/edtLoginPassword"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/baseline_visibility_40"
-        app:tint="#6A3F0D" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="68dp"
-        android:layout_height="72dp"
-        android:layout_marginStart="47dp"
-        android:layout_marginTop="108dp"
-        android:src="@drawable/logo_reading_cycle"
-        app:layout_constraintEnd_toStartOf="@+id/textTitleMain"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btnRegister" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

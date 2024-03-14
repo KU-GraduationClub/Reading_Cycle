@@ -21,9 +21,6 @@ class UserRegisterFragment : Fragment() {
         fragmentUserRegisterBinding = FragmentUserRegisterBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
 
-        // 텍스트 설정
-        fragmentUserRegisterBinding.toolbarLibraryMyTitle.text = "회원가입"
-
         fragmentUserRegisterBinding.run {
             // 뒤로가기 버튼 클릭 시 프래그먼트 제거
             toolbarUserRegister.setNavigationOnClickListener {

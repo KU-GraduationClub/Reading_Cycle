@@ -21,9 +21,6 @@ class PasswordResetFragment : Fragment() {
         fragmentPasswordResetBinding = FragmentPasswordResetBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
 
-        // 텍스트 설정
-        fragmentPasswordResetBinding.toolbarLibraryMyTitle.text = "비밀번호 재설정"
-
         fragmentPasswordResetBinding.run {
             // 뒤로가기 버튼 클릭 시 프래그먼트 제거
             toolbarPasswordReset.setNavigationOnClickListener {
