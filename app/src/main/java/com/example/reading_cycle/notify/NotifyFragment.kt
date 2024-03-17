@@ -32,11 +32,6 @@ class NotifyFragment : Fragment() {
             mainActivity.removeFragment(MainActivity.NOTIFY_FRAGMENT)
         }
 
-        fragmentNotifyBinding.toolbarTitleNotify.compoundDrawablePadding = resources.getDimensionPixelSize(
-            R.dimen.icon_text_padding
-        )
-        fragmentNotifyBinding.toolbarTitleNotify.text = "알림"
-
         // 리사이클러뷰 초기화 및 어댑터 설정 (더미)
         val notifyList = mutableListOf(
             NotifyDataClass("제목 1", "알림 내용 1", System.currentTimeMillis()),

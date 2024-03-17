@@ -7,10 +7,10 @@
 
     <ImageView
         android:id="@+id/imgProfile"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="13dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
         android:src="@drawable/baseline_dehaze_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,40 +20,40 @@
         android:id="@+id/textUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
         android:fontFamily="@font/soyo_maple_bold"
         android:text="Username"
+        android:textSize="14dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imgProfile"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/imgProfile" />
 
     <TextView
         android:id="@+id/textLastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/soyo_maple_regular"
         android:text="Last message"
-        app:layout_constraintStart_toEndOf="@+id/imgProfile"
+        android:textSize="13dp"
+        app:layout_constraintStart_toStartOf="@+id/textUsername"
         app:layout_constraintTop_toBottomOf="@+id/textUsername" />
 
     <TextView
         android:id="@+id/textLastMessageTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="10dp"
-        android:fontFamily="@font/soyo_maple_bold"
+        android:fontFamily="@font/soyo_maple_regular"
         android:text="chat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/textUsername" />
 
     <TextView
         android:id="@+id/textUnseenCount"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="5dp"
         android:background="@android:drawable/radiobutton_off_background"
@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="4dp"
         android:background="#BAB6B6"
         android:elevation="0dp"

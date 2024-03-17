@@ -62,10 +62,12 @@ class LibraryMyFragment : Fragment() {
         // 데이터 생성(임시)
         val swapBooknameList = listOf(
             SwapBooknameDataClass("책 제목1"),
+            SwapBooknameDataClass("책 제목2"),
+            SwapBooknameDataClass("책 제목3")
         )
         val saleBooknameList = listOf(
-            SaleBooknameDataClass("책 제목2"),
-            SaleBooknameDataClass("책 제목3"),
+            SaleBooknameDataClass("책 제목4"),
+            SaleBooknameDataClass("책 제목5")
         )
 
         // 어댑터 초기화
@@ -73,10 +75,10 @@ class LibraryMyFragment : Fragment() {
 
         // RecyclerView 설정
         val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        fragmentLibraryMyBinding.recyclerViewLibraryMain.layoutManager = layoutManager
+        fragmentLibraryMyBinding.recyclerViewLibraryMy.layoutManager = layoutManager
 
         //어댑터 설정
-        fragmentLibraryMyBinding.recyclerViewLibraryMain.adapter = libraryMainAdapter
+        fragmentLibraryMyBinding.recyclerViewLibraryMy.adapter = libraryMainAdapter
 
         // 툴바 알림 메뉴 클릭 이벤트 처리
         fragmentLibraryMyBinding.toolbarLayoutLibraryMy.setOnMenuItemClickListener { menuItem ->

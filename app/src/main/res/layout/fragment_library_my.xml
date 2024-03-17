@@ -11,7 +11,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutLibraryMy"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,7 +24,7 @@
             android:background="@color/background"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-            app:menu="@menu/toolbar_library_main">
+            app:menu="@menu/toolbar_library">
 
             <TextView
                 android:id="@+id/toolbarLibraryMyTitle"
@@ -33,38 +33,41 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/soyo_maple_bold"
                 android:gravity="center"
+                android:paddingTop="2dp"
+                android:text="내 라이브러리"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#27713C" />
+                android:textColor="#27713C"
+                android:textSize="16dp" />
 
         </com.google.android.material.appbar.MaterialToolbar>
-
-        <View
-            android:id="@+id/dividerLibraryMy"
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:layout_marginTop="0dp"
-            android:background="#27713C"
-            android:elevation="0dp" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- 프로필 이미지 -->
+    <View
+        android:id="@+id/dividerLibraryMy"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="#B2C8AA"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutLibraryMy" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="48dp"
         android:background="@color/background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutPostMain">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutLibraryMain">
 
         <ImageView
             android:id="@+id/imgLibraryMyProfile"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/baseline_account_circle_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -75,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:layout_marginTop="2dp"
+            android:fontFamily="@font/soyo_maple_regular"
             android:text="사용자"
             android:textSize="18dp"
             android:textStyle="bold"
@@ -85,7 +89,8 @@
             android:id="@+id/textLibraryMy1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/soyo_maple_regular"
             android:text="님의 라이브러리"
             android:textSize="13dp"
             app:layout_constraintStart_toStartOf="@+id/textLibraryMyUser"
@@ -95,8 +100,9 @@
             android:id="@+id/textLibraryMy2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="90dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/soyo_maple_regular"
             android:text="게시물"
             android:textSize="13dp"
             android:textStyle="bold"
@@ -105,9 +111,10 @@
 
         <TextView
             android:id="@+id/textLibraryMyPostCount"
-            android:layout_width="9dp"
-            android:layout_height="19dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:fontFamily="@font/soyo_maple_regular"
             android:gravity="center"
             android:padding="0dp"
             android:text="0"
@@ -121,18 +128,21 @@
             android:id="@+id/textLibraryMy3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="프렌드"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:text="친구"
             android:textSize="13dp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/textLibraryMy2"
-            app:layout_constraintTop_toBottomOf="@+id/textLibraryMy2" />
+            app:layout_constraintEnd_toEndOf="@+id/textLibraryMy2"
+            app:layout_constraintTop_toBottomOf="@+id/textLibraryMy2"
+            tools:fontFamily="@font/soyo_maple_regular" />
 
         <TextView
             android:id="@+id/textLibraryMyFrdCount"
-            android:layout_width="9dp"
-            android:layout_height="19dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:fontFamily="@font/soyo_maple_regular"
             android:gravity="center"
             android:padding="0dp"
             android:text="0"
@@ -146,10 +156,9 @@
             android:id="@+id/iconLibraryMyLocation"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="3dp"
             android:layout_marginTop="5dp"
             android:src="@drawable/baseline_location_on_40"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/imgLibraryMyProfile"
             app:layout_constraintTop_toBottomOf="@+id/imgLibraryMyProfile" />
 
         <TextView
@@ -157,68 +166,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
+            android:fontFamily="@font/soyo_maple_regular"
             android:text="주소지"
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="@+id/iconLibraryMyLocation"
             app:layout_constraintStart_toEndOf="@+id/iconLibraryMyLocation"
             app:layout_constraintTop_toTopOf="@+id/iconLibraryMyLocation" />
 
-        <Button
-            android:id="@+id/btnLibraryMyAddFrd"
-            android:layout_width="90dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="25dp"
-            android:background="#964b00"
-            android:gravity="center"
-            android:text="친구 추가"
-            android:textColor="#FFFFFF"
-            app:layout_constraintEnd_toStartOf="@+id/add_chat_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iconLibraryMyLocation" />
-
-        <Button
-            android:id="@+id/btnLibraryMyChat"
-            android:layout_width="90dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="70dp"
-            android:background="#964b00"
-            android:gravity="center"
-            android:text=" 채팅 "
-            android:textColor="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/add_friend_btn"
-            app:layout_constraintTop_toTopOf="@+id/btnLibraryMyAddFrd" />
-
         <View
             android:id="@+id/dividerLibraryMy2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:background="#808080"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLibraryMyAddFrd" />
+            app:layout_constraintTop_toBottomOf="@+id/iconLibraryMyLocation" />
 
-        <ScrollView
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="133dp"
+            android:layout_marginTop="130dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewLibraryMain"
+                android:id="@+id/recyclerViewLibraryMy"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
-        </ScrollView>
+                app:layout_constraintTop_toBottomOf="@+id/divider2"></androidx.recyclerview.widget.RecyclerView>
+        </HorizontalScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -232,24 +212,6 @@
         android:src="@drawable/round_add_box_60"
         app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
         app:layout_constraintEnd_toEndOf="@+id/constraintLayout3" />
-
-    <!-- 닉네임1-->
-
-    <!--닉네임2-->
-
-
-    <!-- 게시물 카운트 -->
-
-    <!-- 프렌드 카운트 -->
-
-    <!-- 위치 아이콘 -->
-    <!--위치정보-->
-
-    <!--친구추가버튼-->
-
-    <!--채팅버튼-->
-
-    <!--구분선-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

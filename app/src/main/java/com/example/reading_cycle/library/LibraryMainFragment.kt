@@ -33,22 +33,6 @@ class LibraryMainFragment : Fragment() {
     ): View? {
         fragmentLibraryMainBinding = FragmentLibraryMainBinding.inflate(inflater)
 
-        // 타이틀 아이콘 작업
-        val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
-        fragmentLibraryMainBinding.toolbarLibraryMyTitle.setCompoundDrawablesWithIntrinsicBounds(
-            null,
-            null,
-            null,
-            null
-        )
-        fragmentLibraryMainBinding.toolbarLibraryMyTitle.compoundDrawablePadding =
-            resources.getDimensionPixelSize(
-                R.dimen.icon_text_padding
-            )
-
-        // 텍스트 설정
-        fragmentLibraryMainBinding.toolbarLibraryMyTitle.text = "라이브러리"
-
         // 데이터 생성(임시)
         val swapBooknameList = listOf(
             SwapBooknameDataClass("책 제목1"),

@@ -10,7 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutChatList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,36 +23,40 @@
             android:background="@color/background"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-            app:menu="@menu/toolbar_library_main">
+            app:menu="@menu/toolbar_library">
 
             <TextView
-                android:id="@+id/toolbarChatListTitle"
+                android:id="@+id/toolbarTextChatList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/soyo_maple_bold"
                 android:gravity="center"
+                android:paddingTop="2dp"
                 android:text="채팅 목록"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#27713C" />
+                android:textColor="#27713C"
+                android:textSize="16dp"/>
 
         </com.google.android.material.appbar.MaterialToolbar>
-
-        <View
-            android:id="@+id/dividerChatList"
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:layout_marginTop="0dp"
-            android:background="#27713C"
-            android:elevation="0dp" />
-
     </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:id="@+id/dividerChatList"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#B2C8AA"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutChatList" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerChatList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="top"
+        android:layout_marginTop="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

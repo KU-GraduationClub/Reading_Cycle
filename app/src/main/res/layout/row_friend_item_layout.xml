@@ -7,51 +7,64 @@
 
     <ImageView
         android:id="@+id/imgFriendProfile"
-        android:layout_width="63dp"
-        android:layout_height="63dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="3dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="5dp"
-        android:background="@color/background"
+        android:background="@color/white"
         android:padding="10dp"
-        android:src="@drawable/baseline_account_circle_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_account_circle_24" />
 
     <TextView
         android:id="@+id/textLibraryMyUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:fontFamily="@font/soyo_maple_bold"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/soyo_maple_regular"
         android:text="닉네임"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
+        android:textSize="18dp"
         app:layout_constraintStart_toEndOf="@+id/imgFriendProfile"
         app:layout_constraintTop_toTopOf="@+id/imgFriendProfile" />
 
+    <TextView
+        android:id="@+id/textLibraryMyUserMemo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginBottom="1dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="메모"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
+        app:layout_constraintStart_toStartOf="@+id/textLibraryMyUser"
+        app:layout_constraintTop_toBottomOf="@+id/textLibraryMyUser" />
+
     <ImageView
         android:id="@+id/imgBtnFriendMain"
-        android:layout_width="45dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="220dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="15dp"
         android:background="@color/background"
         android:clickable="true"
-        android:src="@drawable/outline_settings_suggest_24"
-        app:layout_constraintBottom_toBottomOf="@+id/textLibraryMyUser"
+        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textLibraryMyUser"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/imgFriendProfile"
+        app:srcCompat="@drawable/baseline_settings_24" />
 
     <ImageView
         android:id="@+id/imgFriendStar"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/baseline_grade_24"
-        app:layout_constraintBottom_toBottomOf="@+id/imgBtnFriendMain"
+        android:layout_marginEnd="3dp"
+        android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
         app:layout_constraintEnd_toStartOf="@+id/imgBtnFriendMain"
-        app:layout_constraintTop_toTopOf="@+id/imgBtnFriendMain" />
+        app:layout_constraintTop_toTopOf="@+id/imgFriendProfile"
+        app:srcCompat="@drawable/round_star_24" />
 
     <View
         android:id="@+id/dividerRowFriend"

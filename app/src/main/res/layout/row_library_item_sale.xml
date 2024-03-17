@@ -1,0 +1,161 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="270dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="20dp"
+    android:background="@drawable/border_post_main">
+
+    <Button
+        android:id="@+id/btnRowLibraryItemSale1"
+        android:layout_width="75dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="#9E6320"
+        android:clickable="false"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:padding="1dp"
+        android:text="도서 종류"
+        android:textColor="#FFFFFF"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgRowLibraryItemSale"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="5dp"
+        android:elevation="2dp"
+        app:layout_constraintEnd_toStartOf="@+id/btnRowLibraryItemSale2"
+        app:layout_constraintStart_toEndOf="@+id/btnRowLibraryItemSale1"
+        app:layout_constraintTop_toTopOf="@+id/btnRowLibraryItemSale1"
+        app:srcCompat="@drawable/baseline_currency_exchange_40_red" />
+
+    <Button
+        android:id="@+id/btnRowLibraryItemSale2"
+        android:layout_width="75dp"
+        android:layout_height="41dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="#E05B5B"
+        android:clickable="false"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:padding="1dp"
+        android:text="도서 종류"
+        android:textColor="#000000"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnRowLibraryItemSale1" />
+
+    <FrameLayout
+        android:id="@+id/frameLayoutRowLibraryItemSale2"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#9A9393"
+        android:elevation="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRowLibraryItemSale1">
+
+        <!-- ImageView 2 -->
+
+        <ImageView
+            android:id="@+id/imgRowLibraryItemSale2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            app:srcCompat="@drawable/baseline_image_24" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textRowLibraryItemSale1"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/soyo_maple_bold"
+        android:gravity="center"
+        android:text="작가"
+        android:textColor="#000000"
+        android:textSize="11dp"
+        app:layout_constraintEnd_toEndOf="@+id/BorderRowLibraryItemSale"
+        app:layout_constraintStart_toEndOf="@+id/frameLayoutRowLibraryItemSale2"
+        app:layout_constraintTop_toTopOf="@+id/frameLayoutRowLibraryItemSale2" />
+
+    <TextView
+        android:id="@+id/textRowLibraryItemSaleAuthor"
+        android:layout_width="75dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/border_post_main"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center"
+        android:text="작가명"
+        android:textColor="#000000"
+        android:textSize="9dp"
+        app:layout_constraintEnd_toEndOf="@+id/BorderRowLibraryItemSale"
+        app:layout_constraintStart_toEndOf="@+id/frameLayoutRowLibraryItemSale2"
+        app:layout_constraintTop_toBottomOf="@+id/textRowLibraryItemSale1" />
+
+    <TextView
+        android:id="@+id/textRowLibraryItemSale2"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="7dp"
+        android:fontFamily="@font/soyo_maple_bold"
+        android:gravity="center"
+        android:text="책 상태"
+        android:textColor="#000000"
+        android:textSize="11dp"
+        app:layout_constraintEnd_toEndOf="@+id/BorderRowLibraryItemSale"
+        app:layout_constraintStart_toEndOf="@+id/frameLayoutRowLibraryItemSale2"
+        app:layout_constraintTop_toBottomOf="@+id/textRowLibraryItemSaleAuthor" />
+
+    <TextView
+        android:id="@+id/textRowLibraryItemSaleState"
+        android:layout_width="75dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/border_post_main"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center"
+        android:text="책 상태"
+        android:textColor="#000000"
+        android:textSize="9dp"
+        app:layout_constraintEnd_toEndOf="@+id/BorderRowLibraryItemSale"
+        app:layout_constraintStart_toEndOf="@+id/frameLayoutRowLibraryItemSale2"
+        app:layout_constraintTop_toBottomOf="@+id/textRowLibraryItemSale2" />
+
+    <TextView
+        android:id="@+id/textRowLibraryItemSaleTitle"
+        android:layout_width="170dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/border_post_main"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center"
+        android:text="책 제목"
+        android:textColor="#000000"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayoutRowLibraryItemSale2" />
+
+    <View
+        android:id="@+id/BorderRowLibraryItemSale"
+        android:layout_width="200dp"
+        android:layout_height="295dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/border_post_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

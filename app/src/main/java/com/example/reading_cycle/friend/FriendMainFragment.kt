@@ -26,18 +26,6 @@ class FriendMainFragment : Fragment() {
         fragmentFriendMainBinding = FragmentFriendMainBinding.inflate(inflater)
         mainActivity.showBottomNavigation()
 
-        // 타이틀 아이콘 작업
-        fragmentFriendMainBinding.toolbarLibraryMyTitle.setCompoundDrawablesWithIntrinsicBounds(
-            null,
-            null,
-            null,
-            null
-        )
-        fragmentFriendMainBinding.toolbarLibraryMyTitle.compoundDrawablePadding =
-            resources.getDimensionPixelSize(R.dimen.icon_text_padding)
-        // 텍스트 설정
-        fragmentFriendMainBinding.toolbarLibraryMyTitle.text = "프렌드"
-
         // RecyclerView 설정
         val layoutManager = LinearLayoutManager(requireContext())
         fragmentFriendMainBinding.recyclerViewFriendMain.layoutManager = layoutManager
