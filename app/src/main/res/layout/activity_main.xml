@@ -24,7 +24,7 @@
         android:layout_height="72dp"
         android:background="@color/background"
         android:visibility="visible"
-        app:itemIconSize="31dp"
+        app:itemIconSize="33dp"
         app:itemTextAppearanceActive="@style/bottom_bar_text_appearance"
         app:itemTextAppearanceInactive="@style/bottom_bar_text_appearance"
         app:menu="@menu/bottom_menu_main"
