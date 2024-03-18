@@ -25,4 +25,10 @@
         android:title="라이브러리"
         android:icon="@drawable/baseline_menu_book_24"/>
 
+    <item
+        android:id="@+id/bottom_setting"
+        android:menuCategory="secondary"
+        android:title="설정"
+        android:icon="@drawable/baseline_settings_24"/>
+
 </menu>

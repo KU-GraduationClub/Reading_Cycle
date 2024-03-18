@@ -15,7 +15,7 @@
     <style name="bottom_bar_text_appearance" parent="Widget.Design.BottomNavigationView">
         <item name="android:fontFamily">@font/soyo_maple_bold</item>
         <item name="android:textColor">#BA7525</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">14dp</item>
     </style>
 
 </resources>
