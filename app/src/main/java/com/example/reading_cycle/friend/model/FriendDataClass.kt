@@ -1,3 +1,5 @@
+package com.example.reading_cycle.friend.model
+
 import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +15,7 @@ class FriendMainAdapter(private val friendList: MutableList<FriendDataClass>) : 
 
     inner class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgBtnFriendMain: ImageView = itemView.findViewById(R.id.imgBtnFriendMain)
-        val imgBookmark: ImageView = itemView.findViewById(R.id.star)
+        val imgBookmark: ImageView = itemView.findViewById(R.id.imgFriendStar)
 
         init {
             imgBtnFriendMain.setOnClickListener { clickedView ->
@@ -128,16 +130,37 @@ class FriendMainAdapter(private val friendList: MutableList<FriendDataClass>) : 
 
     // 즐겨 찾기 아이콘 토글
     private fun toggleBookmark(friendData: FriendDataClass, position: Int) {
-        friendData.isBookmarked = !friendData.isBookmarked
-        notifyItemChanged(position) // 아이템 변경 사항을 알림
+        if (friendData.isBookmarked) {
+            // 이미 즐겨찾기 상태인 경우, 상단 고정을 해제합니다.
+            friendData.isBookmarked = false
+            // 현재 위치에서 제거하고, 원래 위치에 다시 추가합니다.
+            friendList.removeAt(position)
+            friendList.add(position, friendData)
+            notifyItemMoved(position, friendList.indexOf(friendData))
+        } else {
+            // 즐겨찾기 상태가 아닌 경우, 상단 고정을 수행합니다.
+            friendData.isBookmarked = true
+            // 현재 위치에서 제거하고, 리스트의 맨 앞에 추가합니다.
+            friendList.removeAt(position)
+            friendList.add(0, friendData)
+            notifyItemMoved(position, 0)
+        }
+        notifyItemChanged(0) // 첫 번째 아이템을 갱신하여 아이콘이 생성될 수 있도록 합니다.
     }
 
+}
     // 즐겨 찾기 아이콘 삭제
     private fun deleteBookmark(friendData: FriendDataClass, position: Int) {
         friendData.isBookmarked = false
-        notifyItemChanged(position) // 아이템 변경 사항을 알림
+
     }
-}
+
+
+
+
+
+
+
 
 
 
