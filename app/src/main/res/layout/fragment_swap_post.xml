@@ -25,7 +25,7 @@
             android:elevation="0dp"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-            app:layout_constraintEnd_toEndOf="@id/dividerPostMain"
+            app:layout_constraintEnd_toEndOf="@id/dividerSwapPost"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/toolbar_post"

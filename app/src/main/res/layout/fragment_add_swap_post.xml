@@ -26,7 +26,7 @@
             android:elevation="0dp"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-            app:layout_constraintEnd_toEndOf="@id/dividerPostMain"
+            app:layout_constraintEnd_toEndOf="@id/dividerAddSwapPost"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/toolbar_post"
@@ -69,7 +69,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <View
-        android:id="@+id/dividerAddswapPost"
+        android:id="@+id/dividerAddSwapPost"
         android:layout_width="wrap_content"
         android:layout_height="1.5dp"
         android:background="#B2C8AA"
