@@ -91,33 +91,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/iconPostMainLocation"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginBottom="1dp"
-                android:src="@drawable/outline_location_on_40"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/textPostMainLocation"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="23dp"
                 android:layout_margin="1dp"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="1dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginEnd="1dp"
                 android:layout_marginBottom="1dp"
                 android:fontFamily="@font/soyo_maple_regular"
-                android:gravity="center|left"
+                android:gravity="center"
                 android:text="위치"
-                android:textColor="#595656"
+                android:textColor="#80511C"
                 android:textSize="11dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iconPostMainLocation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -127,7 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
-            android:background="#D3CFCF"
+            android:background="#B2C8AA"
             android:elevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -242,6 +232,27 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            app:behavior_peekHeight="0dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

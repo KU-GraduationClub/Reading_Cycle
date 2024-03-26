@@ -19,12 +19,16 @@ import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
 import com.example.reading_cycle.post.model.SaleDataClass
 import com.example.reading_cycle.post.model.SwapDataClass
+import com.example.reading_cycle.post.vm.PostSheetViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class PostMainFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentPostMainBinding : FragmentPostMainBinding
     private lateinit var postMainAdapter : PostMainAdapter
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var bottomSheetViewModel: PostSheetViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,16 +38,12 @@ class PostMainFragment : Fragment() {
         fragmentPostMainBinding = FragmentPostMainBinding.inflate(inflater)
         mainActivity.showBottomNavigation()
 
-        // 텍스트 설정
-        fragmentPostMainBinding.toolbarPostMainTitle.text = "리딩 사이클"
-        // 정렬 팝업 메뉴
-        fragmentPostMainBinding.conPostMainSort.setOnClickListener {
-            showPopupMenu(it)
-        }
-        // 이미지 버튼 클릭 이벤트 처리
-        fragmentPostMainBinding.imgBtnPostMain.setOnClickListener {
-            showPostTypeDialog()
-        }
+        // BottomSheetBehavior 초기화
+        bottomSheetBehavior = BottomSheetBehavior.from(fragmentPostMainBinding.bottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        // ViewModel 초기화
+        bottomSheetViewModel = PostSheetViewModel()
 
         // 데이터 생성 (임시)
         val swapBookList = listOf(
@@ -81,6 +81,20 @@ class PostMainFragment : Fragment() {
         // 위치 설정 버튼 클릭 이벤트 처리
         fragmentPostMainBinding.conPostMainLocation.setOnClickListener {
             mainActivity.navigateToLocSetFragment()
+        }
+
+        // 필터 클릭 리스너 설정
+        fragmentPostMainBinding.conPostMainFilter.setOnClickListener {
+            bottomSheetViewModel.toggleBottomSheet()
+        }
+
+        // 바텀시트 상태 관찰
+        bottomSheetViewModel.bottomSheetExpanded.observe(viewLifecycleOwner) { expanded ->
+            if (expanded) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            } else {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
         }
 
         return fragmentPostMainBinding.root
@@ -157,8 +171,8 @@ class PostMainFragment : Fragment() {
                 )
             }
         }
-
         val dialog = builder.create()
         dialog.show()
     }
+
 }
