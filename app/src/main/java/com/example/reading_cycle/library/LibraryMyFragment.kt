@@ -70,6 +70,8 @@ class LibraryMyFragment : Fragment() {
             SaleBooknameDataClass("책 제목5")
         )
 
+
+
         // 어댑터 초기화
         libraryMainAdapter = LibraryMainAdapter(swapBooknameList, saleBooknameList)
 
@@ -128,6 +130,5 @@ class LibraryMyFragment : Fragment() {
     }
 
 }
-
 
 

@@ -36,10 +36,12 @@ class LibraryMainFragment : Fragment() {
         // 데이터 생성(임시)
         val swapBooknameList = listOf(
             SwapBooknameDataClass("책 제목1"),
+            SwapBooknameDataClass("책 제목2"),
+            SwapBooknameDataClass("책 제목3")
         )
         val saleBooknameList = listOf(
-            SaleBooknameDataClass("책 제목2"),
-            SaleBooknameDataClass("책 제목3"),
+            SaleBooknameDataClass("책 제목4"),
+            SaleBooknameDataClass("책 제목5")
         )
 
         // 어댑터 초기화
@@ -65,6 +67,5 @@ class LibraryMainFragment : Fragment() {
     }
 
 }
-
 
 
