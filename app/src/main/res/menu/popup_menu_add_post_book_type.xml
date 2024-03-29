@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menuNovel"
+        android:title="소설" />
+    <item
+        android:id="@+id/menuWorkbook"
+        android:title="강의/문제" />
+    <item
+        android:id="@+id/menuEssay"
+        android:title="에세이/수필" />
+    <item
+        android:id="@+id/menuComic"
+        android:title="만화" />
+    <item
+        android:id="@+id/menuPoetry"
+        android:title="시집" />
+    <item
+        android:id="@+id/menuHistoryPhilosophy"
+        android:title="역사/철학" />
+    <item
+        android:id="@+id/menuPoliticsSociety"
+        android:title="정치/사회" />
+    <item
+        android:id="@+id/menuHobbyArt"
+        android:title="취미/예술" />
+    <item
+        android:id="@+id/menuScienceHealth"
+        android:title="과학/건강" />
+    <item
+        android:id="@+id/menuOther"
+        android:title="기타" />
+</menu>
