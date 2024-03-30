@@ -54,6 +54,7 @@
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="2dp"
                     android:gravity="center"
+                    android:text="리딩 사이클"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#27713C"
                     android:textSize="16dp" />

@@ -97,6 +97,15 @@ class PostMainFragment : Fragment() {
             }
         }
 
+        // 정렬 팝업 메뉴
+        fragmentPostMainBinding.conPostMainSort.setOnClickListener {
+            showPopupMenu(it)
+        }
+        // 이미지 버튼 클릭 이벤트 처리
+        fragmentPostMainBinding.imgBtnPostMain.setOnClickListener {
+            showPostTypeDialog()
+        }
+
         return fragmentPostMainBinding.root
     }
 
