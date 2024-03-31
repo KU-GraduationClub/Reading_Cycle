@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "812429246624",
+    "firebase_url": "https://reading-cycle-test01-default-rtdb.firebaseio.com",
+    "project_id": "reading-cycle-test01",
+    "storage_bucket": "reading-cycle-test01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812429246624:android:c2212a5e001b17999349c5",
+        "android_client_info": {
+          "package_name": "com.example.reading_cycle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_XdQMz6jdDtPncEVJueBYQotczv9x-Gg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
