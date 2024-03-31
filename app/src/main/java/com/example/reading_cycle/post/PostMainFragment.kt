@@ -54,11 +54,11 @@ class PostMainFragment : Fragment() {
 //        // 어댑터 초기화
 //        postMainAdapter = PostMainAdapter(swapBookList, saleList)
 
-        // RecyclerView 설정
-        fragmentPostMainBinding.recyclerViewPostMain.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = postMainAdapter
-        }
+//        // RecyclerView 설정
+//        fragmentPostMainBinding.recyclerViewPostMain.apply {
+//            layoutManager = LinearLayoutManager(requireContext())
+//            adapter = postMainAdapter
+//        }
 
         // 툴바 알림 메뉴 클릭 이벤트 처리
         fragmentPostMainBinding.toolbarLayoutPostMain.setOnMenuItemClickListener { menuItem ->
