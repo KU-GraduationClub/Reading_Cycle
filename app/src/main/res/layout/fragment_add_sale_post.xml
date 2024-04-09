@@ -123,22 +123,29 @@
                     android:orientation="horizontal"
                     android:padding="5dp">
 
-                    <FrameLayout
-                        android:id="@+id/FrameAddSalePostImg"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAddSalePostImg"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
+                        android:layout_gravity="center"
                         android:layout_marginLeft="8dp"
-                        android:background="@drawable/border_add_post_edit_img"
-                        android:elevation="3dp">
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:cardBackgroundColor="#787878"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="3dp">
 
                         <ImageView
                             android:id="@+id/imgAddSalePost1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerInside"
+                            android:layout_width="67dp"
+                            android:layout_height="67dp"
+                            android:layout_gravity="center"
+                            android:background="#FFFFFF"
+                            android:padding="1dp"
+                            android:scaleType="center"
                             app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
 
-                    </FrameLayout>
+                    </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
             </HorizontalScrollView>
