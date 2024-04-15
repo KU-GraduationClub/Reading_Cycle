@@ -12,9 +12,11 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -26,6 +28,15 @@ class AddSalePostFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentAddSalePostBinding: FragmentAddSalePostBinding
+    private var selectedCardIndex: Int? = null
+
+    private val cardViewIds = listOf(
+        R.id.cardViewAddSalePostImg1,
+        R.id.cardViewAddSalePostImg2,
+        R.id.cardViewAddSalePostImg3,
+        R.id.cardViewAddSalePostImg4,
+        R.id.cardViewAddSalePostImg5
+    )
 
     companion object {
         const val REQUEST_IMAGE_CAPTURE = 1001
@@ -45,9 +56,11 @@ class AddSalePostFragment : Fragment() {
             mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
         }
 
-        // 카드뷰 클릭 이벤트 처리
-        fragmentAddSalePostBinding.cardViewAddSalePostImg.setOnClickListener {
-            showImageSourceDialog()
+        // 각 카드뷰에 대한 클릭 이벤트 처리
+        for (i in cardViewIds.indices) {
+            fragmentAddSalePostBinding.root.findViewById<CardView>(cardViewIds[i]).setOnClickListener {
+                showImageSourceDialog(i)
+            }
         }
 
         return fragmentAddSalePostBinding.root
@@ -58,27 +71,49 @@ class AddSalePostFragment : Fragment() {
         when (requestCode) {
             REQUEST_PICK_IMAGE -> {
                 if (resultCode == RESULT_OK) {
-                    val selectedImageUri = data?.data
-                    selectedImageUri?.let { uri ->
-                        val imageBitmap = uriToBitmap(uri)
-                        imageBitmap?.let { bitmap ->
-                            val resizedBitmap = resizeBitmap(bitmap)
-                            fragmentAddSalePostBinding.imgAddSalePost1.setImageBitmap(resizedBitmap)
+                    val selectedImageUris = data?.clipData
+                    selectedImageUris?.let { clipData ->
+                        for (i in 0 until minOf(clipData.itemCount, cardViewIds.size)) { // 최대 5개까지만 처리
+                            val imageUri = clipData.getItemAt(i).uri
+                            val imageBitmap = uriToBitmap(imageUri)
+                            imageBitmap?.let { bitmap ->
+                                val resizedBitmap = resizeBitmap(bitmap)
+                                val index = i
+                                val imageViewId = fragmentAddSalePostBinding.root.findViewById<CardView>(cardViewIds[index])
+                                    .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
+                                    .id
+                                fragmentAddSalePostBinding.root.findViewById<ImageView>(imageViewId).setImageBitmap(resizedBitmap)
+                                // 다음 번호의 카드뷰를 보여줌
+                                if (index < cardViewIds.size - 1) {
+                                    val nextCardViewId = cardViewIds[index + 1]
+                                    fragmentAddSalePostBinding.root.findViewById<CardView>(nextCardViewId).visibility = View.VISIBLE
+                                }
+                            }
                         }
                     }
                 }
             }
-
             REQUEST_IMAGE_CAPTURE -> {
                 if (resultCode == RESULT_OK) {
-                    // 이미지 캡처의 경우 URI가 아닌 비트맵을 반환하므로 바로 사용 가능
                     val imageBitmap = data?.extras?.get("data") as Bitmap
                     val resizedBitmap = resizeBitmap(imageBitmap)
-                    fragmentAddSalePostBinding.imgAddSalePost1.setImageBitmap(resizedBitmap)
+                    selectedCardIndex?.let { index ->
+                        val imageViewId = fragmentAddSalePostBinding.root.findViewById<CardView>(cardViewIds[index])
+                            .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
+                            .id
+                        fragmentAddSalePostBinding.root.findViewById<ImageView>(imageViewId).setImageBitmap(resizedBitmap)
+                        // 다음 번호의 카드뷰를 보여줌
+                        if (index < cardViewIds.size - 1) {
+                            val nextCardViewId = cardViewIds[index + 1]
+                            fragmentAddSalePostBinding.root.findViewById<CardView>(nextCardViewId).visibility = View.VISIBLE
+                        }
+                    }
                 }
             }
         }
     }
+
+    // 촬영 / 갤러리 선택 이미지 크기 조정
     private fun resizeBitmap(bitmap: Bitmap): Bitmap {
         val targetWidth = fragmentAddSalePostBinding.imgAddSalePost1.width
         val targetHeight = fragmentAddSalePostBinding.imgAddSalePost1.height
@@ -96,6 +131,7 @@ class AddSalePostFragment : Fragment() {
         return Bitmap.createScaledBitmap(bitmap, scaledWidth.toInt(), scaledHeight.toInt(), true)
     }
 
+    // 촬영용 uri -> bitmap 변환
     private fun uriToBitmap(uri: Uri): Bitmap? {
         return try {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
@@ -106,7 +142,9 @@ class AddSalePostFragment : Fragment() {
         }
     }
 
-    private fun showImageSourceDialog() {
+    // 카드뷰 내부 이미지 추가용 다이얼로그
+    private fun showImageSourceDialog(cardIndex: Int) {
+        selectedCardIndex = cardIndex // 선택된 카드뷰의 인덱스 저장
         val items = arrayOf("갤러리", "카메라")
         val builder = android.app.AlertDialog.Builder(requireContext())
         builder.setItems(items) { dialog, which ->
@@ -120,8 +158,10 @@ class AddSalePostFragment : Fragment() {
     }
 
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, REQUEST_PICK_IMAGE)
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // 다중 선택 허용
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PICK_IMAGE)
     }
 
     private fun openCamera() {
@@ -140,6 +180,7 @@ class AddSalePostFragment : Fragment() {
         }
     }
 
+    // 도서 종류 선택용 다이얼로그
     private fun showBookTypeMenu(view: View) {
         // XML에서 정의한 팝업 메뉴를 인플레이트
         val popupMenu = PopupMenu(requireContext(), view)

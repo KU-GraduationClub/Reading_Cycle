@@ -118,13 +118,14 @@
 
                 <LinearLayout
                     android:id="@+id/linearAddSalePostImg"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="0dp"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/cardViewAddSalePostImg"
+                        android:id="@+id/cardViewAddSalePostImg1"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_gravity="center"
@@ -141,7 +142,102 @@
                             android:layout_height="67dp"
                             android:layout_gravity="center"
                             android:background="#FFFFFF"
-                            android:padding="1dp"
+                            android:scaleType="center"
+                            app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAddSalePostImg2"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="#787878"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/imgAddSalePost2"
+                            android:layout_width="67dp"
+                            android:layout_height="67dp"
+                            android:layout_gravity="center"
+                            android:background="#FFFFFF"
+                            android:scaleType="center"
+                            app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAddSalePostImg3"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="#787878"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/imgAddSalePost3"
+                            android:layout_width="67dp"
+                            android:layout_height="67dp"
+                            android:layout_gravity="center"
+                            android:background="#FFFFFF"
+                            android:scaleType="center"
+                            app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAddSalePostImg4"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="#787878"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/imgAddSalePost4"
+                            android:layout_width="67dp"
+                            android:layout_height="67dp"
+                            android:layout_gravity="center"
+                            android:background="#FFFFFF"
+                            android:scaleType="center"
+                            app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAddSalePostImg5"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="#787878"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/imgAddSalePost5"
+                            android:layout_width="67dp"
+                            android:layout_height="67dp"
+                            android:layout_gravity="center"
+                            android:background="#FFFFFF"
                             android:scaleType="center"
                             app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
 
