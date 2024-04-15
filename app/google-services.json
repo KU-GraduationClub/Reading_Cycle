@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "727687832292",
-    "project_id": "text-40e3a",
-    "storage_bucket": "text-40e3a.appspot.com"
+    "project_number": "910747760271",
+    "firebase_url": "https://reading-cycle-default-rtdb.firebaseio.com",
+    "project_id": "reading-cycle"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:727687832292:android:aa0aba0233a1c18c5ac2f1",
+        "mobilesdk_app_id": "1:910747760271:android:f0258a4512aa7696e1a2fa",
         "android_client_info": {
-          "package_name": "com.text"
+          "package_name": "com.example.reading_cycle"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAypvrrOyWDFdfUgChShrJ1TAH0Gtz2s5c"
+          "current_key": "AIzaSyBeMCCeJaNx1hR9NEBIcsGPkk52vYM-LpA"
         }
       ],
       "services": {
