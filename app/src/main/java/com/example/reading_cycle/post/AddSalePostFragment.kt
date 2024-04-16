@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.activity.result.ActivityResultLauncher
@@ -29,6 +31,7 @@ class AddSalePostFragment : Fragment() {
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentAddSalePostBinding: FragmentAddSalePostBinding
     private var selectedCardIndex: Int? = null
+    private var selectedFrameId: Int? = null
 
     private val cardViewIds = listOf(
         R.id.cardViewAddSalePostImg1,
@@ -63,7 +66,48 @@ class AddSalePostFragment : Fragment() {
             }
         }
 
+        // 책 종류 선택 버튼 클릭 리스너 설정
+        fragmentAddSalePostBinding.btnAddSalePostType1.setOnClickListener {
+            showBookTypeMenu(it)
+        }
+
+        // 각 프레임 레이아웃에 대한 클릭 이벤트 처리
+        fragmentAddSalePostBinding.FrameAddSalePostVeryBad.setOnClickListener {
+            selectFrame(R.id.FrameAddSalePostVeryBad)
+        }
+
+        fragmentAddSalePostBinding.FrameAddSalePostBad.setOnClickListener {
+            selectFrame(R.id.FrameAddSalePostBad)
+        }
+
+        fragmentAddSalePostBinding.FrameAddSalePostCommon.setOnClickListener {
+            selectFrame(R.id.FrameAddSalePostCommon)
+        }
+
+        fragmentAddSalePostBinding.FrameAddSalePostGood.setOnClickListener {
+            selectFrame(R.id.FrameAddSalePostGood)
+        }
+
+        fragmentAddSalePostBinding.FrameAddSalePostVeryGood.setOnClickListener {
+            selectFrame(R.id.FrameAddSalePostVeryGood)
+        }
+
         return fragmentAddSalePostBinding.root
+    }
+
+    private fun selectFrame(frameId: Int) {
+        // 이전에 선택된 프레임 레이아웃의 선택 표시 해제
+        selectedFrameId?.let { previousFrameId ->
+            val previousFrameLayout = fragmentAddSalePostBinding.root.findViewById<FrameLayout>(previousFrameId)
+            previousFrameLayout.background = ContextCompat.getDrawable(requireContext(), R.drawable.border_add_post_edit_text)
+        }
+
+        // 새로운 프레임 레이아웃에 선택 표시 추가
+        val selectedFrameLayout = fragmentAddSalePostBinding.root.findViewById<FrameLayout>(frameId)
+        selectedFrameLayout.setBackgroundColor(Color.GRAY)
+
+        // 선택된 프레임 레이아웃의 ID 저장
+        selectedFrameId = frameId
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
