@@ -397,7 +397,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/FrameAddSalePost1" />
 
             <EditText
-                android:id="@+id/edtAddSalePostPrice2"
+                android:id="@+id/edtAddSalePostPrice"
                 android:layout_width="388dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="13dp"
@@ -428,10 +428,10 @@
                 android:textColor="#000000"
                 android:textSize="15dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostPrice2" />
+                app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostPrice" />
 
             <EditText
-                android:id="@+id/edtAddSalePostPrice"
+                android:id="@+id/edtAddSalePostRegPrice"
                 android:layout_width="388dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="13dp"
@@ -462,7 +462,7 @@
                 android:textColor="#000000"
                 android:textSize="15dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostPrice" />
+                app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostRegPrice" />
 
             <TextView
                 android:id="@+id/textAddSalePost10"

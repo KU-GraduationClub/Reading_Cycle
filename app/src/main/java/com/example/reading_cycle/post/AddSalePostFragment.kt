@@ -16,22 +16,30 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.PopupMenu
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentAddSalePostBinding
+import com.example.reading_cycle.post.model.BookState
+import com.example.reading_cycle.post.model.BookType
+import com.example.reading_cycle.post.model.SaleBookData
+import com.example.reading_cycle.post.repository.AddSalePostRepository
+import com.example.reading_cycle.post.vm.AddSalePostViewModel
+import com.example.reading_cycle.post.vm.AddSalePostViewModelFactory
 
 class AddSalePostFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentAddSalePostBinding: FragmentAddSalePostBinding
+    private lateinit var viewModel: AddSalePostViewModel
     private var selectedCardIndex: Int? = null
     private var selectedFrameId: Int? = null
+    private var selectedBookType: BookType? = null
+    private var selectedBookState: BookState? = null
 
     private val cardViewIds = listOf(
         R.id.cardViewAddSalePostImg1,
@@ -53,6 +61,10 @@ class AddSalePostFragment : Fragment() {
         mainActivity = activity as MainActivity
         fragmentAddSalePostBinding = FragmentAddSalePostBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
+        // ViewModelFactory 초기화
+        val factory = AddSalePostViewModelFactory(AddSalePostRepository())
+        // ViewModelProvider를 통해 ViewModel 인스턴스를 가져옴
+        viewModel = ViewModelProvider(this, factory)[AddSalePostViewModel::class.java]
 
         // 뒤로 가기 버튼 클릭 리스너
         fragmentAddSalePostBinding.toolbarLayoutAddSalePost.setNavigationOnClickListener {
@@ -68,7 +80,7 @@ class AddSalePostFragment : Fragment() {
 
         // 책 종류 선택 버튼 클릭 리스너 설정
         fragmentAddSalePostBinding.btnAddSalePostType1.setOnClickListener {
-            showBookTypeMenu(it)
+            getBookTypeMenu(it)
         }
 
         // 각 프레임 레이아웃에 대한 클릭 이벤트 처리
@@ -92,7 +104,41 @@ class AddSalePostFragment : Fragment() {
             selectFrame(R.id.FrameAddSalePostVeryGood)
         }
 
+        // 버튼 클릭 이벤트 리스너 설정
+        fragmentAddSalePostBinding.btnAddSalePostComplete.setOnClickListener {
+            val saleData = collectInputData()
+            viewModel.uploadSalePost(saleData) // ViewModel 인스턴스를 통해 메서드 호출
+        }
+
         return fragmentAddSalePostBinding.root
+    }
+
+    private fun collectInputData(): SaleBookData {
+        val title =  fragmentAddSalePostBinding.edtAddSalePostTitle.text.toString()
+        val author =  fragmentAddSalePostBinding.edtAddSalePostAuthor.text.toString()
+        val bookType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
+        val price =  fragmentAddSalePostBinding.edtAddSalePostPrice.text.toString().toLong()
+        val regPrice =  fragmentAddSalePostBinding.edtAddSalePostRegPrice.text.toString().toLong()
+        val bookState = determineBookState()
+        val description =  fragmentAddSalePostBinding.edtAddSalePostExplain.text.toString()
+
+        return SaleBookData(
+            saleIdx = System.currentTimeMillis(), // 또는 서버에서 생성한 ID 사용
+            saleBookPostImg = "", // 이미지 업로드 후 URL 설정 필요
+            saleBookImg = listOf(), // 이미지 URL 리스트
+            saleBookTitle = title,
+            saleBookAuthor = author,
+            saleBookType = bookType,
+            saleBookPrice = price,
+            saleBookRegPrice = regPrice,
+            saleBookState = bookState,
+            saleBookExplain = description
+        )
+    }
+
+    // 도서 상태 선택 데이터 처리
+    private fun determineBookState(): BookState {
+        return selectedBookState ?: throw IllegalStateException("도서 상태 선택 필요")
     }
 
     private fun selectFrame(frameId: Int) {
@@ -108,6 +154,16 @@ class AddSalePostFragment : Fragment() {
 
         // 선택된 프레임 레이아웃의 ID 저장
         selectedFrameId = frameId
+
+        // 프레임 ID에 따라 BookState 설정
+        selectedBookState = when (frameId) {
+            R.id.FrameAddSalePostVeryBad -> BookState.VERY_BAD
+            R.id.FrameAddSalePostBad -> BookState.BAD
+            R.id.FrameAddSalePostCommon -> BookState.COMMON
+            R.id.FrameAddSalePostGood -> BookState.GOOD
+            R.id.FrameAddSalePostVeryGood -> BookState.VERY_GOOD
+            else -> null
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -225,60 +281,65 @@ class AddSalePostFragment : Fragment() {
     }
 
     // 도서 종류 선택용 다이얼로그
-    private fun showBookTypeMenu(view: View) {
-        // XML에서 정의한 팝업 메뉴를 인플레이트
+    private fun getBookTypeMenu(view: View) {
         val popupMenu = PopupMenu(requireContext(), view)
         popupMenu.menuInflater.inflate(R.menu.popup_menu_add_post_book_type, popupMenu.menu)
 
-        // 팝업 메뉴 아이템 클릭 리스너 설정
         popupMenu.setOnMenuItemClickListener { menuItem ->
-            // 각 메뉴 아이템에 대한 처리 추가
-            when (menuItem.itemId) {
-                R.id.menuNovel -> {
-                    updateButtonText("소설") }
-                R.id.menuPoetry -> {
-                    updateButtonText("시") }
-                R.id.menuEssay -> {
-                    updateButtonText("에세이") }
-                R.id.menuClassic -> {
-                    updateButtonText("고전") }
-                R.id.menuComic -> {
-                    updateButtonText("만화") }
-                R.id.menuChildren -> {
-                    updateButtonText("어린이") }
-                R.id.menuToddler -> {
-                    updateButtonText("유아") }
-                R.id.menuSelfDevelopment -> {
-                    updateButtonText("자기계발") }
-                R.id.menuReference -> {
-                    updateButtonText("학습/참고서") }
-                R.id.menuMajor -> {
-                    updateButtonText("전공서") }
-                R.id.menuCooking -> {
-                    updateButtonText("요리/제빵") }
-                R.id.menuLanguage -> {
-                    updateButtonText("외국어") }
-                R.id.menuSocialScience -> {
-                    updateButtonText("사회/과학") }
-                R.id.menuArt -> {
-                    updateButtonText("예술") }
-                R.id.menuReligion -> {
-                    updateButtonText("종교") }
-                R.id.menuEconomics -> {
-                    updateButtonText("경제/경영") }
-                R.id.menuHealthTravel -> {
-                    updateButtonText("건강/여행") }
-                R.id.menuHistory -> {
-                    updateButtonText("역사") }
-                R.id.menuPhilosophy -> {
-                    updateButtonText("철학") }
-                R.id.menuOther -> {
-                    updateButtonText("기타") }
+            selectedBookType = when (menuItem.itemId) {
+                R.id.menuNovel -> BookType.NOVEL
+                R.id.menuPoetry -> BookType.POETRY
+                R.id.menuEssay -> BookType.ESSAY
+                R.id.menuClassic -> BookType.CLASSIC
+                R.id.menuComic -> BookType.COMIC
+                R.id.menuChildren -> BookType.CHILDREN
+                R.id.menuToddler -> BookType.TODDLER
+                R.id.menuSelfDevelopment -> BookType.SELF_DEVELOPMENT
+                R.id.menuReference -> BookType.REFERENCE
+                R.id.menuMajor -> BookType.MAJOR
+                R.id.menuCooking -> BookType.COOKING
+                R.id.menuLanguage -> BookType.LANGUAGE
+                R.id.menuSocialScience -> BookType.SOCIAL_SCIENCE
+                R.id.menuArt -> BookType.ART
+                R.id.menuReligion -> BookType.RELIGION
+                R.id.menuEconomics -> BookType.ECONOMICS
+                R.id.menuHealthTravel -> BookType.HEALTH_TRAVEL
+                R.id.menuHistory -> BookType.HISTORY
+                R.id.menuPhilosophy -> BookType.PHILOSOPHY
+                R.id.menuOther -> BookType.OTHER
+                else -> null
+            }
+            selectedBookType?.let {
+                updateButtonText(showBookTypeText(it))
             }
             true
         }
-        // 팝업 메뉴 표시
         popupMenu.show()
+    }
+
+    private fun showBookTypeText(bookType: BookType): String {
+        return when (bookType) {
+            BookType.NOVEL -> "소설"
+            BookType.POETRY -> "시"
+            BookType.ESSAY -> "에세이"
+            BookType.CLASSIC -> "고전"
+            BookType.COMIC -> "만화"
+            BookType.CHILDREN -> "어린이"
+            BookType.TODDLER -> "유아"
+            BookType.SELF_DEVELOPMENT -> "자기계발"
+            BookType.REFERENCE -> "학습/참고서"
+            BookType.MAJOR -> "전공서"
+            BookType.COOKING -> "요리/제빵"
+            BookType.LANGUAGE -> "외국어"
+            BookType.SOCIAL_SCIENCE -> "사회/과학"
+            BookType.ART -> "예술"
+            BookType.RELIGION -> "종교"
+            BookType.ECONOMICS -> "경제/경영"
+            BookType.HEALTH_TRAVEL -> "건강/여행"
+            BookType.HISTORY -> "역사"
+            BookType.PHILOSOPHY -> "철학"
+            BookType.OTHER -> "기타"
+        }
     }
 
     private fun updateButtonText(text: String) {
