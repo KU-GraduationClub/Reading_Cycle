@@ -10,9 +10,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.PopupMenu
@@ -30,6 +33,9 @@ import com.example.reading_cycle.post.model.SaleBookData
 import com.example.reading_cycle.post.repository.AddSalePostRepository
 import com.example.reading_cycle.post.vm.AddSalePostViewModel
 import com.example.reading_cycle.post.vm.AddSalePostViewModelFactory
+import com.google.android.material.snackbar.Snackbar
+import java.text.NumberFormat
+import java.util.Locale
 
 class AddSalePostFragment : Fragment() {
 
@@ -78,6 +84,10 @@ class AddSalePostFragment : Fragment() {
             }
         }
 
+        // 정가, 판매가 입력 형식 설정
+        setupPriceEditText(fragmentAddSalePostBinding.edtAddSalePostPrice)
+        setupPriceEditText(fragmentAddSalePostBinding.edtAddSalePostRegPrice)
+
         // 책 종류 선택 버튼 클릭 리스너 설정
         fragmentAddSalePostBinding.btnAddSalePostType1.setOnClickListener {
             getBookTypeMenu(it)
@@ -106,8 +116,24 @@ class AddSalePostFragment : Fragment() {
 
         // 버튼 클릭 이벤트 리스너 설정
         fragmentAddSalePostBinding.btnAddSalePostComplete.setOnClickListener {
-            val saleData = collectInputData()
-            viewModel.uploadSalePost(saleData) // ViewModel 인스턴스를 통해 메서드 호출
+            try {
+                val saleData = collectInputData()
+                viewModel.uploadSalePost(saleData)
+            } catch (e: IllegalStateException) {
+                showSnackbar("빈 칸 없이 작성해주세요.")
+            } catch (e: Exception) {
+                showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
+            }
+        }
+
+        // 뷰모델에서 uploadResult 결과에 따른 동작 수행
+        viewModel.uploadResult.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                showSnackbar("게시글이 성공적으로 등록되었습니다.")
+                mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
+            } else {
+                showSnackbar("게시글 등록에 실패했습니다.")
+            }
         }
 
         return fragmentAddSalePostBinding.root
@@ -117,8 +143,8 @@ class AddSalePostFragment : Fragment() {
         val title =  fragmentAddSalePostBinding.edtAddSalePostTitle.text.toString()
         val author =  fragmentAddSalePostBinding.edtAddSalePostAuthor.text.toString()
         val bookType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
-        val price =  fragmentAddSalePostBinding.edtAddSalePostPrice.text.toString().toLong()
-        val regPrice =  fragmentAddSalePostBinding.edtAddSalePostRegPrice.text.toString().toLong()
+        val price = fragmentAddSalePostBinding.edtAddSalePostPrice.text.toString()
+        val regPrice = fragmentAddSalePostBinding.edtAddSalePostRegPrice.text.toString()
         val bookState = determineBookState()
         val description =  fragmentAddSalePostBinding.edtAddSalePostExplain.text.toString()
 
@@ -324,8 +350,6 @@ class AddSalePostFragment : Fragment() {
             BookType.ESSAY -> "에세이"
             BookType.CLASSIC -> "고전"
             BookType.COMIC -> "만화"
-            BookType.CHILDREN -> "어린이"
-            BookType.TODDLER -> "유아"
             BookType.SELF_DEVELOPMENT -> "자기계발"
             BookType.REFERENCE -> "학습/참고서"
             BookType.MAJOR -> "전공서"
@@ -338,11 +362,48 @@ class AddSalePostFragment : Fragment() {
             BookType.HEALTH_TRAVEL -> "건강/여행"
             BookType.HISTORY -> "역사"
             BookType.PHILOSOPHY -> "철학"
+            BookType.CHILDREN -> "어린이"
+            BookType.TODDLER -> "유아"
             BookType.OTHER -> "기타"
         }
     }
 
     private fun updateButtonText(text: String) {
         fragmentAddSalePostBinding.btnAddSalePostType1.text = text
+    }
+
+    private fun setupPriceEditText(editText: EditText) {
+        editText.addTextChangedListener(object : TextWatcher {
+            private var current = ""
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString() != current) {
+                    editText.removeTextChangedListener(this)
+
+                    val cleanString = s.toString().replace("""[,.원]""".toRegex(), "")
+                    if (cleanString.isNotEmpty()) {
+                        val parsed = cleanString.toDouble()
+                        val formatted = NumberFormat.getNumberInstance(Locale.KOREA).format(parsed) + "원"
+
+                        current = formatted
+                        editText.setText(formatted)
+                        editText.setSelection(formatted.length - 1)
+                    } else {
+                        current = ""
+                        editText.setText("")
+                    }
+
+                    editText.addTextChangedListener(this)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
 }

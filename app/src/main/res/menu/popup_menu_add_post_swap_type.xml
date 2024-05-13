@@ -16,12 +16,6 @@
         android:id="@+id/menuComic"
         android:title="만화" />
     <item
-        android:id="@+id/menuChildren"
-        android:title="어린이" />
-    <item
-        android:id="@+id/menuToddler"
-        android:title="유아" />
-    <item
         android:id="@+id/menuSelfDevelopment"
         android:title="자기계발" />
     <item
@@ -57,6 +51,12 @@
     <item
         android:id="@+id/menuPhilosophy"
         android:title="철학" />
+    <item
+        android:id="@+id/menuChildren"
+        android:title="어린이" />
+    <item
+        android:id="@+id/menuToddler"
+        android:title="유아" />
     <item
         android:id="@+id/menuOther"
         android:title="기타" />
