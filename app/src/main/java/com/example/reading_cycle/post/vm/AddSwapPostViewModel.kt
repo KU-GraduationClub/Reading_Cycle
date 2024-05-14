@@ -3,14 +3,14 @@ package com.example.reading_cycle.post.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.reading_cycle.post.model.SaleBookData
-import com.example.reading_cycle.post.repository.AddSalePostRepository
+import com.example.reading_cycle.post.model.SwapBookData
+import com.example.reading_cycle.post.repository.AddSwapPostRepository
 
-class AddSalePostViewModel(private val repository: AddSalePostRepository) : ViewModel() {
+class AddSwapPostViewModel(private val repository: AddSwapPostRepository) : ViewModel() {
     val uploadResult = MutableLiveData<Boolean>()
 
-    fun uploadSalePost(saleData: SaleBookData) {
-        repository.uploadSaleDataToFirebase(saleData)
+    fun uploadSwapPost(swapData: SwapBookData) {
+        repository.uploadSwapDataToFirebase(swapData)
             .addOnSuccessListener {
                 uploadResult.value = true
             }
@@ -20,11 +20,11 @@ class AddSalePostViewModel(private val repository: AddSalePostRepository) : View
     }
 }
 
-class AddSalePostViewModelFactory(private val repository: AddSalePostRepository) : ViewModelProvider.Factory {
+class AddSwapPostViewModelFactory(private val repository: AddSwapPostRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddSalePostViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(AddSwapPostViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AddSalePostViewModel(repository) as T
+            return AddSwapPostViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

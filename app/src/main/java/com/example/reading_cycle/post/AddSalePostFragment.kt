@@ -89,7 +89,7 @@ class AddSalePostFragment : Fragment() {
         setupPriceEditText(fragmentAddSalePostBinding.edtAddSalePostRegPrice)
 
         // 책 종류 선택 버튼 클릭 리스너 설정
-        fragmentAddSalePostBinding.btnAddSalePostType1.setOnClickListener {
+        fragmentAddSalePostBinding.FrameAddSalePost1.setOnClickListener {
             getBookTypeMenu(it)
         }
 
@@ -151,7 +151,7 @@ class AddSalePostFragment : Fragment() {
         return SaleBookData(
             saleIdx = System.currentTimeMillis(), // 또는 서버에서 생성한 ID 사용
             saleBookPostImg = "", // 이미지 업로드 후 URL 설정 필요
-            saleBookImg = listOf(), // 이미지 URL 리스트
+            saleBookImg = listOf(),
             saleBookTitle = title,
             saleBookAuthor = author,
             saleBookType = bookType,
@@ -204,15 +204,17 @@ class AddSalePostFragment : Fragment() {
                             val imageBitmap = uriToBitmap(imageUri)
                             imageBitmap?.let { bitmap ->
                                 val resizedBitmap = resizeBitmap(bitmap)
-                                val index = i
-                                val imageViewId = fragmentAddSalePostBinding.root.findViewById<CardView>(cardViewIds[index])
+                                val imageViewId = fragmentAddSalePostBinding.root.findViewById<CardView>(
+                                    cardViewIds[i])
                                     .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                                     .id
                                 fragmentAddSalePostBinding.root.findViewById<ImageView>(imageViewId).setImageBitmap(resizedBitmap)
                                 // 다음 번호의 카드뷰를 보여줌
-                                if (index < cardViewIds.size - 1) {
-                                    val nextCardViewId = cardViewIds[index + 1]
-                                    fragmentAddSalePostBinding.root.findViewById<CardView>(nextCardViewId).visibility = View.VISIBLE
+                                if (i < cardViewIds.size - 1) {
+                                    val nextCardViewId = cardViewIds[i + 1]
+                                    fragmentAddSalePostBinding.root.findViewById<CardView>(
+                                        nextCardViewId
+                                    ).visibility = View.VISIBLE
                                 }
                             }
                         }
@@ -249,7 +251,7 @@ class AddSalePostFragment : Fragment() {
 
         val scaleX = targetWidth.toFloat() / width
         val scaleY = targetHeight.toFloat() / height
-        val scaleFactor = Math.max(scaleX, scaleY)
+        val scaleFactor = scaleX.coerceAtLeast(scaleY)
 
         val scaledWidth = scaleFactor * width
         val scaledHeight = scaleFactor * height
@@ -273,7 +275,7 @@ class AddSalePostFragment : Fragment() {
         selectedCardIndex = cardIndex // 선택된 카드뷰의 인덱스 저장
         val items = arrayOf("갤러리", "카메라")
         val builder = android.app.AlertDialog.Builder(requireContext())
-        builder.setItems(items) { dialog, which ->
+        builder.setItems(items) { _, which ->
             when (which) {
                 0 -> openGallery()
                 1 -> openCamera()

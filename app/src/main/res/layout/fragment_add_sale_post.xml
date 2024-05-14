@@ -108,7 +108,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <HorizontalScrollView
-                android:id="@+id/ScrollAddSwapPost"
+                android:id="@+id/ScrollAddSalePost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -257,7 +257,7 @@
                 android:elevation="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ScrollAddSwapPost" />
+                app:layout_constraintTop_toBottomOf="@+id/ScrollAddSalePost" />
 
             <TextView
                 android:id="@+id/textAddSalePost2"
@@ -399,14 +399,28 @@
                 app:layout_constraintTop_toBottomOf="@+id/FrameAddSalePost1" />
 
             <View
+                android:id="@+id/dividerAddSalePost4"
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="10dp"
+                android:background="#BCBCBC"
+                android:elevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/FrameAddSalePost1" />
+
+            <View
                 android:id="@+id/dividerAddSalePost3"
                 android:layout_width="245dp"
-                android:layout_height="1.3dp"
+                android:layout_height="0.6dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginEnd="10dp"
-                android:background="#999999"
-                android:elevation="0.8dp"
+                android:background="#BCBCBC"
+                android:elevation="0dp"
                 app:layout_constraintEnd_toEndOf="@+id/edtAddSalePostPrice"
                 app:layout_constraintStart_toStartOf="@+id/edtAddSalePostPrice"
                 app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostPrice" />
