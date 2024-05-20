@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentAddSwapPostBinding
@@ -34,6 +36,12 @@ import com.example.reading_cycle.post.repository.AddSwapPostRepository
 import com.example.reading_cycle.post.vm.AddSwapPostViewModel
 import com.example.reading_cycle.post.vm.AddSwapPostViewModelFactory
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -46,6 +54,7 @@ class AddSwapPostFragment : Fragment() {
     private var selectedFrameId: Int? = null
     private var selectedBookType: BookType? = null
     private var selectedBookState: BookState? = null
+    private val selectedImages = mutableListOf<Bitmap>()
 
     private val cardViewIds = listOf(
         R.id.cardViewAddSwapPostImg1,
@@ -116,13 +125,15 @@ class AddSwapPostFragment : Fragment() {
 
         // 버튼 클릭 이벤트 리스너 설정
         fragmentAddSwapPostBinding.btnAddSwapPostComplete.setOnClickListener {
-            try {
-                val swapData = collectInputData()
-                viewModel.uploadSwapPost(swapData)
-            } catch (e: IllegalStateException) {
-                showSnackbar("빈 칸 없이 작성해주세요.")
-            } catch (e: Exception) {
-                showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
+            lifecycleScope.launch {
+                try {
+                    val swapData = collectInputData()
+                    viewModel.uploadSwapPost(swapData)
+                } catch (e: IllegalStateException) {
+                    showSnackbar("빈 칸 없이 작성해주세요.")
+                } catch (e: Exception) {
+                    showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
+                }
             }
         }
 
@@ -139,7 +150,7 @@ class AddSwapPostFragment : Fragment() {
         return fragmentAddSwapPostBinding.root
     }
 
-    private fun collectInputData(): SwapBookData {
+    private suspend fun collectInputData(): SwapBookData {
         val title =  fragmentAddSwapPostBinding.edtAddSwapPostTitle.text.toString()
         val author =  fragmentAddSwapPostBinding.edtAddSwapPostAuthor.text.toString()
         val bookType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
@@ -148,10 +159,14 @@ class AddSwapPostFragment : Fragment() {
         val bookState = determineBookState()
         val description =  fragmentAddSwapPostBinding.edtAddSwapPostExplain.text.toString()
 
+        val imageUrls = withContext(Dispatchers.IO) {
+            uploadImagesAndGetUrls(selectedImages)
+        }
+
         return SwapBookData(
             swapIdx = System.currentTimeMillis(), // 또는 서버에서 생성한 ID 사용
-            swapBookPostImg = "", // 이미지 업로드 후 URL 설정 필요
-            swapBookImg = listOf(),
+            swapBookPostImg =imageUrls.firstOrNull() ?: "",
+            swapBookImg = imageUrls,
             swapBookTitle = title,
             swapBookAuthor = author,
             swapBookType = bookType,
@@ -160,6 +175,33 @@ class AddSwapPostFragment : Fragment() {
             swapBookState = bookState,
             swapBookExplain = description
         )
+    }
+
+    private suspend fun uploadImagesAndGetUrls(images: List<Bitmap>): List<String> = withContext(Dispatchers.IO) {
+        val urls = mutableListOf<String>()
+        val storage = FirebaseStorage.getInstance().reference
+
+        images.forEachIndexed { index, bitmap ->
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+            val data = byteArrayOutputStream.toByteArray()
+            val filePath = "images/${System.currentTimeMillis()}_$index.jpg"
+            val ref = storage.child(filePath)
+
+            try {
+                val uploadTask = ref.putBytes(data).await()
+                val downloadUrl = uploadTask.storage.downloadUrl.await().toString()
+                urls.add(downloadUrl)
+
+                // 이미지 업로드 확인을 위해 URL 로그로 출력, Storage 규칙 적용 후 제거
+                Log.d("ImageUpload", "Image $index uploaded successfully. URL: $downloadUrl")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("ImageUpload", "Image $index upload failed: ${e.message}")
+            }
+        }
+
+        return@withContext urls
     }
 
     // 도서 상태 선택 데이터 처리
@@ -204,6 +246,7 @@ class AddSwapPostFragment : Fragment() {
                             val imageBitmap = uriToBitmap(imageUri)
                             imageBitmap?.let { bitmap ->
                                 val resizedBitmap = resizeBitmap(bitmap)
+                                selectedImages.add(resizedBitmap)
                                 val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(
                                     cardViewIds[i])
                                     .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
@@ -225,6 +268,7 @@ class AddSwapPostFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     val imageBitmap = data?.extras?.get("data") as Bitmap
                     val resizedBitmap = resizeBitmap(imageBitmap)
+                    selectedImages.add(resizedBitmap)
                     selectedCardIndex?.let { index ->
                         val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(cardViewIds[index])
                             .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴

@@ -178,7 +178,7 @@ class AddSalePostFragment : Fragment() {
         )
     }
 
-    // 이미지 업로드 후 URL을 반환하는 함
+    // 이미지 업로드 후 URL을 반환하는 함수
     private suspend fun uploadImagesAndGetUrls(images: List<Bitmap>): List<String> = withContext(Dispatchers.IO) {
         val urls = mutableListOf<String>()
         val storage = FirebaseStorage.getInstance().reference
