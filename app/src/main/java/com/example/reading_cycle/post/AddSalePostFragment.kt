@@ -160,6 +160,11 @@ class AddSalePostFragment : Fragment() {
         val bookState = determineBookState()
         val description = fragmentAddSalePostBinding.edtAddSalePostExplain.text.toString()
 
+        if (price.isBlank() || regPrice.isBlank()) {
+            showSnackbar("빈 칸 없이 작성해주세요.")
+            throw IllegalStateException("Price fields must not be empty.")
+        }
+
         val imageUrls = withContext(Dispatchers.IO) {
             uploadImagesAndGetUrls(selectedImages)
         }
