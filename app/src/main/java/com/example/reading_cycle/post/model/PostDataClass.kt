@@ -13,7 +13,7 @@ data class SwapBookData(val swapIdx: Long, //교환 도서 IDX
                         val swapBookAuthor: String, //교환 도서 작가
                         val swapBookType: BookType, //교환할 도서 타입
                         val bookSwapType: BookType, //교환받을 도서 타입
-                        val swapBookRegPrice: String, //교환 도서 정가
+                        val swapBookRegPrice: String?, //교환 도서 정가
                         val swapBookState: BookState, //교환 도서 상태
                         val swapBookExplain: String, //교환 도서 설명
                         val swapBookWriteDate: Long = System.currentTimeMillis()) //교환 도서 게시글 작성일
@@ -24,8 +24,8 @@ data class SaleBookData(val saleIdx: Long, //판매 도서 IDX
                         val saleBookTitle: String, //판매 도서 제목
                         val saleBookAuthor: String, //판매 도서 작가
                         val saleBookType: BookType, //판매할 도서 타입
-                        val saleBookPrice: String, //판매할 도서 받을 가격
-                        val saleBookRegPrice: String, //판매 도서 정가
+                        val saleBookPrice: String?, //판매할 도서 받을 가격
+                        val saleBookRegPrice: String?, //판매 도서 정가
                         val saleBookState: BookState, //판매 도서 상태
                         val saleBookExplain: String, //판매 도서 설명
                         val saleBookWriteDate: Long = System.currentTimeMillis()) //판매 도서 게시글 작성일

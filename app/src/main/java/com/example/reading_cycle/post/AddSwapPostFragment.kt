@@ -41,11 +41,10 @@ class AddSwapPostFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentAddSwapPostBinding: FragmentAddSwapPostBinding
-   private lateinit var viewModel: AddSwapPostViewModel
+    private lateinit var viewModel: AddSwapPostViewModel
     private var selectedCardIndex: Int? = null
     private var selectedFrameId: Int? = null
     private var selectedBookType: BookType? = null
-    private var selectedSwapType: BookType? = null
     private var selectedBookState: BookState? = null
 
     private val cardViewIds = listOf(
@@ -156,7 +155,7 @@ class AddSwapPostFragment : Fragment() {
             swapBookTitle = title,
             swapBookAuthor = author,
             swapBookType = bookType,
-            bookSwapType = bookType,
+            bookSwapType = bookSwapType,
             swapBookRegPrice = regPrice,
             swapBookState = bookState,
             swapBookExplain = description

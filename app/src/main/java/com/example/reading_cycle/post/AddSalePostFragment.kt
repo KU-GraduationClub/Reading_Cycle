@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentAddSalePostBinding
@@ -34,6 +36,13 @@ import com.example.reading_cycle.post.repository.AddSalePostRepository
 import com.example.reading_cycle.post.vm.AddSalePostViewModel
 import com.example.reading_cycle.post.vm.AddSalePostViewModelFactory
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -46,6 +55,7 @@ class AddSalePostFragment : Fragment() {
     private var selectedFrameId: Int? = null
     private var selectedBookType: BookType? = null
     private var selectedBookState: BookState? = null
+    private val selectedImages = mutableListOf<Bitmap>()
 
     private val cardViewIds = listOf(
         R.id.cardViewAddSalePostImg1,
@@ -116,13 +126,15 @@ class AddSalePostFragment : Fragment() {
 
         // 버튼 클릭 이벤트 리스너 설정
         fragmentAddSalePostBinding.btnAddSalePostComplete.setOnClickListener {
-            try {
-                val saleData = collectInputData()
-                viewModel.uploadSalePost(saleData)
-            } catch (e: IllegalStateException) {
-                showSnackbar("빈 칸 없이 작성해주세요.")
-            } catch (e: Exception) {
-                showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
+            lifecycleScope.launch {
+                try {
+                    val saleData = collectInputData()
+                    viewModel.uploadSalePost(saleData)
+                } catch (e: IllegalStateException) {
+                    showSnackbar("빈 칸 없이 작성해주세요.")
+                } catch (e: Exception) {
+                    showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
+                }
             }
         }
 
@@ -139,19 +151,23 @@ class AddSalePostFragment : Fragment() {
         return fragmentAddSalePostBinding.root
     }
 
-    private fun collectInputData(): SaleBookData {
-        val title =  fragmentAddSalePostBinding.edtAddSalePostTitle.text.toString()
-        val author =  fragmentAddSalePostBinding.edtAddSalePostAuthor.text.toString()
+    private suspend fun collectInputData(): SaleBookData {
+        val title = fragmentAddSalePostBinding.edtAddSalePostTitle.text.toString()
+        val author = fragmentAddSalePostBinding.edtAddSalePostAuthor.text.toString()
         val bookType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
         val price = fragmentAddSalePostBinding.edtAddSalePostPrice.text.toString()
         val regPrice = fragmentAddSalePostBinding.edtAddSalePostRegPrice.text.toString()
         val bookState = determineBookState()
-        val description =  fragmentAddSalePostBinding.edtAddSalePostExplain.text.toString()
+        val description = fragmentAddSalePostBinding.edtAddSalePostExplain.text.toString()
+
+        val imageUrls = withContext(Dispatchers.IO) {
+            uploadImagesAndGetUrls(selectedImages)
+        }
 
         return SaleBookData(
             saleIdx = System.currentTimeMillis(), // 또는 서버에서 생성한 ID 사용
-            saleBookPostImg = "", // 이미지 업로드 후 URL 설정 필요
-            saleBookImg = listOf(),
+            saleBookPostImg = imageUrls.firstOrNull() ?: "",
+            saleBookImg = imageUrls,
             saleBookTitle = title,
             saleBookAuthor = author,
             saleBookType = bookType,
@@ -160,6 +176,34 @@ class AddSalePostFragment : Fragment() {
             saleBookState = bookState,
             saleBookExplain = description
         )
+    }
+
+    // 이미지 업로드 후 URL을 반환하는 함
+    private suspend fun uploadImagesAndGetUrls(images: List<Bitmap>): List<String> = withContext(Dispatchers.IO) {
+        val urls = mutableListOf<String>()
+        val storage = FirebaseStorage.getInstance().reference
+
+        images.forEachIndexed { index, bitmap ->
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+            val data = byteArrayOutputStream.toByteArray()
+            val filePath = "images/${System.currentTimeMillis()}_$index.jpg"
+            val ref = storage.child(filePath)
+
+            try {
+                val uploadTask = ref.putBytes(data).await()
+                val downloadUrl = uploadTask.storage.downloadUrl.await().toString()
+                urls.add(downloadUrl)
+
+                // 이미지 업로드 확인을 위해 URL 로그로 출력, Storage 규칙 적용 후 제거
+                Log.d("ImageUpload", "Image $index uploaded successfully. URL: $downloadUrl")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("ImageUpload", "Image $index upload failed: ${e.message}")
+            }
+        }
+
+        return@withContext urls
     }
 
     // 도서 상태 선택 데이터 처리
@@ -204,6 +248,7 @@ class AddSalePostFragment : Fragment() {
                             val imageBitmap = uriToBitmap(imageUri)
                             imageBitmap?.let { bitmap ->
                                 val resizedBitmap = resizeBitmap(bitmap)
+                                selectedImages.add(resizedBitmap)
                                 val imageViewId = fragmentAddSalePostBinding.root.findViewById<CardView>(
                                     cardViewIds[i])
                                     .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
@@ -225,6 +270,7 @@ class AddSalePostFragment : Fragment() {
                 if (resultCode == RESULT_OK) {
                     val imageBitmap = data?.extras?.get("data") as Bitmap
                     val resizedBitmap = resizeBitmap(imageBitmap)
+                    selectedImages.add(resizedBitmap)
                     selectedCardIndex?.let { index ->
                         val imageViewId = fragmentAddSalePostBinding.root.findViewById<CardView>(cardViewIds[index])
                             .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴

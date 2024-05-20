@@ -418,7 +418,7 @@
                     android:elevation="3dp"
                     android:fontFamily="@font/soyo_maple_regular"
                     android:padding="1dp"
-                    android:text="소설"
+                    android:text="도서 종류"
                     android:textColor="#F9FBF4"
                     android:textSize="16dp" />
 
