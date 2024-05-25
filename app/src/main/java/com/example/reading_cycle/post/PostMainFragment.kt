@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
+import com.example.reading_cycle.post.vm.PostMainViewModel
 import com.example.reading_cycle.post.vm.PostSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
@@ -22,6 +25,7 @@ class PostMainFragment : Fragment() {
     private lateinit var postMainAdapter : PostMainAdapter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var bottomSheetViewModel: PostSheetViewModel
+    private val postMainViewModel: PostMainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,27 +42,22 @@ class PostMainFragment : Fragment() {
         // ViewModel 초기화
         bottomSheetViewModel = PostSheetViewModel()
 
-//        // 데이터 생성 (임시)
-//        val swapBookList = listOf(
-//            SwapDataClass("책 제목1", "작가1"),
-//            SwapDataClass("책 제목2", "작가2"),
-//            SwapDataClass("책 제목2", "작가2"),
-//            )
-//        val saleList = listOf(
-//            SaleDataClass("책 제목3", "작가3"),
-//            SaleDataClass("책 제목4", "작가4"),
-//            SaleDataClass("책 제목4", "작가4"),
-//            SaleDataClass("책 제목4", "작가4"),
-//        )
+        // 어댑터 초기화
+        postMainAdapter = PostMainAdapter()
+        // RecyclerView 설정
+        fragmentPostMainBinding.recyclerViewPostMain.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = postMainAdapter
+        }
 
-//        // 어댑터 초기화
-//        postMainAdapter = PostMainAdapter(swapBookList, saleList)
+        // LiveData 관찰
+        postMainViewModel.getSalePostsLiveData().observe(viewLifecycleOwner, Observer { salePosts ->
+            postMainAdapter.setSalePosts(salePosts)
+        })
 
-//        // RecyclerView 설정
-//        fragmentPostMainBinding.recyclerViewPostMain.apply {
-//            layoutManager = LinearLayoutManager(requireContext())
-//            adapter = postMainAdapter
-//        }
+        postMainViewModel.getSwapPostsLiveData().observe(viewLifecycleOwner, Observer { swapPosts ->
+            postMainAdapter.setSwapPosts(swapPosts)
+        })
 
         // 툴바 알림 메뉴 클릭 이벤트 처리
         fragmentPostMainBinding.toolbarLayoutPostMain.setOnMenuItemClickListener { menuItem ->
@@ -144,15 +143,6 @@ class PostMainFragment : Fragment() {
         fragmentPostMainBinding.textPostMainSort.text = sortText
     }
 
-//    private fun createPostMainAdapter(): PostMainAdapter {
-//        // TODO: SwapDataClass, SaleDataClass에 맞는 데이터를 생성하여 어댑터에 전달
-//        val swapBookList = mutableListOf<SwapDataClass>() // ... 스왑 데이터 생성
-//        val saleList = mutableListOf<SaleDataClass>() // ... 판매 데이터 생성
-//
-//        // TODO: 데이터 추가
-//
-//        return PostMainAdapter(swapBookList, saleList)
-//    }
 
     private fun showPostTypeDialog() {
         val builder = AlertDialog.Builder(requireContext())

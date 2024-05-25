@@ -54,6 +54,8 @@ fun getApiKey(propertyKey:String):String{
 dependencies {
     // Firebase Storage
     implementation ("com.google.firebase:firebase-storage:19.2.2")
+    // Glide 추가 (이미지 로드, 표시)
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
