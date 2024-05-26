@@ -15,8 +15,10 @@ class FriendRepository(private val database: DatabaseReference) {
     data class UserData(
         val nickname: String,
         val memo: String,
-        val imageUrl: String
+        val imageUrl: String,
+        var isBookmarked: Boolean = false
     )
+
 
     fun fetchUserData() {
         database.child("users")
@@ -25,11 +27,11 @@ class FriendRepository(private val database: DatabaseReference) {
                     val userList = mutableListOf<UserData>()
                     dataSnapshot.children.forEach { userSnapshot ->
                         val userId = userSnapshot.key // 각 사용자의 식별자 가져오기
-                        val imageUrl = userSnapshot.child("imageUrl").getValue(String::class.java) ?: ""
-                        val memo = userSnapshot.child("memo").getValue(String::class.java) ?: ""
                         val nickname = userSnapshot.child("nickname").getValue(String::class.java) ?: ""
+                        val memo = userSnapshot.child("memo").getValue(String::class.java) ?: ""
+                        val imageUrl = userSnapshot.child("imageUrl").getValue(String::class.java) ?: ""
                         // UserData 인스턴스 생성
-                        val userData = UserData(imageUrl, memo, nickname)
+                        val userData = UserData(nickname, memo, imageUrl)
                         userList.add(userData)
                     }
                     _userData.value = userList
@@ -42,7 +44,11 @@ class FriendRepository(private val database: DatabaseReference) {
             })
     }
 
+
     fun getUserData(): MutableLiveData<List<UserData>> {
         return _userData
     }
+
+
+
 }

@@ -4,5 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="_0">0</string>
     <string name="todo">TODO</string>
+    <string name="friendmainfragment">FriendMainFragment</string>
+    <string name="librarymainfragment">LibraryMainFragment</string>
 
 </resources>

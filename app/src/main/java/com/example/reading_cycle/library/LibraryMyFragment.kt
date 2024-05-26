@@ -1,4 +1,4 @@
-package com.example.reading_cycle.library
+package com.example.reading_cycle.Library
 
 import android.app.AlertDialog
 import android.os.Bundle
