@@ -7,13 +7,13 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.example.reading_cycle.Library.LibraryMainFragment
+import com.example.reading_cycle.Library.LibraryMyFragment
 import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
-import com.example.reading_cycle.library.LibraryMainFragment
-import com.example.reading_cycle.library.LibraryMyFragment
-import com.example.reading_cycle.location.LocSetFragment
 import com.example.reading_cycle.location.LocReSetFragment
+import com.example.reading_cycle.location.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.PasswordResetFragment
 import com.example.reading_cycle.login.UserRegisterFragment
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         val view = mainBinding.root
         setContentView(view)
 
-        // 기본 ActionBar를 숨깁니다.
+        // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
         replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
@@ -78,8 +78,8 @@ class MainActivity : AppCompatActivity() {
 
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        
-            // 새로운 Fragment를 담을 변수
+
+            // 새로운 Fragment 담을 변수
             newFragment = when(name){
                 POST_MAIN_FRAGMENT -> PostMainFragment()
                 ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
@@ -99,16 +99,16 @@ class MainActivity : AppCompatActivity() {
                 else -> Fragment()
             }
 
-        // newFragment 에 Fragment가 들어있으면 oldFragment에 넣어준다.
+        // newFragment 에 Fragment 들어있으면 oldFragment 넣어준다.
         if (newFragment != null) {
             oldFragment = newFragment
         }
 
-        // Fragment를 교체한다.
+        // Fragment 교체한다.
         fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
 
         if (addToBackStack) {
-            // Fragment를 Backstack에 넣어 이전으로 돌아가는 기능이 동작할 수 있도록 한다.
+            // Fragment Backstack 넣어 이전으로 돌아가는 기능이 동작할 수 있도록 한다.
             fragmentTransaction.addToBackStack(name)
         }
 
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    // Fragment를 BackStack에서 제거.
+    // Fragment BackStack에서 제거.
     fun removeFragment(name: String) {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
@@ -136,4 +136,5 @@ class MainActivity : AppCompatActivity() {
     fun navigateToLocSetFragment() {
         replaceFragment(LOC_RESET_FRAGMENT, true)
     }
+
 }
