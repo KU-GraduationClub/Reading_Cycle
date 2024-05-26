@@ -1,4 +1,4 @@
-package com.example.reading_cycle.library
+package com.example.reading_cycle.Library
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -39,7 +39,7 @@ class LibraryMyFragment : Fragment() {
         mainActivity.showBottomNavigation()
 
         // 타이틀 아이콘 작업
-        val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
+        ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
         fragmentLibraryMyBinding.toolbarLibraryMyTitle.setCompoundDrawablesWithIntrinsicBounds(
             null,
             null,

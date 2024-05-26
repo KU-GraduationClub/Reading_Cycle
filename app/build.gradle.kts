@@ -3,8 +3,12 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("com.google.gms.google-services")
+}
+
+fun getApiKey(propertyKey: String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
 android {
@@ -19,7 +23,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String","api_key",getApiKey("api.key"))
+        buildConfigField("String", "api_key", getApiKey("api.key"))
     }
 
     buildTypes {
@@ -38,17 +42,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    viewBinding{
+    viewBinding {
         enable = true
     }
-    buildFeatures{
+    buildFeatures {
         buildConfig = true
+        dataBinding = true
     }
-
-}
-fun getApiKey(propertyKey:String):String{
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
-}
 
 
 dependencies {
@@ -75,4 +75,3 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
  }
-
