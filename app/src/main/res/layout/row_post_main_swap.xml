@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapTitle" />
 
     <TextView
-        android:id="@+id/textRowPostSwapWriter"
+        android:id="@+id/textRowPostSwapAuthor"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapTitle" />
 
     <Button
-        android:id="@+id/btnRowPostSwapCate1"
+        android:id="@+id/btnRowPostSwapType"
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="17dp"
@@ -97,15 +97,15 @@
         android:textSize="10dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imgRowPostSwapType"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapWriter" />
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapAuthor" />
 
     <ImageView
         android:id="@+id/imgRowPostSwapType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/btnRowPostSwapCate1"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapWriter"
+        app:layout_constraintStart_toEndOf="@+id/btnRowPostSwapType"
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapAuthor"
         app:srcCompat="@drawable/baseline_sync_40_blue" />
 
     <View

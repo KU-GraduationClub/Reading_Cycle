@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleTitle" />
 
     <TextView
-        android:id="@+id/textRowPostSaleWriter"
+        android:id="@+id/textRowPostSaleAuthor"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleTitle" />
 
     <Button
-        android:id="@+id/btnRowPostSaleType1"
+        android:id="@+id/btnRowPostSaleType"
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="17dp"
@@ -83,7 +83,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSale1" />
 
     <Button
-        android:id="@+id/btnRowPostSaleType2"
+        android:id="@+id/btnRowPostSalePrice"
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="4dp"
@@ -98,7 +98,7 @@
         android:textSize="10dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imgRowPostSaleType"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleWriter" />
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleAuthor" />
 
     <ImageView
         android:id="@+id/imgRowPostSaleType"
@@ -106,8 +106,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="13dp"
-        app:layout_constraintStart_toEndOf="@+id/btnRowPostSaleType1"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleWriter"
+        app:layout_constraintStart_toEndOf="@+id/btnRowPostSaleType"
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleAuthor"
         app:srcCompat="@drawable/baseline_currency_exchange_40_red" />
 
     <View
@@ -135,7 +135,7 @@
         app:layout_constraintTop_toTopOf="@+id/BorderRowPostSale1" />
 
     <TextView
-        android:id="@+id/textRowPostSalePrice"
+        android:id="@+id/textRowPostSaleRegPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
