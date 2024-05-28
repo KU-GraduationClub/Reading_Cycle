@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".login.SetProfileFragment"
+    tools:ignore="ExtraText">
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="176dp"
+        android:layout_marginEnd="351dp"
+        android:text="닉네임"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/edtNickname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="188dp"
+        android:layout_marginBottom="9dp"
+        android:fontFamily="@font/soyo_maple_bold"
+        android:text="프로필을 설정해주세요."
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textView7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarLayout" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="17dp"
+        android:text="나를 나타내는 프로필 사진과 닉네임으로 등록하면 \n 이웃들이 안심할 수 있어요."
+        app:layout_constraintBottom_toTopOf="@+id/imgBtnSetProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarSetProfile"
+            style="@style/Theme.Reading_cycle.ToolbarTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:gravity="center"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/toolbar_password_reset"
+            app:navigationIcon="@drawable/baseline_arrow_back_ios_28"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ImageButton
+        android:id="@+id/imgBtnSetProfile"
+        android:layout_width="141dp"
+        android:layout_height="131dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="135dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="136dp"
+        android:layout_marginBottom="49dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/baseline_account_circle_24"
+        app:layout_constraintBottom_toTopOf="@+id/edtNickname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        />
+
+    <EditText
+        android:id="@+id/edtNickname"
+        android:layout_width="369dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="133dp"
+        android:background="@drawable/border_dark_brown"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center"
+        android:hint="닉네임을 입력해주세요."
+        android:inputType="text"
+        android:textColorHint="#6A3F0D"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegisterFin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+    <Button
+        android:id="@+id/btnRegisterFin"
+        android:layout_width="369dp"
+        android:layout_height="54dp"
+        android:layout_gravity="center_vertical"
+
+        android:layout_marginStart="21dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/shape_stroke"
+        android:backgroundTint="@color/theme_green"
+        android:elevation="0dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="완료"
+        android:textColor="@color/background"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtNickname" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

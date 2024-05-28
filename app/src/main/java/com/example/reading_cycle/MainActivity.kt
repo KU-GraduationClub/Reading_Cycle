@@ -12,17 +12,17 @@ import com.example.reading_cycle.Library.LibraryMyFragment
 import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
-import com.example.reading_cycle.location.LocReSetFragment
+import com.example.reading_cycle.login.MsgAuthFragment
+import com.example.reading_cycle.login.SetProfileFragment
 import com.example.reading_cycle.location.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
-import com.example.reading_cycle.login.PasswordResetFragment
-import com.example.reading_cycle.login.UserRegisterFragment
 import com.example.reading_cycle.notify.NotifyFragment
 import com.example.reading_cycle.post.AddSalePostFragment
 import com.example.reading_cycle.post.AddSwapPostFragment
 import com.example.reading_cycle.post.PostMainFragment
 import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,10 +37,9 @@ class MainActivity : AppCompatActivity() {
         const val SALE_POST_FRAGMENT = "SalePostFragment"
         const val SWAP_POST_FRAGMENT = "SwapPostFragment"
         const val LOC_SET_FRAGMENT = "LocSetFragment"
-        const val LOC_RESET_FRAGMENT = "LocResetFragment"
         const val LOGIN_MAIN_FRAGMENT = "LoginMainFragment"
-        const val PASSWORD_RESET_FRAGMENT = "PasswordResetFragment"
-        const val USER_REGISTER_FRAGMENT = "UserRegisterFragment"
+        const val MSG_AUTH_FRAGMENT = "MsgAuthFragment"
+        const val SET_PROFILE_FRAGMENT = "SetProfileFragment"
         const val CHAT_LIST_FRAGMENT = "ChatListFragment"
         const val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
         const val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
@@ -54,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         val view = mainBinding.root
         setContentView(view)
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this)
 
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
@@ -87,10 +88,9 @@ class MainActivity : AppCompatActivity() {
                 SALE_POST_FRAGMENT -> SalePostFragment()
                 SWAP_POST_FRAGMENT -> SwapPostFragment()
                 LOC_SET_FRAGMENT -> LocSetFragment()
-                LOC_RESET_FRAGMENT -> LocReSetFragment()
                 LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
-                USER_REGISTER_FRAGMENT -> UserRegisterFragment()
-                PASSWORD_RESET_FRAGMENT -> PasswordResetFragment()
+                MSG_AUTH_FRAGMENT -> MsgAuthFragment()
+                SET_PROFILE_FRAGMENT -> SetProfileFragment()
                 CHAT_LIST_FRAGMENT -> ChatListFragment()
                 LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
                 LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
@@ -134,7 +134,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun navigateToLocSetFragment() {
-        replaceFragment(LOC_RESET_FRAGMENT, true)
+        replaceFragment(LOC_SET_FRAGMENT, true)
     }
-
 }

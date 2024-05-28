@@ -51,27 +51,31 @@ android {
     }
 
 
-dependencies {
-    // Firebase Storage
-    implementation ("com.google.firebase:firebase-storage:19.2.2")
-    // Glide 추가 (이미지 로드, 표시)
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    dependencies {
+        // Firebase Storage
+        implementation("com.google.firebase:firebase-storage:19.2.2")
+        // Glide 추가 (이미지 로드, 표시)
+        implementation("com.github.bumptech.glide:glide:4.12.0")
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.firebase:firebase-firestore-ktx:24.11.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+        implementation("androidx.core:core-ktx:1.12.0")
+        implementation("androidx.appcompat:appcompat:1.6.1")
+        implementation("com.google.android.material:material:1.11.0")
+        implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+        implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
+        testImplementation("junit:junit:4.13.2")
+        androidTestImplementation("androidx.test.ext:junit:1.1.5")
+        androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    // Map 관련
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("com.google.android.gms:play-services-location:21.1.0")
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+        // Map 관련
+        implementation("com.google.android.gms:play-services-maps:18.2.0")
+        implementation("com.google.android.gms:play-services-location:21.1.0")
+        implementation("androidx.fragment:fragment-ktx:1.6.2")
 
-    // Firebase 관련
-    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
-    implementation("com.google.firebase:firebase-analytics")
- }
+        // Firebase 관련
+        implementation("com.google.firebase:firebase-database-ktx:21.0.0")
+        implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+        implementation("com.google.firebase:firebase-analytics")
+        implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
+        implementation("com.google.firebase:firebase-auth:23.0.0")
+    }
+}
