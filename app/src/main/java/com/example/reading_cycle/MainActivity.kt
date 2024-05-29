@@ -99,10 +99,7 @@ class MainActivity : AppCompatActivity() {
                 else -> Fragment()
             }
 
-        // newFragment 에 Fragment 들어있으면 oldFragment 넣어준다.
-        if (newFragment != null) {
-            oldFragment = newFragment
-        }
+        newFragment?.arguments = bundle
 
         // Fragment 교체한다.
         fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)

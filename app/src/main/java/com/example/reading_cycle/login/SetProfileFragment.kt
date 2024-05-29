@@ -56,6 +56,7 @@ class SetProfileFragment : Fragment() {
                     uploadImageToFirebaseStorage { imageUrl ->
                         // 사용자 정보 데이터 클래스에 저장
                         val userData = LoginDataClass(
+                            userIdx = auth.currentUser?.uid ?: "",
                             userNickname = userNickname,
                             userPhoneNumber = userPhoneNumber,
                             userProfileImage = imageUrl
@@ -64,7 +65,10 @@ class SetProfileFragment : Fragment() {
                         // Firebase Firestore에 데이터 업로드
                         addLoginRepository.uploadUserDataToFirestore(userData,
                             onSuccess = {
-                                mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
+                                val bundle = Bundle().apply {
+                                    putString("userIdx", userData.userIdx)
+                                }
+                                mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, bundle)
                             },
                             onFailure = { e ->
                                 Log.e(TAG, "Failed to upload user data to Firestore", e)
@@ -84,7 +88,10 @@ class SetProfileFragment : Fragment() {
                     // Firebase Firestore에 데이터 업로드
                     addLoginRepository.uploadUserDataToFirestore(userData,
                         onSuccess = {
-                            mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
+                            val bundle = Bundle().apply {
+                                putString("userIdx", userData.userIdx)
+                            }
+                            mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, bundle)
                         },
                         onFailure = { e ->
                             Log.e(TAG, "Failed to upload user data to Firestore", e)

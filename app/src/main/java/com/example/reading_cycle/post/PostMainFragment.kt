@@ -1,7 +1,9 @@
 package com.example.reading_cycle.post
 
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +28,7 @@ class PostMainFragment : Fragment() {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var bottomSheetViewModel: PostSheetViewModel
     private val postMainViewModel: PostMainViewModel by viewModels()
+    private var userIdx: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +44,10 @@ class PostMainFragment : Fragment() {
 
         // ViewModel 초기화
         bottomSheetViewModel = PostSheetViewModel()
+
+        // userIdx를 Bundle로부터 가져오기
+        userIdx = arguments?.getString("userIdx")
+        Log.d(TAG, "Received userIdx: $userIdx")
 
         // 어댑터 초기화
         postMainAdapter = PostMainAdapter()

@@ -39,6 +39,7 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        mainActivity = activity as MainActivity
         _binding = FragmentLocSetBinding.inflate(inflater, container, false)
         mainActivity.hideBottomNavigation()
         return binding.root

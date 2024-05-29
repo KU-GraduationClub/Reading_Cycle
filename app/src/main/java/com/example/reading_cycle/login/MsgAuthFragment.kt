@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MsgAuthFragment : Fragment() {
 
@@ -25,6 +26,7 @@ class MsgAuthFragment : Fragment() {
 
     // Firebase Authentication 객체를 전역 변수로 선언
     private val auth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     // 인증 ID를 저장할 전역 변수
     private var verificationId = ""
