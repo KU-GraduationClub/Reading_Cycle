@@ -23,8 +23,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 class PostMainFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
-    private lateinit var fragmentPostMainBinding : FragmentPostMainBinding
-    private lateinit var postMainAdapter : PostMainAdapter
+    private lateinit var fragmentPostMainBinding: FragmentPostMainBinding
+    private lateinit var postMainAdapter: PostMainAdapter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var bottomSheetViewModel: PostSheetViewModel
     private val postMainViewModel: PostMainViewModel by viewModels()
@@ -73,6 +73,7 @@ class PostMainFragment : Fragment() {
                     mainActivity.navigateToNotifyFragment()
                     true
                 }
+
                 else -> false
             }
         }
@@ -109,7 +110,6 @@ class PostMainFragment : Fragment() {
     }
 
 
-
     private fun showPopupMenu(view: View) {
         val popup = PopupMenu(requireContext(), view)
         val inflater = popup.menuInflater
@@ -123,21 +123,25 @@ class PostMainFragment : Fragment() {
                     updateSortText("최신 순")
                     true
                 }
+
                 R.id.menuItemSortByDistance -> {
                     // TODO: 거리순 정렬에 대한 로직을 추가.
                     updateSortText("거리 순")
                     true
                 }
+
                 R.id.menuItemSortBySwap -> {
                     // TODO: 교환용 정렬에 대한 로직을 추가.
                     updateSortText("교환 옵션")
                     true
                 }
+
                 R.id.menuItemSortBySale -> {
                     // TODO: 판매용 정렬에 대한 로직을 추가.
                     updateSortText("판매 옵션")
                     true
                 }
+
                 else -> false
             }
         }
@@ -164,6 +168,7 @@ class PostMainFragment : Fragment() {
                     MainActivity.ADD_SWAP_POST_FRAGMENT,
                     true
                 )
+
                 1 -> (requireActivity() as MainActivity).replaceFragment(
                     MainActivity.ADD_SALE_POST_FRAGMENT,
                     true

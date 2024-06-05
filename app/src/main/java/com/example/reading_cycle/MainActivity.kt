@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
-    private var oldFragment: Fragment? = null
 
     companion object{
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
@@ -59,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
+        replaceFragment(POST_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -132,5 +131,9 @@ class MainActivity : AppCompatActivity() {
 
     fun navigateToLocSetFragment() {
         replaceFragment(LOC_SET_FRAGMENT, true)
+    }
+
+    fun navigateToPostMainFragment() {
+        replaceFragment(POST_MAIN_FRAGMENT, true)
     }
 }

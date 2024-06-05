@@ -3,9 +3,11 @@ package com.example.reading_cycle.post
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -128,12 +130,24 @@ class AddSalePostFragment : Fragment() {
         fragmentAddSalePostBinding.btnAddSalePostComplete.setOnClickListener {
             lifecycleScope.launch {
                 try {
+                    // 완료 버튼 클릭 시 버튼 비활성화
+                    fragmentAddSalePostBinding.btnAddSalePostComplete.isEnabled = false
+                    val colorStateList = ColorStateList.valueOf(Color.GRAY)
+                    fragmentAddSalePostBinding.btnAddSalePostComplete.backgroundTintList = colorStateList
+
                     val saleData = collectInputData()
-                    viewModel.uploadSalePost(saleData)
+                    if (selectedImages.isNotEmpty()) {
+                        viewModel.uploadSalePost(saleData)
+                    } else {
+                        showSnackbar("최소 한 장의 이미지를 등록해주세요.")
+                    }
                 } catch (e: IllegalStateException) {
                     showSnackbar("빈 칸 없이 작성해주세요.")
                 } catch (e: Exception) {
                     showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
+                } finally {
+                    // 업로드 완료 후 버튼 활성화
+                    fragmentAddSalePostBinding.btnAddSalePostComplete.isEnabled = true
                 }
             }
         }
@@ -142,7 +156,9 @@ class AddSalePostFragment : Fragment() {
         viewModel.uploadResult.observe(viewLifecycleOwner) { success ->
             if (success) {
                 showSnackbar("게시글이 성공적으로 등록되었습니다.")
+                // PostMainFragment로 이동, RecyclerView 갱신
                 mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
+                mainActivity.navigateToPostMainFragment()
             } else {
                 showSnackbar("게시글 등록에 실패했습니다.")
             }

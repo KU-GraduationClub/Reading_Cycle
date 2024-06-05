@@ -3,6 +3,7 @@ package com.example.reading_cycle.post.model
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.reading_cycle.R
@@ -136,13 +137,23 @@ class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(swapData: SwapBookData) {
-            binding.textRowPostSwapTitle.text = swapData.swapBookTitle
-            binding.textRowPostSwapAuthor.text = swapData.swapBookAuthor
-            binding.btnRowPostSwapType.text = swapData.swapBookType.name
-            binding.btnRowPostSwapType2.text = swapData.bookSwapType.name
+            binding.textRowPostSwapTitle.text = trimTextIfNeeded(binding.textRowPostSwapTitle, swapData.swapBookTitle)
+            binding.textRowPostSwapAuthor.text = trimTextIfNeeded(binding.textRowPostSwapAuthor, swapData.swapBookAuthor)
+            binding.btnRowPostSwapType.text = swapData.swapBookType.toKorean()
+            binding.btnRowPostSwapType2.text = swapData.bookSwapType.toKorean()
             binding.textRowPostSwapPrice.text = swapData.swapBookRegPrice
-            binding.textRowPostSwapState.text = swapData.swapBookState.name
-            binding.textRowPostSwapUser.text = swapData.swapBookExplain
+            binding.textRowPostSwapState.text = swapData.swapBookState.toKorean()
+            // 유저 binding.textRowPostSwapUser.text = swapData.
+
+            val emoji = when (swapData.swapBookState){
+                BookState.VERY_BAD -> R.drawable.round_sentiment_very_dissatisfied_10
+                BookState.BAD -> R.drawable.baseline_sentiment_very_dissatisfied_10
+                BookState.COMMON -> R.drawable.baseline_sentiment_neutral_10
+                BookState.GOOD -> R.drawable.baseline_sentiment_satisfied_alt_10
+                BookState.VERY_GOOD -> R.drawable.sharp_sentiment_very_satisfied_10
+            }
+
+            binding.imgRowPostSwapState.setImageResource(emoji)
 
             Glide.with(binding.root.context)
                 .load(swapData.swapBookPostImg)
@@ -154,17 +165,73 @@ class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(saleData: SaleBookData) {
-            binding.textRowPostSaleTitle.text = saleData.saleBookTitle
-            binding.textRowPostSaleAuthor.text = saleData.saleBookAuthor
-            binding.btnRowPostSaleType.text = saleData.saleBookType.name
+            binding.textRowPostSaleTitle.text = trimTextIfNeeded(binding.textRowPostSaleTitle, saleData.saleBookTitle)
+            binding.textRowPostSaleAuthor.text = trimTextIfNeeded(binding.textRowPostSaleAuthor, saleData.saleBookAuthor)
+            binding.btnRowPostSaleType.text = saleData.saleBookType.toKorean()
             binding.btnRowPostSalePrice.text = saleData.saleBookPrice
             binding.textRowPostSaleRegPrice.text = saleData.saleBookRegPrice
-            binding.textRowPostSaleState.text = saleData.saleBookState.name
-            binding.textRowPostSaleUser.text = saleData.saleBookExplain
+            binding.textRowPostSaleState.text = saleData.saleBookState.toKorean()
+            // 유저 binding.textRowPostSaleUser.text = saleData.
+
+            val emoji = when (saleData.saleBookState){
+                BookState.VERY_BAD -> R.drawable.round_sentiment_very_dissatisfied_10
+                BookState.BAD -> R.drawable.baseline_sentiment_very_dissatisfied_10
+                BookState.COMMON -> R.drawable.baseline_sentiment_neutral_10
+                BookState.GOOD -> R.drawable.baseline_sentiment_satisfied_alt_10
+                BookState.VERY_GOOD -> R.drawable.sharp_sentiment_very_satisfied_10
+            }
+
+            binding.imgRowPostSaleState.setImageResource(emoji)
 
             Glide.with(binding.root.context)
                 .load(saleData.saleBookPostImg)
                 .into(binding.imgRowPostSalePoster)
         }
+    }
+}
+
+// 확장 함수로 변환 작업 추가
+fun BookType.toKorean(): String {
+    return when (this) {
+        BookType.NOVEL -> "소설"
+        BookType.POETRY -> "시"
+        BookType.ESSAY -> "에세이"
+        BookType.CLASSIC -> "고전"
+        BookType.COMIC -> "만화"
+        BookType.SELF_DEVELOPMENT -> "자기계발"
+        BookType.REFERENCE -> "참고서"
+        BookType.MAJOR -> "전공서"
+        BookType.COOKING -> "요리"
+        BookType.LANGUAGE -> "어학"
+        BookType.SOCIAL_SCIENCE -> "사회과학"
+        BookType.ART -> "예술"
+        BookType.RELIGION -> "종교"
+        BookType.ECONOMICS -> "경제"
+        BookType.HEALTH_TRAVEL -> "건강/여행"
+        BookType.HISTORY -> "역사"
+        BookType.PHILOSOPHY -> "철학"
+        BookType.CHILDREN -> "아동"
+        BookType.TODDLER -> "유아"
+        BookType.OTHER -> "기타"
+    }
+}
+
+fun BookState.toKorean(): String {
+    return when (this) {
+        BookState.VERY_BAD -> "매우 나쁨"
+        BookState.BAD -> "나쁨"
+        BookState.COMMON -> "보통"
+        BookState.GOOD -> "좋음"
+        BookState.VERY_GOOD -> "매우 좋음"
+    }
+}
+
+private fun trimTextIfNeeded(textView: TextView, text: String): String {
+    val maxLength = 12 // 최대 길이 설정
+    return if (text.length > maxLength) {
+        textView.text = text.substring(0, maxLength) + "..."
+        text.substring(0, maxLength) + "..."
+    } else {
+        text
     }
 }
