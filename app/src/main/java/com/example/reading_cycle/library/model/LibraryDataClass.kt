@@ -19,12 +19,12 @@ class LibraryMainAdapter(private val swapBooknameList: List<SwapBooknameDataClas
         return when (viewType) {
             VIEW_TYPE_SWAPBOOKNAME -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.row_library_item_layout, parent, false)
+                    .inflate(R.layout.row_library_item_swap, parent, false)
                 SwapViewHolder(view)
             }
             VIEW_TYPE_SALEBOOKNAME -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.row_library_item2_layout, parent, false)
+                    .inflate(R.layout.row_library_item_sale, parent, false)
                 SaleViewHolder(view)
             }
             else -> throw IllegalArgumentException("Invalid view type")

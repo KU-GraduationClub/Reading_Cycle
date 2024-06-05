@@ -1,68 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/linear_layout"
+    <TextView
+        android:id="@+id/textLibraryMyUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="@{viewModel.userData.value?.get(0)?.nickname ?: `No Data`}"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/imgFriendProfile"
+        app:layout_constraintTop_toTopOf="@+id/imgFriendProfile" />
+
+    <TextView
+        android:id="@+id/textLibraryMyUserMemo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginBottom="1dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:text="@{viewModel.userData.value?.get(0)?.memo ?: `No Memo`}"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
+        app:layout_constraintStart_toStartOf="@+id/textLibraryMyUser"
+        app:layout_constraintTop_toBottomOf="@+id/textLibraryMyUser"
+        tools:ignore="HardcodedText,SmallSp" />
+
+    <ImageView
+        android:id="@+id/imgFriendProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/imgFriendStar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgBtnFriendMain"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="15dp"
+        android:background="@color/background"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgFriendProfile"
+        app:srcCompat="@drawable/baseline_settings_24"
+        android:contentDescription="@string/todo" />
+
+    <ImageView
+        android:id="@+id/imgFriendStar"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="10dp"
+        android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/profile_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/baseline_account_circle_24"
-            android:background="@color/white"
-            android:layout_gravity="center_vertical" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/nickname2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="닉네임"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/add_chat_btn"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="#964b00"
-            android:text="삭제"
-            android:textColor="#FFFFFF" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="@+id/imgFriendProfile"
+        app:srcCompat="@drawable/round_star_24" />
 
     <View
-        android:id="@+id/dividerRowPostMain"
-        android:layout_width="match_parent"
+        android:id="@+id/dividerRowFriend"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:background="#9A9393"
+        android:background="#CAC3C3"
         android:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/imgFriendProfile" />
 
+    <Button
+        android:id="@+id/BtnSetProfile"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/theme_brown"
+        android:elevation="0dp"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="프로필"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgFriendStar"
+        app:layout_constraintEnd_toStartOf="@+id/imgBtnFriendMain"
+        app:layout_constraintTop_toTopOf="@+id/imgFriendStar"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

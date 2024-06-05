@@ -1,5 +1,6 @@
-package com.example.reading_cycle.library
+package com.example.reading_cycle.Library
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentLibraryMyBinding
 import com.example.reading_cycle.library.model.LibraryMainAdapter
@@ -16,6 +18,7 @@ import com.example.reading_cycle.library.model.SwapBooknameDataClass
 
 class LibraryMyFragment : Fragment() {
 
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentLibraryMyBinding: FragmentLibraryMyBinding
     private lateinit var libraryMainAdapter: LibraryMainAdapter
 
@@ -31,32 +34,40 @@ class LibraryMyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainActivity = activity as MainActivity
         fragmentLibraryMyBinding = FragmentLibraryMyBinding.inflate(inflater)
+        mainActivity.showBottomNavigation()
 
         // 타이틀 아이콘 작업
-        val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
-        fragmentLibraryMyBinding.toolbarTitle.setCompoundDrawablesWithIntrinsicBounds(
+        ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
+        fragmentLibraryMyBinding.toolbarLibraryMyTitle.setCompoundDrawablesWithIntrinsicBounds(
             null,
             null,
             null,
             null
         )
-        fragmentLibraryMyBinding.toolbarTitle.compoundDrawablePadding =
+        fragmentLibraryMyBinding.toolbarLibraryMyTitle.compoundDrawablePadding =
             resources.getDimensionPixelSize(
                 R.dimen.icon_text_padding
             )
 
         // 텍스트 설정
-        fragmentLibraryMyBinding.toolbarTitle.text = "라이브러리"
+        fragmentLibraryMyBinding.toolbarLibraryMyTitle.text = "라이브러리"
 
+        // 이미지 버튼 클릭 이벤트 처리
+        fragmentLibraryMyBinding.imgBtnLibraryMy.setOnClickListener {
+            showPostTypeDialog()
+        }
 
         // 데이터 생성(임시)
         val swapBooknameList = listOf(
             SwapBooknameDataClass("책 제목1"),
+            SwapBooknameDataClass("책 제목2"),
+            SwapBooknameDataClass("책 제목3")
         )
         val saleBooknameList = listOf(
-            SaleBooknameDataClass("책 제목2"),
-            SaleBooknameDataClass("책 제목3"),
+            SaleBooknameDataClass("책 제목4"),
+            SaleBooknameDataClass("책 제목5")
         )
 
         // 어댑터 초기화
@@ -64,10 +75,21 @@ class LibraryMyFragment : Fragment() {
 
         // RecyclerView 설정
         val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        fragmentLibraryMyBinding.recyclerViewLibraryMain.layoutManager = layoutManager
+        fragmentLibraryMyBinding.recyclerViewLibraryMy.layoutManager = layoutManager
 
         //어댑터 설정
-        fragmentLibraryMyBinding.recyclerViewLibraryMain.adapter = libraryMainAdapter
+        fragmentLibraryMyBinding.recyclerViewLibraryMy.adapter = libraryMainAdapter
+
+        // 툴바 알림 메뉴 클릭 이벤트 처리
+        fragmentLibraryMyBinding.toolbarLayoutLibraryMy.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.libraryMenuItemNotify -> {
+                    mainActivity.navigateToNotifyFragment()
+                    true
+                }
+                else -> false
+            }
+        }
 
         return fragmentLibraryMyBinding.root
     }
@@ -79,6 +101,30 @@ class LibraryMyFragment : Fragment() {
         // TODO:데이터 추가
         return  LibraryMainAdapter(swapBooknameList, saleBooknameList)
 
+    }
+
+    private fun showPostTypeDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("게시글 유형을 선택해 주세요")
+
+        val postTypes = arrayOf("교환 게시글", "판매 게시글")
+
+        builder.setItems(postTypes) { _, which ->
+            // 사용자가 선택한 항목에 따라 해당 프래그먼트로 이동하는 로직 추가
+            when (which) {
+                0 -> (requireActivity() as MainActivity).replaceFragment(
+                    MainActivity.ADD_SWAP_POST_FRAGMENT,
+                    true
+                )
+                1 -> (requireActivity() as MainActivity).replaceFragment(
+                    MainActivity.ADD_SALE_POST_FRAGMENT,
+                    true
+                )
+            }
+        }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 
 }

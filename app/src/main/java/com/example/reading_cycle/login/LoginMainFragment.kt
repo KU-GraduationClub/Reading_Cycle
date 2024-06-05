@@ -7,27 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.databinding.FragmentLoginMainBinding
+
 class LoginMainFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentLoginMainBinding : FragmentLoginMainBinding
-    private fun setupUiListeners() {
-        fragmentLoginMainBinding.btnRegister.setOnClickListener {// 회원가입 버튼
-
-            mainActivity.replaceFragment(MainActivity.Companion.USER_REGISTER_FRAGMENT, true, null)
-        }
-
-        fragmentLoginMainBinding.btnResetPassword.setOnClickListener {// 비밀번호 찾기 버튼
-
-            mainActivity.replaceFragment(MainActivity.Companion.PASSWORD_RESET_FRAGMENT, true, null)
-        }
-
-        fragmentLoginMainBinding.btnLogin.setOnClickListener {
-            // 로그인 성공 시 PostMainFragment로 이동
-
-            mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,8 +24,13 @@ class LoginMainFragment : Fragment() {
         setupUiListeners()
 
         return fragmentLoginMainBinding.root
-        }
-
     }
+
+    private fun setupUiListeners() {
+        fragmentLoginMainBinding.btnRegister.setOnClickListener {// 시작하기 버튼
+            mainActivity.replaceFragment(MainActivity.MSG_AUTH_FRAGMENT, true, null)
+        }
+    }
+}
 
 

@@ -28,16 +28,6 @@ class SalePostFragment : Fragment() {
              mainActivity.removeFragment(MainActivity.SALE_POST_FRAGMENT)
         }
 
-        // 타이틀 아이콘 및 텍스트 설정
-        val iconDrawable = ContextCompat.getDrawable(requireContext(),
-            R.drawable.baseline_currency_exchange_40_red
-        )
-        fragmentSalePostBinding.toolbarTitleSalePost.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
-        fragmentSalePostBinding.toolbarTitleSalePost.compoundDrawablePadding = resources.getDimensionPixelSize(
-            R.dimen.icon_text_padding
-        )
-        fragmentSalePostBinding.toolbarTitleSalePost.text = "도서 판매"
-
         return fragmentSalePostBinding.root
     }
 }

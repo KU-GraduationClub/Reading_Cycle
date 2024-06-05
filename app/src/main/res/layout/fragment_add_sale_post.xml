@@ -11,7 +11,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutAddSalePost"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,41 +24,59 @@
             android:background="@color/background"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-            app:layout_constraintEnd_toEndOf="@id/dividerPostMain"
+            app:layout_constraintEnd_toEndOf="@id/dividerAddSalePost"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/toolbar_post"
             app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
 
-            <TextView
-                android:id="@+id/toolbarTitleAddSalePost"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/soyo_maple_bold"
                 android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#DE2222"
-                tools:fontFamily="@font/soyo_maple_bold" />
+                android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/iconAddSalePostTitle"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:gravity="center"
+                    android:src="@drawable/baseline_currency_exchange_40_red" />
+
+                <TextView
+                    android:id="@+id/toolbarAddSalePostTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="1dp"
+                    android:fontFamily="@font/soyo_maple_bold"
+                    android:gravity="center"
+                    android:text="도서 판매 게시"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#DE2222"
+                    android:textSize="16dp"
+                    tools:fontFamily="@font/soyo_maple_bold" />
+            </LinearLayout>
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <View
-            android:id="@+id/dividerAddSalePost"
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:layout_marginTop="0dp"
-            android:background="#27713C"
-            android:elevation="0dp" />
-
     </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:id="@+id/dividerAddSalePost"
+        android:layout_width="wrap_content"
+        android:layout_height="1.5dp"
+        android:background="#B2C8AA"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutAddSalePost" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="48dp"
         android:background="@color/background"
         android:fillViewport="true"
         android:nestedScrollingEnabled="true"
@@ -85,12 +103,12 @@
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="이미지"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <HorizontalScrollView
-                android:id="@+id/ScrollAddSwapPost"
+                android:id="@+id/ScrollAddSalePost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -100,26 +118,130 @@
 
                 <LinearLayout
                     android:id="@+id/linearAddSalePostImg"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="0dp"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
-                    <FrameLayout
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAddSalePostImg1"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
+                        android:layout_gravity="center"
                         android:layout_marginLeft="8dp"
-                        android:background="@drawable/border_add_post_edit_img"
-                        android:elevation="3dp">
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:cardBackgroundColor="#787878"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="3dp">
 
                         <ImageView
                             android:id="@+id/imgAddSalePost1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerInside"
+                            android:layout_width="67dp"
+                            android:layout_height="67dp"
+                            android:layout_gravity="center"
+                            android:background="#FFFFFF"
+                            android:scaleType="center"
                             app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
 
-                    </FrameLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAddSalePostImg2"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="#787878"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/imgAddSalePost2"
+                            android:layout_width="67dp"
+                            android:layout_height="67dp"
+                            android:layout_gravity="center"
+                            android:background="#FFFFFF"
+                            android:scaleType="center"
+                            app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAddSalePostImg3"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="#787878"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/imgAddSalePost3"
+                            android:layout_width="67dp"
+                            android:layout_height="67dp"
+                            android:layout_gravity="center"
+                            android:background="#FFFFFF"
+                            android:scaleType="center"
+                            app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAddSalePostImg4"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="#787878"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/imgAddSalePost4"
+                            android:layout_width="67dp"
+                            android:layout_height="67dp"
+                            android:layout_gravity="center"
+                            android:background="#FFFFFF"
+                            android:scaleType="center"
+                            app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAddSalePostImg5"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="#787878"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/imgAddSalePost5"
+                            android:layout_width="67dp"
+                            android:layout_height="67dp"
+                            android:layout_gravity="center"
+                            android:background="#FFFFFF"
+                            android:scaleType="center"
+                            app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+                    </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
             </HorizontalScrollView>
@@ -135,7 +257,7 @@
                 android:elevation="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ScrollAddSwapPost" />
+                app:layout_constraintTop_toBottomOf="@+id/ScrollAddSalePost" />
 
             <TextView
                 android:id="@+id/textAddSalePost2"
@@ -146,7 +268,7 @@
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="도서"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dividerAddSalePost2" />
 
@@ -159,14 +281,15 @@
                 android:layout_marginEnd="13dp"
                 android:background="@drawable/border_add_post_edit_text"
                 android:elevation="2dp"
-                android:fontFamily="@font/soyo_maple_regular"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
                 android:hint="도서 제목을 입력해주세요"
                 android:inputType="text"
+                android:maxLength="50"
                 android:minLines="1"
                 android:padding="5dp"
-                android:paddingStart="6dp"
                 android:textColorHint="#787878"
-                android:textSize="15dp"
+                android:textSize="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textAddSalePost2" />
@@ -180,7 +303,7 @@
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="작가"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostTitle" />
 
@@ -193,14 +316,15 @@
                 android:layout_marginEnd="13dp"
                 android:background="@drawable/border_add_post_edit_text"
                 android:elevation="2dp"
-                android:fontFamily="@font/soyo_maple_regular"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
                 android:hint="작가 이름을 입력해주세요"
                 android:inputType="text"
+                android:maxLength="50"
                 android:minLines="1"
                 android:padding="5dp"
-                android:paddingStart="6dp"
                 android:textColorHint="#787878"
-                android:textSize="15dp"
+                android:textSize="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textAddSalePost3" />
@@ -214,7 +338,7 @@
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="도서 종류"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostAuthor" />
 
@@ -248,7 +372,7 @@
                     android:elevation="3dp"
                     android:fontFamily="@font/soyo_maple_regular"
                     android:padding="1dp"
-                    android:text="소설"
+                    android:text="도서 종류"
                     android:textColor="#F9FBF4"
                     android:textSize="16dp" />
 
@@ -270,30 +394,56 @@
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="도서 판매 가격"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/FrameAddSalePost1" />
 
+            <View
+                android:id="@+id/dividerAddSalePost4"
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="10dp"
+                android:background="#BCBCBC"
+                android:elevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/FrameAddSalePost1" />
+
+            <View
+                android:id="@+id/dividerAddSalePost3"
+                android:layout_width="245dp"
+                android:layout_height="0.6dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="10dp"
+                android:background="#BCBCBC"
+                android:elevation="0dp"
+                app:layout_constraintEnd_toEndOf="@+id/edtAddSalePostPrice"
+                app:layout_constraintStart_toStartOf="@+id/edtAddSalePostPrice"
+                app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostPrice" />
+
             <EditText
-                android:id="@+id/edtAddSalePostPrice2"
-                android:layout_width="388dp"
+                android:id="@+id/edtAddSalePostPrice"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="13dp"
                 android:background="@drawable/border_add_post_edit_text"
                 android:elevation="2dp"
-                android:fontFamily="@font/soyo_maple_regular"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
                 android:hint="도서 판매가를 입력해주세요"
                 android:inputType="number"
+                android:maxLength="15"
                 android:minLines="1"
-                android:padding="5dp"
-                android:paddingStart="6dp"
+                android:padding="4dp"
                 android:textColorHint="#787878"
-                android:textSize="15dp"
+                android:textSize="13dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textAddSalePost6"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textAddSalePost6" />
+                app:layout_constraintTop_toTopOf="@+id/textAddSalePost6" />
 
             <TextView
                 android:id="@+id/textAddSalePost8"
@@ -304,30 +454,29 @@
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="도서 정가"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostPrice2" />
+                app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostPrice" />
 
             <EditText
-                android:id="@+id/edtAddSalePostPrice"
-                android:layout_width="388dp"
+                android:id="@+id/edtAddSalePostRegPrice"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="13dp"
                 android:background="@drawable/border_add_post_edit_text"
                 android:elevation="2dp"
-                android:fontFamily="@font/soyo_maple_regular"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
                 android:hint="도서 정가를 입력해주세요"
                 android:inputType="number"
+                android:maxLength="15"
                 android:minLines="1"
                 android:padding="5dp"
-                android:paddingStart="6dp"
                 android:textColorHint="#787878"
-                android:textSize="15dp"
+                android:textSize="13dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textAddSalePost8"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textAddSalePost8" />
+                app:layout_constraintTop_toTopOf="@+id/textAddSalePost8" />
 
             <TextView
                 android:id="@+id/textAddSalePost9"
@@ -338,9 +487,9 @@
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="도서 상태"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostPrice" />
+                app:layout_constraintTop_toBottomOf="@+id/edtAddSalePostRegPrice" />
 
             <TextView
                 android:id="@+id/textAddSalePost10"
@@ -360,7 +509,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="11dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/border_add_post_red"
+                android:background="@drawable/border_add_post_edit_text"
                 android:clickable="true"
                 android:elevation="3dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -379,7 +528,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="4dp"
                     android:fontFamily="@font/soyo_maple_regular"
                     android:text="매우 나쁨"
                     android:textColor="#000000"
@@ -395,7 +544,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/border_add_post_orange"
+                android:background="@drawable/border_add_post_edit_text"
                 android:clickable="true"
                 android:elevation="3dp"
                 app:layout_constraintStart_toEndOf="@+id/FrameAddSalePostVeryBad"
@@ -414,7 +563,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="4dp"
                     android:fontFamily="@font/soyo_maple_regular"
                     android:text="나쁨"
                     android:textColor="#000000"
@@ -431,7 +580,7 @@
                 android:layout_marginStart="3dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="3dp"
-                android:background="@drawable/border_add_post_gray"
+                android:background="@drawable/border_add_post_edit_text"
                 android:clickable="true"
                 android:elevation="3dp"
                 app:layout_constraintEnd_toStartOf="@+id/FrameAddSalePostGood"
@@ -451,7 +600,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="4dp"
                     android:fontFamily="@font/soyo_maple_regular"
                     android:text="보통"
                     android:textColor="#000000"
@@ -467,7 +616,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="3dp"
-                android:background="@drawable/border_add_post_green"
+                android:background="@drawable/border_add_post_edit_text"
                 app:layout_constraintEnd_toStartOf="@+id/FrameAddSalePostVeryGood"
                 app:layout_constraintTop_toBottomOf="@+id/textAddSalePost9">
 
@@ -484,7 +633,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="4dp"
                     android:fontFamily="@font/soyo_maple_regular"
                     android:text="좋음"
                     android:textColor="#000000"
@@ -500,13 +649,13 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="11dp"
-                android:background="@drawable/border_add_post_blue"
+                android:background="@drawable/border_add_post_edit_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textAddSalePost9">
 
                 <ImageView
                     android:id="@+id/imgAddSalePostVeryGood"
-                    android:layout_width="25dp"
+                    android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center|top"
                     android:layout_marginTop="3dp"
@@ -517,7 +666,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="4dp"
                     android:fontFamily="@font/soyo_maple_regular"
                     android:text="매우 좋음"
                     android:textColor="#000000"
@@ -536,7 +685,7 @@
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="설명"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/FrameAddSalePostCommon" />
 
@@ -549,7 +698,7 @@
                 android:layout_marginEnd="13dp"
                 android:background="@drawable/border_add_post_edit_text"
                 android:elevation="2dp"
-                android:fontFamily="@font/soyo_maple_regular"
+                android:fontFamily="sans-serif"
                 android:gravity="start"
                 android:hint="도서와 거래 설명을 입력해주세요"
                 android:inputType="text|textMultiLine"
@@ -557,12 +706,13 @@
                 android:maxLines="8"
                 android:minLines="1"
                 android:padding="5dp"
-                android:paddingStart="6dp"
+                android:paddingStart="8dp"
                 android:textColorHint="#787878"
-                android:textSize="15dp"
+                android:textSize="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textAddSalePost11" />
+                app:layout_constraintTop_toBottomOf="@+id/textAddSalePost11"
+                tools:maxLength="150" />
 
             <Button
                 android:id="@+id/btnAddSalePostComplete"
@@ -570,7 +720,7 @@
                 android:layout_height="63dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="25dp"
-                android:backgroundTint="#27713C"
+                android:backgroundTint="#CF8127"
                 android:elevation="3dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:padding="1dp"

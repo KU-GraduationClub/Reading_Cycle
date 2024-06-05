@@ -9,30 +9,36 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.chat.model.ChatItem
 import com.example.reading_cycle.databinding.FragmentChatListBinding
-import com.google.android.material.R
+import com.example.reading_cycle.R
 
 
 class ChatListFragment : Fragment() {
+
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentChatListBinding : FragmentChatListBinding
     private lateinit var chatListAdapter: ChatListAdapter //채팅리스트 어댑터
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainActivity = activity as MainActivity
         fragmentChatListBinding = FragmentChatListBinding.inflate(inflater, container, false)
+        mainActivity.showBottomNavigation()
 
         val ChatItems = listOf(
-            ChatItem(R.drawable.design_ic_visibility, "김민수", "안녕하세요!", "12:30 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "손흥민", "오늘 날씨 어때?", "1:45 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "한문철", "뭐해?", "3:20 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "박지성", "안녕하세요!", "12:30 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "이승우", "오늘 날씨 어때?", "1:45 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "차두리", "뭐해?", "3:20 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "차범근", "안녕하세요!", "12:30 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "이청용", "오늘 날씨 어때?", "1:45 PM"),
-            ChatItem(R.drawable.design_ic_visibility, "기성룡", "뭐해?", "3:20 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "김민재", "안녕하세요!", "12:30 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "손흥민", "데미안 구매하고 싶습니다", "1:45 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "이강인", "15000원에 거래합니다.", "3:20 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "박지성", "안녕하세요~", "12:30 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "이승우", "사거리 앞에 있습니다.", "1:45 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "차두리", "네 감사합니다", "3:20 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "차범근", "안녕하세요!", "12:30 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "이청용", "3000원 네고 가능한가요?", "1:45 PM"),
+            ChatItem(R.drawable.baseline_account_circle_24, "기성룡", "안녕하세요", "3:20 PM"),
             // ... 다른 채팅 아이템들을 추가할 수 있습니다.
         )
         /*lateinit var mainActivity: MainActivity
@@ -42,6 +48,17 @@ class ChatListFragment : Fragment() {
                 mainActivity.removeFragment(MainActivity.AUTH_JOIN_FRAGMENT)
             }*/
         initRecyclerView(ChatItems)
+
+        // 툴바 알림 메뉴 클릭 이벤트 처리
+        fragmentChatListBinding.toolbarLayoutChatList.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.libraryMenuItemNotify -> {
+                    mainActivity.navigateToNotifyFragment()
+                    true
+                }
+                else -> false
+            }
+        }
 
         return fragmentChatListBinding.root
     }
