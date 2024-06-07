@@ -12,10 +12,10 @@ import com.example.reading_cycle.Library.LibraryMyFragment
 import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
-import com.example.reading_cycle.login.MsgAuthFragment
-import com.example.reading_cycle.login.SetProfileFragment
 import com.example.reading_cycle.location.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
+import com.example.reading_cycle.login.MsgAuthFragment
+import com.example.reading_cycle.login.SetProfileFragment
 import com.example.reading_cycle.notify.NotifyFragment
 import com.example.reading_cycle.post.AddSalePostFragment
 import com.example.reading_cycle.post.AddSwapPostFragment
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
+        replaceFragment(FRIEND_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->

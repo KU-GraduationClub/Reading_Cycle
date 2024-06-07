@@ -1,54 +1,67 @@
 package com.example.reading_cycle.friend.repository
 
 
-import androidx.lifecycle.MutableLiveData
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.example.reading_cycle.friend.model.Friend
+import com.google.firebase.firestore.FirebaseFirestore
 
-class FriendRepository(private val database: DatabaseReference) {
+class FriendRepository {
 
-    private val _userData = MutableLiveData<List<UserData>>()
+    private val firestoreDB = FirebaseFirestore.getInstance()
 
-    // UserData 클래스 정의가 누락되어 추가합니다.
-    data class UserData(
-        val nickname: String,
-        val memo: String,
-        val imageUrl: String,
-        var isBookmarked: Boolean = false
-    )
-
-
-    fun fetchUserData() {
-        database.child("users")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val userList = mutableListOf<UserData>()
-                    dataSnapshot.children.forEach { userSnapshot ->
-                        val userId = userSnapshot.key // 각 사용자의 식별자 가져오기
-                        val nickname = userSnapshot.child("nickname").getValue(String::class.java) ?: ""
-                        val memo = userSnapshot.child("memo").getValue(String::class.java) ?: ""
-                        val imageUrl = userSnapshot.child("imageUrl").getValue(String::class.java) ?: ""
-                        // UserData 인스턴스 생성
-                        val userData = UserData(nickname, memo, imageUrl)
-                        userList.add(userData)
-                    }
-                    _userData.value = userList
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    // 오류 처리
-                    println("Firebase 데이터 가져오기 실패: ${databaseError.message}")
-                }
-            })
+    // 친구 추가
+    fun addFriend(userId: String, friend: Friend, callback: () -> Unit) {
+        val userRef = firestoreDB.collection("users").document(userId)
+        userRef.collection("friends").document(friend.userIdx!!)
+            .set(friend)
+            .addOnSuccessListener {
+                callback()
+            }
+            .addOnFailureListener {
+                // 실패 처리
+            }
     }
 
-
-    fun getUserData(): MutableLiveData<List<UserData>> {
-        return _userData
+    // 친구 제거
+    fun removeFriend(userId: String, friendIdx: String, callback: () -> Unit) {
+        val userRef = firestoreDB.collection("users").document(userId)
+        userRef.collection("friends").document(friendIdx)
+            .delete()
+            .addOnSuccessListener {
+                callback()
+            }
+            .addOnFailureListener {
+                // 실패 처리
+            }
     }
 
+    // 친구 목록 가져오기
+    fun getFriendList(userId: String, callback: (List<Friend>) -> Unit) {
+        val userRef = firestoreDB.collection("users").document(userId)
+        userRef.collection("friends")
+            .get()
+            .addOnSuccessListener { result ->
+                val friendList = mutableListOf<Friend>()
+                for (document in result) {
+                    val friend = document.toObject(Friend::class.java)
+                    friendList.add(friend)
+                }
+                callback(friendList)
+            }
+            .addOnFailureListener {
+                // 실패 처리
+            }
+    }
 
-
+    // 친구 정보 업데이트
+    fun updateFriendInfo(userId: String, friend: Friend, callback: () -> Unit) {
+        val userRef = firestoreDB.collection("users").document(userId)
+        userRef.collection("friends").document(friend.userIdx!!)
+            .set(friend)
+            .addOnSuccessListener {
+                callback()
+            }
+            .addOnFailureListener {
+                // 실패 처리
+            }
+    }
 }
