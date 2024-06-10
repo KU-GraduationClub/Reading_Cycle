@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.reading_cycle.friend.model.Friend
+import com.example.reading_cycle.friend.repository.FriendRepository
 
 class FriendViewModel : ViewModel() {
 
@@ -20,70 +21,64 @@ class FriendViewModel : ViewModel() {
     private val _friendList = MutableLiveData<List<FriendData>>()
     val friendList: LiveData<List<FriendData>> = _friendList
 
-    private val firestoreDB = FirebaseFirestore.getInstance()
+    private val friendRepository = FriendRepository()
 
     // 사용자의 친구 목록 가져오기
     fun fetchAllUsersFriendList(userIds: List<String>) {
         val allFriends = mutableListOf<FriendData>()
-
-        val usersCollection = firestoreDB.collection("users")
-
         userIds.forEach { userId ->
-            val friendsCollection = usersCollection.document(userId).collection("friends")
-            friendsCollection.get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        val friend = document.toObject(FriendData::class.java)
-                        allFriends.add(friend)
-                    }
-                    _friendList.value = allFriends
-                    Log.d("FriendViewModel", "Fetched all friends: $allFriends")
+            friendRepository.getFriendList(userId) { result ->
+                val friendDataList = result.map { friend ->
+                    FriendData(
+                        userId = friend.userIdx ?: "",
+                        userNickname = friend.userNickname ?: "",
+                        userPhoneNumber = friend.userPhoneNumber ?: "",
+                        userProfileImage = friend.userProfileImage ?: "",
+                        memo = friend.memo ?: "",
+                        isBookmarked = false // 초기값 설정
+                    )
                 }
-                .addOnFailureListener { exception ->
-                    Log.e("FriendViewModel", "Error fetching friend list for user $userId", exception)
-                }
+                allFriends.addAll(friendDataList)
+                _friendList.value = allFriends
+                Log.d("FriendViewModel", "Fetched all friends: $allFriends")
+            }
         }
     }
 
-
-
     // 친구 추가
     fun addFriend(userId: String, friendData: FriendData, callback: () -> Unit) {
-        val usersCollection = firestoreDB.collection("users").document(userId).collection("friends")
-        usersCollection.document(friendData.userId)
-            .set(friendData)
-            .addOnSuccessListener {
-                callback()
-            }
-            .addOnFailureListener {
-                Log.e("FriendViewModel", "Error adding friend", it)
-            }
+        val friend = Friend(
+            userIdx = friendData.userId,
+            userNickname = friendData.userNickname,
+            userPhoneNumber = friendData.userPhoneNumber,
+            userProfileImage = friendData.userProfileImage,
+            memo = friendData.memo
+        )
+
+        friendRepository.addFriend(userId, friend) {
+            callback()
+        }
     }
 
     // 친구 제거
     fun removeFriend(userId: String, friendId: String, callback: () -> Unit) {
-        val usersCollection = firestoreDB.collection("users").document(userId).collection("friends")
-        usersCollection.document(friendId)
-            .delete()
-            .addOnSuccessListener {
-                callback()
-            }
-            .addOnFailureListener {
-                Log.e("FriendViewModel", "Error removing friend", it)
-            }
+        friendRepository.removeFriend(userId, friendId) {
+            callback()
+        }
     }
 
     // 친구 정보 업데이트
     fun updateFriendInfo(userId: String, friendData: FriendData, callback: () -> Unit) {
-        val usersCollection = firestoreDB.collection("users").document(userId).collection("friends")
-        usersCollection.document(friendData.userId)
-            .set(friendData)
-            .addOnSuccessListener {
-                callback()
-            }
-            .addOnFailureListener {
-                Log.e("FriendViewModel", "Error updating friend info", it)
-            }
+        val friend = Friend(
+            userIdx = friendData.userId,
+            userNickname = friendData.userNickname,
+            userPhoneNumber = friendData.userPhoneNumber,
+            userProfileImage = friendData.userProfileImage,
+            memo = friendData.memo
+        )
+
+        friendRepository.updateFriendInfo(userId, friend) {
+            callback()
+        }
     }
 }
-

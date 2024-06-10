@@ -16,8 +16,9 @@ class FriendRepository {
             .addOnSuccessListener {
                 callback()
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e ->
                 // 실패 처리
+                // e.printStackTrace()
             }
     }
 
@@ -29,8 +30,9 @@ class FriendRepository {
             .addOnSuccessListener {
                 callback()
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e ->
                 // 실패 처리
+                // e.printStackTrace()
             }
     }
 
@@ -47,8 +49,10 @@ class FriendRepository {
                 }
                 callback(friendList)
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e ->
                 // 실패 처리
+                // e.printStackTrace()
+                callback(emptyList())
             }
     }
 
@@ -60,8 +64,9 @@ class FriendRepository {
             .addOnSuccessListener {
                 callback()
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e ->
                 // 실패 처리
+                // e.printStackTrace()
             }
     }
 }
