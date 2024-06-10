@@ -3,10 +3,10 @@ package com.example.reading_cycle.post
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,7 +14,6 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import android.widget.PopupMenu
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.reading_cycle.MainActivity
@@ -130,21 +130,18 @@ class AddSwapPostFragment : Fragment() {
                 try {
                     // 완료 버튼 클릭 시 버튼 비활성화
                     fragmentAddSwapPostBinding.btnAddSwapPostComplete.isEnabled = false
-                    fragmentAddSwapPostBinding.btnAddSwapPostComplete.background = ColorDrawable(Color.GRAY)
+                    val colorStateList = ColorStateList.valueOf(Color.GRAY)
+                    fragmentAddSwapPostBinding.btnAddSwapPostComplete.backgroundTintList = colorStateList
 
                     val swapData = collectInputData()
-                    if (selectedImages.isNotEmpty()) {
-                        viewModel.uploadSwapPost(swapData)
-                    } else {
-                        showSnackbar("최소 한 장의 이미지를 등록해주세요.")
-                    }
+                    viewModel.uploadSwapPost(swapData)
                 } catch (e: IllegalStateException) {
-                    showSnackbar("빈 칸 없이 작성해주세요.")
+                    showSnackbar(e.message ?: "빈 칸 없이 작성해주세요.")
                 } catch (e: Exception) {
                     showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
                 } finally {
-                    // 업로드 완료 후 버튼 활성화
                     fragmentAddSwapPostBinding.btnAddSwapPostComplete.isEnabled = true
+                    fragmentAddSwapPostBinding.btnAddSwapPostComplete.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CF8127"))
                 }
             }
         }
@@ -157,7 +154,7 @@ class AddSwapPostFragment : Fragment() {
                 mainActivity.removeFragment(MainActivity.ADD_SWAP_POST_FRAGMENT)
                 mainActivity.navigateToPostMainFragment()
             } else {
-                showSnackbar("게시글 등록에 실패했습니다.")
+                showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요")
             }
         }
 
@@ -167,16 +164,17 @@ class AddSwapPostFragment : Fragment() {
     private suspend fun collectInputData(): SwapBookData {
         val title =  fragmentAddSwapPostBinding.edtAddSwapPostTitle.text.toString()
         val author =  fragmentAddSwapPostBinding.edtAddSwapPostAuthor.text.toString()
-        val bookType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
-        val bookSwapType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
+        val bookType = selectedBookType ?: throw IllegalStateException("판매 도서 종류를 선택해주세요")
+        val bookSwapType = selectedBookType ?: throw IllegalStateException("교환할 도서 종류를 선택해주세요")
         val regPrice = fragmentAddSwapPostBinding.edtAddSwapPostRegPrice.text.toString()
-        val bookState = determineBookState()
+        val bookState = selectedBookState ?: throw IllegalStateException("도서 상태를 선택해주세요")
         val description =  fragmentAddSwapPostBinding.edtAddSwapPostExplain.text.toString()
 
-        if (regPrice.isBlank()) {
-            showSnackbar("빈 칸 없이 작성해주세요.")
-            throw IllegalStateException("Price fields must not be empty.")
-        }
+        if (title.isBlank()) throw IllegalStateException("제목을 입력하세요.")
+        if (author.isBlank()) throw IllegalStateException("작가를 입력하세요.")
+        if (regPrice.isBlank()) throw IllegalStateException("가격을 입력하세요.")
+        if (description.isBlank()) throw IllegalStateException("설명을 입력하세요.")
+        if (selectedImages.isEmpty()) throw IllegalStateException("최소 한 장의 이미지를 등록하세요.")
 
         val imageUrls = withContext(Dispatchers.IO) {
             uploadImagesAndGetUrls(selectedImages)
@@ -256,7 +254,7 @@ class AddSwapPostFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            AddSwapPostFragment.REQUEST_PICK_IMAGE -> {
+            REQUEST_PICK_IMAGE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val selectedImageUris = data?.clipData
                     selectedImageUris?.let { clipData ->
@@ -283,7 +281,7 @@ class AddSwapPostFragment : Fragment() {
                     }
                 }
             }
-            AddSwapPostFragment.REQUEST_IMAGE_CAPTURE -> {
+            REQUEST_IMAGE_CAPTURE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val imageBitmap = data?.extras?.get("data") as Bitmap
                     val resizedBitmap = resizeBitmap(imageBitmap)

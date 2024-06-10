@@ -136,18 +136,14 @@ class AddSalePostFragment : Fragment() {
                     fragmentAddSalePostBinding.btnAddSalePostComplete.backgroundTintList = colorStateList
 
                     val saleData = collectInputData()
-                    if (selectedImages.isNotEmpty()) {
-                        viewModel.uploadSalePost(saleData)
-                    } else {
-                        showSnackbar("최소 한 장의 이미지를 등록해주세요.")
-                    }
+                    viewModel.uploadSalePost(saleData)
                 } catch (e: IllegalStateException) {
-                    showSnackbar("빈 칸 없이 작성해주세요.")
+                    showSnackbar(e.message ?: "빈 칸 없이 작성해주세요.")
                 } catch (e: Exception) {
                     showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
                 } finally {
-                    // 업로드 완료 후 버튼 활성화
                     fragmentAddSalePostBinding.btnAddSalePostComplete.isEnabled = true
+                    fragmentAddSalePostBinding.btnAddSalePostComplete.backgroundTintList  = ColorStateList.valueOf(Color.parseColor("#CF8127"))
                 }
             }
         }
@@ -160,7 +156,7 @@ class AddSalePostFragment : Fragment() {
                 mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
                 mainActivity.navigateToPostMainFragment()
             } else {
-                showSnackbar("게시글 등록에 실패했습니다.")
+                showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요")
             }
         }
 
@@ -170,16 +166,18 @@ class AddSalePostFragment : Fragment() {
     private suspend fun collectInputData(): SaleBookData {
         val title = fragmentAddSalePostBinding.edtAddSalePostTitle.text.toString()
         val author = fragmentAddSalePostBinding.edtAddSalePostAuthor.text.toString()
-        val bookType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
+        val bookType = selectedBookType ?: throw IllegalStateException("판매 도서 종류를 선택해주세요")
         val price = fragmentAddSalePostBinding.edtAddSalePostPrice.text.toString()
         val regPrice = fragmentAddSalePostBinding.edtAddSalePostRegPrice.text.toString()
-        val bookState = determineBookState()
+        val bookState = selectedBookState ?: throw IllegalStateException("도서 상태를 선택해주세요")
         val description = fragmentAddSalePostBinding.edtAddSalePostExplain.text.toString()
 
-        if (price.isBlank() || regPrice.isBlank()) {
-            showSnackbar("빈 칸 없이 작성해주세요.")
-            throw IllegalStateException("Price fields must not be empty.")
-        }
+        if (title.isBlank()) throw IllegalStateException("제목을 입력하세요.")
+        if (author.isBlank()) throw IllegalStateException("작가를 입력하세요.")
+        if (price.isBlank()) throw IllegalStateException("판매 가격을 입력하세요.")
+        if (regPrice.isBlank()) throw IllegalStateException("정가를 입력하세요.")
+        if (description.isBlank()) throw IllegalStateException("설명을 입력하세요.")
+        if (selectedImages.isEmpty()) throw IllegalStateException("최소 한 장의 이미지를 등록하세요.")
 
         val imageUrls = withContext(Dispatchers.IO) {
             uploadImagesAndGetUrls(selectedImages)
@@ -227,10 +225,6 @@ class AddSalePostFragment : Fragment() {
         return@withContext urls
     }
 
-    // 도서 상태 선택 데이터 처리
-    private fun determineBookState(): BookState {
-        return selectedBookState ?: throw IllegalStateException("도서 상태 선택 필요")
-    }
 
     private fun selectFrame(frameId: Int) {
         // 이전에 선택된 프레임 레이아웃의 선택 표시 해제
@@ -473,6 +467,6 @@ class AddSalePostFragment : Fragment() {
     }
 
     private fun showSnackbar(message: String) {
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
     }
 }
