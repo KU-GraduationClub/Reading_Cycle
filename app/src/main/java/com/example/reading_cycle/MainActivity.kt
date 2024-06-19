@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
 
-        SystemClock.sleep(200)
+        SystemClock.sleep(100)
 
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -135,5 +135,13 @@ class MainActivity : AppCompatActivity() {
 
     fun navigateToPostMainFragment() {
         replaceFragment(POST_MAIN_FRAGMENT, true)
+    }
+
+    fun navigateToSwapPostFragment() {
+        replaceFragment(SWAP_POST_FRAGMENT, true)
+    }
+
+    fun navigateToSalePostFragment() {
+        replaceFragment(SALE_POST_FRAGMENT, true)
     }
 }

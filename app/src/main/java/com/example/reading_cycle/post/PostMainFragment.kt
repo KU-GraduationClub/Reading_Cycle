@@ -16,11 +16,13 @@ import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
+import com.example.reading_cycle.post.model.SaleBookData
+import com.example.reading_cycle.post.model.SwapBookData
 import com.example.reading_cycle.post.vm.PostMainViewModel
 import com.example.reading_cycle.post.vm.PostSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
-class PostMainFragment : Fragment() {
+class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentPostMainBinding: FragmentPostMainBinding
@@ -50,7 +52,7 @@ class PostMainFragment : Fragment() {
         Log.d(TAG, "Received userIdx: $userIdx")
 
         // 어댑터 초기화
-        postMainAdapter = PostMainAdapter()
+        postMainAdapter = PostMainAdapter(this)
         // RecyclerView 설정
         fragmentPostMainBinding.recyclerViewPostMain.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -177,6 +179,34 @@ class PostMainFragment : Fragment() {
         }
         val dialog = builder.create()
         dialog.show()
+    }
+
+
+    // RecyclerView 아이템 클릭 처리
+    override fun onSwapItemClick(swapData: SwapBookData) {
+        // 교환 아이템 클릭 처리 로직 추가
+        val swapIdx = swapData.swapIdx
+        val bundle = Bundle().apply {
+            putLong("itemIdx", swapIdx) // IDX를 Bundle에 전달
+        }
+        (requireActivity() as MainActivity).replaceFragment(
+            MainActivity.SWAP_POST_FRAGMENT,
+            true,
+            bundle
+        )
+    }
+
+    override fun onSaleItemClick(saleData: SaleBookData) {
+        // 판매 아이템 클릭 처리 로직 추가
+        val saleIdx = saleData.saleIdx
+        val bundle = Bundle().apply {
+            putLong("itemIdx", saleIdx) // IDX를 Bundle에 전달
+        }
+        (requireActivity() as MainActivity).replaceFragment(
+            MainActivity.SALE_POST_FRAGMENT,
+            true,
+            bundle
+        )
     }
 
 }

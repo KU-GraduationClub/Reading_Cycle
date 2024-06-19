@@ -71,7 +71,11 @@ enum class BookState {
 
 
 
-class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PostMainAdapter(private val listener: OnPostItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    interface OnPostItemClickListener {
+        fun onSwapItemClick(swapData: SwapBookData)
+        fun onSaleItemClick(saleData: SaleBookData)
+    }
 
     private val swapBookList = mutableListOf<SwapBookData>()
     private val saleBookList = mutableListOf<SaleBookData>()
@@ -104,10 +108,16 @@ class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             VIEW_TYPE_SWAP -> {
                 val swapData = swapBookList[position]
                 (holder as SwapViewHolder).bind(swapData)
+                holder.itemView.setOnClickListener {
+                    listener.onSwapItemClick(swapData)
+                }
             }
             VIEW_TYPE_SALE -> {
                 val saleData = saleBookList[position - swapBookList.size]
                 (holder as SaleViewHolder).bind(saleData)
+                holder.itemView.setOnClickListener {
+                    listener.onSaleItemClick(saleData)
+                }
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }
@@ -122,20 +132,18 @@ class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun setSwapPosts(swapPosts: List<SwapBookData>) {
-        this.swapBookList.clear()
-        this.swapBookList.addAll(swapPosts)
+        swapBookList.clear()
+        swapBookList.addAll(swapPosts)
         notifyDataSetChanged()
     }
 
     fun setSalePosts(salePosts: List<SaleBookData>) {
-        this.saleBookList.clear()
-        this.saleBookList.addAll(salePosts)
+        saleBookList.clear()
+        saleBookList.addAll(salePosts)
         notifyDataSetChanged()
     }
 
-    class SwapViewHolder(private val binding: RowPostMainSwapBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
+    inner class SwapViewHolder(private val binding: RowPostMainSwapBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(swapData: SwapBookData) {
             binding.textRowPostSwapTitle.text = trimTextIfNeeded(binding.textRowPostSwapTitle, swapData.swapBookTitle)
             binding.textRowPostSwapAuthor.text = trimTextIfNeeded(binding.textRowPostSwapAuthor, swapData.swapBookAuthor)
@@ -143,7 +151,6 @@ class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.btnRowPostSwapType2.text = swapData.bookSwapType.toKorean()
             binding.textRowPostSwapPrice.text = swapData.swapBookRegPrice
             binding.textRowPostSwapState.text = swapData.swapBookState.toKorean()
-            // 유저 binding.textRowPostSwapUser.text = swapData.
 
             val emoji = when (swapData.swapBookState){
                 BookState.VERY_BAD -> R.drawable.round_sentiment_very_dissatisfied_10
@@ -161,9 +168,7 @@ class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    class SaleViewHolder(private val binding: RowPostMainSaleBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
+    inner class SaleViewHolder(private val binding: RowPostMainSaleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(saleData: SaleBookData) {
             binding.textRowPostSaleTitle.text = trimTextIfNeeded(binding.textRowPostSaleTitle, saleData.saleBookTitle)
             binding.textRowPostSaleAuthor.text = trimTextIfNeeded(binding.textRowPostSaleAuthor, saleData.saleBookAuthor)
@@ -171,7 +176,6 @@ class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.btnRowPostSalePrice.text = saleData.saleBookPrice
             binding.textRowPostSaleRegPrice.text = saleData.saleBookRegPrice
             binding.textRowPostSaleState.text = saleData.saleBookState.toKorean()
-            // 유저 binding.textRowPostSaleUser.text = saleData.
 
             val emoji = when (saleData.saleBookState){
                 BookState.VERY_BAD -> R.drawable.round_sentiment_very_dissatisfied_10

@@ -25,7 +25,7 @@ class SwapPostFragment : Fragment() {
 
         // 뒤로 가기 버튼 클릭 리스너 설정
         fragmentSwapPostBinding.toolbarLayoutSwapPost.setNavigationOnClickListener {
-             mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
+             mainActivity.removeFragment(MainActivity.SWAP_POST_FRAGMENT)
         }
 
         return fragmentSwapPostBinding.root
