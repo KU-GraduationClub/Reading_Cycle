@@ -21,6 +21,9 @@ class FriendViewModel : ViewModel() {
     private val _friendList = MutableLiveData<List<FriendData>>()
     val friendList: LiveData<List<FriendData>> = _friendList
 
+    private val _currentUser = MutableLiveData<FriendData>()
+    val currentUser: LiveData<FriendData> = _currentUser
+
     private val friendRepository = FriendRepository()
 
     // 사용자의 친구 목록 가져오기
@@ -42,6 +45,22 @@ class FriendViewModel : ViewModel() {
                 _friendList.value = allFriends
                 Log.d("FriendViewModel", "Fetched all friends: $allFriends")
             }
+        }
+    }
+
+    // 단일 사용자 정보 가져오기
+    fun fetchUserData(userId: String) {
+        friendRepository.getUser(userId) { friend ->
+            val userData = FriendData(
+                userId = friend.userIdx ?: "",
+                userNickname = friend.userNickname ?: "",
+                userPhoneNumber = friend.userPhoneNumber ?: "",
+                userProfileImage = friend.userProfileImage ?: "",
+                memo = friend.memo ?: "",
+                isBookmarked = false // 초기값 설정
+            )
+            _currentUser.value = userData
+            Log.d("FriendViewModel", "Fetched user data: $userData")
         }
     }
 

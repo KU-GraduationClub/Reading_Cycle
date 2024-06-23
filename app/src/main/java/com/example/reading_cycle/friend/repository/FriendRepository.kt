@@ -69,4 +69,23 @@ class FriendRepository {
                 // e.printStackTrace()
             }
     }
+
+    // 단일 사용자 정보 가져오기
+    fun getUser(userId: String, callback: (Friend) -> Unit) {
+        val userRef = firestoreDB.collection("users").document(userId)
+        userRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val user = document.toObject(Friend::class.java)
+                    if (user != null) {
+                        callback(user)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                // 실패 처리
+                // e.printStackTrace()
+                callback(Friend()) // 실패 시 빈 Friend 객체 반환
+            }
+    }
 }

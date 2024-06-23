@@ -73,45 +73,42 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
-
+    fun replaceFragment(fragmentTag: String, addToBackStack: Boolean, bundle: Bundle? = null) {
+        // 200ms 대기
         SystemClock.sleep(200)
 
-        // Fragment 교체 상태로 설정한다.
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-
-            // 새로운 Fragment 담을 변수
-            newFragment = when(name){
-                POST_MAIN_FRAGMENT -> PostMainFragment()
-                ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
-                ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
-                SALE_POST_FRAGMENT -> SalePostFragment()
-                SWAP_POST_FRAGMENT -> SwapPostFragment()
-                LOC_SET_FRAGMENT -> LocSetFragment()
-                LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
-                MSG_AUTH_FRAGMENT -> MsgAuthFragment()
-                SET_PROFILE_FRAGMENT -> SetProfileFragment()
-                CHAT_LIST_FRAGMENT -> ChatListFragment()
-                LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
-                LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
-                FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
-                NOTIFY_FRAGMENT -> NotifyFragment()
-                else -> Fragment()
+        // 새로운 Fragment 인스턴스 생성
+        val newFragment: Fragment = when(fragmentTag) {
+            POST_MAIN_FRAGMENT -> PostMainFragment()
+            ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
+            ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
+            SALE_POST_FRAGMENT -> SalePostFragment()
+            SWAP_POST_FRAGMENT -> SwapPostFragment()
+            LOC_SET_FRAGMENT -> LocSetFragment()
+            LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
+            MSG_AUTH_FRAGMENT -> MsgAuthFragment()
+            SET_PROFILE_FRAGMENT -> SetProfileFragment()
+            CHAT_LIST_FRAGMENT -> ChatListFragment()
+            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment().apply {
+                arguments = bundle  // bundle을 Fragment에 설정
             }
-
-        newFragment?.arguments = bundle
-
-        // Fragment 교체한다.
-        fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
-
-        if (addToBackStack) {
-            // Fragment Backstack 넣어 이전으로 돌아가는 기능이 동작할 수 있도록 한다.
-            fragmentTransaction.addToBackStack(name)
+            LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
+            FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+            NOTIFY_FRAGMENT -> NotifyFragment()
+            else -> throw IllegalArgumentException("Unknown fragment tag: $fragmentTag")
         }
 
-        // 교체 명령 동작.
-        fragmentTransaction.commit()
+        // Fragment 교체 처리
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.hostFragmentMain, newFragment)
+            if (addToBackStack) {
+                addToBackStack(fragmentTag)  // addToBackStack에 fragmentTag 추가
+            }
+            commit()
+        }
     }
+
+
 
     // Fragment BackStack에서 제거.
     fun removeFragment(name: String) {
