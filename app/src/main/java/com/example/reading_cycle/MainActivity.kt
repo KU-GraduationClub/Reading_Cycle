@@ -1,5 +1,7 @@
 package com.example.reading_cycle
 
+
+
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.MenuItem
@@ -9,13 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.reading_cycle.Library.LibraryMainFragment
 import com.example.reading_cycle.Library.LibraryMyFragment
-import com.example.reading_cycle.chat.ChatListFragment
+import com.example.reading_cycle.chat.ui.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
-import com.example.reading_cycle.login.MsgAuthFragment
-import com.example.reading_cycle.login.SetProfileFragment
 import com.example.reading_cycle.location.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
+import com.example.reading_cycle.login.MsgAuthFragment
+import com.example.reading_cycle.login.SetProfileFragment
 import com.example.reading_cycle.notify.NotifyFragment
 import com.example.reading_cycle.post.AddSalePostFragment
 import com.example.reading_cycle.post.AddSwapPostFragment
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private var newFragment: Fragment? = null
     private var oldFragment: Fragment? = null
 
-    companion object{
+    companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
         const val ADD_SALE_POST_FRAGMENT = "AddSalePostFragment"
         const val ADD_SWAP_POST_FRAGMENT = "AddSwapPostFragment"
@@ -47,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         const val NOTIFY_FRAGMENT = "NotifyFragment"
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -59,7 +60,9 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
+        // 인텐트에서 시작할 프래그먼트를 가져옵니다.
+        val startFragment = intent.getStringExtra("startFragment") ?: LOGIN_MAIN_FRAGMENT
+        replaceFragment(startFragment, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -80,24 +83,24 @@ class MainActivity : AppCompatActivity() {
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 
-            // 새로운 Fragment 담을 변수
-            newFragment = when(name){
-                POST_MAIN_FRAGMENT -> PostMainFragment()
-                ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
-                ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
-                SALE_POST_FRAGMENT -> SalePostFragment()
-                SWAP_POST_FRAGMENT -> SwapPostFragment()
-                LOC_SET_FRAGMENT -> LocSetFragment()
-                LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
-                MSG_AUTH_FRAGMENT -> MsgAuthFragment()
-                SET_PROFILE_FRAGMENT -> SetProfileFragment()
-                CHAT_LIST_FRAGMENT -> ChatListFragment()
-                LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
-                LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
-                FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
-                NOTIFY_FRAGMENT -> NotifyFragment()
-                else -> Fragment()
-            }
+        // 새로운 Fragment 담을 변수
+        newFragment = when(name){
+            POST_MAIN_FRAGMENT -> PostMainFragment()
+            ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
+            ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
+            SALE_POST_FRAGMENT -> SalePostFragment()
+            SWAP_POST_FRAGMENT -> SwapPostFragment()
+            LOC_SET_FRAGMENT -> LocSetFragment()
+            LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
+            MSG_AUTH_FRAGMENT -> MsgAuthFragment()
+            SET_PROFILE_FRAGMENT -> SetProfileFragment()
+            CHAT_LIST_FRAGMENT -> ChatListFragment()
+            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
+            LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
+            FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+            NOTIFY_FRAGMENT -> NotifyFragment()
+            else -> Fragment()
+        }
 
         newFragment?.arguments = bundle
 

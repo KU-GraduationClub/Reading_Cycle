@@ -1,14 +1,14 @@
 {
   "project_info": {
-    "project_number": "910747760271",
-    "firebase_url": "https://reading-cycle-default-rtdb.firebaseio.com",
-    "project_id": "reading-cycle",
-    "storage_bucket": "reading-cycle.appspot.com"
+    "project_number": "422397763533",
+    "firebase_url": "https://readingcyclepractice-default-rtdb.firebaseio.com",
+    "project_id": "readingcyclepractice",
+    "storage_bucket": "readingcyclepractice.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:910747760271:android:f0258a4512aa7696e1a2fa",
+        "mobilesdk_app_id": "1:422397763533:android:5b9d6adad9bd6901c22e84",
         "android_client_info": {
           "package_name": "com.example.reading_cycle"
         }
@@ -16,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBeMCCeJaNx1hR9NEBIcsGPkk52vYM-LpA"
+          "current_key": "AIzaSyDyej5yJhjz8DpCXETlmPR0B0XYiWWtqak"
         }
       ],
       "services": {
