@@ -4,8 +4,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.reading_cycle.chat.model.ChatItem
 import com.example.reading_cycle.databinding.RowChatListBinding
 
-class ChatListAdapter(private val chatList: List<ChatItem>) :
+class ChatListAdapter(private val chatList: List<ChatItem>, private val listener: OnChatItemClickListener) :
     RecyclerView.Adapter<ChatListAdapter.ChatViewHolder>() {
+
+    interface OnChatItemClickListener {
+        fun onChatItemClicked(chatItem: ChatItem)
+    }
 
     class ChatViewHolder(private val binding: RowChatListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatItem: ChatItem) {
@@ -26,6 +30,10 @@ class ChatListAdapter(private val chatList: List<ChatItem>) :
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         val chatItem = chatList[position]
         holder.bind(chatItem)
+
+        holder.itemView.setOnClickListener {
+            listener.onChatItemClicked(chatItem)
+        }
     }
 
     override fun getItemCount(): Int {

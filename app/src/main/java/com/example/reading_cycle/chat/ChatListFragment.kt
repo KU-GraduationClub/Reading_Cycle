@@ -1,7 +1,7 @@
-
 package com.example.reading_cycle.chat.ui
 
 import ChatListAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +13,7 @@ import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.chat.model.ChatItem
 import com.example.reading_cycle.chat.model.ChatRoom
+import com.example.reading_cycle.chat.vm.ChatRoomActivity
 import com.example.reading_cycle.databinding.FragmentChatListBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -20,7 +21,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class ChatListFragment : Fragment() {
+class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentChatListBinding: FragmentChatListBinding
@@ -37,19 +38,10 @@ class ChatListFragment : Fragment() {
 
         val database = Firebase.database.reference.child("chatRoom")
 
-        // 툴바 알림 메뉴 클릭 이벤트 처리
-        fragmentChatListBinding.toolbarLayoutChatList.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.libraryMenuItemNotify -> {
-                    mainActivity.navigateToNotifyFragment()
-                    true
-                }
-                else -> false
-            }
-        }
+        // 기타 코드 유지
 
         // 초기 빈 어댑터 설정
-        chatListAdapter = ChatListAdapter(emptyList())
+        chatListAdapter = ChatListAdapter(emptyList(), this)
         fragmentChatListBinding.recyclerChatList.layoutManager = LinearLayoutManager(requireContext())
         fragmentChatListBinding.recyclerChatList.adapter = chatListAdapter
 
@@ -74,7 +66,7 @@ class ChatListFragment : Fragment() {
                 }
                 val chatItems = chatRoomList.map {
                     ChatItem(
-                        profileImage = R.drawable.ic_launcher_foreground, // 기본 이미지 설정 필요시
+                        profileImage = R.drawable.ic_launcher_foreground,
                         name = it.name ?: "Unknown",
                         lastMessage = it.lastMessage ?: "No message",
                         lastMessageTime = it.lastMessageTime ?: "Unknown time"
@@ -83,7 +75,7 @@ class ChatListFragment : Fragment() {
 
                 Log.d("ChatListFragment", "Loaded chat items: $chatItems")
                 requireActivity().runOnUiThread {
-                    chatListAdapter = ChatListAdapter(chatItems)
+                    chatListAdapter = ChatListAdapter(chatItems, this@ChatListFragment)
                     fragmentChatListBinding.recyclerChatList.adapter = chatListAdapter
                     chatListAdapter.notifyDataSetChanged()
                 }
@@ -94,4 +86,15 @@ class ChatListFragment : Fragment() {
             }
         })
     }
+
+    override fun onChatItemClicked(chatItem: ChatItem) {
+        // 클릭된 아이템의 ChatRoomId를 가져옴
+        val chatRoomId = chatItem.chatRoomId
+
+        // Intent 생성 및 ChatRoomActivity로 전환
+        val intent = Intent(requireContext(), ChatRoomActivity::class.java)
+        intent.putExtra("chatRoomId", chatRoomId)
+        startActivity(intent)
+    }
+
 }
