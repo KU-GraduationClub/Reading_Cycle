@@ -102,7 +102,7 @@
                 android:layout_marginEnd="22dp"
                 android:background="#9A9393"
                 android:elevation="3dp"
-                app:layout_constraintEnd_toStartOf="@+id/btnSalePostCate3"
+                app:layout_constraintEnd_toStartOf="@+id/btnSalePostType"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:background="@drawable/border_add_post_gray">
@@ -110,7 +110,7 @@
                 <ImageView
                     android:id="@+id/imgSalePostPoster"
                     android:layout_width="116dp"
-                    android:layout_height="180dp"
+                    android:layout_height="170dp"
                     android:layout_gravity="center"
                     android:background="@color/white"
                     app:srcCompat="@drawable/baseline_image_24" />
@@ -144,7 +144,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textSalePostTitle" />
 
             <TextView
-                android:id="@+id/textSalePostWriter4"
+                android:id="@+id/textSalePostAuthor"
                 android:layout_width="172dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
@@ -156,7 +156,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textSalePost" />
 
             <Button
-                android:id="@+id/btnSalePostCate3"
+                android:id="@+id/btnSalePostType"
                 android:layout_width="90dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="22dp"
@@ -172,10 +172,10 @@
                 android:textSize="12dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/frameSalePost"
-                app:layout_constraintTop_toBottomOf="@+id/textSalePostWriter4" />
+                app:layout_constraintTop_toBottomOf="@+id/textSalePostAuthor" />
 
             <Button
-                android:id="@+id/btnSalePostType4"
+                android:id="@+id/btnSalePostPrice"
                 android:layout_width="90dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="3dp"
@@ -191,7 +191,7 @@
                 android:textSize="12dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imgSalePostType4"
-                app:layout_constraintTop_toBottomOf="@+id/textSalePostWriter4" />
+                app:layout_constraintTop_toBottomOf="@+id/textSalePostAuthor" />
 
             <ImageView
                 android:id="@+id/imgSalePostType4"
@@ -200,8 +200,8 @@
                 android:layout_marginStart="3dp"
                 android:layout_marginTop="17dp"
                 android:elevation="2dp"
-                app:layout_constraintStart_toEndOf="@+id/btnSalePostCate3"
-                app:layout_constraintTop_toBottomOf="@+id/textSalePostWriter4"
+                app:layout_constraintStart_toEndOf="@+id/btnSalePostType"
+                app:layout_constraintTop_toBottomOf="@+id/textSalePostAuthor"
                 app:srcCompat="@drawable/baseline_currency_exchange_40_red" />
 
             <View
@@ -212,7 +212,7 @@
                 android:layout_marginTop="6dp"
                 android:background="@drawable/border_s_post"
                 app:layout_constraintStart_toEndOf="@+id/frameSalePost"
-                app:layout_constraintTop_toBottomOf="@+id/btnSalePostCate3" />
+                app:layout_constraintTop_toBottomOf="@+id/btnSalePostType" />
 
             <ImageView
                 android:id="@+id/imgSalePostUser"
@@ -256,116 +256,92 @@
                 app:layout_constraintStart_toStartOf="@+id/borderSalePost" />
 
             <FrameLayout
-                android:id="@+id/frameSalePost2"
-                android:layout_width="365dp"
+                android:id="@+id/frameLayout2"
+                android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_marginStart="23dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/border_s_post_brown"
                 android:clickable="true"
                 android:elevation="3dp"
+                app:layout_constraintEnd_toStartOf="@+id/frameLayout3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/frameSalePost">
 
-                <FrameLayout
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="7dp"
-                    android:background="@drawable/border_s_post_brown"
-                    android:clickable="true"
-                    android:elevation="3dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    android:id="@+id/imgSalePostBook1"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/baseline_image_24" />
 
-                    <ImageView
-                        android:id="@+id/imgSalePostBook1"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/baseline_image_24" />
+            </FrameLayout>
 
-                </FrameLayout>
+            <FrameLayout
+                android:id="@+id/frameLayout3"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/border_s_post_brown"
+                android:clickable="true"
+                android:elevation="3dp"
+                app:layout_constraintEnd_toStartOf="@+id/frameLayout4"
+                app:layout_constraintStart_toEndOf="@+id/frameLayout2"
+                app:layout_constraintTop_toTopOf="@+id/frameLayout2">
 
-                <FrameLayout
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="85dp"
-                    android:layout_marginTop="7dp"
-                    android:background="@drawable/border_s_post_brown"
-                    android:clickable="true"
-                    android:elevation="3dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    android:id="@+id/imgSalePostBook2"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/baseline_image_24" />
 
-                    <ImageView
-                        android:id="@+id/imgSalePostBook2"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/baseline_image_24" />
+            </FrameLayout>
 
-                </FrameLayout>
+            <FrameLayout
+                android:id="@+id/frameLayout4"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/border_s_post_brown"
+                android:clickable="true"
+                android:elevation="3dp"
+                app:layout_constraintEnd_toStartOf="@+id/frameLayout5"
+                app:layout_constraintStart_toEndOf="@+id/frameLayout3"
+                app:layout_constraintTop_toTopOf="@+id/frameLayout3">
 
-                <FrameLayout
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="155dp"
-                    android:layout_marginTop="7dp"
-                    android:background="@drawable/border_s_post_brown"
-                    android:clickable="true"
-                    android:elevation="3dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    android:id="@+id/imgSalePostBook3"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/baseline_image_24" />
 
-                    <ImageView
-                        android:id="@+id/imgSalePostBook3"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/baseline_image_24" />
+            </FrameLayout>
 
-                </FrameLayout>
+            <FrameLayout
+                android:id="@+id/frameLayout5"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/border_s_post_brown"
+                android:clickable="true"
+                android:elevation="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/frameLayout4"
+                app:layout_constraintTop_toTopOf="@+id/frameLayout4">
 
-                <FrameLayout
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="225dp"
-                    android:layout_marginTop="7dp"
-                    android:background="@drawable/border_s_post_brown"
-                    android:clickable="true"
-                    android:elevation="3dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    android:id="@+id/imgSalePostBook4"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/baseline_image_24" />
 
-                    <ImageView
-                        android:id="@+id/imgSalePostBook4"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/baseline_image_24" />
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="295dp"
-                    android:layout_marginTop="7dp"
-                    android:background="@drawable/border_s_post_brown"
-                    android:clickable="true"
-                    android:elevation="3dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/imgSalePostBook5"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/baseline_image_24" />
-
-                </FrameLayout>
             </FrameLayout>
 
             <TextView
@@ -380,10 +356,10 @@
                 android:textSize="15dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frameSalePost2" />
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout2" />
 
             <TextView
-                android:id="@+id/textSalePostPrice"
+                android:id="@+id/textSalePostRegPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -419,7 +395,7 @@
                 android:clickable="true"
                 android:elevation="3dp"
                 app:layout_constraintStart_toEndOf="@+id/textSalePost3"
-                app:layout_constraintTop_toBottomOf="@+id/textSalePostPrice">
+                app:layout_constraintTop_toBottomOf="@+id/textSalePostRegPrice">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -436,7 +412,7 @@
                         android:src="@drawable/baseline_sentiment_neutral_10" />
 
                     <TextView
-                        android:id="@+id/textSalePostEmotion"
+                        android:id="@+id/textSalePostState"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center"

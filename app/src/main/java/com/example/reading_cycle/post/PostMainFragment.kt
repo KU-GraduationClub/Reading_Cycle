@@ -187,7 +187,7 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         // 교환 아이템 클릭 처리 로직 추가
         val swapIdx = swapData.swapIdx
         val bundle = Bundle().apply {
-            putLong("itemIdx", swapIdx) // IDX를 Bundle에 전달
+            putLong("swapItemIdx", swapIdx)
         }
         (requireActivity() as MainActivity).replaceFragment(
             MainActivity.SWAP_POST_FRAGMENT,
@@ -200,7 +200,7 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         // 판매 아이템 클릭 처리 로직 추가
         val saleIdx = saleData.saleIdx
         val bundle = Bundle().apply {
-            putLong("itemIdx", saleIdx) // IDX를 Bundle에 전달
+            putLong("saleItemIdx", saleIdx)
         }
         (requireActivity() as MainActivity).replaceFragment(
             MainActivity.SALE_POST_FRAGMENT,
