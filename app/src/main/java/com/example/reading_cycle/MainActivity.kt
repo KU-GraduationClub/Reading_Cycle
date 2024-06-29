@@ -2,6 +2,7 @@ package com.example.reading_cycle
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -84,8 +85,12 @@ class MainActivity : AppCompatActivity() {
                 POST_MAIN_FRAGMENT -> PostMainFragment()
                 ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
                 ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
-                SALE_POST_FRAGMENT -> SalePostFragment()
-                SWAP_POST_FRAGMENT -> SwapPostFragment()
+                SALE_POST_FRAGMENT -> SalePostFragment().apply {
+                    arguments = bundle
+                }
+                SWAP_POST_FRAGMENT -> SwapPostFragment().apply {
+                    arguments = bundle
+                }
                 LOC_SET_FRAGMENT -> LocSetFragment()
                 LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
                 MSG_AUTH_FRAGMENT -> MsgAuthFragment()
@@ -137,11 +142,19 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(POST_MAIN_FRAGMENT, true)
     }
 
-    fun navigateToSwapPostFragment() {
+    fun navigateToSwapPostFragment(documentId: String) {
+        val bundle = Bundle().apply {
+            putString("documentId", documentId)
+            Log.d("MainActivity", "Navigating to SwapPostFragment with documentId: $documentId")
+        }
         replaceFragment(SWAP_POST_FRAGMENT, true)
     }
 
-    fun navigateToSalePostFragment() {
-        replaceFragment(SALE_POST_FRAGMENT, true)
+    fun navigateToSalePostFragment(documentId: String) {
+        val bundle = Bundle().apply {
+            putString("documentId", documentId)
+            Log.d("MainActivity", "Navigating to SalePostFragment with documentId: $documentId")
+        }
+        replaceFragment(SALE_POST_FRAGMENT, true, bundle)
     }
 }

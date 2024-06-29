@@ -123,10 +123,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="17dp"
+                android:layout_marginEnd="31dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="책 제목"
                 android:textColor="#000000"
                 android:textSize="19dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/frameSalePost"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -140,6 +142,7 @@
                 android:text="작가_"
                 android:textColor="#000000"
                 android:textSize="15dp"
+                app:layout_constraintEnd_toStartOf="@+id/textSalePostAuthor"
                 app:layout_constraintStart_toEndOf="@+id/frameSalePost"
                 app:layout_constraintTop_toBottomOf="@+id/textSalePostTitle" />
 
@@ -148,11 +151,13 @@
                 android:layout_width="172dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
+                android:layout_marginEnd="33dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="작가 이름"
                 android:textColor="#000000"
                 android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="@+id/textSalePost"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textSalePost" />
 
             <Button
@@ -208,9 +213,11 @@
                 android:id="@+id/borderSalePost"
                 android:layout_width="220dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="27dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="26dp"
                 android:background="@drawable/border_s_post"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/frameSalePost"
                 app:layout_constraintTop_toBottomOf="@+id/btnSalePostType" />
 
@@ -234,7 +241,7 @@
                 android:gravity="center|left"
                 android:text="유저 이름"
                 android:textColor="#000000"
-                android:textSize="18dp"
+                android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="@+id/imgSalePostUser"
                 app:layout_constraintStart_toEndOf="@+id/imgSalePostUser" />
 
@@ -260,7 +267,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="13dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/border_s_post_brown"
                 android:clickable="true"
@@ -349,7 +356,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="17dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="도서 정가"
                 android:textColor="#000000"
@@ -369,7 +376,8 @@
                 android:textSize="15dp"
                 android:textStyle="normal"
                 app:layout_constraintBottom_toBottomOf="@+id/textSalePost2"
-                app:layout_constraintStart_toEndOf="@+id/textSalePost2" />
+                app:layout_constraintStart_toEndOf="@+id/textSalePost2"
+                app:layout_constraintTop_toTopOf="@+id/textSalePost2" />
 
             <TextView
                 android:id="@+id/textSalePost3"
@@ -385,45 +393,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textSalePost2" />
 
-            <FrameLayout
-                android:id="@+id/frameSalePostEmotion"
+            <ImageView
+                android:id="@+id/imgSalePostEmotion"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/baseline_sentiment_neutral_10"
+                app:layout_constraintBottom_toBottomOf="@+id/textSalePost3"
+                app:layout_constraintStart_toEndOf="@+id/textSalePost3"
+                app:layout_constraintTop_toTopOf="@+id/textSalePost3" />
+
+            <TextView
+                android:id="@+id/textSalePostState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/border_add_post_gray"
-                android:clickable="true"
-                android:elevation="3dp"
-                app:layout_constraintStart_toEndOf="@+id/textSalePost3"
-                app:layout_constraintTop_toBottomOf="@+id/textSalePostRegPrice">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/imgSalePostEmotion"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="30dp"
-                        android:src="@drawable/baseline_sentiment_neutral_10" />
-
-                    <TextView
-                        android:id="@+id/textSalePostState"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_marginBottom="5dp"
-                        android:fontFamily="@font/soyo_maple_regular"
-                        android:text="상태"
-                        android:textColor="#000000"
-                        android:textSize="12dp" />
-                </LinearLayout>
-
-            </FrameLayout>
+                android:layout_gravity="bottom|center"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/soyo_maple_regular"
+                android:text="상태"
+                android:textColor="#000000"
+                android:textSize="14dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgSalePostEmotion"
+                app:layout_constraintStart_toEndOf="@+id/imgSalePostEmotion"
+                app:layout_constraintTop_toTopOf="@+id/imgSalePostEmotion" />
 
             <TextView
                 android:id="@+id/textSalePost4"
@@ -445,6 +437,7 @@
                 android:layout_height="110dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="25dp"
                 android:background="@drawable/border_post_main"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:padding="10dp"
@@ -452,6 +445,7 @@
                 android:textColor="#000000"
                 android:textSize="13dp"
                 android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textSalePost4" />
 

@@ -11,18 +11,12 @@ class SalePostRepository {
     private val db = FirebaseFirestore.getInstance()
 
     // 판매 도서 데이터를 가져오는 메소드
-    suspend fun getSaleBookData(saleIdx: Long): SaleBookData? {
+    suspend fun getSaleBookData(documentId: String): SaleBookData? {
         return try {
-            Log.d("SalePostRepository", "Fetching sale book data for saleIdx: $saleIdx")
-            val document = db.collection("salePosts")
-                .document(saleIdx.toString())
-                .get(Source.SERVER)
-                .await()
-            val saleBookData = document.toObject(SaleBookData::class.java)
-            Log.d("SalePostRepository", "Fetched sale book data: $saleBookData")
-            saleBookData
+            val snapshot = db.collection("salePosts").document(documentId).get().await()
+            snapshot.toObject(SaleBookData::class.java)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("SalePostRepository", "Error fetching sale book data", e)
             null
         }
     }

@@ -184,7 +184,6 @@ class AddSalePostFragment : Fragment() {
         }
 
         return SaleBookData(
-            saleIdx = System.currentTimeMillis(), // 또는 서버에서 생성한 ID 사용
             saleBookPostImg = imageUrls.firstOrNull() ?: "",
             saleBookImg = imageUrls,
             saleBookTitle = title,

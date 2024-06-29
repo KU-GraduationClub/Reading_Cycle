@@ -182,7 +182,6 @@ class AddSwapPostFragment : Fragment() {
         }
 
         return SwapBookData(
-            swapIdx = System.currentTimeMillis(), // 또는 서버에서 생성한 ID 사용
             swapBookPostImg =imageUrls.firstOrNull() ?: "",
             swapBookImg = imageUrls,
             swapBookTitle = title,

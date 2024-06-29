@@ -9,13 +9,13 @@ import com.bumptech.glide.Glide
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.RowPostMainSaleBinding
 import com.example.reading_cycle.databinding.RowPostMainSwapBinding
+import com.google.firebase.firestore.DocumentSnapshot
 
 data class SwapBookData(
-    val swapIdx: Long = 0, // 교환 도서 IDX
-    val swapBookPostImg: String = "", // 교환 도서 대표 이미지
-    val swapBookImg: List<String> = emptyList(), // 교환 도서 이미지들
     val swapBookTitle: String = "", // 교환 도서 제목
     val swapBookAuthor: String = "", // 교환 도서 작가
+    val swapBookPostImg: String = "", // 교환 도서 대표 이미지
+    val swapBookImg: List<String> = emptyList(), // 교환 도서 이미지들
     val swapBookType: BookType = BookType.OTHER, // 교환할 도서 타입
     val bookSwapType: BookType = BookType.OTHER, // 교환받을 도서 타입
     val swapBookRegPrice: String = "", // 교환 도서 정가
@@ -25,11 +25,10 @@ data class SwapBookData(
 )
 
 data class SaleBookData(
-    val saleIdx: Long = 0, // 판매 도서 IDX
-    val saleBookPostImg: String = "", // 판매 도서 대표 이미지
-    val saleBookImg: List<String> = emptyList(), // 판매 도서 이미지들
     val saleBookTitle: String = "", // 판매 도서 제목
     val saleBookAuthor: String = "", // 판매 도서 작가
+    val saleBookPostImg: String = "", // 판매 도서 대표 이미지
+    val saleBookImg: List<String> = emptyList(), // 판매 도서 이미지들
     val saleBookType: BookType = BookType.OTHER, // 판매할 도서 타입
     val saleBookPrice: String = "", // 판매할 도서 받을 가격 (String 타입으로 유지)
     val saleBookRegPrice: String = "", // 판매 도서 정가
@@ -72,13 +71,14 @@ enum class BookState {
 
 
 class PostMainAdapter(private val listener: OnPostItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     interface OnPostItemClickListener {
-        fun onSwapItemClick(swapData: SwapBookData)
-        fun onSaleItemClick(saleData: SaleBookData)
+        fun onSwapItemClick(document: DocumentSnapshot)
+        fun onSaleItemClick(document: DocumentSnapshot)
     }
 
-    private val swapBookList = mutableListOf<SwapBookData>()
-    private val saleBookList = mutableListOf<SaleBookData>()
+    private val swapBookList = mutableListOf<DocumentSnapshot>()
+    private val saleBookList = mutableListOf<DocumentSnapshot>()
 
     companion object {
         private const val VIEW_TYPE_SWAP = 1
@@ -106,17 +106,17 @@ class PostMainAdapter(private val listener: OnPostItemClickListener) : RecyclerV
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             VIEW_TYPE_SWAP -> {
-                val swapData = swapBookList[position]
-                (holder as SwapViewHolder).bind(swapData)
+                val document = swapBookList[position]
+                (holder as SwapViewHolder).bind(document)
                 holder.itemView.setOnClickListener {
-                    listener.onSwapItemClick(swapData)
+                    listener.onSwapItemClick(document)
                 }
             }
             VIEW_TYPE_SALE -> {
-                val saleData = saleBookList[position - swapBookList.size]
-                (holder as SaleViewHolder).bind(saleData)
+                val document = saleBookList[position - swapBookList.size]
+                (holder as SaleViewHolder).bind(document)
                 holder.itemView.setOnClickListener {
-                    listener.onSaleItemClick(saleData)
+                    listener.onSaleItemClick(document)
                 }
             }
             else -> throw IllegalArgumentException("Invalid view type")
@@ -131,20 +131,21 @@ class PostMainAdapter(private val listener: OnPostItemClickListener) : RecyclerV
         return if (position < swapBookList.size) VIEW_TYPE_SWAP else VIEW_TYPE_SALE
     }
 
-    fun setSwapPosts(swapPosts: List<SwapBookData>) {
+    fun setSwapPosts(swapPosts: List<DocumentSnapshot>) {
         swapBookList.clear()
         swapBookList.addAll(swapPosts)
         notifyDataSetChanged()
     }
 
-    fun setSalePosts(salePosts: List<SaleBookData>) {
+    fun setSalePosts(salePosts: List<DocumentSnapshot>) {
         saleBookList.clear()
         saleBookList.addAll(salePosts)
         notifyDataSetChanged()
     }
 
     inner class SwapViewHolder(private val binding: RowPostMainSwapBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(swapData: SwapBookData) {
+        fun bind(document: DocumentSnapshot) {
+            val swapData = document.toSwapBookData()
             binding.textRowPostSwapTitle.text = trimTextIfNeeded(binding.textRowPostSwapTitle, swapData.swapBookTitle)
             binding.textRowPostSwapAuthor.text = trimTextIfNeeded(binding.textRowPostSwapAuthor, swapData.swapBookAuthor)
             binding.btnRowPostSwapType.text = swapData.swapBookType.toKorean()
@@ -152,7 +153,7 @@ class PostMainAdapter(private val listener: OnPostItemClickListener) : RecyclerV
             binding.textRowPostSwapPrice.text = swapData.swapBookRegPrice
             binding.textRowPostSwapState.text = swapData.swapBookState.toKorean()
 
-            val emoji = when (swapData.swapBookState){
+            val emoji = when (swapData.swapBookState) {
                 BookState.VERY_BAD -> R.drawable.round_sentiment_very_dissatisfied_10
                 BookState.BAD -> R.drawable.baseline_sentiment_very_dissatisfied_10
                 BookState.COMMON -> R.drawable.baseline_sentiment_neutral_10
@@ -169,7 +170,8 @@ class PostMainAdapter(private val listener: OnPostItemClickListener) : RecyclerV
     }
 
     inner class SaleViewHolder(private val binding: RowPostMainSaleBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(saleData: SaleBookData) {
+        fun bind(document: DocumentSnapshot) {
+            val saleData = document.toSaleBookData()
             binding.textRowPostSaleTitle.text = trimTextIfNeeded(binding.textRowPostSaleTitle, saleData.saleBookTitle)
             binding.textRowPostSaleAuthor.text = trimTextIfNeeded(binding.textRowPostSaleAuthor, saleData.saleBookAuthor)
             binding.btnRowPostSaleType.text = saleData.saleBookType.toKorean()
@@ -177,7 +179,7 @@ class PostMainAdapter(private val listener: OnPostItemClickListener) : RecyclerV
             binding.textRowPostSaleRegPrice.text = saleData.saleBookRegPrice
             binding.textRowPostSaleState.text = saleData.saleBookState.toKorean()
 
-            val emoji = when (saleData.saleBookState){
+            val emoji = when (saleData.saleBookState) {
                 BookState.VERY_BAD -> R.drawable.round_sentiment_very_dissatisfied_10
                 BookState.BAD -> R.drawable.baseline_sentiment_very_dissatisfied_10
                 BookState.COMMON -> R.drawable.baseline_sentiment_neutral_10
@@ -192,6 +194,38 @@ class PostMainAdapter(private val listener: OnPostItemClickListener) : RecyclerV
                 .into(binding.imgRowPostSalePoster)
         }
     }
+}
+
+// DocumentSnapshot을 데이터 클래스로 변환하는 확장 함수 추가
+private fun DocumentSnapshot.toSwapBookData(): SwapBookData {
+    return SwapBookData(
+        swapBookTitle = getString("swapBookTitle") ?: "",
+        swapBookAuthor = getString("swapBookAuthor") ?: "",
+        swapBookPostImg = getString("swapBookPostImg") ?: "",
+        swapBookImg = (get("swapBookImg") as? List<*>)?.map { it as? String ?: "" } ?: emptyList(),
+        swapBookType = BookType.valueOf(getString("swapBookType") ?: BookType.OTHER.name),
+        bookSwapType = BookType.valueOf(getString("bookSwapType") ?: BookType.OTHER.name),
+        swapBookRegPrice = get("swapBookRegPrice")?.toString() ?: "",
+        swapBookState = BookState.valueOf(getString("swapBookState") ?: BookState.COMMON.name),
+        swapBookExplain = getString("swapBookExplain") ?: "",
+        swapBookWriteDate = getLong("swapBookWriteDate") ?: System.currentTimeMillis()
+    )
+}
+
+// DocumentSnapshot을 SaleBookData로 변환하는 확장 함수 추가
+private fun DocumentSnapshot.toSaleBookData(): SaleBookData {
+    return SaleBookData(
+        saleBookTitle = getString("saleBookTitle") ?: "",
+        saleBookAuthor = getString("saleBookAuthor") ?: "",
+        saleBookPostImg = getString("saleBookPostImg") ?: "",
+        saleBookImg = (get("saleBookImg") as? List<*>)?.map { it as? String ?: "" } ?: emptyList(),
+        saleBookType = BookType.valueOf(getString("saleBookType") ?: BookType.OTHER.name),
+        saleBookPrice = get("saleBookPrice")?.toString() ?: "",
+        saleBookRegPrice = get("saleBookRegPrice")?.toString() ?: "",
+        saleBookState = BookState.valueOf(getString("saleBookState") ?: BookState.COMMON.name),
+        saleBookExplain = getString("saleBookExplain") ?: "",
+        saleBookWriteDate = getLong("saleBookWriteDate") ?: System.currentTimeMillis()
+    )
 }
 
 // 확장 함수로 변환 작업 추가

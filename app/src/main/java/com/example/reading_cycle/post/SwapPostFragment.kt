@@ -10,23 +10,31 @@ import androidx.fragment.app.viewModels
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentSwapPostBinding
+import com.example.reading_cycle.post.repository.SalePostRepository
+import com.example.reading_cycle.post.repository.SwapPostRepository
+import com.example.reading_cycle.post.vm.SalePostViewModel
 import com.example.reading_cycle.post.vm.SwapPostViewModel
 
 class SwapPostFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentSwapPostBinding: FragmentSwapPostBinding
+    private lateinit var viewModelFactory: SwapPostViewModel.Factory
     private val swapPostViewModel: SwapPostViewModel by viewModels()
-    private var swapIdx: Long? = null
+    private var documentId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            swapIdx = it.getLong("swapItemIdx", -1)
-            if (swapIdx != -1L) {
-                swapPostViewModel.fetchSaleBookData(swapIdx!!)
-            }
+            documentId = it.getString("documentId")
+        }
+
+        val repository = SwapPostRepository()
+        viewModelFactory = SwapPostViewModel.Factory(repository)
+
+        documentId?.let {
+            swapPostViewModel.fetchSwapBookData(it)
         }
     }
 

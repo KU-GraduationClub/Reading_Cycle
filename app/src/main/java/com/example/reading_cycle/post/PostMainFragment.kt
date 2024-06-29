@@ -1,5 +1,6 @@
 package com.example.reading_cycle.post
 
+import PostMainViewModel
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.os.Bundle
@@ -18,9 +19,9 @@ import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
 import com.example.reading_cycle.post.model.SaleBookData
 import com.example.reading_cycle.post.model.SwapBookData
-import com.example.reading_cycle.post.vm.PostMainViewModel
 import com.example.reading_cycle.post.vm.PostSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.firestore.DocumentSnapshot
 
 class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
 
@@ -183,30 +184,14 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
 
 
     // RecyclerView 아이템 클릭 처리
-    override fun onSwapItemClick(swapData: SwapBookData) {
-        // 교환 아이템 클릭 처리 로직 추가
-        val swapIdx = swapData.swapIdx
-        val bundle = Bundle().apply {
-            putLong("swapItemIdx", swapIdx)
-        }
-        (requireActivity() as MainActivity).replaceFragment(
-            MainActivity.SWAP_POST_FRAGMENT,
-            true,
-            bundle
-        )
+    override fun onSwapItemClick(document: DocumentSnapshot) {
+        val documentId = document.id
+        mainActivity.navigateToSwapPostFragment(documentId)
     }
 
-    override fun onSaleItemClick(saleData: SaleBookData) {
-        // 판매 아이템 클릭 처리 로직 추가
-        val saleIdx = saleData.saleIdx
-        val bundle = Bundle().apply {
-            putLong("saleItemIdx", saleIdx)
-        }
-        (requireActivity() as MainActivity).replaceFragment(
-            MainActivity.SALE_POST_FRAGMENT,
-            true,
-            bundle
-        )
+    override fun onSaleItemClick(document: DocumentSnapshot) {
+        val documentId = document.id
+        mainActivity.navigateToSalePostFragment(documentId)
     }
 
 }
