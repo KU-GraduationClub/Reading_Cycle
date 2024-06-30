@@ -402,42 +402,17 @@ class AddSwapPostFragment : Fragment() {
                 when (buttonId) {
                     R.id.btnAddSwapPostType1 -> {
                         selectedBookType1 = it // 판매 도서 타입 저장
-                        updateButtonText(showBookTypeText(it), buttonId)
+                        updateButtonText(it.displayName, buttonId)
                     }
                     R.id.btnAddSwapPostType2 -> {
                         selectedBookType2 = it // 교환 도서 타입 저장
-                        updateButtonText(showBookTypeText(it), buttonId)
+                        updateButtonText(it.displayName, buttonId)
                     }
                 }
             }
             true
         }
         popupMenu.show()
-    }
-
-    private fun showBookTypeText(bookType: BookType): String {
-        return when (bookType) {
-            BookType.NOVEL -> "소설"
-            BookType.POETRY -> "시"
-            BookType.ESSAY -> "에세이"
-            BookType.CLASSIC -> "고전"
-            BookType.COMIC -> "만화"
-            BookType.SELF_DEVELOPMENT -> "자기계발"
-            BookType.REFERENCE -> "학습/참고서"
-            BookType.MAJOR -> "전공서"
-            BookType.COOKING -> "요리/제빵"
-            BookType.LANGUAGE -> "외국어"
-            BookType.SOCIAL_SCIENCE -> "사회/과학"
-            BookType.ART -> "예술"
-            BookType.RELIGION -> "종교"
-            BookType.ECONOMICS -> "경제/경영"
-            BookType.HEALTH_TRAVEL -> "건강/여행"
-            BookType.HISTORY -> "역사"
-            BookType.PHILOSOPHY -> "철학"
-            BookType.CHILDREN -> "어린이"
-            BookType.TODDLER -> "유아"
-            BookType.OTHER -> "기타"
-        }
     }
 
     private fun updateButtonText(text: String, buttonId: Int) {

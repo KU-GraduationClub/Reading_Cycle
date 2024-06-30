@@ -37,35 +37,35 @@ data class SaleBookData(
     val saleBookWriteDate: Long = System.currentTimeMillis() // 판매 도서 게시글 작성일
 )
 
-enum class BookType{
-    NOVEL,
-    POETRY,
-    ESSAY,
-    CLASSIC,
-    COMIC,
-    SELF_DEVELOPMENT,
-    REFERENCE,
-    MAJOR,
-    COOKING,
-    LANGUAGE,
-    SOCIAL_SCIENCE,
-    ART,
-    RELIGION,
-    ECONOMICS,
-    HEALTH_TRAVEL,
-    HISTORY,
-    PHILOSOPHY,
-    CHILDREN,
-    TODDLER,
-    OTHER
+enum class BookType(val displayName: String) {
+    NOVEL("소설"),
+    POETRY("시"),
+    ESSAY("에세이"),
+    CLASSIC("고전"),
+    COMIC("만화"),
+    SELF_DEVELOPMENT("자기계발"),
+    REFERENCE("학습/참고서"),
+    MAJOR("전공서"),
+    COOKING("요리/제빵"),
+    LANGUAGE("외국어"),
+    SOCIAL_SCIENCE("사회/과학"),
+    ART("예술"),
+    RELIGION("종교"),
+    ECONOMICS("경제/경영"),
+    HEALTH_TRAVEL("건강/여행"),
+    HISTORY("역사"),
+    PHILOSOPHY("철학"),
+    CHILDREN("어린이"),
+    TODDLER("유아"),
+    OTHER("기타")
 }
 
-enum class BookState {
-    VERY_BAD,
-    BAD,
-    COMMON,
-    GOOD,
-    VERY_GOOD
+enum class BookState(val displayName: String) {
+    VERY_BAD("매우 나쁨"),
+    BAD("나쁨"),
+    COMMON("보통"),
+    GOOD("좋음"),
+    VERY_GOOD("매우 좋음")
 }
 
 

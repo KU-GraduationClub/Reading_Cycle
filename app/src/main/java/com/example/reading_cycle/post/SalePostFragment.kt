@@ -64,51 +64,25 @@ class SalePostFragment : Fragment() {
                     textSalePostState.text = it.saleBookState.toString()
                     textSalePostExplain.text = it.saleBookExplain
 
-                    // 대표 이미지 설정 (Glide 사용)
+                    // 대표 이미지 설정 (첫 번째 이미지)
                     Glide.with(this@SalePostFragment)
-                        .load(it.saleBookPostImg)
+                        .load(it.saleBookImg.firstOrNull())
+                        .fitCenter()
                         .into(imgSalePostPoster)
 
-                    // 나머지 이미지 설정 (Glide 사용)
-                    imgSalePostBook1.visibility = View.GONE
-                    imgSalePostBook2.visibility = View.GONE
-                    imgSalePostBook3.visibility = View.GONE
-                    imgSalePostBook4.visibility = View.GONE
-
-                    it.saleBookImg.take(4).forEachIndexed { index, imageUrl ->
-                        when (index) {
-                            0 -> {
-                                imgSalePostBook1.visibility = View.VISIBLE
-                                Glide.with(this@SalePostFragment)
-                                    .load(imageUrl)
-                                    .into(imgSalePostBook1)
-                            }
-
-                            1 -> {
-                                imgSalePostBook2.visibility = View.VISIBLE
-                                Glide.with(this@SalePostFragment)
-                                    .load(imageUrl)
-                                    .into(imgSalePostBook2)
-                            }
-
-                            2 -> {
-                                imgSalePostBook3.visibility = View.VISIBLE
-                                Glide.with(this@SalePostFragment)
-                                    .load(imageUrl)
-                                    .into(imgSalePostBook3)
-                            }
-
-                            3 -> {
-                                imgSalePostBook4.visibility = View.VISIBLE
-                                Glide.with(this@SalePostFragment)
-                                    .load(imageUrl)
-                                    .into(imgSalePostBook4)
-                            }
-                        }
+                    // 추가 이미지 설정 (나머지 이미지)
+                    val imageViews = listOf(imgSalePostBook1, imgSalePostBook2, imgSalePostBook3, imgSalePostBook4)
+                    it.saleBookImg.drop(1).take(imageViews.size).forEachIndexed { index, imageUrl ->
+                        imageViews[index].visibility = View.VISIBLE
+                        Glide.with(this@SalePostFragment)
+                            .load(imageUrl)
+                            .centerCrop()
+                            .into(imageViews[index])
                     }
                 }
             }
         }
+
                 return fragmentSalePostBinding.root
             }
         }
