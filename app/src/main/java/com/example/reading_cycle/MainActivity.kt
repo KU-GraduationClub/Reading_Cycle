@@ -1,5 +1,7 @@
 package com.example.reading_cycle
 
+
+
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -10,13 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.reading_cycle.Library.LibraryMainFragment
 import com.example.reading_cycle.Library.LibraryMyFragment
-import com.example.reading_cycle.chat.ChatListFragment
+import com.example.reading_cycle.chat.ui.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
-import com.example.reading_cycle.login.MsgAuthFragment
-import com.example.reading_cycle.login.SetProfileFragment
 import com.example.reading_cycle.location.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
+import com.example.reading_cycle.login.MsgAuthFragment
+import com.example.reading_cycle.login.SetProfileFragment
 import com.example.reading_cycle.notify.NotifyFragment
 import com.example.reading_cycle.post.AddSalePostFragment
 import com.example.reading_cycle.post.AddSwapPostFragment
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
 
-    companion object{
+    companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
         const val ADD_SALE_POST_FRAGMENT = "AddSalePostFragment"
         const val ADD_SWAP_POST_FRAGMENT = "AddSwapPostFragment"
@@ -46,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         const val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
         const val NOTIFY_FRAGMENT = "NotifyFragment"
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +80,7 @@ class MainActivity : AppCompatActivity() {
 
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
+
 
             // 새로운 Fragment 담을 변수
             newFragment = when(name){
@@ -137,6 +139,7 @@ class MainActivity : AppCompatActivity() {
     fun navigateToLocSetFragment() {
         replaceFragment(LOC_SET_FRAGMENT, true)
     }
+
 
     fun navigateToPostMainFragment() {
         replaceFragment(POST_MAIN_FRAGMENT, true)
