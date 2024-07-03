@@ -40,13 +40,19 @@ class ChatRoomActivity : AppCompatActivity() {
         // RecyclerView 설정
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerViewMessages.layoutManager = layoutManager
+        // textOpponent를 "이도형"로 설정
+        binding.textOpponent.text = "이도형"
+        val RoomID = "room2"
+
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 Log.d("MessageActivity", "데이터베이스에 연결되었습니다.")
                 val dataList = mutableListOf<DataMessage>()
 
-                for (snapshot in dataSnapshot.children) {
+                val specificPathSnapshot = dataSnapshot.child("chatRooms").child(RoomID) // 루트 설정
+
+                for (snapshot in specificPathSnapshot.children) {
                     val message = snapshot.child("message").getValue(String::class.java)
                     val timestamp = snapshot.child("timestamp").getValue(String::class.java)
                     val name = snapshot.child("name").getValue(String::class.java)
@@ -57,9 +63,10 @@ class ChatRoomActivity : AppCompatActivity() {
                 }
 
                 // 어댑터 초기화 및 데이터 설정
+                name = "박명수" // 임시로
                 messageAdapter = MessageAdapter(dataList, name) // name 변수 추가
                 binding.recyclerViewMessages.adapter = messageAdapter
-                name = "이도형" //임시로
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -75,7 +82,7 @@ class ChatRoomActivity : AppCompatActivity() {
                 val formattedTime = dateFormat.format(Date())
 
                 val content = DataMessage(messageContent, formattedTime, name)
-                databaseReference.push().setValue(content)
+                databaseReference.child("chatRooms").child(RoomID).push().setValue(content)
                     .addOnSuccessListener {
                         Log.d("MessageActivity", "데이터 쓰기 성공: $content")
                         binding.edtSend.setText("")
