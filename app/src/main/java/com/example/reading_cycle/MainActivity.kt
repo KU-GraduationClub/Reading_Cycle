@@ -4,6 +4,7 @@ package com.example.reading_cycle
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -30,7 +31,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
-    private var oldFragment: Fragment? = null
 
     companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
@@ -60,9 +60,7 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        // 인텐트에서 시작할 프래그먼트를 가져옵니다.
-        val startFragment = intent.getStringExtra("startFragment") ?: LOGIN_MAIN_FRAGMENT
-        replaceFragment(startFragment, false, null)
+        replaceFragment(POST_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -78,29 +76,34 @@ class MainActivity : AppCompatActivity() {
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
 
-        SystemClock.sleep(200)
+        SystemClock.sleep(100)
 
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 
-        // 새로운 Fragment 담을 변수
-        newFragment = when(name){
-            POST_MAIN_FRAGMENT -> PostMainFragment()
-            ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
-            ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
-            SALE_POST_FRAGMENT -> SalePostFragment()
-            SWAP_POST_FRAGMENT -> SwapPostFragment()
-            LOC_SET_FRAGMENT -> LocSetFragment()
-            LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
-            MSG_AUTH_FRAGMENT -> MsgAuthFragment()
-            SET_PROFILE_FRAGMENT -> SetProfileFragment()
-            CHAT_LIST_FRAGMENT -> ChatListFragment()
-            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
-            LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
-            FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
-            NOTIFY_FRAGMENT -> NotifyFragment()
-            else -> Fragment()
-        }
+
+            // 새로운 Fragment 담을 변수
+            newFragment = when(name){
+                POST_MAIN_FRAGMENT -> PostMainFragment()
+                ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
+                ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
+                SALE_POST_FRAGMENT -> SalePostFragment().apply {
+                    arguments = bundle
+                }
+                SWAP_POST_FRAGMENT -> SwapPostFragment().apply {
+                    arguments = bundle
+                }
+                LOC_SET_FRAGMENT -> LocSetFragment()
+                LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
+                MSG_AUTH_FRAGMENT -> MsgAuthFragment()
+                SET_PROFILE_FRAGMENT -> SetProfileFragment()
+                CHAT_LIST_FRAGMENT -> ChatListFragment()
+                LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
+                LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
+                FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+                NOTIFY_FRAGMENT -> NotifyFragment()
+                else -> Fragment()
+            }
 
         newFragment?.arguments = bundle
 
@@ -135,5 +138,26 @@ class MainActivity : AppCompatActivity() {
 
     fun navigateToLocSetFragment() {
         replaceFragment(LOC_SET_FRAGMENT, true)
+    }
+
+
+    fun navigateToPostMainFragment() {
+        replaceFragment(POST_MAIN_FRAGMENT, true)
+    }
+
+    fun navigateToSwapPostFragment(documentId: String) {
+        val bundle = Bundle().apply {
+            putString("documentId", documentId)
+            Log.d("MainActivity", "Navigating to SwapPostFragment with documentId: $documentId")
+        }
+        replaceFragment(SWAP_POST_FRAGMENT, true)
+    }
+
+    fun navigateToSalePostFragment(documentId: String) {
+        val bundle = Bundle().apply {
+            putString("documentId", documentId)
+            Log.d("MainActivity", "Navigating to SalePostFragment with documentId: $documentId")
+        }
+        replaceFragment(SALE_POST_FRAGMENT, true, bundle)
     }
 }

@@ -77,6 +77,11 @@ android {
         implementation("com.google.firebase:firebase-analytics")
         implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
         implementation("com.google.firebase:firebase-auth:23.0.0")
+
+        // ImageSlider 라이브러리 추가
+        implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+
     }
 }
 dependencies {
