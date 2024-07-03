@@ -132,7 +132,7 @@
                 android:maxLines="1"
                 android:text="책 제목"
                 android:textColor="#000000"
-                android:textSize="12dp"
+                android:textSize="13dp"
                 app:layout_constraintStart_toEndOf="@+id/frameSalePost"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -145,7 +145,7 @@
                 android:fontFamily="@font/soyo_maple_regular"
                 android:text="작가 "
                 android:textColor="#27713C"
-                android:textSize="11dp"
+                android:textSize="12dp"
                 app:layout_constraintStart_toEndOf="@+id/frameSalePost"
                 app:layout_constraintTop_toBottomOf="@+id/textSalePostTitle" />
 
@@ -159,7 +159,7 @@
                 android:maxLines="1"
                 android:text="작가 이름"
                 android:textColor="#000000"
-                android:textSize="11dp"
+                android:textSize="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/textSalePost"
                 app:layout_constraintStart_toEndOf="@+id/textSalePost"
                 app:layout_constraintTop_toTopOf="@+id/textSalePost" />
@@ -218,7 +218,7 @@
                 android:layout_width="215dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/border_s_post"
                 app:layout_constraintStart_toEndOf="@+id/frameSalePost"
                 app:layout_constraintTop_toBottomOf="@+id/btnSalePostType" />
@@ -470,5 +470,20 @@
 
     </ScrollView>
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerSalePostImages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:padding="16dp"
+        android:src="@drawable/baseline_close_24"
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

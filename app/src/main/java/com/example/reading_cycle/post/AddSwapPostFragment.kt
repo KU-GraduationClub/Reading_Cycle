@@ -1,6 +1,7 @@
 package com.example.reading_cycle.post
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
@@ -255,38 +256,54 @@ class AddSwapPostFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_PICK_IMAGE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val selectedImageUris = data?.clipData
-                    selectedImageUris?.let { clipData ->
-                        for (i in 0 until minOf(clipData.itemCount, cardViewIds.size)) { // 최대 5개까지만 처리
-                            val imageUri = clipData.getItemAt(i).uri
-                            val imageBitmap = uriToBitmap(imageUri)
-                            imageBitmap?.let { bitmap ->
-                                val resizedBitmap = resizeBitmap(bitmap)
-                                selectedImages.add(resizedBitmap)
-                                val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(
-                                    cardViewIds[i])
+                if (resultCode == RESULT_OK) {
+                    val imageUri = data?.data
+                    imageUri?.let { uri ->
+                        val imageBitmap = uriToBitmap(uri)
+                        imageBitmap?.let { bitmap ->
+                            val resizedBitmap = resizeBitmap(bitmap)
+                            selectedCardIndex?.let { index ->
+                                // 이미지를 대체하거나 추가하는 경우
+                                if (index < selectedImages.size) {
+                                    // 이미지를 대체하는 경우, 기존 이미지를 삭제하고 새 이미지를 추가함
+                                    selectedImages.removeAt(index)
+                                    selectedImages.add(index, resizedBitmap)
+                                } else {
+                                    // 선택한 인덱스가 리스트의 범위를 넘어가는 경우 새로운 이미지를 추가함
+                                    selectedImages.add(resizedBitmap)
+                                }
+                                val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(cardViewIds[index])
                                     .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                                     .id
                                 fragmentAddSwapPostBinding.root.findViewById<ImageView>(imageViewId).setImageBitmap(resizedBitmap)
                                 // 다음 번호의 카드뷰를 보여줌
-                                if (i < cardViewIds.size - 1) {
-                                    val nextCardViewId = cardViewIds[i + 1]
-                                    fragmentAddSwapPostBinding.root.findViewById<CardView>(
-                                        nextCardViewId
-                                    ).visibility = View.VISIBLE
+                                if (index < cardViewIds.size - 1) {
+                                    val nextCardViewId = cardViewIds[index + 1]
+                                    fragmentAddSwapPostBinding.root.findViewById<CardView>(nextCardViewId).visibility = View.VISIBLE
                                 }
                             }
+                        } ?: run {
+                            showSnackbar("이미지를 가져오는 데 문제가 발생했습니다.")
                         }
+                    } ?: run {
+                        showSnackbar("이미지를 가져오는 데 문제가 발생했습니다.")
                     }
                 }
             }
             REQUEST_IMAGE_CAPTURE -> {
-                if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     val imageBitmap = data?.extras?.get("data") as Bitmap
                     val resizedBitmap = resizeBitmap(imageBitmap)
-                    selectedImages.add(resizedBitmap)
                     selectedCardIndex?.let { index ->
+                        // 이미지를 대체하거나 추가하는 경우
+                        if (index < selectedImages.size) {
+                            // 이미지를 대체하는 경우, 기존 이미지를 삭제하고 새 이미지를 추가함
+                            selectedImages.removeAt(index)
+                            selectedImages.add(index, resizedBitmap)
+                        } else {
+                            // 선택한 인덱스가 리스트의 범위를 넘어가는 경우 새로운 이미지를 추가함
+                            selectedImages.add(resizedBitmap)
+                        }
                         val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(cardViewIds[index])
                             .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                             .id
@@ -349,8 +366,8 @@ class AddSwapPostFragment : Fragment() {
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // 다중 선택 허용
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"),REQUEST_PICK_IMAGE
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+            AddSwapPostFragment.REQUEST_PICK_IMAGE
         )
     }
 
@@ -361,7 +378,8 @@ class AddSwapPostFragment : Fragment() {
         ) {
             ActivityCompat.requestPermissions(
                 requireActivity(),
-                arrayOf(android.Manifest.permission.CAMERA), REQUEST_IMAGE_CAPTURE
+                arrayOf(android.Manifest.permission.CAMERA),
+                AddSwapPostFragment.REQUEST_IMAGE_CAPTURE
             )
         } else {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)

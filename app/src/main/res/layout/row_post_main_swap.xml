@@ -45,10 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="9dp"
         android:fontFamily="@font/soyo_maple_regular"
         android:text="작가  "
-        android:textColor="#000000"
+        android:textColor="#27713C"
         android:textSize="10dp"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapTitle" />
@@ -73,7 +73,7 @@
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="17dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="6dp"
         android:layout_weight="1"
         android:backgroundTint="#9E6320"
         android:clickable="false"
@@ -90,7 +90,6 @@
         android:id="@+id/btnRowPostSwapType2"
         android:layout_width="80dp"
         android:layout_height="43dp"
-        android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:backgroundTint="#5A69EF"
         android:clickable="false"
@@ -100,16 +99,17 @@
         android:textColor="#FFFFFF"
         android:textSize="11dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRowPostSwapType"
         app:layout_constraintStart_toEndOf="@+id/imgRowPostSwapType"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapAuthor" />
+        app:layout_constraintTop_toTopOf="@+id/btnRowPostSwapType" />
 
     <ImageView
         android:id="@+id/imgRowPostSwapType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRowPostSwapType"
         app:layout_constraintStart_toEndOf="@+id/btnRowPostSwapType"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSwapAuthor"
+        app:layout_constraintTop_toTopOf="@+id/btnRowPostSwapType"
         app:srcCompat="@drawable/baseline_sync_40_blue" />
 
     <View

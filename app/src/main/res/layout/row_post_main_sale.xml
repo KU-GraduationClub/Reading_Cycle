@@ -45,10 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="9dp"
         android:fontFamily="@font/soyo_maple_regular"
         android:text="작가  "
-        android:textColor="#000000"
+        android:textColor="#27713C"
         android:textSize="10dp"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleTitle" />
@@ -73,7 +73,7 @@
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="17dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="6dp"
         android:layout_weight="1"
         android:backgroundTint="#9E6320"
         android:clickable="false"
@@ -91,7 +91,6 @@
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:backgroundTint="#E05B5B"
         android:clickable="false"
@@ -101,17 +100,18 @@
         android:textColor="#FFFFFF"
         android:textSize="11dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRowPostSaleType"
         app:layout_constraintStart_toEndOf="@+id/imgRowPostSaleType"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleAuthor" />
+        app:layout_constraintTop_toTopOf="@+id/btnRowPostSaleType" />
 
     <ImageView
         android:id="@+id/imgRowPostSaleType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="13dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRowPostSaleType"
         app:layout_constraintStart_toEndOf="@+id/btnRowPostSaleType"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleAuthor"
+        app:layout_constraintTop_toTopOf="@+id/btnRowPostSaleType"
         app:srcCompat="@drawable/baseline_currency_exchange_40_red" />
 
     <View
