@@ -103,21 +103,19 @@ class MainActivity : AppCompatActivity() {
                 FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
                 NOTIFY_FRAGMENT -> NotifyFragment()
                 else -> Fragment()
-            }
-
-        newFragment?.arguments = bundle
-
-        // Fragment 교체한다.
-        fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
-
-        if (addToBackStack) {
-            // Fragment Backstack 넣어 이전으로 돌아가는 기능이 동작할 수 있도록 한다.
-            fragmentTransaction.addToBackStack(name)
         }
 
-        // 교체 명령 동작.
-        fragmentTransaction.commit()
+        // Fragment 교체 처리
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.hostFragmentMain, newFragment)
+            if (addToBackStack) {
+                addToBackStack(fragmentTag)  // addToBackStack에 fragmentTag 추가
+            }
+            commit()
+        }
     }
+
+
 
     // Fragment BackStack에서 제거.
     fun removeFragment(name: String) {
