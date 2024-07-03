@@ -1,7 +1,10 @@
 package com.example.reading_cycle
 
+
+
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.reading_cycle.Library.LibraryMainFragment
 import com.example.reading_cycle.Library.LibraryMyFragment
-import com.example.reading_cycle.chat.ChatListFragment
+import com.example.reading_cycle.chat.ui.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
 import com.example.reading_cycle.location.LocSetFragment
@@ -28,9 +31,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
-    private var oldFragment: Fragment? = null
 
-    companion object{
+    companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
         const val ADD_SALE_POST_FRAGMENT = "AddSalePostFragment"
         const val ADD_SWAP_POST_FRAGMENT = "AddSwapPostFragment"
@@ -47,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         const val NOTIFY_FRAGMENT = "NotifyFragment"
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(FRIEND_MAIN_FRAGMENT, false, null)
+        replaceFragment(POST_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -73,29 +74,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun replaceFragment(fragmentTag: String, addToBackStack: Boolean, bundle: Bundle? = null) {
-        // 200ms 대기
-        SystemClock.sleep(200)
+    fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
 
-        // 새로운 Fragment 인스턴스 생성
-        val newFragment: Fragment = when(fragmentTag) {
-            POST_MAIN_FRAGMENT -> PostMainFragment()
-            ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
-            ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
-            SALE_POST_FRAGMENT -> SalePostFragment()
-            SWAP_POST_FRAGMENT -> SwapPostFragment()
-            LOC_SET_FRAGMENT -> LocSetFragment()
-            LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
-            MSG_AUTH_FRAGMENT -> MsgAuthFragment()
-            SET_PROFILE_FRAGMENT -> SetProfileFragment()
-            CHAT_LIST_FRAGMENT -> ChatListFragment()
-            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment().apply {
-                arguments = bundle  // bundle을 Fragment에 설정
-            }
-            LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
-            FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
-            NOTIFY_FRAGMENT -> NotifyFragment()
-            else -> throw IllegalArgumentException("Unknown fragment tag: $fragmentTag")
+        SystemClock.sleep(100)
+
+        // Fragment 교체 상태로 설정한다.
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+
+
+            // 새로운 Fragment 담을 변수
+            newFragment = when(name){
+                POST_MAIN_FRAGMENT -> PostMainFragment()
+                ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
+                ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
+                SALE_POST_FRAGMENT -> SalePostFragment().apply {
+                    arguments = bundle
+                }
+                SWAP_POST_FRAGMENT -> SwapPostFragment().apply {
+                    arguments = bundle
+                }
+                LOC_SET_FRAGMENT -> LocSetFragment()
+                LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
+                MSG_AUTH_FRAGMENT -> MsgAuthFragment()
+                SET_PROFILE_FRAGMENT -> SetProfileFragment()
+                CHAT_LIST_FRAGMENT -> ChatListFragment()
+                LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
+                LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
+                FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+                NOTIFY_FRAGMENT -> NotifyFragment()
+                else -> Fragment()
         }
 
         // Fragment 교체 처리
@@ -129,5 +136,26 @@ class MainActivity : AppCompatActivity() {
 
     fun navigateToLocSetFragment() {
         replaceFragment(LOC_SET_FRAGMENT, true)
+    }
+
+
+    fun navigateToPostMainFragment() {
+        replaceFragment(POST_MAIN_FRAGMENT, true)
+    }
+
+    fun navigateToSwapPostFragment(documentId: String) {
+        val bundle = Bundle().apply {
+            putString("documentId", documentId)
+            Log.d("MainActivity", "Navigating to SwapPostFragment with documentId: $documentId")
+        }
+        replaceFragment(SWAP_POST_FRAGMENT, true)
+    }
+
+    fun navigateToSalePostFragment(documentId: String) {
+        val bundle = Bundle().apply {
+            putString("documentId", documentId)
+            Log.d("MainActivity", "Navigating to SalePostFragment with documentId: $documentId")
+        }
+        replaceFragment(SALE_POST_FRAGMENT, true, bundle)
     }
 }
