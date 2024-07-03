@@ -12,7 +12,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.DialogPostDetailsTextBinding
@@ -31,6 +33,7 @@ class SalePostFragment : Fragment() {
     private var documentId: String? = null
     private lateinit var viewPager: ViewPager2
     private lateinit var adapter: SalePostPagerAdapter
+    private lateinit var closeButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +66,14 @@ class SalePostFragment : Fragment() {
         }
 
         viewPager = fragmentSalePostBinding.viewPagerSalePostImages
+        closeButton = fragmentSalePostBinding.root.findViewById(R.id.btnClose)
         adapter = SalePostPagerAdapter(emptyList())
         viewPager.adapter = adapter
+
+        // 닫기 버튼 클릭 리스너 설정
+        closeButton.setOnClickListener {
+            hideViewPager()
+        }
 
         salePostViewModel.saleBookData.observe(viewLifecycleOwner) { saleBookData ->
             saleBookData?.let { data ->
@@ -166,7 +175,14 @@ class SalePostFragment : Fragment() {
 
         // ViewPager 가시성 설정
         viewPager.visibility = View.VISIBLE
-        fragmentSalePostBinding.imgSalePostPoster.visibility = View.GONE  // 기존 이미지는 숨김 처리
+        closeButton.visibility = View.VISIBLE
+    }
+
+    private fun hideViewPager() {
+        viewPager.visibility = View.GONE
+        closeButton.visibility = View.GONE
+
+        fragmentSalePostBinding.imgSalePostPoster.visibility = View.VISIBLE  // 기존 이미지를 다시 표시
     }
 }
 
@@ -186,8 +202,10 @@ class SalePostPagerAdapter(private var images: List<String>) : RecyclerView.Adap
         val imageUrl = images[position]
         Glide.with(holder.itemView.context)
             .load(imageUrl)
-            .centerCrop()
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .centerCrop() // 이미지를 원본 비율을 유지하면서 이미지뷰를 꽉 채우도록 설정
+            .downsample(DownsampleStrategy.NONE) // 다운샘플링 없음
+            .format(DecodeFormat.PREFER_ARGB_8888) // 고화질 포맷 사용
+            .diskCacheStrategy(DiskCacheStrategy.ALL) // 캐시 전략 설정
             .into(holder.imageView)
     }
 
