@@ -1,7 +1,5 @@
 package com.example.reading_cycle
 
-
-
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -60,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(POST_MAIN_FRAGMENT, false, null)
+        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -105,14 +103,18 @@ class MainActivity : AppCompatActivity() {
                 else -> Fragment()
         }
 
-        // Fragment 교체 처리
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.hostFragmentMain, newFragment)
-            if (addToBackStack) {
-                addToBackStack(fragmentTag)  // addToBackStack에 fragmentTag 추가
-            }
-            commit()
+        newFragment?.arguments = bundle
+
+        // Fragment 교체한다.
+        fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
+
+        if (addToBackStack) {
+            // Fragment Backstack 넣어 이전으로 돌아가는 기능이 동작할 수 있도록 한다.
+            fragmentTransaction.addToBackStack(name)
         }
+
+        // 교체 명령 동작.
+        fragmentTransaction.commit()
     }
 
 

@@ -1,8 +1,10 @@
 package com.example.reading_cycle.login.model
 
 data class LoginDataClass(
-    var userIdx: String = "", // Firestore 문서 ID가 될 변수
-    val userNickname: String,
-    val userPhoneNumber: String,
-    val userProfileImage: String
+    val userIdx: String = "",
+    var userNickname: String = "",
+    var userPhoneNumber: String = "",
+    var userProfileImage: String = "",
+    var userLocation: String = "",
+    val regDate: String = ""
 )

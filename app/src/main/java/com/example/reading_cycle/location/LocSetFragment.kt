@@ -2,29 +2,35 @@ package com.example.reading_cycle.location
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.databinding.FragmentLocSetBinding
-import com.example.reading_cycle.location.model.Post
+import com.example.reading_cycle.location.model.LocDataClass
+import com.example.reading_cycle.location.vm.LocViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlin.math.acos
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import java.io.IOException
+import java.util.*
 
 class LocSetFragment : Fragment(), OnMapReadyCallback {
 
@@ -33,29 +39,49 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentLocSetBinding? = null
     private val binding get() = _binding!!
     private var googleMap: GoogleMap? = null
+    private val locViewModel: LocViewModel by activityViewModels()
+
+    private lateinit var database: DatabaseReference
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            getCurrentLocation()
+        } else {
+            Toast.makeText(requireContext(), "위치 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         mainActivity = activity as MainActivity
         _binding = FragmentLocSetBinding.inflate(inflater, container, false)
         mainActivity.hideBottomNavigation()
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Firebase 데이터베이스 초기화
+        database = FirebaseDatabase.getInstance().reference
+
+        // SupportMapFragment 가져오기 및 지도 준비 완료 시 콜백 받기
         val mapFragment =
             childFragmentManager.findFragmentById(com.example.reading_cycle.R.id.mapViewLocSet) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        // FusedLocationProviderClient 초기화
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
+        // 버튼 클릭 리스너 설정
         binding.nowlocationLocSet.setOnClickListener {
-            getCurrentLocation()
+            requestLocationPermission()
         }
 
         binding.btnLocSetFinish.setOnClickListener {
@@ -70,6 +96,42 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
+
+        // 줌 컨트롤 활성화
+        googleMap.uiSettings.isZoomControlsEnabled = true
+
+        // 위치 권한 확인 및 My Location 버튼 활성화
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            googleMap.isMyLocationEnabled = true
+            googleMap.uiSettings.isMyLocationButtonEnabled = true
+        }
+
+        // 지도 유형 설정 (일반 지도)
+        googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+
+        // 현재 위치 가져오기
+        getCurrentLocation()
+    }
+
+    private fun requestLocationPermission() {
+        when {
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                getCurrentLocation()
+            }
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -95,52 +157,99 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             if (location != null && googleMap != null) {
                 val currentLatLng = LatLng(location.latitude, location.longitude)
-                googleMap?.addMarker(MarkerOptions().position(currentLatLng).title("현재 위치"))
-                googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM))
 
-                // 현재 위치 기준으로 반경 내 게시글 필터링
-                filterPostsWithinRadius(currentLatLng, RADIUS)
+                // 마커 추가
+                addMarker(currentLatLng, "현재 위치")
+
+                // 카메라 이동
+                moveCamera(currentLatLng)
+
+                // LatLng를 주소로 변환
+                val address = getAddressFromLatLng(requireContext(), currentLatLng)
+                binding.textLocSetNow.text = address
+
+                // 현재 위치 정보를 LocDataClass로 저장
+                val currentLocation = LocDataClass(location.latitude, location.longitude)
+                saveLocation(currentLocation)
             } else {
                 Toast.makeText(requireContext(), "위치를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun filterPostsWithinRadius(currentLatLng: LatLng, radius: Double) {
-        // 게시글 목록 (가상의 데이터)
-        val posts = listOf(
-            Post("게시글 1", LatLng(37.5665, 126.9780)),  // 서울
-            Post("게시글 2", LatLng(37.5651, 126.9895)),  // 서울
-            Post("게시글 3", LatLng(35.1796, 129.0756))   // 부산
-        )
+    private fun addMarker(latLng: LatLng, title: String) {
+        val markerOptions = MarkerOptions().position(latLng).title(title)
 
-        // 반경 내 게시글 필터링
-        val nearbyPosts = posts.filter {
-            calculateDistance(currentLatLng, it.location) <= radius
-        }
+        // 마커 아이콘 설정 (옵션)
+        val bitmapDescriptor =
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
+        markerOptions.icon(bitmapDescriptor)
 
-        // 필터링된 게시글을 지도에 표시
-        googleMap?.clear()
-        googleMap?.addMarker(MarkerOptions().position(currentLatLng).title("현재 위치"))
-        for (post in nearbyPosts) {
-            googleMap?.addMarker(MarkerOptions().position(post.location).title(post.title))
+        googleMap?.addMarker(markerOptions)
+    }
+
+    private fun moveCamera(latLng: LatLng) {
+        // 카메라 이동
+        googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM))
+    }
+
+    private fun animateCamera(latLng: LatLng) {
+        // 카메라 이동 + 애니메이션
+        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM))
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_LOCATION_PERMISSION -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    getCurrentLocation()
+                } else {
+                    Toast.makeText(requireContext(), "위치 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
         }
     }
 
-    private fun calculateDistance(start: LatLng, end: LatLng): Double {
-        val radius = 6371.0 // 지구 반지름 (km)
-        val dLat = Math.toRadians(end.latitude - start.latitude)
-        val dLon = Math.toRadians(end.longitude - start.longitude)
-        val a = sin(dLat / 2) * sin(dLat / 2) +
-                cos(Math.toRadians(start.latitude)) * cos(Math.toRadians(end.latitude)) *
-                sin(dLon / 2) * sin(dLon / 2)
-        val c = 2 * acos(sqrt(a))
-        return radius * c
+    private fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        var addressText = ""
+
+        try {
+            val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+            if (addresses!!.isNotEmpty()) {
+                val address = addresses[0]
+                addressText = address.getAddressLine(0) // 여기서 주소를 가져오는 부분을 변경하면 됩니다.
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(context, "주소 변환에 실패했습니다.", Toast.LENGTH_SHORT).show()
+        }
+
+        return addressText
+    }
+
+    private fun saveLocation(location: LocDataClass) {
+        // 위치 정보를 ViewModel에 저장
+        locViewModel.currentLocation = location
+
+        // 위치 정보를 Firebase 데이터베이스에 저장
+        database.child("locations").push().setValue(location)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "위치가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "위치 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
     }
 
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
         private const val DEFAULT_ZOOM = 15f
-        private const val RADIUS = 5.0 // 반경 5km
     }
 }
