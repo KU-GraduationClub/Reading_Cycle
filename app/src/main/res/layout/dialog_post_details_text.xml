@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white"
+    android:divider="?android:attr/dividerHorizontal"
+    android:showDividers="middle"
+    android:dividerPadding="8dp">
+
+    <TextView
+        android:id="@+id/labelSalePostTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="도서 제목"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/theme_green"
+        android:paddingBottom="4dp" />
+
+    <TextView
+        android:id="@+id/dialogSalePostTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border_add_post_edit_img"
+        android:padding="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/labelSalePostAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="작가"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/theme_green"
+        android:paddingBottom="4dp" />
+
+    <TextView
+        android:id="@+id/dialogSalePostAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border_add_post_edit_img"
+        android:padding="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/labelSalePostDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="도서 설명"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/theme_green"
+        android:paddingBottom="4dp" />
+
+    <TextView
+        android:id="@+id/dialogSalePostDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border_add_post_edit_img"
+        android:padding="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="20dp" />
+
+</LinearLayout>

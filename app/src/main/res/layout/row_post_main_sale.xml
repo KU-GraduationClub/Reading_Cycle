@@ -31,7 +31,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
+        android:ellipsize="end"
         android:fontFamily="@font/soyo_maple_regular"
+        android:maxLines="1"
         android:text="책 제목"
         android:textColor="#000000"
         android:textSize="15dp"
@@ -43,11 +45,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="9dp"
         android:fontFamily="@font/soyo_maple_regular"
-        android:text="작가_"
-        android:textColor="#000000"
-        android:textSize="12dp"
+        android:text="작가  "
+        android:textColor="#27713C"
+        android:textSize="10dp"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleTitle" />
 
@@ -56,20 +58,22 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="5dp"
+        android:ellipsize="end"
         android:fontFamily="@font/soyo_maple_regular"
+        android:maxLines="1"
         android:text="작가 이름"
         android:textColor="#000000"
         android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textRowPostSale1"
         app:layout_constraintStart_toEndOf="@+id/textRowPostSale1"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleTitle" />
+        app:layout_constraintTop_toTopOf="@+id/textRowPostSale1" />
 
     <Button
         android:id="@+id/btnRowPostSaleType"
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="17dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="6dp"
         android:layout_weight="1"
         android:backgroundTint="#9E6320"
         android:clickable="false"
@@ -77,7 +81,7 @@
         android:padding="1dp"
         android:text="도서 종류"
         android:textColor="#FFFFFF"
-        android:textSize="10dp"
+        android:textSize="11dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSale1" />
@@ -87,27 +91,27 @@
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:backgroundTint="#E05B5B"
         android:clickable="false"
         android:fontFamily="@font/soyo_maple_regular"
         android:padding="1dp"
         android:text="판매가"
-        android:textColor="#000000"
-        android:textSize="10dp"
+        android:textColor="#FFFFFF"
+        android:textSize="11dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRowPostSaleType"
         app:layout_constraintStart_toEndOf="@+id/imgRowPostSaleType"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleAuthor" />
+        app:layout_constraintTop_toTopOf="@+id/btnRowPostSaleType" />
 
     <ImageView
         android:id="@+id/imgRowPostSaleType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="13dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRowPostSaleType"
         app:layout_constraintStart_toEndOf="@+id/btnRowPostSaleType"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleAuthor"
+        app:layout_constraintTop_toTopOf="@+id/btnRowPostSaleType"
         app:srcCompat="@drawable/baseline_currency_exchange_40_red" />
 
     <View
@@ -140,9 +144,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
+        android:ellipsize="end"
         android:fontFamily="@font/soyo_maple_regular"
+        android:maxLines="1"
         android:text="0"
-        android:textColor="#000000"
+        android:textColor="#1C03FB"
         android:textSize="8dp"
         app:layout_constraintEnd_toEndOf="@+id/BorderRowPostSale1"
         app:layout_constraintTop_toTopOf="@+id/BorderRowPostSale1" />
@@ -199,6 +205,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/border_post_main"
+            android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/BorderRowPostSale1" />
 
@@ -218,8 +225,10 @@
             android:layout_height="16dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="11dp"
+            android:ellipsize="end"
             android:fontFamily="@font/soyo_maple_regular"
             android:gravity="center|left"
+            android:maxLines="1"
             android:text="유저 이름"
             android:textColor="#000000"
             android:textSize="9dp"
