@@ -3,9 +3,11 @@ package com.example.reading_cycle.post
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -128,12 +130,20 @@ class AddSalePostFragment : Fragment() {
         fragmentAddSalePostBinding.btnAddSalePostComplete.setOnClickListener {
             lifecycleScope.launch {
                 try {
+                    // 완료 버튼 클릭 시 버튼 비활성화
+                    fragmentAddSalePostBinding.btnAddSalePostComplete.isEnabled = false
+                    val colorStateList = ColorStateList.valueOf(Color.GRAY)
+                    fragmentAddSalePostBinding.btnAddSalePostComplete.backgroundTintList = colorStateList
+
                     val saleData = collectInputData()
                     viewModel.uploadSalePost(saleData)
                 } catch (e: IllegalStateException) {
-                    showSnackbar("빈 칸 없이 작성해주세요.")
+                    showSnackbar(e.message ?: "빈 칸 없이 작성해주세요.")
                 } catch (e: Exception) {
                     showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
+                } finally {
+                    fragmentAddSalePostBinding.btnAddSalePostComplete.isEnabled = true
+                    fragmentAddSalePostBinding.btnAddSalePostComplete.backgroundTintList  = ColorStateList.valueOf(Color.parseColor("#CF8127"))
                 }
             }
         }
@@ -142,9 +152,11 @@ class AddSalePostFragment : Fragment() {
         viewModel.uploadResult.observe(viewLifecycleOwner) { success ->
             if (success) {
                 showSnackbar("게시글이 성공적으로 등록되었습니다.")
+                // PostMainFragment로 이동, RecyclerView 갱신
                 mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
+                mainActivity.navigateToPostMainFragment()
             } else {
-                showSnackbar("게시글 등록에 실패했습니다.")
+                showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요")
             }
         }
 
@@ -154,23 +166,24 @@ class AddSalePostFragment : Fragment() {
     private suspend fun collectInputData(): SaleBookData {
         val title = fragmentAddSalePostBinding.edtAddSalePostTitle.text.toString()
         val author = fragmentAddSalePostBinding.edtAddSalePostAuthor.text.toString()
-        val bookType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
+        val bookType = selectedBookType ?: throw IllegalStateException("판매 도서 종류를 선택해주세요")
         val price = fragmentAddSalePostBinding.edtAddSalePostPrice.text.toString()
         val regPrice = fragmentAddSalePostBinding.edtAddSalePostRegPrice.text.toString()
-        val bookState = determineBookState()
+        val bookState = selectedBookState ?: throw IllegalStateException("도서 상태를 선택해주세요")
         val description = fragmentAddSalePostBinding.edtAddSalePostExplain.text.toString()
 
-        if (price.isBlank() || regPrice.isBlank()) {
-            showSnackbar("빈 칸 없이 작성해주세요.")
-            throw IllegalStateException("Price fields must not be empty.")
-        }
+        if (title.isBlank()) throw IllegalStateException("제목을 입력하세요.")
+        if (author.isBlank()) throw IllegalStateException("작가를 입력하세요.")
+        if (price.isBlank()) throw IllegalStateException("판매 가격을 입력하세요.")
+        if (regPrice.isBlank()) throw IllegalStateException("정가를 입력하세요.")
+        if (description.isBlank()) throw IllegalStateException("설명을 입력하세요.")
+        if (selectedImages.isEmpty()) throw IllegalStateException("최소 한 장의 이미지를 등록하세요.")
 
         val imageUrls = withContext(Dispatchers.IO) {
             uploadImagesAndGetUrls(selectedImages)
         }
 
         return SaleBookData(
-            saleIdx = System.currentTimeMillis(), // 또는 서버에서 생성한 ID 사용
             saleBookPostImg = imageUrls.firstOrNull() ?: "",
             saleBookImg = imageUrls,
             saleBookTitle = title,
@@ -211,10 +224,6 @@ class AddSalePostFragment : Fragment() {
         return@withContext urls
     }
 
-    // 도서 상태 선택 데이터 처리
-    private fun determineBookState(): BookState {
-        return selectedBookState ?: throw IllegalStateException("도서 상태 선택 필요")
-    }
 
     private fun selectFrame(frameId: Int) {
         // 이전에 선택된 프레임 레이아웃의 선택 표시 해제
@@ -246,28 +255,36 @@ class AddSalePostFragment : Fragment() {
         when (requestCode) {
             REQUEST_PICK_IMAGE -> {
                 if (resultCode == RESULT_OK) {
-                    val selectedImageUris = data?.clipData
-                    selectedImageUris?.let { clipData ->
-                        for (i in 0 until minOf(clipData.itemCount, cardViewIds.size)) { // 최대 5개까지만 처리
-                            val imageUri = clipData.getItemAt(i).uri
-                            val imageBitmap = uriToBitmap(imageUri)
-                            imageBitmap?.let { bitmap ->
-                                val resizedBitmap = resizeBitmap(bitmap)
-                                selectedImages.add(resizedBitmap)
-                                val imageViewId = fragmentAddSalePostBinding.root.findViewById<CardView>(
-                                    cardViewIds[i])
+                    val imageUri = data?.data
+                    imageUri?.let { uri ->
+                        val imageBitmap = uriToBitmap(uri)
+                        imageBitmap?.let { bitmap ->
+                            val resizedBitmap = resizeBitmap(bitmap)
+                            selectedCardIndex?.let { index ->
+                                // 이미지를 대체하거나 추가하는 경우
+                                if (index < selectedImages.size) {
+                                    // 이미지를 대체하는 경우, 기존 이미지를 삭제하고 새 이미지를 추가함
+                                    selectedImages.removeAt(index)
+                                    selectedImages.add(index, resizedBitmap)
+                                } else {
+                                    // 선택한 인덱스가 리스트의 범위를 넘어가는 경우 새로운 이미지를 추가함
+                                    selectedImages.add(resizedBitmap)
+                                }
+                                val imageViewId = fragmentAddSalePostBinding.root.findViewById<CardView>(cardViewIds[index])
                                     .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                                     .id
                                 fragmentAddSalePostBinding.root.findViewById<ImageView>(imageViewId).setImageBitmap(resizedBitmap)
                                 // 다음 번호의 카드뷰를 보여줌
-                                if (i < cardViewIds.size - 1) {
-                                    val nextCardViewId = cardViewIds[i + 1]
-                                    fragmentAddSalePostBinding.root.findViewById<CardView>(
-                                        nextCardViewId
-                                    ).visibility = View.VISIBLE
+                                if (index < cardViewIds.size - 1) {
+                                    val nextCardViewId = cardViewIds[index + 1]
+                                    fragmentAddSalePostBinding.root.findViewById<CardView>(nextCardViewId).visibility = View.VISIBLE
                                 }
                             }
+                        } ?: run {
+                            showSnackbar("이미지를 가져오는 데 문제가 발생했습니다.")
                         }
+                    } ?: run {
+                        showSnackbar("이미지를 가져오는 데 문제가 발생했습니다.")
                     }
                 }
             }
@@ -275,8 +292,16 @@ class AddSalePostFragment : Fragment() {
                 if (resultCode == RESULT_OK) {
                     val imageBitmap = data?.extras?.get("data") as Bitmap
                     val resizedBitmap = resizeBitmap(imageBitmap)
-                    selectedImages.add(resizedBitmap)
                     selectedCardIndex?.let { index ->
+                        // 이미지를 대체하거나 추가하는 경우
+                        if (index < selectedImages.size) {
+                            // 이미지를 대체하는 경우, 기존 이미지를 삭제하고 새 이미지를 추가함
+                            selectedImages.removeAt(index)
+                            selectedImages.add(index, resizedBitmap)
+                        } else {
+                            // 선택한 인덱스가 리스트의 범위를 넘어가는 경우 새로운 이미지를 추가함
+                            selectedImages.add(resizedBitmap)
+                        }
                         val imageViewId = fragmentAddSalePostBinding.root.findViewById<CardView>(cardViewIds[index])
                             .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                             .id
@@ -339,7 +364,6 @@ class AddSalePostFragment : Fragment() {
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // 다중 선택 허용
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PICK_IMAGE)
     }
 
@@ -389,36 +413,11 @@ class AddSalePostFragment : Fragment() {
                 else -> null
             }
             selectedBookType?.let {
-                updateButtonText(showBookTypeText(it))
+                updateButtonText(it.displayName)
             }
             true
         }
         popupMenu.show()
-    }
-
-    private fun showBookTypeText(bookType: BookType): String {
-        return when (bookType) {
-            BookType.NOVEL -> "소설"
-            BookType.POETRY -> "시"
-            BookType.ESSAY -> "에세이"
-            BookType.CLASSIC -> "고전"
-            BookType.COMIC -> "만화"
-            BookType.SELF_DEVELOPMENT -> "자기계발"
-            BookType.REFERENCE -> "학습/참고서"
-            BookType.MAJOR -> "전공서"
-            BookType.COOKING -> "요리/제빵"
-            BookType.LANGUAGE -> "외국어"
-            BookType.SOCIAL_SCIENCE -> "사회/과학"
-            BookType.ART -> "예술"
-            BookType.RELIGION -> "종교"
-            BookType.ECONOMICS -> "경제/경영"
-            BookType.HEALTH_TRAVEL -> "건강/여행"
-            BookType.HISTORY -> "역사"
-            BookType.PHILOSOPHY -> "철학"
-            BookType.CHILDREN -> "어린이"
-            BookType.TODDLER -> "유아"
-            BookType.OTHER -> "기타"
-        }
     }
 
     private fun updateButtonText(text: String) {
@@ -457,6 +456,6 @@ class AddSalePostFragment : Fragment() {
     }
 
     private fun showSnackbar(message: String) {
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
     }
 }

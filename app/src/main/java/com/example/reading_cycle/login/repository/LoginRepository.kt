@@ -1,29 +1,35 @@
-import android.util.Log
+package com.example.reading_cycle.login.repository
+
 import com.example.reading_cycle.login.model.LoginDataClass
 import com.google.firebase.firestore.FirebaseFirestore
 
-class AddLoginRepository {
+class LoginRepository {
+    private val db = FirebaseFirestore.getInstance()
 
     fun uploadUserDataToFirestore(userData: LoginDataClass, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        val db = FirebaseFirestore.getInstance()
-        val newUserRef = db.collection("users").document() // 새로운 문서 참조 생성
-
-        // 문서 ID를 userData에 포함
-        userData.userIdx = newUserRef.id
-
-        // userData를 Firestore에 추가
-        newUserRef.set(userData)
-            .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot added with ID: ${newUserRef.id}")
-                onSuccess()
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
-                onFailure(e)
-            }
+        val userRef = db.collection("users").document(userData.userIdx)
+        userRef.set(userData)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
     }
 
-    companion object {
-        private const val TAG = "AddLoginRepository"
+    fun checkIfUserExists(
+        userPhoneNumber: String,
+        onUserExists: (LoginDataClass) -> Unit,
+        onUserNotExists: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        db.collection("users").whereEqualTo("userPhoneNumber", userPhoneNumber).get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val userData = documents.documents[0].toObject(LoginDataClass::class.java)
+                    onUserExists(userData!!)
+                } else {
+                    onUserNotExists()
+                }
+            }
+            .addOnFailureListener { exception ->
+                onError(exception)
+            }
     }
 }

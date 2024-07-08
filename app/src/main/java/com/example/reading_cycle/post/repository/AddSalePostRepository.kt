@@ -1,16 +1,24 @@
 package com.example.reading_cycle.post.repository
 
+import android.util.Log
 import com.example.reading_cycle.post.model.SaleBookData
 import com.google.android.gms.tasks.Task
+import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 class AddSalePostRepository {
+    private val db = Firebase.firestore
 
-    // firebase로 SalePostData 업로드
     fun uploadSaleDataToFirebase(saleData: SaleBookData): Task<DocumentReference> {
-        val db = FirebaseFirestore.getInstance()
         return db.collection("salePosts")
-            .add(saleData)
+            .add(saleData) // saleData 객체를 Firestore에 추가
+            .addOnSuccessListener { documentReference ->
+                Log.d("Firestore", "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w("Firestore", "Error adding document", e)
+            }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.reading_cycle.login
 
 import android.app.AlertDialog
-import java.util.concurrent.TimeUnit
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,26 +8,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentMsgAuthBinding
+import com.example.reading_cycle.login.model.LoginDataClass
+import com.example.reading_cycle.login.vm.LoginViewModel
 import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
-import com.google.firebase.firestore.FirebaseFirestore
+import java.util.concurrent.TimeUnit
 
 class MsgAuthFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentMsgAuthBinding: FragmentMsgAuthBinding
 
-    // Firebase Authentication 객체를 전역 변수로 선언
     private val auth = FirebaseAuth.getInstance()
-    private val db = FirebaseFirestore.getInstance()
+    private val loginViewModel: LoginViewModel by viewModels()
 
-    // 인증 ID를 저장할 전역 변수
     private var verificationId = ""
 
     override fun onCreateView(
@@ -40,7 +44,6 @@ class MsgAuthFragment : Fragment() {
         mainActivity.hideBottomNavigation()
 
         fragmentMsgAuthBinding.run {
-            // 뒤로가기 버튼 클릭 시 프래그먼트 제거
             toolbarMsgAuth.setNavigationOnClickListener {
                 mainActivity.removeFragment(MainActivity.MSG_AUTH_FRAGMENT)
             }
@@ -50,9 +53,7 @@ class MsgAuthFragment : Fragment() {
                 var phoneNumber = edtPhoneNumber.text.toString()
                 phoneNumber = "+82$phoneNumber"
 
-                // 전화번호가 +82010으로 시작하는지 확인
-                if (!isValidPhoneNumber(phoneNumber)) {
-                    // 올바른 전화번호가 아닌 경우 에러 다이얼로그 표시
+                if (phoneNumber.length > 14 || !isValidPhoneNumber(phoneNumber)) {
                     showErrorDialog("오류", "올바른 전화번호를 입력해주세요.")
                     return@setOnClickListener
                 }
@@ -62,16 +63,27 @@ class MsgAuthFragment : Fragment() {
 
                 val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                        // 자동 검증 또는 인스턴트 검증 완료
                         signInWithPhoneAuthCredential(credential)
                     }
 
                     override fun onVerificationFailed(e: FirebaseException) {
                         Log.w(TAG, "onVerificationFailed", e)
-                        showErrorDialog("인증 실패", "전화번호 인증에 실패했습니다: ${e.message}")
+                        showErrorDialog("인증 실패", "전화번호 인증에 실패했습니다. \n 인증번호를 다시 확인 해 주세요.")
                         edtPhoneNumber.isEnabled = true
                         edtPhoneNumber.setBackgroundColor(resources.getColor(android.R.color.transparent))
+
+                        // 자세한 오류 메시지 출력
+                        if (e is FirebaseAuthInvalidCredentialsException) {
+                            Log.e(TAG, "Invalid request: ${e.message}")
+                        } else if (e is FirebaseTooManyRequestsException) {
+                            Log.e(TAG, "SMS quota exceeded.")
+                        } else if (e is FirebaseAuthException) {
+                            Log.e(TAG, "Firebase Auth Exception: ${e.message}")
+                        } else {
+                            Log.e(TAG, "Unknown error: ${e.message}")
+                        }
                     }
+
 
                     override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
                         this@MsgAuthFragment.verificationId = verificationId
@@ -80,7 +92,6 @@ class MsgAuthFragment : Fragment() {
                     }
                 }
 
-                // Firebase 인증 언어 설정
                 auth.setLanguageCode("kr")
 
                 val optionsCompat = PhoneAuthOptions.newBuilder(auth)
@@ -103,32 +114,72 @@ class MsgAuthFragment : Fragment() {
                     Log.d(TAG, "입력된 인증번호: $authCode")
                     Log.d(TAG, "Firebase 인증번호: $verificationId")
                 } else {
-                    showErrorDialog("오류", "인증 코드를 입력해주세요.")
+                    showErrorDialog("오류", "인증 번호를 입력해주세요.")
                 }
             }
 
-            return fragmentMsgAuthBinding.root
+            loginViewModel.uploadSuccess.observe(viewLifecycleOwner, Observer { success ->
+                if (success) {
+                    val userPhoneNumber = auth.currentUser?.phoneNumber ?: ""
+                    loginViewModel.checkUserExistence(userPhoneNumber)
+                }
+            })
+
+            loginViewModel.uploadError.observe(viewLifecycleOwner, Observer { exception ->
+                Log.e(TAG, "Failed to upload user data to Firestore", exception)
+            })
+
+            loginViewModel.userExists.observe(viewLifecycleOwner, Observer { userData ->
+                if (userData != null) {
+                    showUserExistsDialog(userData)
+                } else {
+                    mainActivity.replaceFragment(MainActivity.SET_PROFILE_FRAGMENT, true, null)
+                }
+            })
+
+            return root
         }
     }
 
     private fun isValidPhoneNumber(phoneNumber: String): Boolean {
-        // 전화번호가 +82010으로 시작하는지 확인
-        return phoneNumber.startsWith("+82010")
+        return phoneNumber.startsWith("+82")
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    // 인증 성공
-                    mainActivity.replaceFragment(MainActivity.SET_PROFILE_FRAGMENT, true, null)
-                    Log.i(TAG, "전화번호 인증 성공")
+                    val user = auth.currentUser
+                    val userPhoneNumber = user?.phoneNumber ?: ""
+
+                    if (user != null) {
+                        val userData = LoginDataClass(
+                            userIdx = user.uid,
+                            userNickname = "",
+                            userPhoneNumber = userPhoneNumber,
+                            userProfileImage = "",
+                            userLocation = ""
+                        )
+
+                        loginViewModel.uploadUserData(userData)
+                    }
                 } else {
-                    // 인증 실패
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    showErrorDialog("인증 실패", "전화번호 인증에 실패했습니다.")
+                    showErrorDialog("인증 실패", "전화번호 인증에 실패했습니다. \n 인증번호를 다시 확인 해 주세요.")
                 }
             }
+    }
+
+    private fun showUserExistsDialog(userData: LoginDataClass) {
+        val message = "기존에 가입된 회원입니다\n닉네임: ${userData.userNickname}\n동네: ${userData.userLocation}"
+        AlertDialog.Builder(requireContext())
+            .setTitle("기존 회원")
+            .setMessage(message)
+            .setPositiveButton("확인") { dialog, _ ->
+                dialog.dismiss()
+                mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
+            }
+            .show()
     }
 
     private fun showErrorDialog(title: String, message: String) {
@@ -136,7 +187,7 @@ class MsgAuthFragment : Fragment() {
         builder.setTitle(title)
             .setMessage(message)
             .setPositiveButton("확인") { dialog, _ ->
-                dialog.dismiss() // 다이얼로그 닫기
+                dialog.dismiss()
             }
         val dialog = builder.create()
         dialog.show()

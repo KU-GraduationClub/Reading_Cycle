@@ -1,7 +1,7 @@
 package com.example.reading_cycle.login
 
-import AddLoginRepository
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,9 +11,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.databinding.FragmentSetProfileBinding
 import com.example.reading_cycle.login.model.LoginDataClass
+import com.example.reading_cycle.login.vm.LoginViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -30,7 +34,7 @@ class SetProfileFragment : Fragment() {
     private var userNickname: String = ""
     private lateinit var userPhoneNumber: String
 
-    private val addLoginRepository = AddLoginRepository()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +47,6 @@ class SetProfileFragment : Fragment() {
         auth = Firebase.auth
 
         fragmentSetProfileBinding.run {
-            // 이미지 버튼 클릭 이벤트 설정
             imgBtnSetProfile.setOnClickListener {
                 openGallery()
             }
@@ -52,53 +55,45 @@ class SetProfileFragment : Fragment() {
                 userNickname = edtNickname.text.toString()
                 userPhoneNumber = auth.currentUser?.phoneNumber ?: ""
 
-                if (selectedImageUri != null) {
-                    uploadImageToFirebaseStorage { imageUrl ->
-                        // 사용자 정보 데이터 클래스에 저장
+                if (isNicknameValid(userNickname)) {
+                    if (selectedImageUri != null) {
+                        uploadImageToFirebaseStorage { imageUrl ->
+                            val userData = LoginDataClass(
+                                userIdx = auth.currentUser?.uid ?: "",
+                                userNickname = userNickname,
+                                userPhoneNumber = userPhoneNumber,
+                                userProfileImage = imageUrl,
+                                userLocation = "" // 비어 있는 상태로 설정
+                            )
+                            loginViewModel.uploadUserData(userData)
+                        }
+                    } else {
                         val userData = LoginDataClass(
                             userIdx = auth.currentUser?.uid ?: "",
                             userNickname = userNickname,
                             userPhoneNumber = userPhoneNumber,
-                            userProfileImage = imageUrl
+                            userProfileImage = "",
+                            userLocation = "" // 비어 있는 상태로 설정
                         )
-
-                        // Firebase Firestore에 데이터 업로드
-                        addLoginRepository.uploadUserDataToFirestore(userData,
-                            onSuccess = {
-                                val bundle = Bundle().apply {
-                                    putString("userIdx", userData.userIdx)
-                                }
-                                mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, bundle)
-                            },
-                            onFailure = { e ->
-                                Log.e(TAG, "Failed to upload user data to Firestore", e)
-                                // 실패한 경우 사용자에게 알림 등을 처리할 수 있습니다.
-                            }
-                        )
+                        loginViewModel.uploadUserData(userData)
                     }
                 } else {
-                    // 이미지가 선택되지 않은 경우 처리
-                    // 사용자 정보 데이터 클래스에 저장
-                    val userData = LoginDataClass(
-                        userNickname = userNickname,
-                        userPhoneNumber = userPhoneNumber,
-                        userProfileImage = ""
-                    )
-
-                    // Firebase Firestore에 데이터 업로드
-                    addLoginRepository.uploadUserDataToFirestore(userData,
-                        onSuccess = {
-                            val bundle = Bundle().apply {
-                                putString("userIdx", userData.userIdx)
-                            }
-                            mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, bundle)
-                        },
-                        onFailure = { e ->
-                            Log.e(TAG, "Failed to upload user data to Firestore", e)
-                            // 실패한 경우 사용자에게 알림 등을 처리할 수 있습니다.
-                        }
-                    )
+                    showInvalidNicknameAlert()
                 }
+            }
+
+            loginViewModel.uploadSuccess.observe(viewLifecycleOwner) { success ->
+                if (success) {
+                    val userIdx = auth.currentUser?.uid ?: ""
+                    val intent = Intent(mainActivity, MainActivity::class.java).apply {
+                        putExtra("userIdx", userIdx)
+                    }
+                    mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
+                }
+            }
+
+            loginViewModel.uploadError.observe(viewLifecycleOwner) { exception ->
+                Log.e(TAG, "Failed to upload user data to Firestore", exception)
             }
 
             return root
@@ -114,7 +109,10 @@ class SetProfileFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
             selectedImageUri = data.data
-            fragmentSetProfileBinding.imgBtnSetProfile.setImageURI(selectedImageUri)
+            Glide.with(this)
+                .load(selectedImageUri)
+                .apply(RequestOptions.circleCropTransform())
+                .into(fragmentSetProfileBinding.imgBtnSetProfile)
         }
     }
 
@@ -134,6 +132,21 @@ class SetProfileFragment : Fragment() {
                     onSuccess("") // 실패한 경우 빈 문자열 반환
                 }
         } ?: onSuccess("") // URI가 null인 경우 빈 문자열 반환
+    }
+
+    private fun isNicknameValid(nickname: String): Boolean {
+        val nicknamePattern = "^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]{1,12}$"
+        return nickname.matches(nicknamePattern.toRegex())
+    }
+
+    private fun showInvalidNicknameAlert() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("유효하지 않은 닉네임")
+            .setMessage("사용자 이름은 12자 이내, 특수문자를 포함하지 않고 작성 해 주세요.")
+            .setPositiveButton("확인") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     companion object {

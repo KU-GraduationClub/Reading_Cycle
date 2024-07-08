@@ -1,11 +1,12 @@
 package com.example.reading_cycle.friend
 
-import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,10 +16,8 @@ import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentFriendMainBinding
 import com.example.reading_cycle.databinding.RowFriendItemLayoutBinding
-import com.example.reading_cycle.friend.model.Friend
-import com.example.reading_cycle.friend.repository.FriendRepository
 import com.example.reading_cycle.friend.vm.FriendViewModel
-import com.google.firebase.database.FirebaseDatabase
+
 
 class FriendMainFragment : Fragment() {
 
@@ -48,20 +47,23 @@ class FriendMainFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // 어댑터 설정
-        friendMainAdapter = FriendMainAdapter(ArrayList()) // 빈 목록으로 초기화
+        friendMainAdapter = FriendMainAdapter(ArrayList(), friendViewModel)
         recyclerView.adapter = friendMainAdapter
 
         // 데이터 관찰 및 업데이트 처리
-        friendViewModel.userData.observe(viewLifecycleOwner) { userData ->
-            if (userData != null) {
-                updateFriendList(userData)
-            } else {
-                // userData null 경우 처리할 코드 작성
-            }
+        friendViewModel.friendList.observe(/* owner = */ viewLifecycleOwner) { friendList ->
+            friendMainAdapter.updateFriendList(friendList)
+            Log.d("FriendMainFragment", "Updated friend list in adapter: $friendList")
         }
 
         // 데이터 가져오기
-        friendViewModel.fetchUserData()
+        val userIds = listOf(
+            "0ajXfqKfMoGRBuAAbEBl",
+            "3zRNeJOHKg2v2q9tpnBm",
+            "RhFTwzbXx5WnNJAvh1pU",
+            "VKGZISoIU9EiaoRvqaPr"
+        )
+        friendViewModel.fetchAllUsersFriendList(userIds)
 
         // 툴바 알림 메뉴 클릭 이벤트 처리
         fragmentFriendMainBinding.toolbarLayoutFriendMain.setOnMenuItemClickListener { menuItem ->
@@ -77,24 +79,17 @@ class FriendMainFragment : Fragment() {
         return binding
     }
 
-    private fun updateFriendList(userData: List<FriendRepository.UserData>) {
-        // userData Friend 객체로 변환하여 RecyclerView 표시하는 로직 작성
-        val friendList = getFriendListFromDatabase(userData)
+    private fun updateFriendList(friendList: List<FriendViewModel.FriendData>) {
+        // RecyclerView 표시하는 로직 작성
         friendMainAdapter.updateFriendList(friendList)
-    }
-
-    private fun getFriendListFromDatabase(userData: List<FriendRepository.UserData>): List<Friend> {
-        val friendList = mutableListOf<Friend>()
-        for (user in userData) {
-            val friend = Friend(user.nickname, user.memo, user.imageUrl) // 올바른 순서로 Friend 객체 생성
-            friendList.add(friend)
-        }
-        return friendList
     }
 }
 
 
-class FriendMainAdapter(private var friendList: MutableList<Friend>) : RecyclerView.Adapter<FriendMainAdapter.FriendViewHolder>() {
+class FriendMainAdapter(
+    private var friendList: MutableList<FriendViewModel.FriendData>,
+    private val friendViewModel: FriendViewModel
+) : RecyclerView.Adapter<FriendMainAdapter.FriendViewHolder>() {
 
     inner class FriendViewHolder(private val binding: RowFriendItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -104,13 +99,13 @@ class FriendMainAdapter(private var friendList: MutableList<Friend>) : RecyclerV
             }
         }
 
-        fun bind(friend: Friend) {
-            binding.textLibraryMyUser.text = friend.nickname
+        fun bind(friend: FriendViewModel.FriendData) {
+            binding.textLibraryMyUser.text = friend.userNickname
             binding.textLibraryMyUserMemo.text = friend.memo
             binding.imgFriendStar.visibility = if (friend.isBookmarked) View.VISIBLE else View.GONE
 
             Glide.with(binding.root)
-                .load(friend.imageUrl)
+                .load(friend.userProfileImage)
                 .placeholder(R.drawable.baseline_person_30) // 로딩 중에 표시할 이미지
                 .error(R.drawable.baseline_person_40) // 로드 실패 시 표시할 이미지
                 .into(binding.imgFriendProfile)
@@ -123,7 +118,7 @@ class FriendMainAdapter(private var friendList: MutableList<Friend>) : RecyclerV
         }
     }
 
-    private fun showPopupMenu(view: View, friend: Friend, position: Int) {
+    private fun showPopupMenu(view: View, friend: FriendViewModel.FriendData, position: Int) {
         val popup = PopupMenu(view.context, view)
         popup.menuInflater.inflate(R.menu.popup_menu_friend_main, popup.menu)
         popup.setOnMenuItemClickListener { menuItem ->
@@ -155,7 +150,7 @@ class FriendMainAdapter(private var friendList: MutableList<Friend>) : RecyclerV
         popup.show()
     }
 
-    private fun showDeleteConfirmationDialog(view: View, friend: Friend, position: Int) {
+    private fun showDeleteConfirmationDialog(view: View, friend: FriendViewModel.FriendData, position: Int) {
         val builder = AlertDialog.Builder(view.context)
         builder.setTitle("삭제 확인")
         builder.setMessage("정말 삭제하시겠습니까?")
@@ -165,7 +160,9 @@ class FriendMainAdapter(private var friendList: MutableList<Friend>) : RecyclerV
             friendList.removeAt(position)
             notifyItemRemoved(position)
             // 저장된 데이터도 삭제
-            deleteFriendFromDatabase(friend)
+            friendViewModel.removeFriend("사용자ID", friend.userId) {
+                Log.d("FriendMainAdapter", "Removed friend: ${friend.userId}")
+            }
         }
 
         builder.setNegativeButton("아니오") { _, _ ->
@@ -174,18 +171,6 @@ class FriendMainAdapter(private var friendList: MutableList<Friend>) : RecyclerV
 
         val dialog = builder.create()
         dialog.show()
-    }
-
-    private fun deleteFriendFromDatabase(friend: Friend) {
-        // Firebase 데이터베이스의 루트 참조 가져오기
-        val database = FirebaseDatabase.getInstance()
-        val reference = database.reference
-
-        // 친구의 경로 생성 (여기서는 "users" 경로를 사용합니다)
-        val friendPath = "users/${friend.nickname}" // userId에 맞게 경로를 설정해야 합니다.
-
-        // 해당 경로의 데이터 삭제
-        reference.child(friendPath).removeValue()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
@@ -203,12 +188,11 @@ class FriendMainAdapter(private var friendList: MutableList<Friend>) : RecyclerV
         return friendList.size
     }
 
-    fun updateFriendList(newFriendList: List<Friend>) {
+    fun updateFriendList(newFriendList: List<FriendViewModel.FriendData>) {
         friendList.clear()
         friendList.addAll(newFriendList)
         notifyDataSetChanged()
     }
 }
-
 
 
