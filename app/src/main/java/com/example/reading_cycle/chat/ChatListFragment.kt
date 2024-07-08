@@ -1,100 +1,68 @@
-package com.example.reading_cycle.chat.ui
+package com.example.reading_cycle.chat
 
 import ChatListAdapter
-import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.reading_cycle.MainActivity
-import com.example.reading_cycle.R
+import androidx.recyclerview.widget.RecyclerView
 import com.example.reading_cycle.chat.model.ChatItem
-import com.example.reading_cycle.chat.model.ChatRoom
-import com.example.reading_cycle.chat.vm.ChatRoomActivity
 import com.example.reading_cycle.databinding.FragmentChatListBinding
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import com.google.android.material.R
 
-class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
 
-    private lateinit var mainActivity: MainActivity
-    private lateinit var fragmentChatListBinding: FragmentChatListBinding
-    private lateinit var chatListAdapter: ChatListAdapter
-    private val chatRoomList = mutableListOf<ChatRoom>()
-
+class ChatListFragment : Fragment() {
+    private lateinit var fragmentChatListBinding : FragmentChatListBinding
+    private lateinit var chatListAdapter: ChatListAdapter //채팅리스트 어댑터
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mainActivity = activity as MainActivity
         fragmentChatListBinding = FragmentChatListBinding.inflate(inflater, container, false)
-        mainActivity.showBottomNavigation()
 
-        val database = Firebase.database.reference.child("chatRoom")
-
-        // 기타 코드 유지
-
-        // 초기 빈 어댑터 설정
-        chatListAdapter = ChatListAdapter(emptyList(), this)
-        fragmentChatListBinding.recyclerChatList.layoutManager = LinearLayoutManager(requireContext())
-        fragmentChatListBinding.recyclerChatList.adapter = chatListAdapter
+        val ChatItems = listOf(
+            ChatItem(R.drawable.design_ic_visibility, "김민수", "안녕하세요!", "12:30 PM"),
+            ChatItem(R.drawable.design_ic_visibility, "손흥민", "오늘 날씨 어때?", "1:45 PM"),
+            ChatItem(R.drawable.design_ic_visibility, "한문철", "뭐해?", "3:20 PM"),
+            ChatItem(R.drawable.design_ic_visibility, "박지성", "안녕하세요!", "12:30 PM"),
+            ChatItem(R.drawable.design_ic_visibility, "이승우", "오늘 날씨 어때?", "1:45 PM"),
+            ChatItem(R.drawable.design_ic_visibility, "차두리", "뭐해?", "3:20 PM"),
+            ChatItem(R.drawable.design_ic_visibility, "차범근", "안녕하세요!", "12:30 PM"),
+            ChatItem(R.drawable.design_ic_visibility, "이청용", "오늘 날씨 어때?", "1:45 PM"),
+            ChatItem(R.drawable.design_ic_visibility, "기성룡", "뭐해?", "3:20 PM"),
+            // ... 다른 채팅 아이템들을 추가할 수 있습니다.
+        )
+        /*lateinit var mainActivity: MainActivity
+        mainActivity = activity as MainActivity
+        fragmentChatListBinding.run {
+            toolbarAuthJoin.setNavigationOnClickListener {
+                mainActivity.removeFragment(MainActivity.AUTH_JOIN_FRAGMENT)
+            }*/
+        initRecyclerView(ChatItems)
 
         return fragmentChatListBinding.root
     }
+    private fun initRecyclerView(ChatItems: List<ChatItem>) {
+        // LinearLayoutManager를 거꾸로 설정하여 최신 데이터가 위에 위치하도록 함
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.reverseLayout = true
+        fragmentChatListBinding.recyclerChatList.layoutManager = layoutManager
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val database = Firebase.database.reference.child("chatRooms")
-
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                chatRoomList.clear()
-                for (childSnapshot in snapshot.children) {
-                    val chatRoom = childSnapshot.getValue(ChatRoom::class.java)
-                    if (chatRoom != null) {
-                        chatRoomList.add(chatRoom)
-                    } else {
-                        Log.w("ChatListFragment", "Invalid ChatRoom object: $childSnapshot")
-                    }
-                }
-                val chatItems = chatRoomList.map {
-                    ChatItem(
-                        profileImage = R.drawable.ic_launcher_foreground,
-                        name = it.name ?: "Unknown",
-                        lastMessage = it.lastMessage ?: "No message",
-                        lastMessageTime = it.lastMessageTime ?: "Unknown time"
-                    )
-                }
-
-                Log.d("ChatListFragment", "Loaded chat items: $chatItems")
-                requireActivity().runOnUiThread {
-                    chatListAdapter = ChatListAdapter(chatItems, this@ChatListFragment)
-                    fragmentChatListBinding.recyclerChatList.adapter = chatListAdapter
-                    chatListAdapter.notifyDataSetChanged()
-                }
+        // ItemDecoration을 사용하여 아이템 간격을 0으로 설정
+        val itemDecoration = object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                outRect.set(0, 0, 0, 0)
             }
+        }
+        // 어댑터 초기화 및 RecyclerView에 설정
+        chatListAdapter = ChatListAdapter(ChatItems)
+        fragmentChatListBinding.recyclerChatList.adapter = chatListAdapter
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("ChatListFragment", "Firebase Database error: ${error.message}")
-            }
-        })
+        chatListAdapter.notifyDataSetChanged()    // 데이터 변경을 어댑터에 알림
+
+
     }
-
-    override fun onChatItemClicked(chatItem: ChatItem) {
-        // 클릭된 아이템의 ChatRoomId를 가져옴
-        val chatRoomId = chatItem.chatRoomId
-
-        // Intent 생성 및 ChatRoomActivity로 전환
-        val intent = Intent(requireContext(), ChatRoomActivity::class.java)
-        intent.putExtra("chatRoomId", chatRoomId)
-        startActivity(intent)
-    }
-
 }

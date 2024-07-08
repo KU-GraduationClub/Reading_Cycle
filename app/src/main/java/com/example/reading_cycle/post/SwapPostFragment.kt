@@ -6,37 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentSwapPostBinding
-import com.example.reading_cycle.post.repository.SalePostRepository
-import com.example.reading_cycle.post.repository.SwapPostRepository
-import com.example.reading_cycle.post.vm.SalePostViewModel
-import com.example.reading_cycle.post.vm.SwapPostViewModel
 
 class SwapPostFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentSwapPostBinding: FragmentSwapPostBinding
-    private lateinit var viewModelFactory: SwapPostViewModel.Factory
-    private val swapPostViewModel: SwapPostViewModel by viewModels()
-    private var documentId: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            documentId = it.getString("documentId")
-        }
-
-        val repository = SwapPostRepository()
-        viewModelFactory = SwapPostViewModel.Factory(repository)
-
-        documentId?.let {
-            swapPostViewModel.fetchSwapBookData(it)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,19 +25,18 @@ class SwapPostFragment : Fragment() {
 
         // 뒤로 가기 버튼 클릭 리스너 설정
         fragmentSwapPostBinding.toolbarLayoutSwapPost.setNavigationOnClickListener {
-             mainActivity.removeFragment(MainActivity.SWAP_POST_FRAGMENT)
+             mainActivity.removeFragment(MainActivity.ADD_SALE_POST_FRAGMENT)
         }
 
-//        salePostViewModel.saleBookData.observe(viewLifecycleOwner) { saleBookData ->
-//            saleBookData?.let {
-//                fragmentSalePostBinding.apply {
-//                    textTitle.text = it.saleBookTitle
-//                    textAuthor.text = it.saleBookAuthor
-//                    textPrice.text = it.saleBookPrice
-//                    // 기타 데이터를 View에 설정
-//                }
-//            }
-//        }
+        // 타이틀 아이콘 및 텍스트 설정
+        val iconDrawable = ContextCompat.getDrawable(requireContext(),
+            R.drawable.baseline_sync_40_blue
+        )
+        fragmentSwapPostBinding.toolbarTitleSwapPost.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
+        fragmentSwapPostBinding.toolbarTitleSwapPost.compoundDrawablePadding = resources.getDimensionPixelSize(
+            R.dimen.icon_text_padding
+        )
+        fragmentSwapPostBinding.toolbarTitleSwapPost.text = "도서 교환"
 
         return fragmentSwapPostBinding.root
     }
