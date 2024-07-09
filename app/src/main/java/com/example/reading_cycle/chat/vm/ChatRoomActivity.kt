@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.chat.adapter.MessageAdapter
 import com.example.reading_cycle.chat.model.DataMessage
 import com.example.reading_cycle.databinding.ActivityChatRoomBinding
+import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -25,13 +27,35 @@ class ChatRoomActivity : AppCompatActivity() {
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var databaseReference: DatabaseReference
     private var name: String = ""
-
+    private var userNickname: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatRoomBinding.inflate(layoutInflater)
         val view = binding.root
-        setContentView(view)
 
+
+        setContentView(view)
+        val db = Firebase.firestore
+        val userIdx = "NOlPsc5cyVf2rxxAZvbAbDc0yrF2" // 임의로 설정
+        db.collection("users")
+            .document(userIdx)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    // '1111'의 nickname 가져오기
+                    val userNickname = document.getString("userNickname")
+
+                    if (userNickname != null) {
+                        // 가져온 nickname을 사용
+                        Log.d("UserInfo", "userNickname: $userNickname")
+                    }
+                } else {
+                    Log.d("UserInfo", "Document does not exist")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("UserInfo", "Error getting document: ", exception)
+            }
         FirebaseApp.initializeApp(this)
 
         val firebaseDatabase = FirebaseDatabase.getInstance()
@@ -63,7 +87,7 @@ class ChatRoomActivity : AppCompatActivity() {
                 }
 
                 // 어댑터 초기화 및 데이터 설정
-                name = "박명수" // 임시로
+                name = userNickname
                 messageAdapter = MessageAdapter(dataList, name) // name 변수 추가
                 binding.recyclerViewMessages.adapter = messageAdapter
 

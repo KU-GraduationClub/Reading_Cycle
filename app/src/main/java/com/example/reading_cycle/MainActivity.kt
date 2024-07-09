@@ -104,7 +104,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         newFragment?.arguments = bundle
-
         // Fragment 교체한다.
         fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
 
