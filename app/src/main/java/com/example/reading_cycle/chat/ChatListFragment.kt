@@ -27,7 +27,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
     private lateinit var fragmentChatListBinding: FragmentChatListBinding
     private lateinit var chatListAdapter: ChatListAdapter
     private val chatRoomList = mutableListOf<ChatRoom>()
-
+    private val userIdx: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,7 +69,8 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
                         profileImage = R.drawable.ic_launcher_foreground,
                         name = it.name ?: "Unknown",
                         lastMessage = it.lastMessage ?: "No message",
-                        lastMessageTime = it.lastMessageTime ?: "Unknown time"
+                        lastMessageTime = it.lastMessageTime ?: "Unknown time",
+                        chatRoomId = it.chatRoomId ?: " "
                     )
                 }
 
@@ -88,12 +89,19 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
     }
 
     override fun onChatItemClicked(chatItem: ChatItem) {
-        // 클릭된 아이템의 ChatRoomId를 가져옴
+        // 클릭된 아이템의 ChatRoomId와 name 가져오기
         val chatRoomId = chatItem.chatRoomId
+        val name = chatItem.name
 
         // Intent 생성 및 ChatRoomActivity로 전환
         val intent = Intent(requireContext(), ChatRoomActivity::class.java)
         intent.putExtra("chatRoomId", chatRoomId)
+        intent.putExtra("name", name)
+
+        // 인텐트에 포함된 데이터를 Log로 출력
+        Log.d("IntentDebug", "Sending chatRoomId: $chatRoomId")
+        Log.d("IntentDebug", "Sending name: $name")
+
         startActivity(intent)
     }
 
