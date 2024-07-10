@@ -19,8 +19,14 @@ class LoginViewModel : ViewModel() {
 
     fun uploadUserData(userData: LoginDataClass) {
         repository.uploadUserDataToFirestore(userData,
-            onSuccess = { _uploadSuccess.value = true },
-            onFailure = { exception -> _uploadError.value = exception })
+            onSuccess = {
+                _uploadSuccess.value = true
+                checkUserExistence(userData.userPhoneNumber)  // 업로드 성공 후 사용자 존재 여부 확인
+            },
+            onFailure = { exception ->
+                _uploadError.value = exception
+            }
+        )
     }
 
     private val _userExists = MutableLiveData<LoginDataClass?>()

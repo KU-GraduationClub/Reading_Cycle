@@ -10,6 +10,10 @@ import com.example.reading_cycle.chat.model.DataMessage
 
 class MessageAdapter(private val messageList: List<DataMessage>, private val myName: String) : RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
 
+    init {
+        // messageList를 timestamp에 따라 정렬
+        messageList.sortedBy { it.timestamp }
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return if (viewType == MY_MESSAGE_VIEW_TYPE) {
@@ -40,13 +44,13 @@ class MessageAdapter(private val messageList: List<DataMessage>, private val myN
     }
 
     inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val messageTextView: TextView = itemView.findViewById(R.id.textMessage)
         private val timestampTextView: TextView = itemView.findViewById(R.id.textDate) // 타임스탬프 텍스트뷰 추가
+        private val messageTextView: TextView = itemView.findViewById(R.id.textMessage)
         private val nameTextView : TextView = itemView.findViewById(R.id.textIsShown)
 
         fun bind(message: DataMessage) {
-            messageTextView.text = message.message
             timestampTextView.text = message.timestamp // 타임스탬프 설정
+            messageTextView.text = message.message
             nameTextView.text = message.name // 이름 설정
         }
     }

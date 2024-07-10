@@ -53,7 +53,7 @@ android {
 
     dependencies {
         // Firebase Storage
-        implementation("com.google.firebase:firebase-storage:19.2.2")
+        implementation("com.google.firebase:firebase-storage:21.0.0")
         // Glide 추가 (이미지 로드, 표시)
         implementation("com.github.bumptech.glide:glide:4.12.0")
 
@@ -67,7 +67,7 @@ android {
         androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
         // Map 관련
-        implementation("com.google.android.gms:play-services-maps:18.2.0")
+        implementation("com.google.android.gms:play-services-maps:19.0.0")
         implementation("com.google.android.gms:play-services-location:21.1.0")
         implementation("androidx.fragment:fragment-ktx:1.6.2")
 
@@ -76,15 +76,13 @@ android {
         implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
         implementation("com.google.firebase:firebase-analytics")
         implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
-        implementation("com.google.firebase:firebase-auth:23.0.0")
+        implementation("com.google.firebase:firebase-bom")
+        implementation("com.google.firebase:firebase-appcheck-playintegrity")
 
         // ImageSlider 라이브러리 추가
         implementation("androidx.viewpager2:viewpager2:1.1.0")
 
-
     }
 }
-dependencies {
-    implementation("com.google.firebase:firebase-database:21.0.0")
-    implementation("com.google.firebase:firebase-auth:23.0.0")
-}
+
+apply(plugin = "com.google.gms.google-services")
