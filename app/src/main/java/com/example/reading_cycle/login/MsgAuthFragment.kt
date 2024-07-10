@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentMsgAuthBinding
@@ -51,12 +50,13 @@ class MsgAuthFragment : Fragment() {
             btnSendAuthCode.setOnClickListener {
                 val edtPhoneNumber = requireView().findViewById<EditText>(R.id.edtPhoneNumber)
                 var phoneNumber = edtPhoneNumber.text.toString()
-                phoneNumber = "+82$phoneNumber"
 
-                if (phoneNumber.length > 14 || !isValidPhoneNumber(phoneNumber)) {
+                if (!isValidPhoneNumber(phoneNumber)) {
                     showErrorDialog("오류", "올바른 전화번호를 입력해주세요.")
                     return@setOnClickListener
                 }
+
+                phoneNumber = "+82$phoneNumber"
 
                 edtPhoneNumber.isEnabled = false
                 edtPhoneNumber.setBackgroundColor(resources.getColor(android.R.color.darker_gray))
@@ -84,7 +84,6 @@ class MsgAuthFragment : Fragment() {
                         }
                     }
 
-
                     override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
                         this@MsgAuthFragment.verificationId = verificationId
                         edtAuthCode3.requestFocus()
@@ -109,40 +108,27 @@ class MsgAuthFragment : Fragment() {
                 val edtAuthCode3 = requireView().findViewById<EditText>(R.id.edtAuthCode3)
                 val authCode = edtAuthCode3.text.toString()
                 if (authCode.isNotEmpty()) {
-                    val credential = PhoneAuthProvider.getCredential(verificationId, authCode)
-                    signInWithPhoneAuthCredential(credential)
-                    Log.d(TAG, "입력된 인증번호: $authCode")
-                    Log.d(TAG, "Firebase 인증번호: $verificationId")
+                    if (verificationId.isNotEmpty()) { // verificationId가 제대로 설정되었는지 확인
+                        val credential = PhoneAuthProvider.getCredential(verificationId, authCode)
+                        signInWithPhoneAuthCredential(credential)
+                        Log.d(TAG, "입력된 인증번호: $authCode")
+                        Log.d(TAG, "Firebase 인증번호: $verificationId")
+                    } else {
+                        showErrorDialog("오류", "인증을 먼저 요청해주세요.")
+                    }
                 } else {
                     showErrorDialog("오류", "인증 번호를 입력해주세요.")
                 }
             }
-
-            loginViewModel.uploadSuccess.observe(viewLifecycleOwner, Observer { success ->
-                if (success) {
-                    val userPhoneNumber = auth.currentUser?.phoneNumber ?: ""
-                    loginViewModel.checkUserExistence(userPhoneNumber)
-                }
-            })
-
-            loginViewModel.uploadError.observe(viewLifecycleOwner, Observer { exception ->
-                Log.e(TAG, "Failed to upload user data to Firestore", exception)
-            })
-
-            loginViewModel.userExists.observe(viewLifecycleOwner, Observer { userData ->
-                if (userData != null) {
-                    showUserExistsDialog(userData)
-                } else {
-                    mainActivity.replaceFragment(MainActivity.SET_PROFILE_FRAGMENT, true, null)
-                }
-            })
 
             return root
         }
     }
 
     private fun isValidPhoneNumber(phoneNumber: String): Boolean {
-        return phoneNumber.startsWith("+82")
+        // 전화번호가 11자리이고, "010"으로 시작하며, 숫자 이외의 문자가 포함되지 않았는지 확인합니다.
+        val regex = Regex("^010\\d{8}\$")
+        return phoneNumber.matches(regex)
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
@@ -161,25 +147,14 @@ class MsgAuthFragment : Fragment() {
                             userLocation = ""
                         )
 
-                        loginViewModel.uploadUserData(userData)
+                        // 여기서 MainActivity로 화면 전환 요청
+                        mainActivity.replaceFragment(MainActivity.SET_PROFILE_FRAGMENT, true, null)
                     }
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     showErrorDialog("인증 실패", "전화번호 인증에 실패했습니다. \n 인증번호를 다시 확인 해 주세요.")
                 }
             }
-    }
-
-    private fun showUserExistsDialog(userData: LoginDataClass) {
-        val message = "기존에 가입된 회원입니다\n닉네임: ${userData.userNickname}\n동네: ${userData.userLocation}"
-        AlertDialog.Builder(requireContext())
-            .setTitle("기존 회원")
-            .setMessage(message)
-            .setPositiveButton("확인") { dialog, _ ->
-                dialog.dismiss()
-                mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
-            }
-            .show()
     }
 
     private fun showErrorDialog(title: String, message: String) {

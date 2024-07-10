@@ -97,7 +97,7 @@
         android:fontFamily="@font/soyo_maple_regular"
         android:padding="1dp"
         android:text="판매가"
-        android:textColor="#FFFFFF"
+        android:textColor="#272727"
         android:textSize="11dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/btnRowPostSaleType"

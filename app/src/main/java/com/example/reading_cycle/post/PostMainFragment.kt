@@ -1,6 +1,5 @@
 package com.example.reading_cycle.post
 
-import PostMainViewModel
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.os.Bundle
@@ -17,8 +16,7 @@ import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
-import com.example.reading_cycle.post.model.SaleBookData
-import com.example.reading_cycle.post.model.SwapBookData
+import com.example.reading_cycle.post.vm.PostMainViewModel
 import com.example.reading_cycle.post.vm.PostSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.firestore.DocumentSnapshot
