@@ -5,94 +5,81 @@
     android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:layout_editor_absoluteX="-1dp"
+    tools:layout_editor_absoluteY="-10dp">
 
     <TextView
         android:id="@+id/textOpponent"
-        android:textColor="#27713C"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="홍길동"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/soyo_maple_bold"
+        android:text="홍길동"
+        android:textColor="#27713C"
+        android:textSize="20dp"
         android:textStyle="bold"
-        android:textSize="28dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <ImageButton
-        tools:ignore="SpeakableTextPresentCheck"
         android:id="@+id/imgBtnQuit"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="26dp"
+        android:layout_height="28dp"
         android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
         android:background="@android:color/transparent"
+        android:onClick="onBackButtonClick"
+        android:src="@drawable/baseline_arrow_back_ios_28"
         app:layout_constraintBottom_toBottomOf="@+id/textOpponent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textOpponent"
-        android:src="@drawable/baseline_arrow_back_ios_28"
-        />
-
-
-    <ImageButton
-        tools:ignore="SpeakableTextPresentCheck"
-        android:id="@+id/imgBtnOption"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/baseline_settings_24"
-        app:layout_constraintBottom_toBottomOf="@+id/textOpponent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/imgBtnQuit" />
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
-        tools:ignore="SpeakableTextPresentCheck"
         android:id="@+id/textDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:textColor="#27713C"
         android:text="오늘"
+        android:textColor="#27713C"
         app:layout_constraintEnd_toStartOf="@+id/dividerRight"
         app:layout_constraintStart_toEndOf="@+id/dividerLeft"
-        app:layout_constraintTop_toBottomOf="@+id/textOpponent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/dividerLeft"
-        android:layout_width="0dp"
-        android:layout_height="4dp"
-        android:backgroundTint="#27713C"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:background="#B6B6B6"
-        app:layout_constraintBottom_toBottomOf="@+id/textDay"
-        app:layout_constraintEnd_toStartOf="@+id/textDay"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textDay">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/textOpponent"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dividerRight"
         android:layout_width="0dp"
         android:layout_height="4dp"
-        android:backgroundTint="#27713C"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:background="#B6B6B6"
+        android:backgroundTint="#27713C"
         app:layout_constraintBottom_toBottomOf="@+id/textDay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textDay"
-        app:layout_constraintTop_toTopOf="@+id/textDay">
+        app:layout_constraintTop_toTopOf="@+id/textDay"
+        app:layout_constraintVertical_bias="0.47">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dividerLeft"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginEnd="10dp"
+        android:background="#B6B6B6"
+        android:backgroundTint="#27713C"
+        app:layout_constraintBottom_toBottomOf="@+id/textDay"
+        app:layout_constraintEnd_toStartOf="@+id/textDay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textDay"
+        app:layout_constraintVertical_bias="0.47">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
