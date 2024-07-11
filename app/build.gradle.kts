@@ -73,10 +73,9 @@ android {
 
         // Firebase 관련
         implementation("com.google.firebase:firebase-database-ktx:21.0.0")
-        implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+        implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
         implementation("com.google.firebase:firebase-analytics")
         implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
-        implementation("com.google.firebase:firebase-bom")
         implementation("com.google.firebase:firebase-appcheck-playintegrity")
 
         // ImageSlider 라이브러리 추가

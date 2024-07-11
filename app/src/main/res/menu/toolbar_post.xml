@@ -4,8 +4,12 @@
 
     <item
         android:id="@+id/postMenuItemNotify"
-        android:icon="@drawable/baseline_notifications_none_40"
+        android:icon="@drawable/baseline_notifications_none_28"
         android:title="알림"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/postMenuItemPostDelete"
+        android:title="" />
 
 </menu>

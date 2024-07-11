@@ -1,4 +1,4 @@
-package com.example.reading_cycle.location.model
+package com.example.reading_cycle.location
 
 
 import android.Manifest
@@ -15,7 +15,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.databinding.FragmentLocSetBinding
+import com.example.reading_cycle.location.model.LocDataClass
 import com.example.reading_cycle.location.vm.LocViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -33,6 +35,7 @@ import java.util.*
 
 class LocSetFragment : Fragment(), OnMapReadyCallback {
 
+    private lateinit var mainActivity: MainActivity
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var _binding: FragmentLocSetBinding? = null
     private val binding get() = _binding!!
@@ -56,6 +59,9 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLocSetBinding.inflate(inflater, container, false)
+        mainActivity = activity as MainActivity
+        mainActivity.hideBottomNavigation()
+
         return binding.root
     }
 
