@@ -1,4 +1,4 @@
-package com.example.reading_cycle.Library.vm
+package com.example.reading_cycle.library.vm
 
 class LibraryViewModel {
 }

@@ -8,9 +8,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.reading_cycle.Library.LibraryMainFragment
+import com.example.reading_cycle.library.LibraryMainFragment
 import com.example.reading_cycle.Library.LibraryMyFragment
-import com.example.reading_cycle.chat.ui.ChatListFragment
+import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
 import com.example.reading_cycle.location.LocSetFragment
@@ -23,7 +23,10 @@ import com.example.reading_cycle.post.AddSwapPostFragment
 import com.example.reading_cycle.post.PostMainFragment
 import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
-import com.google.firebase.FirebaseApp
+import com.google.firebase.Firebase
+import com.google.firebase.appcheck.appCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
+import com.google.firebase.initialize
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,12 +56,15 @@ class MainActivity : AppCompatActivity() {
         val view = mainBinding.root
         setContentView(view)
         // Initialize Firebase
-        FirebaseApp.initializeApp(this)
+        Firebase.initialize(context = this)
+        Firebase.appCheck.installAppCheckProviderFactory(
+            PlayIntegrityAppCheckProviderFactory.getInstance(),
+        )
 
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
+        replaceFragment(POST_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->

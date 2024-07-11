@@ -147,7 +147,9 @@ class SalePostFragment : Fragment() {
     private fun loadImageView(imageView: ImageView, imageUrl: String?) {
         Glide.with(this@SalePostFragment)
             .load(imageUrl)
-            .centerCrop() // 이미지를 원본 비율을 유지하면서 이미지뷰를 꽉 채우도록 설정
+            .centerCrop()
+            .downsample(DownsampleStrategy.AT_MOST)
+            .format(DecodeFormat.PREFER_ARGB_8888)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(imageView)
     }
@@ -202,9 +204,9 @@ class SalePostPagerAdapter(private var images: List<String>) : RecyclerView.Adap
         val imageUrl = images[position]
         Glide.with(holder.itemView.context)
             .load(imageUrl)
-            .centerCrop() // 이미지를 원본 비율을 유지하면서 이미지뷰를 꽉 채우도록 설정
-            .downsample(DownsampleStrategy.NONE) // 다운샘플링 없음
-            .format(DecodeFormat.PREFER_ARGB_8888) // 고화질 포맷 사용
+            .centerCrop()
+            .downsample(DownsampleStrategy.AT_MOST)
+           .format(DecodeFormat.PREFER_ARGB_8888) // 고화질 포맷 사용
             .diskCacheStrategy(DiskCacheStrategy.ALL) // 캐시 전략 설정
             .into(holder.imageView)
     }

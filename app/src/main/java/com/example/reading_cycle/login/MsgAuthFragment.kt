@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.reading_cycle.MainActivity
@@ -14,14 +15,18 @@ import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentMsgAuthBinding
 import com.example.reading_cycle.login.model.LoginDataClass
 import com.example.reading_cycle.login.vm.LoginViewModel
+import com.google.firebase.Firebase
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.appcheck.appCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.initialize
 import java.util.concurrent.TimeUnit
 
 class MsgAuthFragment : Fragment() {
@@ -41,6 +46,7 @@ class MsgAuthFragment : Fragment() {
         mainActivity = activity as MainActivity
         fragmentMsgAuthBinding = FragmentMsgAuthBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
+
 
         fragmentMsgAuthBinding.run {
             toolbarMsgAuth.setNavigationOnClickListener {
@@ -69,8 +75,9 @@ class MsgAuthFragment : Fragment() {
                     override fun onVerificationFailed(e: FirebaseException) {
                         Log.w(TAG, "onVerificationFailed", e)
                         showErrorDialog("인증 실패", "전화번호 인증에 실패했습니다. \n 인증번호를 다시 확인 해 주세요.")
+
                         edtPhoneNumber.isEnabled = true
-                        edtPhoneNumber.setBackgroundColor(resources.getColor(android.R.color.transparent))
+                        edtPhoneNumber.background = ContextCompat.getDrawable(requireContext(), R.drawable.border_dark_brown)
 
                         // 자세한 오류 메시지 출력
                         if (e is FirebaseAuthInvalidCredentialsException) {
