@@ -39,9 +39,8 @@ class ChatRoomActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-
-
-
+        // 기본 ActionBar 숨깁니다.
+        supportActionBar?.hide()
 
         FirebaseApp.initializeApp(this)
         name = "이도형"

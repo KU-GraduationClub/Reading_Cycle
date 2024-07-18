@@ -13,6 +13,9 @@ class SplashActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(R.layout.activity_splash)
 
+        // 기본 ActionBar 숨깁니다.
+        supportActionBar?.hide()
+
         // postDelayed 대신에 postDelayed 함수를 사용하여 Handler를 대체합니다.
         window.decorView.postDelayed({
             // 이 부분에서 스플래시 스크린이 끝난 후 표시할 다음 화면의 액티비티로 이동합니다.
