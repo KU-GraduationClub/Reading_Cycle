@@ -218,7 +218,7 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
-        val geocoder = Geocoder(context, Locale.getDefault())
+        val geocoder = Geocoder(context, Locale("ko"))
         var addressText = ""
 
         try {
@@ -242,7 +242,7 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         // 위치 정보를 Firebase 데이터베이스에 저장
         database.child("locations").push().setValue(location)
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "위치가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "위치 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
