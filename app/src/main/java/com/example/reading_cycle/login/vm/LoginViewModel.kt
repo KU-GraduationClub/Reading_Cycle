@@ -3,8 +3,8 @@ package com.example.reading_cycle.login.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.reading_cycle.login.repository.LoginRepository
 import com.example.reading_cycle.login.model.LoginDataClass
+import com.example.reading_cycle.login.repository.LoginRepository
 
 class LoginViewModel : ViewModel() {
     private val repository = LoginRepository()
@@ -21,7 +21,6 @@ class LoginViewModel : ViewModel() {
         repository.uploadUserDataToFirestore(userData,
             onSuccess = {
                 _uploadSuccess.value = true
-                checkUserExistence(userData.userPhoneNumber)  // 업로드 성공 후 사용자 존재 여부 확인
             },
             onFailure = { exception ->
                 _uploadError.value = exception
