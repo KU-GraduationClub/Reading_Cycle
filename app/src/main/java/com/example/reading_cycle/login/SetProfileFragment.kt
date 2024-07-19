@@ -22,7 +22,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import java.util.UUID
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SetProfileFragment : Fragment() {
 
@@ -58,22 +59,26 @@ class SetProfileFragment : Fragment() {
                 if (isNicknameValid(userNickname)) {
                     if (selectedImageUri != null) {
                         uploadImageToFirebaseStorage { imageUrl ->
+                            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
                             val userData = LoginDataClass(
                                 userIdx = auth.currentUser?.uid ?: "",
                                 userNickname = userNickname,
                                 userPhoneNumber = userPhoneNumber,
                                 userProfileImage = imageUrl,
-                                userLocation = "" // 비어 있는 상태로 설정
+                                userLocation = "",
+                                regDate = currentDate // 가입일자 추가
                             )
                             loginViewModel.uploadUserData(userData)
                         }
                     } else {
+                        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
                         val userData = LoginDataClass(
                             userIdx = auth.currentUser?.uid ?: "",
                             userNickname = userNickname,
                             userPhoneNumber = userPhoneNumber,
                             userProfileImage = "",
-                            userLocation = "" // 비어 있는 상태로 설정
+                            userLocation = "",
+                            regDate = currentDate // 가입일자 추가
                         )
                         loginViewModel.uploadUserData(userData)
                     }
