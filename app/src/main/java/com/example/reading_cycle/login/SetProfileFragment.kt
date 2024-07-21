@@ -89,11 +89,18 @@ class SetProfileFragment : Fragment() {
 
             loginViewModel.uploadSuccess.observe(viewLifecycleOwner) { success ->
                 if (success) {
-                    val userIdx = auth.currentUser?.uid ?: ""
-                    val intent = Intent(mainActivity, MainActivity::class.java).apply {
-                        putExtra("userIdx", userIdx)
+                    // userIdx를 ViewModel에서 가져오기
+                    val userIdx = (activity as MainActivity).userViewModel.userIdx
+
+                    if (userIdx != null) {
+                        val bundle = Bundle().apply {
+                            putString("userIdx", userIdx)
+                        }
+                        mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, bundle)
+                    } else {
+                        // userIdx가 null일 경우 처리
+                        Log.e(TAG, "User index is null, cannot proceed to POST_MAIN_FRAGMENT.")
                     }
-                    mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
                 }
             }
 

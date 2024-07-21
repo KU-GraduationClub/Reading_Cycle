@@ -5,9 +5,13 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
@@ -32,6 +36,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
+    val userViewModel: UserViewModel by viewModels()
+
 
     companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
@@ -55,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         val view = mainBinding.root
         setContentView(view)
+
         // Initialize Firebase
         Firebase.initialize(context = this)
         Firebase.appCheck.installAppCheckProviderFactory(
@@ -64,7 +71,10 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment( LOGIN_MAIN_FRAGMENT, false, null)
+        // 인텐트를 통해 전달된 데이터 처리
+        userViewModel.userIdx = intent.getStringExtra("userIdx")
+
+        replaceFragment(LOGIN_MAIN_FRAGMENT, false)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -79,37 +89,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
-
         SystemClock.sleep(100)
 
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 
-
-            // 새로운 Fragment 담을 변수
-            newFragment = when(name){
-                POST_MAIN_FRAGMENT -> PostMainFragment()
-                ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
-                ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
-                SALE_POST_FRAGMENT -> SalePostFragment().apply {
-                    arguments = bundle
-                }
-                SWAP_POST_FRAGMENT -> SwapPostFragment().apply {
-                    arguments = bundle
-                }
-                LOC_SET_FRAGMENT -> LocSetFragment()
-                LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
-                MSG_AUTH_FRAGMENT -> MsgAuthFragment()
-                SET_PROFILE_FRAGMENT -> SetProfileFragment()
-                CHAT_LIST_FRAGMENT -> ChatListFragment()
-                LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
-                LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
-                FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
-                NOTIFY_FRAGMENT -> NotifyFragment()
-                else -> Fragment()
+        // 새로운 Fragment 담을 변수
+        newFragment = when (name) {
+            POST_MAIN_FRAGMENT -> PostMainFragment()
+            ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
+            ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
+            SALE_POST_FRAGMENT -> SalePostFragment().apply {
+                arguments = bundle
+            }
+            SWAP_POST_FRAGMENT -> SwapPostFragment().apply {
+                arguments = bundle
+            }
+            LOC_SET_FRAGMENT -> LocSetFragment()
+            LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
+            MSG_AUTH_FRAGMENT -> MsgAuthFragment()
+            SET_PROFILE_FRAGMENT -> SetProfileFragment()
+            CHAT_LIST_FRAGMENT -> ChatListFragment()
+            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
+            LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
+            FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+            NOTIFY_FRAGMENT -> NotifyFragment()
+            else -> Fragment()
         }
 
-        newFragment?.arguments = bundle
+        newFragment?.arguments = Bundle().apply {
+            putString("userIdx", userViewModel.userIdx)
+        }
 
         // Fragment 교체한다.
         fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
@@ -123,8 +133,6 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-
-
     // Fragment BackStack에서 제거.
     fun removeFragment(name: String) {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -134,6 +142,7 @@ class MainActivity : AppCompatActivity() {
     fun showBottomNavigation() {
         mainBinding.bottomNavigation.visibility = View.VISIBLE
     }
+
     fun hideBottomNavigation() {
         mainBinding.bottomNavigation.visibility = View.GONE
     }
@@ -146,7 +155,6 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(LOC_SET_FRAGMENT, true)
     }
 
-
     fun navigateToPostMainFragment() {
         replaceFragment(POST_MAIN_FRAGMENT, true)
     }
@@ -156,7 +164,7 @@ class MainActivity : AppCompatActivity() {
             putString("documentId", documentId)
             Log.d("MainActivity", "Navigating to SwapPostFragment with documentId: $documentId")
         }
-        replaceFragment(SWAP_POST_FRAGMENT, true)
+        replaceFragment(SWAP_POST_FRAGMENT, true, bundle)
     }
 
     fun navigateToSalePostFragment(documentId: String) {
@@ -166,4 +174,8 @@ class MainActivity : AppCompatActivity() {
         }
         replaceFragment(SALE_POST_FRAGMENT, true, bundle)
     }
+}
+
+class UserViewModel : ViewModel() {
+    var userIdx: String? = null
 }
