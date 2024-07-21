@@ -9,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
+import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
 import com.example.reading_cycle.post.vm.PostMainViewModel
@@ -29,7 +32,7 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var bottomSheetViewModel: PostSheetViewModel
     private val postMainViewModel: PostMainViewModel by viewModels()
-    private var userIdx: String? = null
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,12 +46,12 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         bottomSheetBehavior = BottomSheetBehavior.from(fragmentPostMainBinding.bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-        // ViewModel 초기화
-        bottomSheetViewModel = PostSheetViewModel()
+        // Bundle로부터 userIdx를 가져온다.
+        val userIdx = userViewModel.userIdx
+        Log.d("PostMainFragment", "User Index: $userIdx")
 
-        // userIdx를 Bundle로부터 가져오기
-        userIdx = arguments?.getString("userIdx")
-        Log.d(TAG, "Received userIdx: $userIdx")
+        // ViewModel 초기화
+        bottomSheetViewModel = ViewModelProvider(this)[PostSheetViewModel::class.java]
 
         // 어댑터 초기화
         postMainAdapter = PostMainAdapter(this)
@@ -74,7 +77,6 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
                     mainActivity.navigateToNotifyFragment()
                     true
                 }
-
                 else -> false
             }
         }
@@ -102,6 +104,7 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         fragmentPostMainBinding.conPostMainSort.setOnClickListener {
             showPopupMenu(it)
         }
+
         // 이미지 버튼 클릭 이벤트 처리
         fragmentPostMainBinding.imgBtnPostMain.setOnClickListener {
             showPostTypeDialog()
@@ -109,7 +112,6 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
 
         return fragmentPostMainBinding.root
     }
-
 
     private fun showPopupMenu(view: View) {
         val popup = PopupMenu(requireContext(), view)
@@ -124,25 +126,21 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
                     updateSortText("최신 순")
                     true
                 }
-
                 R.id.menuItemSortByDistance -> {
                     // TODO: 거리순 정렬에 대한 로직을 추가.
                     updateSortText("거리 순")
                     true
                 }
-
                 R.id.menuItemSortBySwap -> {
                     // TODO: 교환용 정렬에 대한 로직을 추가.
                     updateSortText("교환 옵션")
                     true
                 }
-
                 R.id.menuItemSortBySale -> {
                     // TODO: 판매용 정렬에 대한 로직을 추가.
                     updateSortText("판매 옵션")
                     true
                 }
-
                 else -> false
             }
         }
@@ -154,7 +152,6 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         // 정렬 텍스트 업데이트
         fragmentPostMainBinding.textPostMainSort.text = sortText
     }
-
 
     private fun showPostTypeDialog() {
         val builder = AlertDialog.Builder(requireContext())
@@ -169,7 +166,6 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
                     MainActivity.ADD_SWAP_POST_FRAGMENT,
                     true
                 )
-
                 1 -> (requireActivity() as MainActivity).replaceFragment(
                     MainActivity.ADD_SALE_POST_FRAGMENT,
                     true
@@ -179,7 +175,6 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         val dialog = builder.create()
         dialog.show()
     }
-
 
     // RecyclerView 아이템 클릭 처리
     override fun onSwapItemClick(document: DocumentSnapshot) {
@@ -191,5 +186,4 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         val documentId = document.id
         mainActivity.navigateToSalePostFragment(documentId)
     }
-
 }
