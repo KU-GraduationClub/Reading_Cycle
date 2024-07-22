@@ -5,9 +5,13 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
@@ -32,6 +36,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
+    val userViewModel: UserViewModel by viewModels()
+
 
     companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
@@ -55,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         val view = mainBinding.root
         setContentView(view)
+
         // Initialize Firebase
         Firebase.initialize(context = this)
         Firebase.appCheck.installAppCheckProviderFactory(
@@ -64,7 +71,10 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
+        // 인텐트를 통해 전달된 데이터 처리
+        userViewModel.userIdx = intent.getStringExtra("userIdx")
+
+        replaceFragment(LOGIN_MAIN_FRAGMENT, false)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -107,7 +117,9 @@ class MainActivity : AppCompatActivity() {
             else -> Fragment()
         }
 
-        newFragment?.arguments = bundle
+        newFragment?.arguments = Bundle().apply {
+            putString("userIdx", userViewModel.userIdx)
+        }
 
         // Fragment 교체한다.
         fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
@@ -162,4 +174,8 @@ class MainActivity : AppCompatActivity() {
         }
         replaceFragment(SALE_POST_FRAGMENT, true, bundle)
     }
+}
+
+class UserViewModel : ViewModel() {
+    var userIdx: String? = null
 }

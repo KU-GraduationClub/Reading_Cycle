@@ -9,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
+import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
 import com.example.reading_cycle.post.vm.PostMainViewModel
@@ -29,7 +32,7 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var bottomSheetViewModel: PostSheetViewModel
     private val postMainViewModel: PostMainViewModel by viewModels()
-    private var userIdx: String? = null
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,12 +46,12 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         bottomSheetBehavior = BottomSheetBehavior.from(fragmentPostMainBinding.bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-        // ViewModel 초기화
-        bottomSheetViewModel = PostSheetViewModel()
+        // Bundle로부터 userIdx를 가져온다.
+        val userIdx = userViewModel.userIdx
+        Log.d("PostMainFragment", "User Index: $userIdx")
 
-        // userIdx를 Bundle로부터 가져오기
-        userIdx = arguments?.getString("userIdx")
-        Log.d(TAG, "Received userIdx: $userIdx")
+        // ViewModel 초기화
+        bottomSheetViewModel = ViewModelProvider(this)[PostSheetViewModel::class.java]
 
         // 어댑터 초기화
         postMainAdapter = PostMainAdapter(this)

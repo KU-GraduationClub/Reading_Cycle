@@ -145,30 +145,21 @@ class MsgAuthFragment : Fragment() {
     private fun checkIfUserExists(phoneNumber: String) {
         loginViewModel.checkUserExistence(phoneNumber)
         loginViewModel.userExists.observe(viewLifecycleOwner) { userData ->
+            val userIdx = auth.currentUser?.uid ?: ""
+            // Set userIdx in ViewModel
+            (activity as MainActivity).userViewModel.userIdx = userIdx
+
             if (userData != null) {
-                showExistingUserDialog(userData)
-                val userIdx = auth.currentUser?.uid ?: ""
-                val intent = Intent(mainActivity, MainActivity::class.java).apply {
-                    putExtra("userIdx", userIdx)
-                }
-                mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
+                // 사용자 존재 시 MainActivity의 프래그먼트 교체 메소드 호출
+                (activity as MainActivity).replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true)
             } else {
-                mainActivity.replaceFragment(MainActivity.SET_PROFILE_FRAGMENT, true, null)
+                // 사용자 없음 시 MainActivity의 프래그먼트 교체 메소드 호출
+                (activity as MainActivity).replaceFragment(MainActivity.SET_PROFILE_FRAGMENT, true)
             }
         }
         loginViewModel.uploadError.observe(viewLifecycleOwner) { exception ->
             Log.e(TAG, "Failed to check user existence", exception)
         }
-    }
-
-    private fun showExistingUserDialog(userData: LoginDataClass) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("기존가입 회원입니다!")
-            .setMessage("닉네임: ${userData.userNickname}\n가입일자: ${userData.regDate}")
-            .setPositiveButton("확인") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
     }
 
     private fun showErrorDialog(title: String, message: String) {
