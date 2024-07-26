@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         // 인텐트를 통해 전달된 데이터 처리
         userViewModel.userIdx = intent.getStringExtra("userIdx")
 
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false)
+        replaceFragment(POST_MAIN_FRAGMENT, false)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -117,7 +117,9 @@ class MainActivity : AppCompatActivity() {
             else -> Fragment()
         }
 
-        newFragment?.arguments = Bundle().apply {
+        newFragment?.arguments = newFragment?.arguments?.apply {
+            putString("userIdx", userViewModel.userIdx)
+        } ?: Bundle().apply {
             putString("userIdx", userViewModel.userIdx)
         }
 

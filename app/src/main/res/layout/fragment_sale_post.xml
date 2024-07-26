@@ -42,6 +42,7 @@
                     android:id="@+id/iconSalePostTitle"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_marginLeft="1dp"
                     android:gravity="center"
                     android:src="@drawable/baseline_currency_exchange_40_red" />
 
@@ -50,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginLeft="7dp"
                     android:layout_marginTop="1dp"
                     android:fontFamily="@font/soyo_maple_bold"
                     android:gravity="center"
@@ -77,7 +78,7 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayoutSalePost" />
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/scrollViewSalePost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="48dp"

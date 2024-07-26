@@ -156,9 +156,9 @@ class SalePostFragment : Fragment() {
 
     private fun showSalePostDetailsDialog(title: String, author: String, description: String) {
         dialogPostDetailsTextBinding = DialogPostDetailsTextBinding.inflate(layoutInflater)
-        dialogPostDetailsTextBinding.dialogSalePostTitle.text = title
-        dialogPostDetailsTextBinding.dialogSalePostAuthor.text = author
-        dialogPostDetailsTextBinding.dialogSalePostDescription.text = description
+        dialogPostDetailsTextBinding.dialogPostTitle.text = title
+        dialogPostDetailsTextBinding.dialogPostAuthor.text = author
+        dialogPostDetailsTextBinding.dialogPostDescription.text = description
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogPostDetailsTextBinding.root)

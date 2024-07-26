@@ -19,7 +19,9 @@ import com.example.reading_cycle.R
 import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
+import com.example.reading_cycle.post.repository.PostMainRepository
 import com.example.reading_cycle.post.vm.PostMainViewModel
+import com.example.reading_cycle.post.vm.PostMainViewModelFactory
 import com.example.reading_cycle.post.vm.PostSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.firestore.DocumentSnapshot
@@ -31,7 +33,9 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
     private lateinit var postMainAdapter: PostMainAdapter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var bottomSheetViewModel: PostSheetViewModel
-    private val postMainViewModel: PostMainViewModel by viewModels()
+    private val postMainViewModel: PostMainViewModel by viewModels {
+        PostMainViewModelFactory(PostMainRepository())
+    }
     private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -62,11 +66,11 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         }
 
         // LiveData 관찰
-        postMainViewModel.getSalePostsLiveData().observe(viewLifecycleOwner, Observer { salePosts ->
+        postMainViewModel.salePosts.observe(viewLifecycleOwner, Observer { salePosts ->
             postMainAdapter.setSalePosts(salePosts)
         })
 
-        postMainViewModel.getSwapPostsLiveData().observe(viewLifecycleOwner, Observer { swapPosts ->
+        postMainViewModel.swapPosts.observe(viewLifecycleOwner, Observer { swapPosts ->
             postMainAdapter.setSwapPosts(swapPosts)
         })
 
