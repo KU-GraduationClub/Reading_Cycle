@@ -11,9 +11,11 @@ import com.google.firebase.firestore.firestore
 class AddSalePostRepository {
     private val db = Firebase.firestore
 
-    fun uploadSaleDataToFirebase(saleData: SaleBookData): Task<DocumentReference> {
-        return db.collection("salePosts")
-            .add(saleData) // saleData 객체를 Firestore에 추가
+    fun uploadSaleDataToFirebase(userId: String, saleData: SaleBookData): Task<DocumentReference> {
+        return db.collection("users")
+            .document(userId)
+            .collection("salePosts")
+            .add(saleData)
             .addOnSuccessListener { documentReference ->
                 Log.d("Firestore", "DocumentSnapshot added with ID: ${documentReference.id}")
             }

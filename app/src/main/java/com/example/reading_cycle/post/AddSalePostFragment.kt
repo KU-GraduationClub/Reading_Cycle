@@ -26,10 +26,12 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
+import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.FragmentAddSalePostBinding
 import com.example.reading_cycle.post.model.BookState
 import com.example.reading_cycle.post.model.BookType
@@ -58,6 +60,7 @@ class AddSalePostFragment : Fragment() {
     private var selectedBookType: BookType? = null
     private var selectedBookState: BookState? = null
     private val selectedImages = mutableListOf<Bitmap>()
+    private val userViewModel: UserViewModel by activityViewModels()
 
     private val cardViewIds = listOf(
         R.id.cardViewAddSalePostImg1,
@@ -79,6 +82,11 @@ class AddSalePostFragment : Fragment() {
         mainActivity = activity as MainActivity
         fragmentAddSalePostBinding = FragmentAddSalePostBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
+
+        // Bundle로부터 userIdx를 가져온다.
+        val userIdx = userViewModel.userIdx
+        Log.d("PostMainFragment", "User Index: $userIdx")
+
         // ViewModelFactory 초기화
         val factory = AddSalePostViewModelFactory(AddSalePostRepository())
         // ViewModelProvider를 통해 ViewModel 인스턴스를 가져옴
@@ -135,15 +143,16 @@ class AddSalePostFragment : Fragment() {
                     val colorStateList = ColorStateList.valueOf(Color.GRAY)
                     fragmentAddSalePostBinding.btnAddSalePostComplete.backgroundTintList = colorStateList
 
+                    val userId = userViewModel.userIdx ?: throw IllegalStateException("유저 ID를 가져올 수 없습니다.")
                     val saleData = collectInputData()
-                    viewModel.uploadSalePost(saleData)
+                    viewModel.uploadSalePost(userId, saleData)
                 } catch (e: IllegalStateException) {
                     showSnackbar(e.message ?: "빈 칸 없이 작성해주세요.")
                 } catch (e: Exception) {
                     showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
                 } finally {
                     fragmentAddSalePostBinding.btnAddSalePostComplete.isEnabled = true
-                    fragmentAddSalePostBinding.btnAddSalePostComplete.backgroundTintList  = ColorStateList.valueOf(Color.parseColor("#CF8127"))
+                    fragmentAddSalePostBinding.btnAddSalePostComplete.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CF8127"))
                 }
             }
         }
