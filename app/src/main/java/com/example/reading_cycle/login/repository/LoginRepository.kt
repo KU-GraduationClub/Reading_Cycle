@@ -32,4 +32,23 @@ class LoginRepository {
                 onError(exception)
             }
     }
+
+    fun checkIfNicknameExists(
+        nickname: String,
+        onNicknameExists: () -> Unit,
+        onNicknameNotExists: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        db.collection("users").whereEqualTo("userNickname", nickname).get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    onNicknameExists()
+                } else {
+                    onNicknameNotExists()
+                }
+            }
+            .addOnFailureListener { exception ->
+                onError(exception)
+            }
+    }
 }
