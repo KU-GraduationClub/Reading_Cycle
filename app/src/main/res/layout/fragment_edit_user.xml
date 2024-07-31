@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".login.EditUserFragment">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -27,7 +26,6 @@
             android:padding="16dp"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Profile Image and Change Button -->
     <LinearLayout
         android:id="@+id/profile_layout"
         android:layout_width="match_parent"
@@ -52,10 +50,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:text="프로필 이미지 변경" />
+            android:text="프로필 이미지 변경"
+            />
     </LinearLayout>
 
-    <!-- Nickname EditText -->
     <EditText
         android:id="@+id/edit_nickname"
         android:layout_width="match_parent"
@@ -71,16 +69,4 @@
         android:padding="12dp"
         android:textSize="16sp" />
 
-    <!-- ListView for other user information -->
-    <ListView
-        android:id="@+id/list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/edit_nickname"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
 </RelativeLayout>
