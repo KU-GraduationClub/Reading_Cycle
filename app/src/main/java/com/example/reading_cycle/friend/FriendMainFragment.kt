@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentFriendMainBinding
@@ -107,7 +108,8 @@ class FriendMainAdapter(
             Glide.with(binding.root)
                 .load(friend.userProfileImage)
                 .placeholder(R.drawable.baseline_person_30) // 로딩 중에 표시할 이미지
-                .error(R.drawable.baseline_person_40) // 로드 실패 시 표시할 이미지
+                .error(R.drawable.baseline_person_30)
+                .transform(CircleCrop())
                 .into(binding.imgFriendProfile)
 
             binding.BtnSetProfile.setOnClickListener {

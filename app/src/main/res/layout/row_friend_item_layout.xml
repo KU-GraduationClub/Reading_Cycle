@@ -38,6 +38,8 @@
         android:layout_height="40dp"
         android:layout_marginStart="7dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/border_add_post_green"
+        android:padding="0.7dp"
         app:layout_constraintStart_toEndOf="@+id/imgFriendStar"
         app:layout_constraintTop_toTopOf="parent" />
 

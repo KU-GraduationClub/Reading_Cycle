@@ -1,4 +1,4 @@
-package com.example.reading_cycle.Library.repository
+package com.example.reading_cycle.library.repository
 
 class LibraryRepository {
 }

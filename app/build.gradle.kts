@@ -68,13 +68,8 @@ android {
 
         // Map 관련
         implementation("com.google.android.gms:play-services-maps:18.2.0")
-        implementation("com.google.android.gms:play-services-location:21.3.0")
-        implementation("androidx.fragment:fragment-ktx:1.7.1")
-        implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
-        implementation("com.squareup.retrofit2:retrofit:2.9.0")
-        implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-        implementation ("com.google.code.gson:gson:2.8.6")
-        implementation ("com.google.android.libraries.places:places:2.7.0")
+        implementation("com.google.android.gms:play-services-location:21.1.0")
+        implementation("androidx.fragment:fragment-ktx:1.6.2")
 
         // Firebase 관련
         implementation("com.google.firebase:firebase-database-ktx:21.0.0")
@@ -82,5 +77,14 @@ android {
         implementation("com.google.firebase:firebase-analytics")
         implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
         implementation("com.google.firebase:firebase-auth:23.0.0")
+
+        // ImageSlider 라이브러리 추가
+        implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+
     }
+}
+dependencies {
+    implementation("com.google.firebase:firebase-database:21.0.0")
+    implementation("com.google.firebase:firebase-auth:23.0.0")
 }

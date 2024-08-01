@@ -1,4 +1,4 @@
-package com.example.reading_cycle.location.model
+package com.example.reading_cycle.location
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -14,7 +14,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.databinding.FragmentLocSetBinding
+import com.example.reading_cycle.location.model.LocDataClass
+import com.example.reading_cycle.location.vm.LocViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,6 +34,7 @@ import java.util.*
 
 class LocSetFragment : Fragment(), OnMapReadyCallback {
 
+    private lateinit var mainActivity: MainActivity
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var _binding: FragmentLocSetBinding? = null
     private val binding get() = _binding!!
@@ -53,7 +57,11 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        mainActivity = activity as MainActivity
         _binding = FragmentLocSetBinding.inflate(inflater, container, false)
+        mainActivity.hideBottomNavigation()
+
+
         return binding.root
     }
 
@@ -62,8 +70,6 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
 
         // Firebase 데이터베이스 초기화
         database = FirebaseDatabase.getInstance().reference
-
-
 
         // SupportMapFragment 가져오기 및 지도 준비 완료 시 콜백 받기
         val mapFragment =
@@ -79,7 +85,7 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         }
 
         binding.btnLocSetFinish.setOnClickListener {
-            saveCurrentLocationToDatabase()
+            Toast.makeText(requireContext(), "작성을 완료했습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -122,7 +128,6 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
             ) == PackageManager.PERMISSION_GRANTED -> {
                 getCurrentLocation()
             }
-
             else -> {
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
@@ -242,23 +247,6 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
                 Toast.makeText(requireContext(), "위치 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
     }
-
-    private fun saveCurrentLocationToDatabase() {
-        val currentLocation = binding.textLocSetNow.text.toString()
-        if (currentLocation.isNotEmpty()) {
-            database.child("locations").push().setValue(currentLocation)
-                .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "현재 위치가 저장되었습니다.", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(requireContext(), "현재 위치 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(requireContext(), "현재 위치가 설정되지 않았습니다.", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
 
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1

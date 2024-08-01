@@ -24,6 +24,7 @@ class SwapPostFragment : Fragment() {
     private var documentId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         arguments?.let {
