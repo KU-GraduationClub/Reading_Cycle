@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleTitle" />
 
     <TextView
-        android:id="@+id/textRowPostSaleWriter"
+        android:id="@+id/textRowPostSaleAuthor"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleTitle" />
 
     <Button
-        android:id="@+id/btnRowPostSaleType1"
+        android:id="@+id/btnRowPostSaleType"
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="17dp"
@@ -83,7 +83,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textRowPostSale1" />
 
     <Button
-        android:id="@+id/btnRowPostSaleType2"
+        android:id="@+id/btnRowPostSalePrice"
         android:layout_width="80dp"
         android:layout_height="43dp"
         android:layout_marginStart="4dp"
@@ -98,7 +98,7 @@
         android:textSize="10dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imgRowPostSaleType"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleWriter" />
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleAuthor" />
 
     <ImageView
         android:id="@+id/imgRowPostSaleType"
@@ -106,8 +106,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="13dp"
-        app:layout_constraintStart_toEndOf="@+id/btnRowPostSaleType1"
-        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleWriter"
+        app:layout_constraintStart_toEndOf="@+id/btnRowPostSaleType"
+        app:layout_constraintTop_toBottomOf="@+id/textRowPostSaleAuthor"
         app:srcCompat="@drawable/baseline_currency_exchange_40_red" />
 
     <View
@@ -135,7 +135,7 @@
         app:layout_constraintTop_toTopOf="@+id/BorderRowPostSale1" />
 
     <TextView
-        android:id="@+id/textRowPostSalePrice"
+        android:id="@+id/textRowPostSaleRegPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -184,55 +184,67 @@
         app:layout_constraintBottom_toBottomOf="@+id/BorderRowPostSale1"
         app:layout_constraintEnd_toEndOf="@+id/BorderRowPostSale1" />
 
-    <View
-        android:id="@+id/BorderRowPostSale2"
-        android:layout_width="95dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/border_post_main"
+    <FrameLayout
+        android:id="@+id/FrameRowPostSale"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BorderRowPostSale1" />
+        app:layout_constraintTop_toBottomOf="@+id/BorderRowPostSale1">
 
-    <ImageView
-        android:id="@+id/imgRowPostSaleUser"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="@+id/BorderRowPostSale2"
-        app:layout_constraintTop_toTopOf="@+id/BorderRowPostSale2"
-        app:srcCompat="@drawable/baseline_account_circle_24" />
+        <View
+            android:id="@+id/BorderRowPostSale2"
+            android:layout_width="95dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/border_post_main"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/BorderRowPostSale1" />
 
-    <TextView
-        android:id="@+id/textRowPostSaleUser"
-        android:layout_width="61dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:gravity="center|left"
-        android:text="유저 이름"
-        android:textColor="#000000"
-        android:textSize="10dp"
-        app:layout_constraintStart_toEndOf="@+id/imgRowPostSaleUser"
-        app:layout_constraintTop_toTopOf="@+id/BorderRowPostSale2" />
+        <ImageView
+            android:id="@+id/imgRowPostSaleUser"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@+id/BorderRowPostSale2"
+            app:layout_constraintTop_toTopOf="@+id/BorderRowPostSale2"
+            app:srcCompat="@drawable/baseline_account_circle_24" />
 
-    <Button
-        android:id="@+id/btnRowPostSaleUser"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:backgroundTint="#27713C"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:gravity="center"
-        android:padding="1dp"
-        android:text="님의 라이브러리"
-        android:textColor="#FFFFFF"
-        android:textSize="8dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/BorderRowPostSale2"
-        app:layout_constraintEnd_toEndOf="@+id/BorderRowPostSale2"
-        app:layout_constraintStart_toStartOf="@+id/BorderRowPostSale2" />
+        <TextView
+            android:id="@+id/textRowPostSaleUser"
+            android:layout_width="60dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="11dp"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:gravity="center|left"
+            android:text="유저 이름"
+            android:textColor="#000000"
+            android:textSize="9dp"
+            app:layout_constraintStart_toEndOf="@+id/imgRowPostSaleUser"
+            app:layout_constraintTop_toTopOf="@+id/BorderRowPostSale2" />
+
+        <Button
+            android:id="@+id/btnRowPostSaleUser"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="25dp"
+            android:backgroundTint="#27713C"
+            android:clickable="false"
+            android:fontFamily="@font/soyo_maple_regular"
+            android:gravity="center"
+            android:padding="1dp"
+            android:text="라이브러리 가기 >"
+            android:textColor="#FFFFFF"
+            android:textSize="8dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/BorderRowPostSale2"
+            app:layout_constraintEnd_toEndOf="@+id/BorderRowPostSale2"
+            app:layout_constraintStart_toStartOf="@+id/BorderRowPostSale2" />
+    </FrameLayout>
 
     <View
         android:id="@+id/dividerRowPostMain"

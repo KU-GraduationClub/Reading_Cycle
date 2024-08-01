@@ -1,9 +1,9 @@
 package com.example.reading_cycle.location.repository
 
-<<<<<<< HEAD
+
 import android.content.Context
 import android.widget.Toast
-import com.example.reading_cycle.LocDataClass
+import com.example.reading_cycle.location.model.LocDataClass
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 

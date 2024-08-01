@@ -4,124 +4,161 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:transitionGroup="true"
-    android:visibility="visible"
     tools:context=".MainActivity">
 
 
+
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/AppBarLayoutPostMain"
+        android:id="@+id/appBarLayoutLocSet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint=" 현재주소를 입력하시오."
+        android:layout_height="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <View
-            android:id="@+id/divider"
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarLayoutLocSet"
+            style="@style/Theme.Reading_cycle.ToolbarTheme"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#27713C" />
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:elevation="0dp"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
+            app:layout_constraintEnd_toEndOf="@id/dividerLocSet"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/toolbar_loc">
+
+            <ImageButton
+                android:id="@+id/btnLocSetback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/border_dark_brown"
+                android:contentDescription="뒤로 가기 버튼"
+                android:src="@drawable/baseline_arrow_back_ios_28"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/toolbarTitleLocSet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/soyo_maple_bold"
+                android:gravity="center"
+                android:text="내 위치 설정"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/theme_green"
+                android:textSize="16dp" />
+
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/map_view"
-        android:name="com.google.android.gms.maps.MapFragment"
+    <View
+       android:id="@+id/dividerLocSet"
+        android:layout_width="wrap_content"
+       android:layout_height="1.5dp"
+       android:background="#B2C8AA"
+       android:elevation="0dp"
+      app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@+id/appBarLayoutLocSet" />
+
+
+    <fragment
+        android:id="@+id/mapViewLocSet"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_height="350dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutLocSet"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <EditText
-        android:id="@+id/edit_firstaddress"
-        android:layout_width="330dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/border"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:hint=" 현재주소를 입력하시오."
-        android:textColor="@color/theme_brown"
-        android:textColorHint="@color/theme_brown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map_view"
-        tools:ignore="MissingConstraints" />
+    <ImageButton
+        android:id="@+id/nowlocationLocSet"
+        android:layout_width="88dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/baseline_location_on_40"
+        app:layout_constraintEnd_toEndOf="@id/mapViewLocSet"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
 
-    <EditText
-        android:id="@+id/edit_lastaddress"
-        android:layout_width="330dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/border"
+    <TextView
+        android:id="@+id/textLocSet1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/soyo_maple_bold"
+        android:text="현재 위치"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapViewLocSet" />
+
+    <TextView
+        android:id="@+id/textLocSetNow"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/border_dark_brown"
         android:fontFamily="@font/soyo_maple_regular"
-        android:hint=" 바꿀주소를 입력하시오."
-        android:textColor="#6A3F0D"
-        android:textColorHint="@color/theme_brown"
+        android:gravity="center|start"
+        android:padding="5dp"
+        android:paddingStart="10dp"
+        android:text="현재 위치"
+        android:textColor="#373737"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_firstaddress"
+        app:layout_constraintTop_toBottomOf="@+id/textLocSet1"
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/btn_finsh"
-        android:layout_width="370dp"
+        android:id="@+id/btnLocSetFinish"
+        android:layout_width="0dp"
         android:layout_height="63dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="91dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="#CF8127"
         android:elevation="3dp"
-        android:fontFamily="@font/soyo_maple_regular"
+        android:fontFamily="@font/soyo_maple_bold"
         android:padding="1dp"
         android:text="작성 완료"
         android:textColor="#F9FBF4"
         android:textSize="23dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.39"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="NotSibling,UnknownId" />
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/ToolBarLayoutPostMain"
-        style="@style/Theme.Reading_cycle.ToolbarTheme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/toolbar_post_main"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="2dp">
-
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#27713C" />
+        app:layout_constraintTop_toBottomOf="@+id/textLocSetNow"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="NotSibling,UnknownId" />
 
 
-    </com.google.android.material.appbar.MaterialToolbar>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

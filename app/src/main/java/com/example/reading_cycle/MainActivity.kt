@@ -12,14 +12,14 @@ import com.example.reading_cycle.Library.LibraryMyFragment
 import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
-import com.example.reading_cycle.login.MsgAuthFragment
-import com.example.reading_cycle.login.SetProfileFragment
-import com.example.reading_cycle.location.LocSetFragment
+import com.example.reading_cycle.location.model.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
+import com.example.reading_cycle.login.MsgAuthFragment
+//import com.example.reading_cycle.login.SetProfileFragment
 import com.example.reading_cycle.notify.NotifyFragment
 import com.example.reading_cycle.post.AddSalePostFragment
 import com.example.reading_cycle.post.AddSwapPostFragment
-import com.example.reading_cycle.post.PostMainFragment
+//import com.example.reading_cycle.post.PostMainFragment
 import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
 import com.google.firebase.FirebaseApp
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
+        replaceFragment(LOC_SET_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
             // 새로운 Fragment 담을 변수
             newFragment = when(name){
-                POST_MAIN_FRAGMENT -> PostMainFragment()
+//                POST_MAIN_FRAGMENT -> PostMainFragment()
                 ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
                 ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
                 SALE_POST_FRAGMENT -> SalePostFragment()
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                 LOC_SET_FRAGMENT -> LocSetFragment()
                 LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
                 MSG_AUTH_FRAGMENT -> MsgAuthFragment()
-                SET_PROFILE_FRAGMENT -> SetProfileFragment()
+//                SET_PROFILE_FRAGMENT -> SetProfileFragment()
                 CHAT_LIST_FRAGMENT -> ChatListFragment()
                 LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
                 LIBRARY_MY_FRAGMENT -> LibraryMyFragment()

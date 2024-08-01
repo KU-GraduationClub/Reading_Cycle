@@ -15,7 +15,7 @@ class ChatListAdapter(private val chatList: List<ChatItem>, private val listener
         fun bind(chatItem: ChatItem) {
             binding.apply {
                 imgProfile.setImageResource(chatItem.profileImage)
-                textUsername.text = chatItem.name
+                textUsername.text = chatItem.name.toString()
                 textLastMessage.text = chatItem.lastMessage
                 textLastMessageTime.text = chatItem.lastMessageTime
             }
