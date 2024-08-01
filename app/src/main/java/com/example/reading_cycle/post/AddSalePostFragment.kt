@@ -83,13 +83,11 @@ class AddSalePostFragment : Fragment() {
         fragmentAddSalePostBinding = FragmentAddSalePostBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
 
-        // Bundle로부터 userIdx를 가져온다.
         val userIdx = userViewModel.userIdx
         Log.d("PostMainFragment", "User Index: $userIdx")
 
         // ViewModelFactory 초기화
         val factory = AddSalePostViewModelFactory(AddSalePostRepository())
-        // ViewModelProvider를 통해 ViewModel 인스턴스를 가져옴
         viewModel = ViewModelProvider(this, factory)[AddSalePostViewModel::class.java]
 
         // 뒤로 가기 버튼 클릭 리스너

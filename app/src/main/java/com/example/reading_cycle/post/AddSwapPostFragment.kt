@@ -26,10 +26,12 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
+import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.FragmentAddSwapPostBinding
 import com.example.reading_cycle.post.model.BookState
 import com.example.reading_cycle.post.model.BookType
@@ -58,6 +60,7 @@ class AddSwapPostFragment : Fragment() {
     private var selectedBookType2: BookType? = null
     private var selectedBookState: BookState? = null
     private val selectedImages = mutableListOf<Bitmap>()
+    private val userViewModel: UserViewModel by activityViewModels()
 
     private val cardViewIds = listOf(
         R.id.cardViewAddSwapPostImg1,
@@ -80,6 +83,10 @@ class AddSwapPostFragment : Fragment() {
         fragmentAddSwapPostBinding = FragmentAddSwapPostBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
 
+        val userIdx = userViewModel.userIdx
+        Log.d("PostMainFragment", "User Index: $userIdx")
+
+        // ViewModelFactory 초기화
         val factory = AddSwapPostViewModelFactory(AddSwapPostRepository())
         viewModel = ViewModelProvider(this, factory)[AddSwapPostViewModel::class.java]
 
@@ -135,8 +142,9 @@ class AddSwapPostFragment : Fragment() {
                     val colorStateList = ColorStateList.valueOf(Color.GRAY)
                     fragmentAddSwapPostBinding.btnAddSwapPostComplete.backgroundTintList = colorStateList
 
+                    val userId = userViewModel.userIdx ?: throw IllegalStateException("유저 ID를 가져올 수 없습니다.")
                     val swapData = collectInputData()
-                    viewModel.uploadSwapPost(swapData)
+                    viewModel.uploadSwapPost(userId, swapData)
                 } catch (e: IllegalStateException) {
                     showSnackbar(e.message ?: "빈 칸 없이 작성해주세요.")
                 } catch (e: Exception) {
