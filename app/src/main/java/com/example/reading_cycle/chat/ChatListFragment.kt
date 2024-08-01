@@ -1,5 +1,6 @@
-package com.example.reading_cycle.chat
+package com.example.reading_cycle.chat.ui
 
+import ChatListAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +11,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
-import com.example.reading_cycle.UserViewModel
-import com.example.reading_cycle.chat.adapter.ChatListAdapter
 import com.example.reading_cycle.chat.model.ChatItem
 import com.example.reading_cycle.chat.model.ChatRoom
 import com.example.reading_cycle.chat.vm.ChatRoomActivity
@@ -25,7 +23,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
@@ -35,17 +32,16 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
     private lateinit var chatListAdapter: ChatListAdapter
     private val chatRoomList = mutableListOf<ChatRoom>()
     private lateinit var database: DatabaseReference
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val userViewModel: UserViewModel by activityViewModels()
 
-    // 사용자 닉네임을 위한 프로퍼티 추가
-    private var userNickname: String? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         mainActivity = activity as MainActivity
         fragmentChatListBinding = FragmentChatListBinding.inflate(inflater, container, false)
         mainActivity.showBottomNavigation()
-        database = Firebase.database.reference.child("chatRooms") // Firebase 초기화
+
+        database = Firebase.database.reference.child("chatRooms")
 
         // 초기 빈 어댑터 설정
         chatListAdapter = ChatListAdapter(emptyList(), this)
@@ -58,9 +54,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 사용자 닉네임을 Firestore에서 가져오기
-        getUserNickname(userViewModel.userIdx ?: "")
-
+        // roomaddbtn 클릭 리스너 설정
         fragmentChatListBinding.roomaddbtn.setOnClickListener {
             showAddRoomDialog()
         }
@@ -69,37 +63,22 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 chatRoomList.clear()
-                val chatItems = mutableListOf<ChatItem>()
-
                 for (childSnapshot in snapshot.children) {
                     val chatRoom = childSnapshot.getValue(ChatRoom::class.java)
                     if (chatRoom != null) {
-                        val lastReadTimestamp = chatRoom.lastReadTimestamp
-                        var unreadMessageCount = 0
-
-                        // 읽지 않은 메시지 수 계산
-                        if (lastReadTimestamp != null) {
-                            for (messageSnapshot in childSnapshot.child("messages").children) {
-                                val messageTimestamp = messageSnapshot.child("timestamp").getValue(String::class.java)
-                                if (messageTimestamp != null && messageTimestamp > lastReadTimestamp) {
-                                    unreadMessageCount++
-                                }
-                            }
-                        }
-
-                        // 채팅 아이템 추가
-                        val chatItem = ChatItem(
-                            profileImage = R.drawable.ic_launcher_foreground,
-                            name = chatRoom.name ?: "Unknown",
-                            lastMessage = chatRoom.lastMessage ?: "No message",
-                            lastMessageTime = chatRoom.lastMessageTime ?: "Unknown Time",
-                            chatRoomId = chatRoom.chatRoomId ?: "",
-                            unreadMessageCount = unreadMessageCount
-                        )
-                        chatItems.add(chatItem)
+                        chatRoomList.add(chatRoom)
                     } else {
                         Log.w("ChatListFragment", "Invalid ChatRoom object: $childSnapshot")
                     }
+                }
+                val chatItems = chatRoomList.map {
+                    ChatItem(
+                        profileImage = R.drawable.ic_launcher_foreground,
+                        name = it.name ?: "Unknown",
+                        lastMessage = it.lastMessage ?: "No message",
+                        lastMessageTime = it.lastMessageTime ?: "Unknown time",
+                        chatRoomId = it.chatRoomId ?: " "
+                    )
                 }
 
                 Log.d("ChatListFragment", "Loaded chat items: $chatItems")
@@ -116,22 +95,10 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
         })
     }
 
-    // Firestore에서 사용자 닉네임 가져오는 메소드
-    private fun getUserNickname(userIdx: String) {
-        firestore.collection("users").document(userIdx).get()
-            .addOnSuccessListener { document ->
-                userNickname = document?.getString("userNickname") ?: "Unknown"
-                Log.d("ChatListFragment", "Fetched userNickname: $userNickname")
-            }
-            .addOnFailureListener { exception ->
-                Log.w("ChatListFragment", "Get failed with ", exception)
-                userNickname = "Unknown"
-            }
-    }
-
     private fun showAddRoomDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("상대방 이름 입력")
+
         val input = EditText(requireContext())
         input.inputType = android.text.InputType.TYPE_CLASS_TEXT
         builder.setView(input)
@@ -141,7 +108,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
             if (addName.isNotEmpty()) {
                 createChatRoom(addName)
             } else {
-                Toast.makeText(requireContext(), "상대방 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "상대방이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -151,7 +118,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
     }
 
     private fun createChatRoom(addName: String) {
-        val chatRoomRef = database.push() // 새로운 채팅방 ID 생성
+        val chatRoomRef = database.push()  // Firebase Realtime Database 위치에서 새로운 키를 생성
         val chatRoomId = chatRoomRef.key
 
         if (chatRoomId != null) {
@@ -159,8 +126,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
                 chatRoomId = chatRoomId,
                 name = addName,
                 lastMessage = null,
-                lastMessageTime = null,
-                lastReadTimestamp = null // 새로운 채팅방 생성 시 초기값 설정
+                lastMessageTime = null
             )
 
             chatRoomRef.setValue(chatRoom)
@@ -177,6 +143,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
     }
 
     override fun onChatItemClicked(chatItem: ChatItem) {
+        // 클릭된 아이템의 ChatRoomId와 name 가져오기
         val chatRoomId = chatItem.chatRoomId
         val name = chatItem.name
 
@@ -184,13 +151,11 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
         val intent = Intent(requireContext(), ChatRoomActivity::class.java).apply {
             putExtra("chatRoomId", chatRoomId)
             putExtra("name", name)
-            putExtra("userIdx", userViewModel.userIdx)
-            putExtra("userNickname", userNickname.toString()) // 사용자 닉네임 추가
         }
 
+        // 인텐트에 포함된 데이터를 Log로 출력
         Log.d("IntentDebug", "Sending chatRoomId: $chatRoomId")
         Log.d("IntentDebug", "Sending name: $name")
-        Log.d("IntentDebug", "Sending userNickname: $userNickname") // 로그 추가
 
         startActivity(intent)
     }
