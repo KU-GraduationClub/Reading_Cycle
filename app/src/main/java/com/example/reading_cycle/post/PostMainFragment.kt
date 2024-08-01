@@ -1,7 +1,6 @@
 package com.example.reading_cycle.post
 
 import android.app.AlertDialog
-import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,9 +32,7 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
     private lateinit var postMainAdapter: PostMainAdapter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var bottomSheetViewModel: PostSheetViewModel
-    private val postMainViewModel: PostMainViewModel by viewModels {
-        PostMainViewModelFactory(PostMainRepository())
-    }
+    private lateinit var postMainViewModel: PostMainViewModel
     private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -50,15 +47,25 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         bottomSheetBehavior = BottomSheetBehavior.from(fragmentPostMainBinding.bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
+        // BottomSheetViewModel 초기화
+        bottomSheetViewModel = ViewModelProvider(this).get(PostSheetViewModel::class.java)
+
         // Bundle로부터 userIdx를 가져온다.
         val userIdx = userViewModel.userIdx
         Log.d("PostMainFragment", "User Index: $userIdx")
 
         // ViewModel 초기화
-        bottomSheetViewModel = ViewModelProvider(this)[PostSheetViewModel::class.java]
+        val postMainRepository = PostMainRepository()
+        val viewModelFactory = userIdx?.let { PostMainViewModelFactory(postMainRepository, it) }
+        postMainViewModel = viewModelFactory?.let {
+            ViewModelProvider(this,
+                it
+            )[PostMainViewModel::class.java]
+        }!!
 
         // 어댑터 초기화
-        postMainAdapter = PostMainAdapter(this)
+        postMainAdapter = PostMainAdapter(userViewModel,this)
+
         // RecyclerView 설정
         fragmentPostMainBinding.recyclerViewPostMain.apply {
             layoutManager = LinearLayoutManager(requireContext())

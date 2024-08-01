@@ -14,7 +14,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
-class PostMainViewModel(private val postMainRepository: PostMainRepository) : ViewModel() {
+class PostMainViewModel(private val postMainRepository: PostMainRepository, private val userId: String) : ViewModel() {
 
     private val _salePosts = MutableLiveData<List<DocumentSnapshot>>()
     val salePosts: LiveData<List<DocumentSnapshot>> get() = _salePosts
@@ -29,10 +29,10 @@ class PostMainViewModel(private val postMainRepository: PostMainRepository) : Vi
     private fun loadPosts() {
         viewModelScope.launch {
             try {
-                val salePosts = postMainRepository.getSalePosts()
+                val salePosts = postMainRepository.getSalePosts(userId)
                 _salePosts.value = salePosts
 
-                val swapPosts = postMainRepository.getSwapPosts()
+                val swapPosts = postMainRepository.getSwapPosts(userId)
                 _swapPosts.value = swapPosts
             } catch (e: Exception) {
                 // 실패 처리
@@ -72,12 +72,13 @@ private fun DocumentSnapshot.toSwapBookData(): SwapBookData {
 }
 
 class PostMainViewModelFactory(
-    private val postMainRepository: PostMainRepository
+    private val postMainRepository: PostMainRepository,
+    private val userId: String
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PostMainViewModel::class.java)) {
-            return PostMainViewModel(postMainRepository) as T
+            return PostMainViewModel(postMainRepository, userId) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

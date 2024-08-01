@@ -7,17 +7,26 @@ import kotlinx.coroutines.tasks.await
 class PostMainRepository {
     private val firestore = FirebaseFirestore.getInstance()
 
-    suspend fun getSalePosts(): List<DocumentSnapshot> {
+    suspend fun getSalePosts(userId: String): List<DocumentSnapshot> {
         return try {
-            firestore.collection("salePosts").get().await().documents
+            firestore.collection("users")
+                .document(userId)
+                .collection("salePosts")
+                .get()
+                .await()
+                .documents
         } catch (e: Exception) {
             emptyList()
         }
     }
-
-    suspend fun getSwapPosts(): List<DocumentSnapshot> {
+    suspend fun getSwapPosts(userId: String): List<DocumentSnapshot> {
         return try {
-            firestore.collection("swapPosts").get().await().documents
+            firestore.collection("users")
+                .document(userId)
+                .collection("swapPosts")
+                .get()
+                .await()
+                .documents
         } catch (e: Exception) {
             emptyList()
         }
