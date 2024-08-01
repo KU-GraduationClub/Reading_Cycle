@@ -1,50 +1,38 @@
 package com.example.reading_cycle.chat.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.reading_cycle.R
 import com.example.reading_cycle.chat.model.DataMessage
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-class MessageAdapter(private val messageList: List<DataMessage>, private val myName: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageAdapter(private val messageList: List<DataMessage>, private val myName: String) :
+    RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
 
-    companion object {
-        private const val MY_MESSAGE_VIEW_TYPE = 0
-        private const val PARTNER_MESSAGE_VIEW_TYPE_FIRST = 1
-        private const val PARTNER_MESSAGE_VIEW_TYPE = 2
+    init {
+        // 메시지 정렬
+        messageList.sortedBy { it.timestamp }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-
-        return when(viewType) {
-            MY_MESSAGE_VIEW_TYPE -> {
-                val view = inflater.inflate(R.layout.chat_talk_item_my, parent, false)
-                MyMessageViewHolder(view)
-            }
-            PARTNER_MESSAGE_VIEW_TYPE_FIRST -> {
-                val view = inflater.inflate(R.layout.chat_talk_item_partner_first, parent, false)
-                PartnerMessageFirstViewHolder(view)
-            }
-            else -> {
-                val view = inflater.inflate(R.layout.chat_talk_item_partner, parent, false)
-                PartnerMessageViewHolder(view)
-            }
+        return if (viewType == MY_MESSAGE_VIEW_TYPE) {
+            val view = inflater.inflate(R.layout.chat_talk_item_my, parent, false)
+            MessageViewHolder(view)
+        } else {
+            val view = inflater.inflate(R.layout.chat_talk_item_partner, parent, false)
+            MessageViewHolder(view)
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val message = messageList[position]
-
-        when (holder) {
-            is MyMessageViewHolder -> holder.bind(message)
-            is PartnerMessageFirstViewHolder -> holder.bind(message)
-            is PartnerMessageViewHolder -> holder.bind(message)
-        }
+        holder.bind(message)
     }
 
     override fun getItemCount(): Int {
@@ -53,49 +41,48 @@ class MessageAdapter(private val messageList: List<DataMessage>, private val myN
 
     override fun getItemViewType(position: Int): Int {
         val message = messageList[position]
-        return when {
-            message.name == myName -> MY_MESSAGE_VIEW_TYPE
-            position == 0 || messageList[position - 1].name == myName -> PARTNER_MESSAGE_VIEW_TYPE_FIRST
-            else -> PARTNER_MESSAGE_VIEW_TYPE
+        return if (message.name == myName) {
+            MY_MESSAGE_VIEW_TYPE
+        } else {
+            PARTNER_MESSAGE_VIEW_TYPE
         }
     }
 
-    inner class MyMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val timestampTextView: TextView = itemView.findViewById(R.id.textDate)
         private val messageTextView: TextView = itemView.findViewById(R.id.textMessage)
+        private val nameTextView: TextView = itemView.findViewById(R.id.textIsShown)
 
         fun bind(message: DataMessage) {
-            timestampTextView.text = message.timestamp
+            // 두 개의 포맷 설정
+            val dateFormatFull = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+            val timeFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
+
+            // 기본적으로 Unknown Time으로 설정
+            timestampTextView.text = "Unknown Time"
+
+            try {
+                // "yyyy-MM-dd HH:mm:ss" 포맷으로 파싱 시도
+                val timestamp = dateFormatFull.parse(message.timestamp)
+                if (timestamp != null) {
+                    // 올바르게 파싱되면 HH:mm 형식으로 변환하여 설정
+                    timestampTextView.text = timeFormat.format(timestamp)
+                }
+            } catch (e: Exception) {
+                Log.e("MessageAdapter", "Error parsing date: ${message.timestamp}, ${e.message}")
+                // 포맷이 맞지 않으면 기본값으로 Unknown Time 표시
+                timestampTextView.text = "Unknown Time"
+            }
+
             messageTextView.text = message.message
+            nameTextView.text = message.name
         }
     }
 
-    inner class PartnerMessageFirstViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val timestampTextView: TextView = itemView.findViewById(R.id.textDate)
-        private val messageTextView: TextView = itemView.findViewById(R.id.textMessage)
-        private val nicknameTextView: TextView = itemView.findViewById(R.id.textNickname)
-        private val profileImageView: ImageView = itemView.findViewById(R.id.profileImage)
 
-        fun bind(message: DataMessage) {
-            timestampTextView.text = message.timestamp
-            messageTextView.text = message.message
-            nicknameTextView.text = message.userNickname
-            Glide.with(profileImageView.context)
-                .load(message.userProfileImage)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(profileImageView)
-            profileImageView.visibility = View.VISIBLE
-            nicknameTextView.visibility = View.VISIBLE
-        }
-    }
 
-    inner class PartnerMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val timestampTextView: TextView = itemView.findViewById(R.id.textDate)
-        private val messageTextView: TextView = itemView.findViewById(R.id.textMessage)
-
-        fun bind(message: DataMessage) {
-            timestampTextView.text = message.timestamp
-            messageTextView.text = message.message
-        }
+    companion object {
+        private const val MY_MESSAGE_VIEW_TYPE = 0
+        private const val PARTNER_MESSAGE_VIEW_TYPE = 1
     }
 }

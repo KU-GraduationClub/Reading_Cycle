@@ -31,13 +31,16 @@ class ChatRoomActivity : AppCompatActivity() {
         binding = ActivityChatRoomBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        val chatRoomId = intent.getStringExtra("chatRoomId")
+        val oppname = intent.getStringExtra("name")
 
-        val chatRoomId = intent.getStringExtra("chatRoomId") ?: return
-        val oppname = intent.getStringExtra("name") ?: return
-        val userProfileImage = intent.getStringExtra("userProfileImage")
-        val userNickname = intent.getStringExtra("userNickname")
+        // 뒤로가기 버튼 설정
+        val backButton: ImageButton = findViewById(R.id.imgBtnQuit)
+        backButton.setOnClickListener {
+            onBackPressed()
+        }
 
-        binding.textOpponent.text = oppname
+        // 기본 ActionBar 숨김
         supportActionBar?.hide()
 
         FirebaseApp.initializeApp(this)
@@ -46,64 +49,104 @@ class ChatRoomActivity : AppCompatActivity() {
         val firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.reference
 
-        binding.recyclerViewMessages.layoutManager = LinearLayoutManager(this)
+        val layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewMessages.layoutManager = layoutManager
+        binding.textOpponent.text = oppname.toString()
 
-        databaseReference.child("chatRooms").child(chatRoomId).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val dataList = mutableListOf<DataMessage>()
+        databaseReference.child("chatRooms").child(chatRoomId.toString()).child("messages")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val dataList = mutableListOf<DataMessage>()
 
-                for (snapshot in dataSnapshot.children) {
-                    val message = snapshot.child("message").getValue(String::class.java)
-                    val timestamp = snapshot.child("timestamp").getValue(String::class.java)
-                    val senderName = snapshot.child("name").getValue(String::class.java)
+                    for (snapshot in dataSnapshot.children) {
+                        val message = snapshot.child("message").getValue(String::class.java)
+                        val timestamp = snapshot.child("timestamp").getValue(String::class.java)
+                        val name = snapshot.child("name").getValue(String::class.java)
+                        val messageId = snapshot.key
 
-                    if (message != null && timestamp != null && senderName != null) {
-                        val content = DataMessage(
-                            message,
-                            timestamp,
-                            senderName,
-                            userProfileImage = if (senderName != name) userProfileImage else null,
-                            userNickname = if (senderName != name) userNickname else null
-                        )
-                        dataList.add(content)
+                        // 로그 추가: 확인
+                        Log.d("ChatRoomActivity", "Loading message: $message, timestamp: $timestamp, name: $name")
+
+                        if (message != null && timestamp != null && name != null && messageId != null) {
+                            val content = DataMessage(message, timestamp, name, messageId)
+                            dataList.add(content)
+                        }
                     }
+
+                    // 데이터가 비어 있지 않은지 확인
+                    if (dataList.isEmpty()) {
+                        Log.e("ChatRoomActivity", "No messages found in the chat room.")
+                    }
+
+                    // 메시지를 timestamp에 따라 정렬
+                    dataList.sortBy {
+                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).parse(it.timestamp)
+                    }
+
+                    // 어댑터 설정
+                    messageAdapter = MessageAdapter(dataList, name)
+                    binding.recyclerViewMessages.adapter = messageAdapter
                 }
 
-                dataList.sortBy { it.timestamp }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("ChatRoomActivity", "Failed to connect to database: ${error.message}")
+                }
+            })
 
-                messageAdapter = MessageAdapter(dataList, name)
-                binding.recyclerViewMessages.adapter = messageAdapter
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("ChatRoomActivity", "Failed to connect to database: ${error.message}")
-            }
-        })
 
         binding.btnSubmit.setOnClickListener {
             val messageContent = binding.edtSend.text.toString().trim()
             if (messageContent.isNotEmpty()) {
                 val currentTime = System.currentTimeMillis()
-                val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.KOREA)
-                val formattedTime = dateFormat.format(Date())
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+                val formattedTime = dateFormat.format(Date(currentTime)) // 현재 시간 포맷팅
 
-                val content = DataMessage(messageContent, formattedTime, name)
-                databaseReference.child("chatRooms").child(chatRoomId).push().setValue(content)
+                val newMessageRef = databaseReference.child("chatRooms").child(chatRoomId.toString()).child("messages").push()
+                val messageId = newMessageRef.key ?: ""
+                val content = DataMessage(messageContent, formattedTime, name, messageId)
+
+                newMessageRef.setValue(content)
                     .addOnSuccessListener {
-                        Log.d("ChatRoomActivity", "Data write successful: $content")
+                        Log.d("MessageActivity", "Data write successful: $content")
                         binding.edtSend.setText("")
+
+                        // 마지막 메시지 및 시간 업데이트
+                        databaseReference.child("chatRooms").child(chatRoomId.toString()).child("lastMessage").setValue(messageContent)
+                        databaseReference.child("chatRooms").child(chatRoomId.toString()).child("lastMessageTime").setValue(formattedTime) // 최신 메시지 시간 업데이트
                     }
                     .addOnFailureListener { exception ->
-                        Log.e("ChatRoomActivity", "Data write failed: ${exception.message}")
+                        Log.e("MessageActivity", "Data write failed: ${exception.message}")
                     }
             } else {
-                Log.e("ChatRoomActivity", "Please enter a message.")
+                Log.e("MessageActivity", "Please enter a message.")
             }
         }
 
-        val backButton: ImageButton = findViewById(R.id.imgBtnQuit)
-        backButton.setOnClickListener {
-            onBackPressed()
-        }
+
     }
+
+    override fun onResume() {
+        super.onResume()
+        val chatRoomId = intent.getStringExtra("chatRoomId") ?: return
+        val currentTime = System.currentTimeMillis()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+        val formattedTime = dateFormat.format(Date(currentTime))
+        databaseReference.child("chatRooms").child(chatRoomId).child("lastReadTimestamp").setValue(formattedTime)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        // 채팅방 ID 가져오기
+        val chatRoomId = intent.getStringExtra("chatRoomId") ?: return
+        val currentTime = System.currentTimeMillis()  // 현재 시간(long)
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)  // 날짜 형식 설정
+        val formattedTime = dateFormat.format(Date(currentTime))  // 현재 시간을 지정된 형식으로 변환
+
+        // 데이터베이스에서 lastReadTimestamp 업데이트
+        databaseReference.child("chatRooms").child(chatRoomId).child("lastReadTimestamp").setValue(formattedTime)
+
+        Log.d("ChatRoomActivity", "Last read timestamp updated: $formattedTime") // 로그 추가
+    }
+
 }
