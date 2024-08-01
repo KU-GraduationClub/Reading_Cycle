@@ -24,6 +24,7 @@ class ChatRoomActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatRoomBinding
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var databaseReference: DatabaseReference
+
     private var name: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,7 @@ class ChatRoomActivity : AppCompatActivity() {
         setContentView(view)
         val chatRoomId = intent.getStringExtra("chatRoomId")
         val oppname = intent.getStringExtra("name")
+        val name = intent.getStringExtra("userNickname") ?: "molloo"
 
         // 뒤로가기 버튼 설정
         val backButton: ImageButton = findViewById(R.id.imgBtnQuit)
@@ -44,7 +46,7 @@ class ChatRoomActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         FirebaseApp.initializeApp(this)
-        name = "이도형"
+        // name = "이도형"
 
         val firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.reference
