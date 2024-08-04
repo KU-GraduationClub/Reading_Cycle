@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.reading_cycle.R
 import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.RowPostMainSaleBinding
@@ -191,6 +192,11 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
                             if (userProfileImage.isNotEmpty()) {
                                 Glide.with(binding.root.context)
                                     .load(userProfileImage)
+                                    .apply(
+                                        RequestOptions()
+                                        .circleCrop()  // 이미지를 원형으로 자르기
+                                        .override(100, 100)  // 원하는 크기로 조정 (예: 100x100)
+                                    )
                                     .into(binding.imgRowPostSwapUser)
                             }
                         }
@@ -241,6 +247,10 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
                             if (userProfileImage.isNotEmpty()) {
                                 Glide.with(binding.root.context)
                                     .load(userProfileImage)
+                                    .apply(RequestOptions()
+                                        .circleCrop()  // 이미지를 원형으로 자르기
+                                        .override(100, 100)  // 원하는 크기로 조정 (예: 100x100)
+                                    )
                                     .into(binding.imgRowPostSaleUser)
                             }
                         }

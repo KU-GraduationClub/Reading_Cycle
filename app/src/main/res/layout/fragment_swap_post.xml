@@ -248,10 +248,10 @@
 
             <ImageView
                 android:id="@+id/imgSwapPostUser"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="5dp"
                 app:layout_constraintStart_toStartOf="@+id/borderSwapPost"
                 app:layout_constraintTop_toTopOf="@+id/borderSwapPost"
                 app:srcCompat="@drawable/baseline_account_circle_24" />
@@ -260,15 +260,15 @@
                 android:id="@+id/textSwapPostUser"
                 android:layout_width="155dp"
                 android:layout_height="22dp"
-                android:layout_marginStart="3dp"
-                android:layout_marginBottom="3dp"
+                android:layout_marginStart="4dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:gravity="center|left"
                 android:text="유저 이름"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="13dp"
                 app:layout_constraintBottom_toBottomOf="@+id/imgSwapPostUser"
-                app:layout_constraintStart_toEndOf="@+id/imgSwapPostUser" />
+                app:layout_constraintStart_toEndOf="@+id/imgSwapPostUser"
+                app:layout_constraintTop_toTopOf="@+id/imgSwapPostUser" />
 
             <Button
                 android:id="@+id/btnSwapPostUser"
@@ -281,7 +281,7 @@
                 android:padding="1dp"
                 android:text="님의 라이브러리"
                 android:textColor="#FFFFFF"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/borderSwapPost"
                 app:layout_constraintEnd_toEndOf="@+id/borderSwapPost"

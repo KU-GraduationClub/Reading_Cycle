@@ -253,10 +253,10 @@
 
             <ImageView
                 android:id="@+id/imgSalePostUser"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="5dp"
                 app:layout_constraintStart_toStartOf="@+id/borderSalePost"
                 app:layout_constraintTop_toTopOf="@+id/borderSalePost"
                 app:srcCompat="@drawable/baseline_account_circle_24" />
@@ -265,15 +265,15 @@
                 android:id="@+id/textSalePostUser"
                 android:layout_width="155dp"
                 android:layout_height="22dp"
-                android:layout_marginStart="3dp"
-                android:layout_marginBottom="3dp"
+                android:layout_marginStart="4dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:gravity="center|left"
                 android:text="유저 이름"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="13dp"
                 app:layout_constraintBottom_toBottomOf="@+id/imgSalePostUser"
-                app:layout_constraintStart_toEndOf="@+id/imgSalePostUser" />
+                app:layout_constraintStart_toEndOf="@+id/imgSalePostUser"
+                app:layout_constraintTop_toTopOf="@+id/imgSalePostUser" />
 
             <Button
                 android:id="@+id/btnSalePostUser"
@@ -286,7 +286,7 @@
                 android:padding="1dp"
                 android:text="님의 라이브러리"
                 android:textColor="#FFFFFF"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/borderSalePost"
                 app:layout_constraintEnd_toEndOf="@+id/borderSalePost"
