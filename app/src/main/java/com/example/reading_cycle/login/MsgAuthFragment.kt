@@ -2,6 +2,8 @@ package com.example.reading_cycle.login
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +30,58 @@ class MsgAuthFragment : Fragment() {
 
     private var verificationId = ""
 
+    private val phoneNumberFormattingTextWatcher = object : TextWatcher {
+        private var isFormatting: Boolean = false
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            if (isFormatting) return
+
+            isFormatting = true
+
+            val phoneNumber = s.toString().replace("-", "")
+            val formattedNumber = formatPhoneNumber(phoneNumber)
+
+            if (formattedNumber != s.toString()) {
+                val selectionStart = fragmentMsgAuthBinding.edtPhoneNumber.selectionStart
+                val selectionEnd = fragmentMsgAuthBinding.edtPhoneNumber.selectionEnd
+                fragmentMsgAuthBinding.edtPhoneNumber.setText(formattedNumber)
+
+                val newSelectionStart = calculateNewSelection(selectionStart, phoneNumber, formattedNumber)
+                val newSelectionEnd = calculateNewSelection(selectionEnd, phoneNumber, formattedNumber)
+
+                // 텍스트 길이를 초과하지 않도록 범위 제한
+                val limitedSelectionStart = newSelectionStart.coerceIn(0, formattedNumber.length)
+                val limitedSelectionEnd = newSelectionEnd.coerceIn(0, formattedNumber.length)
+
+                fragmentMsgAuthBinding.edtPhoneNumber.setSelection(limitedSelectionStart, limitedSelectionEnd)
+            }
+
+            isFormatting = false
+        }
+
+        private fun formatPhoneNumber(phoneNumber: String): String {
+            return when {
+                phoneNumber.length <= 3 -> phoneNumber
+                phoneNumber.length <= 7 -> "${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3)}"
+                else -> "${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3, 7)}-${phoneNumber.substring(7)}"
+            }
+        }
+
+        private fun calculateNewSelection(oldSelection: Int, oldPhoneNumber: String, newPhoneNumber: String): Int {
+            var offset = 0
+            for (i in 0 until oldSelection) {
+                if (i < oldPhoneNumber.length && i < newPhoneNumber.length && oldPhoneNumber[i] != newPhoneNumber[i]) {
+                    offset++
+                }
+            }
+            return oldSelection + offset
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,16 +95,17 @@ class MsgAuthFragment : Fragment() {
                 mainActivity.removeFragment(MainActivity.MSG_AUTH_FRAGMENT)
             }
 
+            edtPhoneNumber.addTextChangedListener(phoneNumberFormattingTextWatcher)
+
             btnSendAuthCode.setOnClickListener {
-                val edtPhoneNumber = requireView().findViewById<EditText>(R.id.edtPhoneNumber)
-                var phoneNumber = edtPhoneNumber.text.toString()
+                val phoneNumber = edtPhoneNumber.text.toString().replace("-", "")
 
                 if (!isValidPhoneNumber(phoneNumber)) {
                     showErrorDialog("오류", "올바른 전화번호를 입력해주세요.")
                     return@setOnClickListener
                 }
 
-                phoneNumber = "+82$phoneNumber"
+                val formattedPhoneNumber = "+82${phoneNumber.substring(1)}"
 
                 edtPhoneNumber.isEnabled = false
                 edtPhoneNumber.setBackgroundColor(resources.getColor(android.R.color.darker_gray))
@@ -66,7 +121,6 @@ class MsgAuthFragment : Fragment() {
                         edtPhoneNumber.isEnabled = true
                         edtPhoneNumber.setBackgroundColor(resources.getColor(android.R.color.transparent))
 
-                        // 자세한 오류 메시지 출력
                         if (e is FirebaseAuthInvalidCredentialsException) {
                             Log.e(TAG, "Invalid request: ${e.message}")
                         } else if (e is FirebaseTooManyRequestsException) {
@@ -80,7 +134,7 @@ class MsgAuthFragment : Fragment() {
 
                     override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
                         this@MsgAuthFragment.verificationId = verificationId
-                        edtAuthCode3.requestFocus()
+                        fragmentMsgAuthBinding.edtAuthCode3.requestFocus()
                         Log.d(TAG, "onCodeSent: $verificationId")
                     }
                 }
@@ -88,18 +142,17 @@ class MsgAuthFragment : Fragment() {
                 auth.setLanguageCode("kr")
 
                 val optionsCompat = PhoneAuthOptions.newBuilder(auth)
-                    .setPhoneNumber(phoneNumber)
+                    .setPhoneNumber(formattedPhoneNumber)
                     .setTimeout(60L, TimeUnit.SECONDS)
                     .setActivity(requireActivity())
                     .setCallbacks(callbacks)
                     .build()
                 PhoneAuthProvider.verifyPhoneNumber(optionsCompat)
 
-                Log.d(TAG, "Phone Number: $phoneNumber")
+                Log.d(TAG, "Phone Number: $formattedPhoneNumber")
             }
 
             btnCheckAuthCode2.setOnClickListener {
-                val edtAuthCode3 = requireView().findViewById<EditText>(R.id.edtAuthCode3)
                 val authCode = edtAuthCode3.text.toString()
                 if (authCode.isNotEmpty()) {
                     if (verificationId.isNotEmpty()) {

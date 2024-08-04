@@ -60,6 +60,7 @@ class EditUserFragment : Fragment() {
                 if (document != null) {
                     val nickname = document.getString("userNickname")
                     val profileImage = document.getString("userProfileImage")
+                    val phoneNumber = document.getString("userPhoneNumber")
 
                     fragmentEditUserBinding.editNickname.setText(nickname)
                     Glide.with(this)
@@ -67,6 +68,9 @@ class EditUserFragment : Fragment() {
                         .circleCrop()
                         .placeholder(R.drawable.baseline_add_photo_alternate_24)
                         .into(fragmentEditUserBinding.imgProfile)
+
+                    // 전화번호 포맷팅
+                    fragmentEditUserBinding.textPhoneNumber.text = formatPhoneNumber(phoneNumber)
                 } else {
                     Toast.makeText(context, "User data not found", Toast.LENGTH_SHORT).show()
                 }
@@ -75,6 +79,15 @@ class EditUserFragment : Fragment() {
                 Toast.makeText(context, "Failed to load user data", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun formatPhoneNumber(phoneNumber: String?): String {
+        return if (phoneNumber != null && phoneNumber.length == 11) {
+            "${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3, 7)}-${phoneNumber.substring(7)}"
+        } else {
+            ""
+        }
+    }
+
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -115,7 +128,6 @@ class EditUserFragment : Fragment() {
             .whereEqualTo("userNickname", nickname)
             .get()
             .addOnSuccessListener { result ->
-                // 닉네임이 이미 존재하는 경우
                 callback(result.isEmpty)
             }
             .addOnFailureListener {
@@ -138,7 +150,7 @@ class EditUserFragment : Fragment() {
                 if (selectedImageUri != null) {
                     uploadProfileImage(userId)
                 } else {
-                    showSnackbar("Profile updated successfully")
+                    showSnackbar("프로필이 정상적으로 수정되었습니다")
                     navigateToListSettings()
                 }
             }
@@ -166,7 +178,7 @@ class EditUserFragment : Fragment() {
 
                 userRef.update("userProfileImage", downloadUri.toString())
                     .addOnSuccessListener {
-                        showSnackbar("Profile updated successfully")
+                        showSnackbar("프로필이 정상적으로 수정되었습니다")
                         navigateToListSettings()
                     }
                     .addOnFailureListener {
@@ -190,3 +202,4 @@ class EditUserFragment : Fragment() {
         const val GALLERY_REQUEST_CODE = 1
     }
 }
+

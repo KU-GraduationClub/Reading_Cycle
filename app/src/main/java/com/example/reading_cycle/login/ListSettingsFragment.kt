@@ -57,6 +57,9 @@ class ListSettingsFragment : Fragment() {
         FirebaseAuth.getInstance().signOut()
         // ViewModel의 사용자 정보 초기화
         userViewModel.userIdx = null
+
+        showSnackbar("로그아웃 되었습니다")
+
         // Fragment 교체
         mainActivity.replaceFragment(MainActivity.LOGIN_MAIN_FRAGMENT, true, null)
     }

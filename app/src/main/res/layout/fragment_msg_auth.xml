@@ -97,7 +97,7 @@
         android:ems="20"
         android:fontFamily="@font/soyo_maple_regular"
         android:hint="휴대폰 번호를 입력해주세요"
-        android:inputType="number|phone"
+        android:inputType="phone"
         android:paddingStart="20dp"
         android:paddingRight="5dp"
         android:textColorHint="#6A3F0D"

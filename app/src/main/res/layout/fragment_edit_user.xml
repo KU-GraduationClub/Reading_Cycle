@@ -12,7 +12,9 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:title="프로필 수정"
-        app:titleTextColor="@android:color/white">
+        app:titleTextColor="@android:color/white"
+        android:fontFamily="@font/soyo_maple_regular"
+        >
 
         <TextView
             android:id="@+id/btn_done"
@@ -41,7 +43,6 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-
             />
 
         <Button
@@ -50,7 +51,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:text="프로필 이미지 변경"
+            android:text="이미지 변경"
+            android:textColor="@color/background"
+            android:backgroundTint="@color/theme_green"
+            android:fontFamily="@font/soyo_maple_regular"
             />
     </LinearLayout>
 
@@ -63,10 +67,28 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@android:drawable/edit_text"
+        android:background="@drawable/border_dark_brown"
         android:hint="닉네임(기존 data 넣기)"
         android:inputType="textPersonName"
+        android:fontFamily="@font/soyo_maple_regular"
         android:padding="12dp"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/text_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_nickname"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border_dark_brown"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:hint="전화번호(현재 데이터 표시)"
+        android:fontFamily="@font/soyo_maple_regular"
+        android:focusable="false"
+        android:clickable="false"/>
 </RelativeLayout>
