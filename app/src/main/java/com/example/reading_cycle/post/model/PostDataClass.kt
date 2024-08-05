@@ -16,6 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 data class SwapBookData(
+    val userId: String = "", // 게시자 ID
     val swapBookTitle: String = "", // 교환 도서 제목
     val swapBookAuthor: String = "", // 교환 도서 작가
     val swapBookPostImg: String = "", // 교환 도서 대표 이미지
@@ -29,6 +30,7 @@ data class SwapBookData(
 )
 
 data class SaleBookData(
+    val userId: String = "", // 게시자 ID
     val saleBookTitle: String = "", // 판매 도서 제목
     val saleBookAuthor: String = "", // 판매 도서 작가
     val saleBookPostImg: String = "", // 판매 도서 대표 이미지

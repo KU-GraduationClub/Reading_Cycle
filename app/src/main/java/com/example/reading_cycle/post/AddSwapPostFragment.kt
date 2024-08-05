@@ -102,6 +102,7 @@ class AddSwapPostFragment : Fragment() {
             }
         }
 
+        // 정가 입력 형식 설정
         setupPriceEditText(fragmentAddSwapPostBinding.edtAddSwapPostRegPrice)
 
         // 책 종류 선택 버튼 클릭 리스너 설정
@@ -116,45 +117,21 @@ class AddSwapPostFragment : Fragment() {
         fragmentAddSwapPostBinding.FrameAddSwapPostVeryBad.setOnClickListener {
             selectFrame(R.id.FrameAddSwapPostVeryBad)
         }
-
         fragmentAddSwapPostBinding.FrameAddSwapPostBad.setOnClickListener {
             selectFrame(R.id.FrameAddSwapPostBad)
         }
-
         fragmentAddSwapPostBinding.FrameAddSwapPostCommon.setOnClickListener {
             selectFrame(R.id.FrameAddSwapPostCommon)
         }
-
         fragmentAddSwapPostBinding.FrameAddSwapPostGood.setOnClickListener {
             selectFrame(R.id.FrameAddSwapPostGood)
         }
-
         fragmentAddSwapPostBinding.FrameAddSwapPostVeryGood.setOnClickListener {
             selectFrame(R.id.FrameAddSwapPostVeryGood)
         }
 
         // 버튼 클릭 이벤트 리스너 설정
-        fragmentAddSwapPostBinding.btnAddSwapPostComplete.setOnClickListener {
-            lifecycleScope.launch {
-                try {
-                    // 완료 버튼 클릭 시 버튼 비활성화
-                    fragmentAddSwapPostBinding.btnAddSwapPostComplete.isEnabled = false
-                    val colorStateList = ColorStateList.valueOf(Color.GRAY)
-                    fragmentAddSwapPostBinding.btnAddSwapPostComplete.backgroundTintList = colorStateList
-
-                    val userId = userViewModel.userIdx ?: throw IllegalStateException("유저 ID를 가져올 수 없습니다.")
-                    val swapData = collectInputData()
-                    viewModel.uploadSwapPost(userId, swapData)
-                } catch (e: IllegalStateException) {
-                    showSnackbar(e.message ?: "빈 칸 없이 작성해주세요.")
-                } catch (e: Exception) {
-                    showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
-                } finally {
-                    fragmentAddSwapPostBinding.btnAddSwapPostComplete.isEnabled = true
-                    fragmentAddSwapPostBinding.btnAddSwapPostComplete.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CF8127"))
-                }
-            }
-        }
+        fragmentAddSwapPostBinding.btnAddSwapPostComplete.setOnClickListener { handleCompleteButtonClick() }
 
         // 뷰모델에서 uploadResult 결과에 따른 동작 수행
         viewModel.uploadResult.observe(viewLifecycleOwner) { success ->
@@ -169,6 +146,17 @@ class AddSwapPostFragment : Fragment() {
         }
 
         return fragmentAddSwapPostBinding.root
+    }
+
+    private fun handleCompleteButtonClick() {
+        lifecycleScope.launch {
+            try {
+                val swapBookData = collectInputData()
+                viewModel.uploadSwapPost(swapBookData)
+            } catch (e: IllegalStateException) {
+                showSnackbar(e.message ?: "알 수 없는 오류가 발생했습니다.")
+            }
+        }
     }
 
     private suspend fun collectInputData(): SwapBookData {
@@ -190,7 +178,10 @@ class AddSwapPostFragment : Fragment() {
             uploadImagesAndGetUrls(selectedImages)
         }
 
+        val userId = userViewModel.userIdx ?: throw IllegalStateException("유저 ID를 가져올 수 없습니다.")
+
         return SwapBookData(
+            userId = userId,
             swapBookPostImg =imageUrls.firstOrNull() ?: "",
             swapBookImg = imageUrls,
             swapBookTitle = title,
@@ -203,6 +194,7 @@ class AddSwapPostFragment : Fragment() {
         )
     }
 
+    // 이미지 업로드 후 URL을 반환하는 함수
     private suspend fun uploadImagesAndGetUrls(images: List<Bitmap>): List<String> = withContext(Dispatchers.IO) {
         val urls = mutableListOf<String>()
         val storage = FirebaseStorage.getInstance().reference

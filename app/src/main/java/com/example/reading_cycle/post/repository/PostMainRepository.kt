@@ -5,29 +5,33 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 class PostMainRepository {
-    private val firestore = FirebaseFirestore.getInstance()
+    private val fireStore = FirebaseFirestore.getInstance()
 
-    suspend fun getSalePosts(userId: String): List<DocumentSnapshot> {
+    suspend fun getSalePosts(): List<DocumentSnapshot> {
         return try {
-            firestore.collection("users")
-                .document(userId)
-                .collection("salePosts")
+            fireStore.collection("posts")
+                .document("salePosts")
+                .collection("posts")
                 .get()
                 .await()
                 .documents
         } catch (e: Exception) {
+            // Handle error (e.g., log error, return empty list, etc.)
             emptyList()
         }
     }
-    suspend fun getSwapPosts(userId: String): List<DocumentSnapshot> {
+
+    // 모든 swapPosts를 가져오는 메서드
+    suspend fun getSwapPosts(): List<DocumentSnapshot> {
         return try {
-            firestore.collection("users")
-                .document(userId)
-                .collection("swapPosts")
+            fireStore.collection("posts")
+                .document("swapPosts")
+                .collection("posts")
                 .get()
                 .await()
                 .documents
         } catch (e: Exception) {
+            // Handle error (e.g., log error, return empty list, etc.)
             emptyList()
         }
     }

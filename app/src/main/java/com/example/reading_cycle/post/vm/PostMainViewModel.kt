@@ -29,10 +29,10 @@ class PostMainViewModel(private val postMainRepository: PostMainRepository, priv
     private fun loadPosts() {
         viewModelScope.launch {
             try {
-                val salePosts = postMainRepository.getSalePosts(userId)
+                val salePosts = postMainRepository.getSalePosts()
                 _salePosts.value = salePosts
 
-                val swapPosts = postMainRepository.getSwapPosts(userId)
+                val swapPosts = postMainRepository.getSwapPosts()
                 _swapPosts.value = swapPosts
             } catch (e: Exception) {
                 // 실패 처리

@@ -12,9 +12,9 @@ import kotlinx.coroutines.launch
 class AddSalePostViewModel(private val repository: AddSalePostRepository) : ViewModel() {
     val uploadResult = MutableLiveData<Boolean>()
 
-    fun uploadSalePost(userId: String, saleData: SaleBookData) {
+    fun uploadSalePost(saleData: SaleBookData) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.uploadSaleDataToFirebase(userId, saleData)
+            repository.uploadSaleDataToFirebase(saleData)
                 .addOnSuccessListener {
                     // 업로드 성공 시
                     uploadResult.postValue(true)

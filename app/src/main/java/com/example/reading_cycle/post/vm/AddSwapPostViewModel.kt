@@ -12,9 +12,9 @@ import kotlinx.coroutines.launch
 class AddSwapPostViewModel(private val repository: AddSwapPostRepository) : ViewModel() {
     val uploadResult = MutableLiveData<Boolean>()
 
-    fun uploadSwapPost(userId: String, swapData: SwapBookData) {
+    fun uploadSwapPost( swapData: SwapBookData) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.uploadSwapDataToFirebase(userId, swapData)
+            repository.uploadSwapDataToFirebase(swapData)
                 .addOnSuccessListener {
                     // 업로드 성공 시
                     uploadResult.postValue(true)
