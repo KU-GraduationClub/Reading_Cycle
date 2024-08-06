@@ -31,15 +31,13 @@ class ChatRoomActivity : AppCompatActivity() {
         binding = ActivityChatRoomBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        val chatRoomId = intent.getStringExtra("chatRoomId")
-        val oppname = intent.getStringExtra("name")
-        // 이전 화면으로 돌아가는 뒤로가기 버튼을 설정
-        val backButton: ImageButton = findViewById(R.id.imgBtnQuit)
-        backButton.setOnClickListener {
-            onBackPressed()
-        }
 
-        // 기본 ActionBar 숨깁니다.
+        val chatRoomId = intent.getStringExtra("chatRoomId") ?: return
+        val oppname = intent.getStringExtra("name") ?: return
+        val userProfileImage = intent.getStringExtra("userProfileImage")
+        val userNickname = intent.getStringExtra("userNickname")
+
+        binding.textOpponent.text = oppname
         supportActionBar?.hide()
 
         FirebaseApp.initializeApp(this)
@@ -48,36 +46,37 @@ class ChatRoomActivity : AppCompatActivity() {
         val firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.reference
 
-        val layoutManager = LinearLayoutManager(this)
-        binding.recyclerViewMessages.layoutManager = layoutManager
-        binding.textOpponent.text = oppname.toString()
+        binding.recyclerViewMessages.layoutManager = LinearLayoutManager(this)
 
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        databaseReference.child("chatRooms").child(chatRoomId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val dataList = mutableListOf<DataMessage>()
 
-                val specificPathSnapshot = dataSnapshot.child("chatRooms").child(chatRoomId.toString())
-
-                for (snapshot in specificPathSnapshot.children) {
+                for (snapshot in dataSnapshot.children) {
                     val message = snapshot.child("message").getValue(String::class.java)
                     val timestamp = snapshot.child("timestamp").getValue(String::class.java)
-                    val name = snapshot.child("name").getValue(String::class.java)
-                    if (message != null && timestamp != null && name != null) {
-                        val content = DataMessage(message, timestamp.toString(), name)
+                    val senderName = snapshot.child("name").getValue(String::class.java)
+
+                    if (message != null && timestamp != null && senderName != null) {
+                        val content = DataMessage(
+                            message,
+                            timestamp,
+                            senderName,
+                            userProfileImage = if (senderName != name) userProfileImage else null,
+                            userNickname = if (senderName != name) userNickname else null
+                        )
                         dataList.add(content)
                     }
                 }
 
-                // dataList를 timestamp에 따라 정렬
                 dataList.sortBy { it.timestamp }
 
-                name = "이도형"
                 messageAdapter = MessageAdapter(dataList, name)
                 binding.recyclerViewMessages.adapter = messageAdapter
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("MessageActivity", "Failed to connect to database: ${error.message}")
+                Log.e("ChatRoomActivity", "Failed to connect to database: ${error.message}")
             }
         })
 
@@ -89,24 +88,22 @@ class ChatRoomActivity : AppCompatActivity() {
                 val formattedTime = dateFormat.format(Date())
 
                 val content = DataMessage(messageContent, formattedTime, name)
-                databaseReference.child("chatRooms").child(chatRoomId.toString()).push().setValue(content)
+                databaseReference.child("chatRooms").child(chatRoomId).push().setValue(content)
                     .addOnSuccessListener {
-                        Log.d("MessageActivity", "Data write successful: $content")
+                        Log.d("ChatRoomActivity", "Data write successful: $content")
                         binding.edtSend.setText("")
                     }
                     .addOnFailureListener { exception ->
-                        Log.e("MessageActivity", "Data write failed: ${exception.message}")
+                        Log.e("ChatRoomActivity", "Data write failed: ${exception.message}")
                     }
             } else {
-                Log.e("MessageActivity", "Please enter a message.")
+                Log.e("ChatRoomActivity", "Please enter a message.")
             }
         }
 
-
-
-    }
-    override fun onBackPressed() {
-        super.onBackPressed()
-        // 원하는 추가적인 작업을 여기에 추가할 수 있습니다.
+        val backButton: ImageButton = findViewById(R.id.imgBtnQuit)
+        backButton.setOnClickListener {
+            onBackPressed()
+        }
     }
 }

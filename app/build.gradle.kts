@@ -57,6 +57,7 @@ android {
         // Glide 추가 (이미지 로드, 표시)
         implementation("com.github.bumptech.glide:glide:4.12.0")
 
+
         implementation("androidx.core:core-ktx:1.12.0")
         implementation("androidx.appcompat:appcompat:1.6.1")
         implementation("com.google.android.material:material:1.11.0")
