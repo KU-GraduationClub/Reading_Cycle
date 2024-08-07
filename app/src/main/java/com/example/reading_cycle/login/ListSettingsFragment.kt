@@ -83,7 +83,7 @@ class ListSettingsFragment : Fragment() {
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // Firestore에서 사용자 문서 삭제
-                    db.collection("users").document(userId).delete()
+                    db.collection("Users").document(userId).delete()
                         .addOnSuccessListener {
                             // 사용자 데이터 삭제 완료 후 알림 및 이동
                             showSnackbar("탈퇴되었습니다")

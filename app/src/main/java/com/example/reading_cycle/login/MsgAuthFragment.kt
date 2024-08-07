@@ -8,13 +8,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentMsgAuthBinding
 import com.example.reading_cycle.login.vm.LoginViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -29,6 +29,7 @@ class MsgAuthFragment : Fragment() {
     private val loginViewModel: LoginViewModel by viewModels()
 
     private var verificationId = ""
+    private var userNickname: String? = null  // 사용자 닉네임을 저장할 변수
 
     private val phoneNumberFormattingTextWatcher = object : TextWatcher {
         private var isFormatting: Boolean = false
@@ -135,6 +136,7 @@ class MsgAuthFragment : Fragment() {
                     override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
                         this@MsgAuthFragment.verificationId = verificationId
                         fragmentMsgAuthBinding.edtAuthCode3.requestFocus()
+                        Snackbar.make(fragmentMsgAuthBinding.root, "인증번호가 전송되었습니다", Snackbar.LENGTH_SHORT).show()
                         Log.d(TAG, "onCodeSent: $verificationId")
                     }
                 }
@@ -201,8 +203,11 @@ class MsgAuthFragment : Fragment() {
             (activity as MainActivity).userViewModel.userIdx = userIdx
 
             if (userData != null) {
+                userNickname = userData.userNickname // Assuming userData contains userNickname
+
                 // 사용자 존재 시 MainActivity의 프래그먼트 교체 메소드 호출
                 (activity as MainActivity).replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true)
+                showWelcomeSnackbar(userNickname)
             } else {
                 // 사용자 없음 시 MainActivity의 프래그먼트 교체 메소드 호출
                 (activity as MainActivity).replaceFragment(MainActivity.SET_PROFILE_FRAGMENT, true)
@@ -211,6 +216,15 @@ class MsgAuthFragment : Fragment() {
         loginViewModel.uploadError.observe(viewLifecycleOwner) { exception ->
             Log.e(TAG, "Failed to check user existence", exception)
         }
+    }
+
+    private fun showWelcomeSnackbar(userNickname: String?) {
+        val message = if (userNickname != null) {
+            "$userNickname 님 환영합니다!"
+        } else {
+            "환영합니다!"
+        }
+        Snackbar.make(fragmentMsgAuthBinding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun showErrorDialog(title: String, message: String) {

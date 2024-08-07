@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,24 +37,38 @@ class EditUserFragment : Fragment() {
         fragmentEditUserBinding = FragmentEditUserBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
 
+        fragmentEditUserBinding.run {
+            toolbarEditUser.setNavigationOnClickListener {
+                mainActivity.removeFragment(MainActivity.EDIT_USER_FRAGMENT)
+            }
+
+            btnChangeProfile.setOnClickListener {
+                openGallery()
+            }
+
+            btnDone.setOnClickListener {
+                validateAndSaveUserProfile()
+            }
+        }
+
         // 현재 로그인된 유저 정보 가져오기
         loadUserProfile()
-
-        fragmentEditUserBinding.btnChangeProfile.setOnClickListener {
-            openGallery()
-        }
-
-        fragmentEditUserBinding.btnDone.setOnClickListener {
-            validateAndSaveUserProfile()
-        }
 
         return fragmentEditUserBinding.root
     }
 
     private fun loadUserProfile() {
-        val userId = userViewModel.userIdx ?: return
+        val userId = userViewModel.userIdx
+        if (userId == null) {
+            //Toast.makeText(context, "User ID is null", Toast.LENGTH_SHORT).show()
+            Log.e("EditUserFragment", "User ID is null")
+            return
+        }
+
+        Log.d("EditUserFragment", "User ID: $userId")
+
         val db = FirebaseFirestore.getInstance()
-        val userRef = db.collection("users").document(userId)
+        val userRef = db.collection("Users").document(userId)
 
         userRef.get()
             .addOnSuccessListener { document ->
@@ -62,6 +77,9 @@ class EditUserFragment : Fragment() {
                     val profileImage = document.getString("userProfileImage")
                     val phoneNumber = document.getString("userPhoneNumber")
 
+                    // 디버그 로그 추가
+                    Log.d("EditUserFragment", "Nickname: $nickname, Phone: $phoneNumber")
+
                     fragmentEditUserBinding.editNickname.setText(nickname)
                     Glide.with(this)
                         .load(profileImage)
@@ -69,24 +87,41 @@ class EditUserFragment : Fragment() {
                         .placeholder(R.drawable.baseline_add_photo_alternate_24)
                         .into(fragmentEditUserBinding.imgProfile)
 
-                    // 전화번호 포맷팅
+                    // 전화번호 포맷팅 및 설정
                     fragmentEditUserBinding.textPhoneNumber.text = formatPhoneNumber(phoneNumber)
                 } else {
                     Toast.makeText(context, "User data not found", Toast.LENGTH_SHORT).show()
+                    Log.e("EditUserFragment", "User data not found")
                 }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(context, "Failed to load user data", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to load user data: ${exception.message}", Toast.LENGTH_SHORT).show()
+                Log.e("EditUserFragment", "Error getting user data", exception)
             }
     }
 
+
     private fun formatPhoneNumber(phoneNumber: String?): String {
-        return if (phoneNumber != null && phoneNumber.length == 11) {
-            "${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3, 7)}-${phoneNumber.substring(7)}"
-        } else {
-            ""
+        // 전화번호가 null이거나 비어있으면 빈 문자열 반환
+        if (phoneNumber.isNullOrEmpty()) {
+            return ""
+        }
+
+        // 국가 코드 +82 또는 82가 포함된 경우 제거
+        val cleanedPhoneNumber = phoneNumber.removePrefix("+82").removePrefix("82")
+
+        // 맨 앞에 0을 붙이기 (기존 전화번호에 따라 조정 가능)
+        val formattedPhoneNumber = "0$cleanedPhoneNumber"
+
+        // 포맷팅 조건
+        return when {
+            formattedPhoneNumber.length <= 3 -> formattedPhoneNumber
+            formattedPhoneNumber.length <= 7 -> "${formattedPhoneNumber.substring(0, 3)}-${formattedPhoneNumber.substring(3)}"
+            formattedPhoneNumber.length <= 11 -> "${formattedPhoneNumber.substring(0, 3)}-${formattedPhoneNumber.substring(3, 7)}-${formattedPhoneNumber.substring(7)}"
+            else -> formattedPhoneNumber
         }
     }
+
 
 
     private fun openGallery() {
@@ -108,8 +143,9 @@ class EditUserFragment : Fragment() {
 
     private fun validateAndSaveUserProfile() {
         val newNickname = fragmentEditUserBinding.editNickname.text.toString()
-        if (newNickname.isEmpty()) {
-            Toast.makeText(context, "닉네임을 입력하세요", Toast.LENGTH_SHORT).show()
+
+        if (!isNicknameValid(newNickname)) {
+            Toast.makeText(context, "닉네임은 2자 이상 15자 이하로 설정해야 하며, 특수문자는 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -124,7 +160,7 @@ class EditUserFragment : Fragment() {
 
     private fun checkNicknameAvailability(nickname: String, callback: (Boolean) -> Unit) {
         val db = FirebaseFirestore.getInstance()
-        db.collection("users")
+        db.collection("Users")
             .whereEqualTo("userNickname", nickname)
             .get()
             .addOnSuccessListener { result ->
@@ -139,7 +175,7 @@ class EditUserFragment : Fragment() {
     private fun saveUserProfile(newNickname: String) {
         val userId = userViewModel.userIdx ?: return
         val db = FirebaseFirestore.getInstance()
-        val userRef = db.collection("users").document(userId)
+        val userRef = db.collection("Users").document(userId)
 
         val updates = hashMapOf<String, Any>(
             "userNickname" to newNickname
@@ -174,7 +210,7 @@ class EditUserFragment : Fragment() {
             if (task.isSuccessful) {
                 val downloadUri = task.result
                 val db = FirebaseFirestore.getInstance()
-                val userRef = db.collection("users").document(userId)
+                val userRef = db.collection("Users").document(userId)
 
                 userRef.update("userProfileImage", downloadUri.toString())
                     .addOnSuccessListener {
@@ -198,8 +234,13 @@ class EditUserFragment : Fragment() {
         mainActivity.replaceFragment(MainActivity.LIST_SETTINGS_FRAGMENT, true, null)
     }
 
+    private fun isNicknameValid(nickname: String): Boolean {
+        // 닉네임 길이와 특수문자 검사
+        val regex = Regex("^[a-zA-Z0-9가-힣]{2,15}\$")
+        return nickname.matches(regex)
+    }
+
     companion object {
         const val GALLERY_REQUEST_CODE = 1
     }
 }
-
