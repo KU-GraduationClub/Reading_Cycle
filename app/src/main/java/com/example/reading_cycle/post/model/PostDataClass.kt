@@ -2,9 +2,7 @@ package com.example.reading_cycle.post.model
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -22,6 +20,8 @@ data class SwapBookData(
     val swapBookAuthor: String = "", // 교환 도서 작가
     val swapBookPostImg: String = "", // 교환 도서 대표 이미지
     val swapBookImg: List<String> = emptyList(), // 교환 도서 이미지들
+    val swapBookTitle: String = "", // 교환 도서 제목
+    val swapBookAuthor: String = "", // 교환 도서 작가
     val swapBookType: BookType = BookType.OTHER, // 교환할 도서 타입
     val bookSwapType: BookType = BookType.OTHER, // 교환받을 도서 타입
     val swapBookRegPrice: String = "", // 교환 도서 정가
@@ -36,6 +36,8 @@ data class SaleBookData(
     val saleBookAuthor: String = "", // 판매 도서 작가
     val saleBookPostImg: String = "", // 판매 도서 대표 이미지
     val saleBookImg: List<String> = emptyList(), // 판매 도서 이미지들
+    val saleBookTitle: String = "", // 판매 도서 제목
+    val saleBookAuthor: String = "", // 판매 도서 작가
     val saleBookType: BookType = BookType.OTHER, // 판매할 도서 타입
     val saleBookPrice: String = "", // 판매할 도서 받을 가격 (String 타입으로 유지)
     val saleBookRegPrice: String = "", // 판매 도서 정가
@@ -44,37 +46,36 @@ data class SaleBookData(
     val saleBookWriteDate: Long = System.currentTimeMillis() // 판매 도서 게시글 작성일
 )
 
-enum class BookType(val displayName: String) {
-    NOVEL("소설"),
-    POETRY("시"),
-    ESSAY("에세이"),
-    CLASSIC("고전"),
-    COMIC("만화"),
-    SELF_DEVELOPMENT("자기계발"),
-    REFERENCE("학습/참고서"),
-    MAJOR("전공서"),
-    COOKING("요리/제빵"),
-    LANGUAGE("외국어"),
-    SOCIAL_SCIENCE("사회/과학"),
-    ART("예술"),
-    RELIGION("종교"),
-    ECONOMICS("경제/경영"),
-    HEALTH_TRAVEL("건강/여행"),
-    HISTORY("역사"),
-    PHILOSOPHY("철학"),
-    CHILDREN("어린이"),
-    TODDLER("유아"),
-    OTHER("기타")
+enum class BookType{
+    NOVEL,
+    POETRY,
+    ESSAY,
+    CLASSIC,
+    COMIC,
+    SELF_DEVELOPMENT,
+    REFERENCE,
+    MAJOR,
+    COOKING,
+    LANGUAGE,
+    SOCIAL_SCIENCE,
+    ART,
+    RELIGION,
+    ECONOMICS,
+    HEALTH_TRAVEL,
+    HISTORY,
+    PHILOSOPHY,
+    CHILDREN,
+    TODDLER,
+    OTHER
 }
 
-enum class BookState(val displayName: String) {
-    VERY_BAD("매우 나쁨"),
-    BAD("나쁨"),
-    COMMON("보통"),
-    GOOD("좋음"),
-    VERY_GOOD("매우 좋음")
+enum class BookState {
+    VERY_BAD,
+    BAD,
+    COMMON,
+    GOOD,
+    VERY_GOOD
 }
-
 
 
 class PostMainAdapter(private val userViewModel: UserViewModel, private val listener: OnPostItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -84,8 +85,8 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
         fun onSaleItemClick(document: DocumentSnapshot)
     }
 
-    private val swapBookList = mutableListOf<DocumentSnapshot>()
-    private val saleBookList = mutableListOf<DocumentSnapshot>()
+    private val swapBookList = mutableListOf<SwapBookData>()
+    private val saleBookList = mutableListOf<SaleBookData>()
 
     companion object {
         private const val VIEW_TYPE_SWAP = 1
@@ -115,18 +116,12 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             VIEW_TYPE_SWAP -> {
-                val document = swapBookList[position]
-                (holder as SwapViewHolder).bind(document)
-                holder.itemView.setOnClickListener {
-                    listener.onSwapItemClick(document)
-                }
+                val swapData = swapBookList[position]
+                (holder as SwapViewHolder).bind(swapData)
             }
             VIEW_TYPE_SALE -> {
-                val document = saleBookList[position - swapBookList.size]
-                (holder as SaleViewHolder).bind(document)
-                holder.itemView.setOnClickListener {
-                    listener.onSaleItemClick(document)
-                }
+                val saleData = saleBookList[position - swapBookList.size]
+                (holder as SaleViewHolder).bind(saleData)
             }
 
             else -> throw IllegalArgumentException("Invalid view type")
@@ -142,14 +137,18 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
     }
 
     fun setSwapPosts(swapPosts: List<DocumentSnapshot>) {
-        swapBookList.clear()
-        swapBookList.addAll(swapPosts)
+        this.swapBookList.clear()
+        val addAll = if (this.swapBookList.addAll(swapPosts)) {
+            true
+        } else {
+            false
+        }
         notifyDataSetChanged()
     }
 
     fun setSalePosts(salePosts: List<DocumentSnapshot>) {
-        saleBookList.clear()
-        saleBookList.addAll(salePosts)
+        this.saleBookList.clear()
+        this.saleBookList.addAll(salePosts)
         notifyDataSetChanged()
     }
 
@@ -174,7 +173,14 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
                 BookState.VERY_GOOD -> R.drawable.sharp_sentiment_very_satisfied_10
             }
 
-            binding.imgRowPostSwapState.setImageResource(emoji)
+        fun bind(swapData: SwapBookData) {
+            binding.textRowPostSwapTitle.text = swapData.swapBookTitle
+            binding.textRowPostSwapAuthor.text = swapData.swapBookAuthor
+            binding.btnRowPostSwapType.text = swapData.swapBookType.name
+            binding.btnRowPostSwapType2.text = swapData.bookSwapType.name
+            binding.textRowPostSwapPrice.text = swapData.swapBookRegPrice
+            binding.textRowPostSwapState.text = swapData.swapBookState.name
+            binding.textRowPostSwapUser.text = swapData.swapBookExplain
 
             Glide.with(binding.root.context)
                 .load(swapData.swapBookPostImg)
@@ -226,17 +232,8 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
             binding.btnRowPostSaleType.text = saleData.saleBookType.toKorean()
             binding.btnRowPostSalePrice.text = saleData.saleBookPrice
             binding.textRowPostSaleRegPrice.text = saleData.saleBookRegPrice
-            binding.textRowPostSaleState.text = saleData.saleBookState.toKorean()
-
-            val emoji = when (saleData.saleBookState) {
-                BookState.VERY_BAD -> R.drawable.round_sentiment_very_dissatisfied_10
-                BookState.BAD -> R.drawable.baseline_sentiment_very_dissatisfied_10
-                BookState.COMMON -> R.drawable.baseline_sentiment_neutral_10
-                BookState.GOOD -> R.drawable.baseline_sentiment_satisfied_alt_10
-                BookState.VERY_GOOD -> R.drawable.sharp_sentiment_very_satisfied_10
-            }
-
-            binding.imgRowPostSaleState.setImageResource(emoji)
+            binding.textRowPostSaleState.text = saleData.saleBookState.name
+            binding.textRowPostSaleUser.text = saleData.saleBookExplain
 
             Glide.with(binding.root.context)
                 .load(saleData.saleBookPostImg)

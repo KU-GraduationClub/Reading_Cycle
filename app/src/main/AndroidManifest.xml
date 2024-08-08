@@ -46,8 +46,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" android:exported="true"> </activity>
-        <activity android:name="com.example.reading_cycle.chat.vm.ChatRoomActivity" />
-
     </application>
 
 </manifest>

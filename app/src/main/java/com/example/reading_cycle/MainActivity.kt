@@ -5,18 +5,16 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.reading_cycle.library.LibraryMyFragment
-import com.example.reading_cycle.chat.ChatListFragment
+//import com.example.reading_cycle.Library.LibraryMainFragment
+//import com.example.reading_cycle.Library.LibraryMyFragment
+import com.example.reading_cycle.chat.ui.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
 import com.example.reading_cycle.library.LibraryMainFragment
+import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.location.LocSetFragment
 import com.example.reading_cycle.login.EditUserFragment
 import com.example.reading_cycle.login.ListSettingsFragment
@@ -39,8 +37,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
-    val userViewModel: UserViewModel by viewModels()
-
 
     companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
@@ -74,18 +70,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Initialize Firebase
-        Firebase.initialize(context = this)
-        Firebase.appCheck.installAppCheckProviderFactory(
-            PlayIntegrityAppCheckProviderFactory.getInstance(),
-        )
+        FirebaseApp.initializeApp(this)
 
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        // 인텐트를 통해 전달된 데이터 처리
-        userViewModel.userIdx = intent.getStringExtra("userIdx")
-
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false)
+        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -101,6 +91,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
+
         SystemClock.sleep(100)
 
         // Fragment 교체 상태로 설정한다.
@@ -137,6 +128,8 @@ class MainActivity : AppCompatActivity() {
             putString("userIdx", userViewModel.userIdx)
         }
 
+        newFragment?.arguments = bundle
+
         // Fragment 교체한다.
         fragmentTransaction.replace(R.id.hostFragmentMain, newFragment!!)
 
@@ -149,6 +142,8 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
+
+
     // Fragment BackStack에서 제거.
     fun removeFragment(name: String) {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -158,7 +153,6 @@ class MainActivity : AppCompatActivity() {
     fun showBottomNavigation() {
         mainBinding.bottomNavigation.visibility = View.VISIBLE
     }
-
     fun hideBottomNavigation() {
         mainBinding.bottomNavigation.visibility = View.GONE
     }
@@ -171,6 +165,7 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(LOC_SET_FRAGMENT, true)
     }
 
+
     fun navigateToPostMainFragment() {
         replaceFragment(POST_MAIN_FRAGMENT, true)
     }
@@ -180,7 +175,7 @@ class MainActivity : AppCompatActivity() {
             putString("documentId", documentId)
             Log.d("MainActivity", "Navigating to SwapPostFragment with documentId: $documentId")
         }
-        replaceFragment(SWAP_POST_FRAGMENT, true, bundle)
+        replaceFragment(SWAP_POST_FRAGMENT, true)
     }
 
     fun navigateToSalePostFragment(documentId: String) {
@@ -190,8 +185,4 @@ class MainActivity : AppCompatActivity() {
         }
         replaceFragment(SALE_POST_FRAGMENT, true, bundle)
     }
-}
-
-class UserViewModel : ViewModel() {
-    var userIdx: String? = null
 }

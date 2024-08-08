@@ -112,10 +112,10 @@ class SalePostFragment : Fragment() {
         fragmentSalePostBinding.apply {
             textSalePostTitle.text = data.saleBookTitle
             textSalePostAuthor.text = data.saleBookAuthor
-            btnSalePostType.text = data.saleBookType.displayName
+            btnSalePostType.text = data.saleBookType.name
             btnSalePostPrice.text = data.saleBookPrice
             textSalePostRegPrice.text = data.saleBookRegPrice
-            textSalePostState.text = data.saleBookState.displayName
+            textSalePostState.text = data.saleBookState.name
             textSalePostExplain.text = data.saleBookExplain
 
             // 대표 이미지 설정 (첫 번째 이미지)
@@ -171,9 +171,7 @@ class SalePostFragment : Fragment() {
     private fun loadImageView(imageView: ImageView, imageUrl: String?) {
         Glide.with(this@SalePostFragment)
             .load(imageUrl)
-            .centerCrop()
-            .downsample(DownsampleStrategy.AT_MOST)
-            .format(DecodeFormat.PREFER_ARGB_8888)
+            .centerCrop() // 이미지를 원본 비율을 유지하면서 이미지뷰를 꽉 채우도록 설정
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(imageView)
     }
@@ -228,9 +226,9 @@ class SalePostPagerAdapter(private var images: List<String>) : RecyclerView.Adap
         val imageUrl = images[position]
         Glide.with(holder.itemView.context)
             .load(imageUrl)
-            .centerCrop()
-            .downsample(DownsampleStrategy.AT_MOST)
-           .format(DecodeFormat.PREFER_ARGB_8888) // 고화질 포맷 사용
+            .centerCrop() // 이미지를 원본 비율을 유지하면서 이미지뷰를 꽉 채우도록 설정
+            .downsample(DownsampleStrategy.NONE) // 다운샘플링 없음
+            .format(DecodeFormat.PREFER_ARGB_8888) // 고화질 포맷 사용
             .diskCacheStrategy(DiskCacheStrategy.ALL) // 캐시 전략 설정
             .into(holder.imageView)
     }

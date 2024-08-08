@@ -22,8 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import java.text.SimpleDateFormat
-import java.util.*
+import java.util.UUID
 
 class SetProfileFragment : Fragment() {
 
@@ -88,26 +87,22 @@ class SetProfileFragment : Fragment() {
                 } else {
                     if (selectedImageUri != null) {
                         uploadImageToFirebaseStorage { imageUrl ->
-                            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
                             val userData = LoginDataClass(
                                 userIdx = auth.currentUser?.uid ?: "",
                                 userNickname = userNickname,
                                 userPhoneNumber = userPhoneNumber,
                                 userProfileImage = imageUrl,
-                                userLocation = "",
-                                regDate = currentDate // 가입일자 추가
+                                userLocation = "" // 비어 있는 상태로 설정
                             )
                             loginViewModel.uploadUserData(userData)
                         }
                     } else {
-                        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
                         val userData = LoginDataClass(
                             userIdx = auth.currentUser?.uid ?: "",
                             userNickname = userNickname,
                             userPhoneNumber = userPhoneNumber,
                             userProfileImage = "",
-                            userLocation = "",
-                            regDate = currentDate // 가입일자 추가
+                            userLocation = "" // 비어 있는 상태로 설정
                         )
                         loginViewModel.uploadUserData(userData)
                     }
@@ -118,18 +113,11 @@ class SetProfileFragment : Fragment() {
 
             loginViewModel.uploadSuccess.observe(viewLifecycleOwner) { success ->
                 if (success) {
-                    // userIdx를 ViewModel에서 가져오기
-                    val userIdx = (activity as MainActivity).userViewModel.userIdx
-
-                    if (userIdx != null) {
-                        val bundle = Bundle().apply {
-                            putString("userIdx", userIdx)
-                        }
-                        mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, bundle)
-                    } else {
-                        // userIdx가 null일 경우 처리
-                        Log.e(TAG, "User index is null, cannot proceed to POST_MAIN_FRAGMENT.")
+                    val userIdx = auth.currentUser?.uid ?: ""
+                    val intent = Intent(mainActivity, MainActivity::class.java).apply {
+                        putExtra("userIdx", userIdx)
                     }
+                    mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
                 }
             }
 

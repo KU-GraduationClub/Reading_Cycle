@@ -1,10 +1,8 @@
 package com.example.reading_cycle.post
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -15,6 +13,7 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,8 +55,7 @@ class AddSwapPostFragment : Fragment() {
     private lateinit var viewModel: AddSwapPostViewModel
     private var selectedCardIndex: Int? = null
     private var selectedFrameId: Int? = null
-    private var selectedBookType1: BookType? = null
-    private var selectedBookType2: BookType? = null
+    private var selectedBookType: BookType? = null
     private var selectedBookState: BookState? = null
     private val selectedImages = mutableListOf<Bitmap>()
     private val userViewModel: UserViewModel by activityViewModels()
@@ -137,11 +135,9 @@ class AddSwapPostFragment : Fragment() {
         viewModel.uploadResult.observe(viewLifecycleOwner) { success ->
             if (success) {
                 showSnackbar("게시글이 성공적으로 등록되었습니다.")
-                // PostMainFragment로 이동, RecyclerView 갱신
                 mainActivity.removeFragment(MainActivity.ADD_SWAP_POST_FRAGMENT)
-                mainActivity.navigateToPostMainFragment()
             } else {
-                showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요")
+                showSnackbar("게시글 등록에 실패했습니다.")
             }
         }
 
@@ -162,17 +158,16 @@ class AddSwapPostFragment : Fragment() {
     private suspend fun collectInputData(): SwapBookData {
         val title =  fragmentAddSwapPostBinding.edtAddSwapPostTitle.text.toString()
         val author =  fragmentAddSwapPostBinding.edtAddSwapPostAuthor.text.toString()
-        val bookType = selectedBookType1 ?: throw IllegalStateException("판매 도서 종류를 선택해주세요")
-        val bookSwapType = selectedBookType2 ?: throw IllegalStateException("교환할 도서 종류를 선택해주세요")
+        val bookType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
+        val bookSwapType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
         val regPrice = fragmentAddSwapPostBinding.edtAddSwapPostRegPrice.text.toString()
-        val bookState = selectedBookState ?: throw IllegalStateException("도서 상태를 선택해주세요")
+        val bookState = determineBookState()
         val description =  fragmentAddSwapPostBinding.edtAddSwapPostExplain.text.toString()
 
-        if (title.isBlank()) throw IllegalStateException("제목을 입력하세요.")
-        if (author.isBlank()) throw IllegalStateException("작가를 입력하세요.")
-        if (regPrice.isBlank()) throw IllegalStateException("가격을 입력하세요.")
-        if (description.isBlank()) throw IllegalStateException("설명을 입력하세요.")
-        if (selectedImages.isEmpty()) throw IllegalStateException("최소 한 장의 이미지를 등록하세요.")
+        if (regPrice.isBlank()) {
+            showSnackbar("빈 칸 없이 작성해주세요.")
+            throw IllegalStateException("Price fields must not be empty.")
+        }
 
         val imageUrls = withContext(Dispatchers.IO) {
             uploadImagesAndGetUrls(selectedImages)
@@ -255,55 +250,39 @@ class AddSwapPostFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_PICK_IMAGE -> {
-                if (resultCode == RESULT_OK) {
-                    val imageUri = data?.data
-                    imageUri?.let { uri ->
-                        val imageBitmap = uriToBitmap(uri)
-                        imageBitmap?.let { bitmap ->
-                            val resizedBitmap = resizeBitmap(bitmap)
-                            selectedCardIndex?.let { index ->
-                                // 이미지를 대체하거나 추가하는 경우
-                                if (index < selectedImages.size) {
-                                    // 이미지를 대체하는 경우, 기존 이미지를 삭제하고 새 이미지를 추가함
-                                    selectedImages.removeAt(index)
-                                    selectedImages.add(index, resizedBitmap)
-                                } else {
-                                    // 선택한 인덱스가 리스트의 범위를 넘어가는 경우 새로운 이미지를 추가함
-                                    selectedImages.add(resizedBitmap)
-                                }
-                                val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(cardViewIds[index])
+            AddSwapPostFragment.REQUEST_PICK_IMAGE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val selectedImageUris = data?.clipData
+                    selectedImageUris?.let { clipData ->
+                        for (i in 0 until minOf(clipData.itemCount, cardViewIds.size)) { // 최대 5개까지만 처리
+                            val imageUri = clipData.getItemAt(i).uri
+                            val imageBitmap = uriToBitmap(imageUri)
+                            imageBitmap?.let { bitmap ->
+                                val resizedBitmap = resizeBitmap(bitmap)
+                                selectedImages.add(resizedBitmap)
+                                val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(
+                                    cardViewIds[i])
                                     .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                                     .id
                                 fragmentAddSwapPostBinding.root.findViewById<ImageView>(imageViewId).setImageBitmap(resizedBitmap)
                                 // 다음 번호의 카드뷰를 보여줌
-                                if (index < cardViewIds.size - 1) {
-                                    val nextCardViewId = cardViewIds[index + 1]
-                                    fragmentAddSwapPostBinding.root.findViewById<CardView>(nextCardViewId).visibility = View.VISIBLE
+                                if (i < cardViewIds.size - 1) {
+                                    val nextCardViewId = cardViewIds[i + 1]
+                                    fragmentAddSwapPostBinding.root.findViewById<CardView>(
+                                        nextCardViewId
+                                    ).visibility = View.VISIBLE
                                 }
                             }
-                        } ?: run {
-                            showSnackbar("이미지를 가져오는 데 문제가 발생했습니다.")
                         }
-                    } ?: run {
-                        showSnackbar("이미지를 가져오는 데 문제가 발생했습니다.")
                     }
                 }
             }
-            REQUEST_IMAGE_CAPTURE -> {
-                if (resultCode == RESULT_OK) {
+            AddSwapPostFragment.REQUEST_IMAGE_CAPTURE -> {
+                if (resultCode == Activity.RESULT_OK) {
                     val imageBitmap = data?.extras?.get("data") as Bitmap
                     val resizedBitmap = resizeBitmap(imageBitmap)
+                    selectedImages.add(resizedBitmap)
                     selectedCardIndex?.let { index ->
-                        // 이미지를 대체하거나 추가하는 경우
-                        if (index < selectedImages.size) {
-                            // 이미지를 대체하는 경우, 기존 이미지를 삭제하고 새 이미지를 추가함
-                            selectedImages.removeAt(index)
-                            selectedImages.add(index, resizedBitmap)
-                        } else {
-                            // 선택한 인덱스가 리스트의 범위를 넘어가는 경우 새로운 이미지를 추가함
-                            selectedImages.add(resizedBitmap)
-                        }
                         val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(cardViewIds[index])
                             .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                             .id
@@ -366,8 +345,9 @@ class AddSwapPostFragment : Fragment() {
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // 다중 선택 허용
         startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-            AddSwapPostFragment.REQUEST_PICK_IMAGE
+            AddSalePostFragment.REQUEST_PICK_IMAGE
         )
     }
 
@@ -379,11 +359,11 @@ class AddSwapPostFragment : Fragment() {
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(android.Manifest.permission.CAMERA),
-                AddSwapPostFragment.REQUEST_IMAGE_CAPTURE
+                AddSalePostFragment.REQUEST_IMAGE_CAPTURE
             )
         } else {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(intent, AddSwapPostFragment.REQUEST_IMAGE_CAPTURE)
+            startActivityForResult(intent, AddSalePostFragment.REQUEST_IMAGE_CAPTURE)
         }
     }
 
@@ -393,7 +373,7 @@ class AddSwapPostFragment : Fragment() {
         popupMenu.menuInflater.inflate(R.menu.popup_menu_add_post_book_type, popupMenu.menu)
 
         popupMenu.setOnMenuItemClickListener { menuItem ->
-            val selectedBookType = when (menuItem.itemId) {
+            selectedBookType = when (menuItem.itemId) {
                 R.id.menuNovel -> BookType.NOVEL
                 R.id.menuPoetry -> BookType.POETRY
                 R.id.menuEssay -> BookType.ESSAY
@@ -417,20 +397,36 @@ class AddSwapPostFragment : Fragment() {
                 else -> null
             }
             selectedBookType?.let {
-                when (buttonId) {
-                    R.id.btnAddSwapPostType1 -> {
-                        selectedBookType1 = it // 판매 도서 타입 저장
-                        updateButtonText(it.displayName, buttonId)
-                    }
-                    R.id.btnAddSwapPostType2 -> {
-                        selectedBookType2 = it // 교환 도서 타입 저장
-                        updateButtonText(it.displayName, buttonId)
-                    }
-                }
+                updateButtonText(showBookTypeText(it), buttonId)
             }
             true
         }
         popupMenu.show()
+    }
+
+    private fun showBookTypeText(bookType: BookType): String {
+        return when (bookType) {
+            BookType.NOVEL -> "소설"
+            BookType.POETRY -> "시"
+            BookType.ESSAY -> "에세이"
+            BookType.CLASSIC -> "고전"
+            BookType.COMIC -> "만화"
+            BookType.SELF_DEVELOPMENT -> "자기계발"
+            BookType.REFERENCE -> "학습/참고서"
+            BookType.MAJOR -> "전공서"
+            BookType.COOKING -> "요리/제빵"
+            BookType.LANGUAGE -> "외국어"
+            BookType.SOCIAL_SCIENCE -> "사회/과학"
+            BookType.ART -> "예술"
+            BookType.RELIGION -> "종교"
+            BookType.ECONOMICS -> "경제/경영"
+            BookType.HEALTH_TRAVEL -> "건강/여행"
+            BookType.HISTORY -> "역사"
+            BookType.PHILOSOPHY -> "철학"
+            BookType.CHILDREN -> "어린이"
+            BookType.TODDLER -> "유아"
+            BookType.OTHER -> "기타"
+        }
     }
 
     private fun updateButtonText(text: String, buttonId: Int) {
