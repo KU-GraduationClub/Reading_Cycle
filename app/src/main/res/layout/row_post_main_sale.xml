@@ -117,8 +117,8 @@
     <View
         android:id="@+id/BorderRowPostSale1"
         android:layout_width="95dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="9dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/border_post_main"
         app:layout_constraintEnd_toEndOf="parent"
@@ -193,7 +193,8 @@
     <FrameLayout
         android:id="@+id/FrameRowPostSale"
         android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BorderRowPostSale1">
@@ -201,7 +202,7 @@
         <View
             android:id="@+id/BorderRowPostSale2"
             android:layout_width="95dp"
-            android:layout_height="44dp"
+            android:layout_height="27dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/border_post_main"
@@ -222,37 +223,19 @@
         <TextView
             android:id="@+id/textRowPostSaleUser"
             android:layout_width="60dp"
-            android:layout_height="16dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="11dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:fontFamily="@font/soyo_maple_regular"
             android:gravity="center|left"
             android:maxLines="1"
             android:text="유저 이름"
             android:textColor="#000000"
-            android:textSize="9dp"
+            android:textSize="8dp"
             app:layout_constraintStart_toEndOf="@+id/imgRowPostSaleUser"
             app:layout_constraintTop_toTopOf="@+id/BorderRowPostSale2" />
 
-        <Button
-            android:id="@+id/btnRowPostSaleUser"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginTop="25dp"
-            android:backgroundTint="#27713C"
-            android:clickable="false"
-            android:fontFamily="@font/soyo_maple_regular"
-            android:gravity="center"
-            android:padding="1dp"
-            android:text="라이브러리 가기 >"
-            android:textColor="#FFFFFF"
-            android:textSize="8dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/BorderRowPostSale2"
-            app:layout_constraintEnd_toEndOf="@+id/BorderRowPostSale2"
-            app:layout_constraintStart_toStartOf="@+id/BorderRowPostSale2" />
     </FrameLayout>
 
     <View

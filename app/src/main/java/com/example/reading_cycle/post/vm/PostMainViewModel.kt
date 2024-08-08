@@ -3,49 +3,40 @@ package com.example.reading_cycle.post.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.reading_cycle.post.model.BookState
 import com.example.reading_cycle.post.model.BookType
 import com.example.reading_cycle.post.model.SaleBookData
 import com.example.reading_cycle.post.model.SwapBookData
+import com.example.reading_cycle.post.repository.PostMainRepository
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 
-class PostMainViewModel : ViewModel() {
+class PostMainViewModel(private val postMainRepository: PostMainRepository) : ViewModel() {
 
     private val _salePosts = MutableLiveData<List<DocumentSnapshot>>()
+    val salePosts: LiveData<List<DocumentSnapshot>> get() = _salePosts
+
     private val _swapPosts = MutableLiveData<List<DocumentSnapshot>>()
-    private val firestore = FirebaseFirestore.getInstance()
+    val swapPosts: LiveData<List<DocumentSnapshot>> get() = _swapPosts
 
     init {
         loadPosts()
     }
 
-    fun getSalePostsLiveData(): LiveData<List<DocumentSnapshot>> {
-        return _salePosts
-    }
-
-    fun getSwapPostsLiveData(): LiveData<List<DocumentSnapshot>> {
-        return _swapPosts
-    }
-
     private fun loadPosts() {
-        firestore.collection("salePosts")
-            .get()
-            .addOnSuccessListener { result ->
-                _salePosts.value = result.documents
-            }
-            .addOnFailureListener {
-                // 실패 처리
-            }
+        viewModelScope.launch {
+            try {
+                val salePosts = postMainRepository.getSalePosts()
+                _salePosts.value = salePosts
 
-        firestore.collection("swapPosts")
-            .get()
-            .addOnSuccessListener { result ->
-                _swapPosts.value = result.documents
-            }
-            .addOnFailureListener {
+                val swapPosts = postMainRepository.getSwapPosts()
+                _swapPosts.value = swapPosts
+            } catch (e: Exception) {
                 // 실패 처리
             }
+        }
     }
 }
 
@@ -77,4 +68,15 @@ private fun DocumentSnapshot.toSwapBookData(): SwapBookData {
         swapBookExplain = getString("swapBookExplain") ?: "",
         swapBookWriteDate = getLong("swapBookWriteDate") ?: System.currentTimeMillis()
     )
+}
+
+class PostMainViewModelFactory(
+    private val repository: PostMainRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(PostMainViewModel::class.java)) {
+            return PostMainViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

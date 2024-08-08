@@ -117,7 +117,9 @@ class MainActivity : AppCompatActivity() {
             else -> Fragment()
         }
 
-        newFragment?.arguments = Bundle().apply {
+        newFragment?.arguments = newFragment?.arguments?.apply {
+            putString("userIdx", userViewModel.userIdx)
+        } ?: Bundle().apply {
             putString("userIdx", userViewModel.userIdx)
         }
 
