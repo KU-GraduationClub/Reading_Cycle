@@ -22,7 +22,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import java.util.UUID
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SetProfileFragment : Fragment() {
 
@@ -87,37 +88,29 @@ class SetProfileFragment : Fragment() {
                 } else {
                     if (selectedImageUri != null) {
                         uploadImageToFirebaseStorage { imageUrl ->
+                            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
                             val userData = LoginDataClass(
                                 userIdx = auth.currentUser?.uid ?: "",
                                 userNickname = userNickname,
                                 userPhoneNumber = userPhoneNumber,
                                 userProfileImage = imageUrl,
-                                userLocation = "" // 비어 있는 상태로 설정
+                                userLocation = "",
+                                regDate = currentDate
                             )
                             loginViewModel.uploadUserData(userData)
                         }
                     } else {
+                        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
                         val userData = LoginDataClass(
                             userIdx = auth.currentUser?.uid ?: "",
                             userNickname = userNickname,
                             userPhoneNumber = userPhoneNumber,
                             userProfileImage = "",
-                            userLocation = "" // 비어 있는 상태로 설정
+                            userLocation = "",
+                            regDate = currentDate
                         )
                         loginViewModel.uploadUserData(userData)
                     }
-                } else {
-                    showInvalidNicknameAlert()
-                }
-            }
-
-            loginViewModel.uploadSuccess.observe(viewLifecycleOwner) { success ->
-                if (success) {
-                    val userIdx = auth.currentUser?.uid ?: ""
-                    val intent = Intent(mainActivity, MainActivity::class.java).apply {
-                        putExtra("userIdx", userIdx)
-                    }
-                    mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, null)
                 }
             }
 

@@ -27,7 +27,7 @@ class SalePostRepository(private val userId: String) {
     // 사용자 데이터를 가져오는 메소드
     suspend fun getUserData(): LoginDataClass? {
         return try {
-            val snapshot = db.collection("users")
+            val snapshot = db.collection("Users")
                 .document(userId)
                 .get()
                 .await()

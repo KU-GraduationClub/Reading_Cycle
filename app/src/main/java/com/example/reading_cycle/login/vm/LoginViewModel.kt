@@ -3,8 +3,8 @@ package com.example.reading_cycle.login.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import LoginRepository
 import com.example.reading_cycle.login.model.LoginDataClass
+import com.example.reading_cycle.login.repository.LoginRepository
 
 class LoginViewModel : ViewModel() {
     private val repository = LoginRepository()
@@ -19,11 +19,13 @@ class LoginViewModel : ViewModel() {
 
     fun uploadUserData(userData: LoginDataClass) {
         repository.uploadUserDataToFirestore(userData,
-            onSuccess = { _uploadSuccess.value = true },
-            onFailure = {
-                val it = null
-                _uploadError.value = it!!
-            })
+            onSuccess = {
+                _uploadSuccess.value = true
+            },
+            onFailure = { exception ->
+                _uploadError.value = exception
+            }
+        )
     }
 
     private val _userExists = MutableLiveData<LoginDataClass?>()
@@ -31,22 +33,18 @@ class LoginViewModel : ViewModel() {
         get() = _userExists
 
     fun checkUserExistence(userPhoneNumber: String) {
-        repository.run {
-            checkIfUserExists(
-                userPhoneNumber,
-                onUserExists = {
-                    val it = null
-                    _userExists.value = it
-                },
-                onUserNotExists = {
-                    _userExists.value = null
-                },
-                onError = {
-                    val it = null
-                    _uploadError.value = it!!
-                }
-            )
-        }
+        repository.checkIfUserExists(
+            userPhoneNumber,
+            onUserExists = { userData ->
+                _userExists.value = userData
+            },
+            onUserNotExists = {
+                _userExists.value = null
+            },
+            onError = { e ->
+                _uploadError.value = e
+            }
+        )
     }
 
     private val _nicknameExists = MutableLiveData<Boolean>()
@@ -67,20 +65,4 @@ class LoginViewModel : ViewModel() {
             }
         )
     }
-}
-
-class LoginRepository {
-    fun uploadUserDataToFirestore(userData: LoginDataClass, onSuccess: () -> Unit, onFailure: Any) {
-        TODO("Not yet implemented")
-    }
-
-    fun checkIfUserExists(
-        userPhoneNumber: String,
-        onUserExists: Any,
-        onUserNotExists: () -> Unit,
-        onError: Any
-    ) {
-        TODO("Not yet implemented")
-    }
-
 }

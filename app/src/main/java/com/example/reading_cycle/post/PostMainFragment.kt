@@ -12,9 +12,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
+import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
 import com.example.reading_cycle.post.repository.PostMainRepository
@@ -24,7 +26,7 @@ import com.example.reading_cycle.post.vm.PostSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.firestore.DocumentSnapshot
 
-class PostMainFragment : Fragment() {
+class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentPostMainBinding: FragmentPostMainBinding
@@ -45,6 +47,7 @@ class PostMainFragment : Fragment() {
         // BottomSheetBehavior 초기화
         bottomSheetBehavior = BottomSheetBehavior.from(fragmentPostMainBinding.bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
         // BottomSheetViewModel 초기화
         bottomSheetViewModel = ViewModelProvider(this)[PostSheetViewModel::class.java]
 
@@ -113,6 +116,7 @@ class PostMainFragment : Fragment() {
         fragmentPostMainBinding.conPostMainSort.setOnClickListener {
             showPopupMenu(it)
         }
+
         // 이미지 버튼 클릭 이벤트 처리
         fragmentPostMainBinding.imgBtnPostMain.setOnClickListener {
             showPostTypeDialog()
@@ -120,7 +124,6 @@ class PostMainFragment : Fragment() {
 
         return fragmentPostMainBinding.root
     }
-
 
     private fun showPopupMenu(view: View) {
         val popup = PopupMenu(requireContext(), view)
@@ -166,7 +169,6 @@ class PostMainFragment : Fragment() {
         fragmentPostMainBinding.textPostMainSort.text = sortText
     }
 
-
     private fun showPostTypeDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("게시글 유형을 선택해 주세요")
@@ -191,18 +193,16 @@ class PostMainFragment : Fragment() {
         dialog.show()
     }
 
-
     // RecyclerView 아이템 클릭 처리
-    fun onSwapItemClick(document: DocumentSnapshot) {
+    override fun onSwapItemClick(document: DocumentSnapshot) {
         val documentId = document.id
         mainActivity.navigateToSwapPostFragment(documentId)
     }
 
-    fun onSaleItemClick(document: DocumentSnapshot) {
+    override fun onSaleItemClick(document: DocumentSnapshot) {
         val documentId = document.id
         mainActivity.navigateToSalePostFragment(documentId)
     }
-
 
     // UserIdx 미전달 시 초기화면으로 이동
     private fun navigateToLogin() {

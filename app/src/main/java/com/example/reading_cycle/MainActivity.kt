@@ -5,12 +5,12 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-//import com.example.reading_cycle.Library.LibraryMainFragment
-//import com.example.reading_cycle.Library.LibraryMyFragment
-import com.example.reading_cycle.chat.ui.ChatListFragment
+import androidx.lifecycle.ViewModel
+import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
 import com.example.reading_cycle.library.LibraryMainFragment
@@ -27,16 +27,14 @@ import com.example.reading_cycle.post.AddSwapPostFragment
 import com.example.reading_cycle.post.PostMainFragment
 import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
-import com.google.firebase.Firebase
-import com.google.firebase.appcheck.appCheck
-import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.initialize
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
+    val userViewModel: UserViewModel by viewModels()
 
     companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
@@ -185,4 +183,8 @@ class MainActivity : AppCompatActivity() {
         }
         replaceFragment(SALE_POST_FRAGMENT, true, bundle)
     }
+}
+
+class UserViewModel : ViewModel() {
+    var userIdx: String? = null
 }

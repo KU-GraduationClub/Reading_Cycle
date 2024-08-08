@@ -1,8 +1,10 @@
-import android.util.Log
+package com.example.reading_cycle.login.repository
+
 import com.example.reading_cycle.login.model.LoginDataClass
 import com.google.firebase.firestore.FirebaseFirestore
 
-class AddLoginRepository {
+class LoginRepository {
+    private val db = FirebaseFirestore.getInstance()
 
     fun uploadUserDataToFirestore(userData: LoginDataClass, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         val userRef = db.collection("Users").document(userData.userIdx)
@@ -26,13 +28,12 @@ class AddLoginRepository {
                     onUserNotExists()
                 }
             }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
-                onFailure(e)
+            .addOnFailureListener { exception ->
+                onError(exception)
             }
     }
 
-eckIfNicknameExists(
+    fun checkIfNicknameExists(
         nickname: String,
         onNicknameExists: () -> Unit,
         onNicknameNotExists: () -> Unit,
