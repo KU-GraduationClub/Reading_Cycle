@@ -26,10 +26,12 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
+import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.FragmentAddSalePostBinding
 import com.example.reading_cycle.post.model.BookState
 import com.example.reading_cycle.post.model.BookType
@@ -58,6 +60,7 @@ class AddSalePostFragment : Fragment() {
     private var selectedBookType: BookType? = null
     private var selectedBookState: BookState? = null
     private val selectedImages = mutableListOf<Bitmap>()
+    private val userViewModel: UserViewModel by activityViewModels()
 
     private val cardViewIds = listOf(
         R.id.cardViewAddSalePostImg1,
@@ -79,9 +82,12 @@ class AddSalePostFragment : Fragment() {
         mainActivity = activity as MainActivity
         fragmentAddSalePostBinding = FragmentAddSalePostBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
+
+        val userIdx = userViewModel.userIdx
+        Log.d("PostMainFragment", "User Index: $userIdx")
+
         // ViewModelFactory 초기화
         val factory = AddSalePostViewModelFactory(AddSalePostRepository())
-        // ViewModelProvider를 통해 ViewModel 인스턴스를 가져옴
         viewModel = ViewModelProvider(this, factory)[AddSalePostViewModel::class.java]
 
         // 뒤로 가기 버튼 클릭 리스너
@@ -109,44 +115,20 @@ class AddSalePostFragment : Fragment() {
         fragmentAddSalePostBinding.FrameAddSalePostVeryBad.setOnClickListener {
             selectFrame(R.id.FrameAddSalePostVeryBad)
         }
-
         fragmentAddSalePostBinding.FrameAddSalePostBad.setOnClickListener {
             selectFrame(R.id.FrameAddSalePostBad)
         }
-
         fragmentAddSalePostBinding.FrameAddSalePostCommon.setOnClickListener {
             selectFrame(R.id.FrameAddSalePostCommon)
         }
-
         fragmentAddSalePostBinding.FrameAddSalePostGood.setOnClickListener {
             selectFrame(R.id.FrameAddSalePostGood)
         }
-
         fragmentAddSalePostBinding.FrameAddSalePostVeryGood.setOnClickListener {
             selectFrame(R.id.FrameAddSalePostVeryGood)
         }
 
-        // 버튼 클릭 이벤트 리스너 설정
-        fragmentAddSalePostBinding.btnAddSalePostComplete.setOnClickListener {
-            lifecycleScope.launch {
-                try {
-                    // 완료 버튼 클릭 시 버튼 비활성화
-                    fragmentAddSalePostBinding.btnAddSalePostComplete.isEnabled = false
-                    val colorStateList = ColorStateList.valueOf(Color.GRAY)
-                    fragmentAddSalePostBinding.btnAddSalePostComplete.backgroundTintList = colorStateList
-
-                    val saleData = collectInputData()
-                    viewModel.uploadSalePost(saleData)
-                } catch (e: IllegalStateException) {
-                    showSnackbar(e.message ?: "빈 칸 없이 작성해주세요.")
-                } catch (e: Exception) {
-                    showSnackbar("게시글 등록에 실패했습니다. 다시 시도해주세요.")
-                } finally {
-                    fragmentAddSalePostBinding.btnAddSalePostComplete.isEnabled = true
-                    fragmentAddSalePostBinding.btnAddSalePostComplete.backgroundTintList  = ColorStateList.valueOf(Color.parseColor("#CF8127"))
-                }
-            }
-        }
+        fragmentAddSalePostBinding.btnAddSalePostComplete.setOnClickListener { handleCompleteButtonClick() }
 
         // 뷰모델에서 uploadResult 결과에 따른 동작 수행
         viewModel.uploadResult.observe(viewLifecycleOwner) { success ->
@@ -161,6 +143,17 @@ class AddSalePostFragment : Fragment() {
         }
 
         return fragmentAddSalePostBinding.root
+    }
+
+    private fun handleCompleteButtonClick() {
+        lifecycleScope.launch {
+            try {
+                val saleBookData = collectInputData()
+                viewModel.uploadSalePost(saleBookData)
+            } catch (e: IllegalStateException) {
+                showSnackbar(e.message ?: "알 수 없는 오류가 발생했습니다.")
+            }
+        }
     }
 
     private suspend fun collectInputData(): SaleBookData {
@@ -183,7 +176,10 @@ class AddSalePostFragment : Fragment() {
             uploadImagesAndGetUrls(selectedImages)
         }
 
+        val userId = userViewModel.userIdx ?: throw IllegalStateException("유저 ID를 가져올 수 없습니다.")
+
         return SaleBookData(
+            userId = userId,
             saleBookPostImg = imageUrls.firstOrNull() ?: "",
             saleBookImg = imageUrls,
             saleBookTitle = title,

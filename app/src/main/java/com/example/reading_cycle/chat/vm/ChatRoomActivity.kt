@@ -95,7 +95,6 @@ class ChatRoomActivity : AppCompatActivity() {
                 }
             })
 
-
         binding.btnSubmit.setOnClickListener {
             val messageContent = binding.edtSend.text.toString().trim()
             if (messageContent.isNotEmpty()) {
@@ -108,6 +107,7 @@ class ChatRoomActivity : AppCompatActivity() {
                 val content = DataMessage(messageContent, formattedTime, name, messageId)
 
                 newMessageRef.setValue(content)
+
                     .addOnSuccessListener {
                         Log.d("MessageActivity", "Data write successful: $content")
                         binding.edtSend.setText("")
@@ -123,7 +123,6 @@ class ChatRoomActivity : AppCompatActivity() {
                 Log.e("MessageActivity", "Please enter a message.")
             }
         }
-
 
     }
 

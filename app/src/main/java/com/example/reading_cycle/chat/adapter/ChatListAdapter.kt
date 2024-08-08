@@ -48,3 +48,4 @@ class ChatListAdapter(private val chatList: List<ChatItem>, private val listener
 
     override fun getItemCount(): Int = chatList.size
 }
+

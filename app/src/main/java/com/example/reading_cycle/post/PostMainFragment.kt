@@ -1,7 +1,6 @@
 package com.example.reading_cycle.post
 
 import android.app.AlertDialog
-import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -19,7 +19,9 @@ import com.example.reading_cycle.R
 import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.FragmentPostMainBinding
 import com.example.reading_cycle.post.model.PostMainAdapter
+import com.example.reading_cycle.post.repository.PostMainRepository
 import com.example.reading_cycle.post.vm.PostMainViewModel
+import com.example.reading_cycle.post.vm.PostMainViewModelFactory
 import com.example.reading_cycle.post.vm.PostSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.firestore.DocumentSnapshot
@@ -31,7 +33,7 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
     private lateinit var postMainAdapter: PostMainAdapter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var bottomSheetViewModel: PostSheetViewModel
-    private val postMainViewModel: PostMainViewModel by viewModels()
+    private lateinit var postMainViewModel: PostMainViewModel
     private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -46,15 +48,24 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         bottomSheetBehavior = BottomSheetBehavior.from(fragmentPostMainBinding.bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-        // Bundle로부터 userIdx를 가져온다.
-        val userIdx = userViewModel.userIdx
-        Log.d("PostMainFragment", "User Index: $userIdx")
-
-        // ViewModel 초기화
+        // BottomSheetViewModel 초기화
         bottomSheetViewModel = ViewModelProvider(this)[PostSheetViewModel::class.java]
 
+        // UserIdx 확인 및 로그인 화면으로 이동
+        val userIdx = userViewModel.userIdx
+        if (userIdx == null) {
+            navigateToLogin()
+            return null
+        }
+
+        // ViewModel 초기화
+        val postMainRepository = PostMainRepository()
+        val viewModelFactory = PostMainViewModelFactory(postMainRepository)
+        postMainViewModel = ViewModelProvider(this, viewModelFactory)[PostMainViewModel::class.java]
+
         // 어댑터 초기화
-        postMainAdapter = PostMainAdapter(this)
+        postMainAdapter = PostMainAdapter(userViewModel, this)
+
         // RecyclerView 설정
         fragmentPostMainBinding.recyclerViewPostMain.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -62,11 +73,11 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         }
 
         // LiveData 관찰
-        postMainViewModel.getSalePostsLiveData().observe(viewLifecycleOwner, Observer { salePosts ->
+        postMainViewModel.salePosts.observe(viewLifecycleOwner, Observer { salePosts ->
             postMainAdapter.setSalePosts(salePosts)
         })
 
-        postMainViewModel.getSwapPostsLiveData().observe(viewLifecycleOwner, Observer { swapPosts ->
+        postMainViewModel.swapPosts.observe(viewLifecycleOwner, Observer { swapPosts ->
             postMainAdapter.setSwapPosts(swapPosts)
         })
 
@@ -185,5 +196,18 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
     override fun onSaleItemClick(document: DocumentSnapshot) {
         val documentId = document.id
         mainActivity.navigateToSalePostFragment(documentId)
+    }
+
+
+    // UserIdx 미전달 시 초기화면으로 이동
+    private fun navigateToLogin() {
+        val fragmentManager = requireActivity().supportFragmentManager
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+        // 로그인 프래그먼트로 이동
+        (activity as MainActivity).replaceFragment(
+            MainActivity.LOGIN_MAIN_FRAGMENT,
+            false
+        )
     }
 }

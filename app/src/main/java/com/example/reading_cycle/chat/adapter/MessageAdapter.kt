@@ -19,6 +19,10 @@ class MessageAdapter(private val messageList: List<DataMessage>, private val myN
         messageList.sortedBy { it.timestamp }
     }
 
+    init {
+        // messageList를 timestamp에 따라 정렬
+        messageList.sortedBy { it.timestamp }
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return if (viewType == MY_MESSAGE_VIEW_TYPE) {
@@ -78,8 +82,6 @@ class MessageAdapter(private val messageList: List<DataMessage>, private val myN
             nameTextView.text = message.name
         }
     }
-
-
 
     companion object {
         private const val MY_MESSAGE_VIEW_TYPE = 0
