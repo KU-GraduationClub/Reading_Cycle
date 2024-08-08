@@ -17,7 +17,7 @@ class SalePostViewModel(private val repository: SalePostRepository) : ViewModel(
     val saleBookData = MutableLiveData<SaleBookData?>()
     val userData = MutableLiveData<LoginDataClass?>()
 
-    // 데이터 요청 메서드
+    // 특정 도서 데이터를 요청하는 메서드
     fun fetchSaleBookData(documentId: String) {
         Log.d("SalePostViewModel", "Fetching data for document ID: $documentId")
         viewModelScope.launch(Dispatchers.IO) {
@@ -30,28 +30,32 @@ class SalePostViewModel(private val repository: SalePostRepository) : ViewModel(
                     saleBookData.postValue(saleBook)
                 } else {
                     Log.e("SalePostViewModel", "No data found for document ID: $documentId")
+                    saleBookData.postValue(null)
                 }
             } catch (e: Exception) {
                 Log.e("SalePostViewModel", "Error fetching data: ${e.message}", e)
+                saleBookData.postValue(null)
             }
         }
     }
 
-    // 사용자 데이터를 가져오는 메서드
+    // 사용자 데이터를 요청하는 메서드
     fun fetchUserData() {
+        Log.d("SalePostViewModel", "Fetching user data")
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 // 데이터를 repository를 통해 가져옵니다.
-                val userId = repository.getUserData()
-                if (userId != null) {
-                    Log.d("SalePostViewModel", "User data fetched: ${userId.userNickname}")
-                    // UI 스레드에서 LiveData 값 업데이트
-                    userData.postValue(userId)
+                val user = repository.getUserData()
+                if (user != null) {
+                    Log.d("SalePostViewModel", "User data fetched: ${user.userNickname}")
                 } else {
-
+                    Log.e("SalePostViewModel", "No user data found")
                 }
+                // UI 스레드에서 LiveData 값 업데이트
+                userData.postValue(user)
             } catch (e: Exception) {
                 Log.e("SalePostViewModel", "Error fetching user data: ${e.message}", e)
+                userData.postValue(null)
             }
         }
     }

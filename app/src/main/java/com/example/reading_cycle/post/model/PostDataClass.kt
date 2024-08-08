@@ -1,5 +1,6 @@
 package com.example.reading_cycle.post.model
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -120,7 +121,6 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
                     listener.onSwapItemClick(document)
                 }
             }
-
             VIEW_TYPE_SALE -> {
                 val document = saleBookList[position - swapBookList.size]
                 (holder as SaleViewHolder).bind(document)
@@ -180,29 +180,37 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
                 .load(swapData.swapBookPostImg)
                 .into(binding.imgRowPostSwapPoster)
 
-            // userIdx를 UserViewModel에서 가져오기
-            val userIdx = userViewModel.userIdx
-            if (userIdx != null) {
-                if (userIdx.isNotEmpty()) {
-                    FirebaseFirestore.getInstance().collection("users").document(userIdx).get()
-                        .addOnSuccessListener { userDocument ->
-                            val userNickname = userDocument.getString("userNickname") ?: ""
-                            val userProfileImage = userDocument.getString("userProfileImage") ?: ""
+            // 1단계: SwapPosts 문서에서 userId를 가져옵니다.
+            val userId = swapData.userId
+            if (userId.isNotEmpty()) {
+                // 2단계: users 컬렉션에서 해당 userId 문서의 사용자 정보를 가져옵니다.
+                FirebaseFirestore.getInstance().collection("users")
+                    .document(userId)
+                    .get()
+                    .addOnSuccessListener { userDocument ->
+                        val userNickname = userDocument.getString("userNickname") ?: ""
+                        val userProfileImage = userDocument.getString("userProfileImage") ?: ""
 
-                            binding.textRowPostSwapUser.text = userNickname
+                        binding.textRowPostSwapUser.text = userNickname
 
-                            if (userProfileImage.isNotEmpty()) {
-                                Glide.with(binding.root.context)
-                                    .load(userProfileImage)
-                                    .apply(
-                                        RequestOptions()
+                        if (userProfileImage.isNotEmpty()) {
+                            Glide.with(binding.root.context)
+                                .load(userProfileImage)
+                                .apply(
+                                    RequestOptions()
                                         .circleCrop()  // 이미지를 원형으로 자르기
                                         .override(100, 100)  // 원하는 크기로 조정 (예: 100x100)
-                                    )
-                                    .into(binding.imgRowPostSwapUser)
-                            }
+                                )
+                                .into(binding.imgRowPostSwapUser)
                         }
-                }
+                    }
+                    .addOnFailureListener { exception ->
+                        // 오류 처리
+                        Log.e("SwapViewHolder", "Failed to fetch user data", exception)
+                    }
+            } else {
+                // userId가 비어있을 때의 처리 (예: 빈 텍스트 설정)
+                binding.textRowPostSwapUser.text = "Unknown"
             }
         }
     }
@@ -234,29 +242,37 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
                 .load(saleData.saleBookPostImg)
                 .into(binding.imgRowPostSalePoster)
 
+            // 1단계: SalePosts 문서에서 userId를 가져옵니다.
+            val userId = saleData.userId
+            if (userId.isNotEmpty()) {
+                // 2단계: users 컬렉션에서 해당 userId 문서의 사용자 정보를 가져옵니다.
+                FirebaseFirestore.getInstance().collection("users")
+                    .document(userId)
+                    .get()
+                    .addOnSuccessListener { userDocument ->
+                        val userNickname = userDocument.getString("userNickname") ?: ""
+                        val userProfileImage = userDocument.getString("userProfileImage") ?: ""
 
-            // userIdx를 UserViewModel에서 가져오기
-            val userIdx = userViewModel.userIdx
-            if (userIdx != null) {
-                if (userIdx.isNotEmpty()) {
-                    FirebaseFirestore.getInstance().collection("users").document(userIdx).get()
-                        .addOnSuccessListener { userDocument ->
-                            val userNickname = userDocument.getString("userNickname") ?: ""
-                            val userProfileImage = userDocument.getString("userProfileImage") ?: ""
+                        binding.textRowPostSaleUser.text = userNickname
 
-                            binding.textRowPostSaleUser.text = userNickname
-
-                            if (userProfileImage.isNotEmpty()) {
-                                Glide.with(binding.root.context)
-                                    .load(userProfileImage)
-                                    .apply(RequestOptions()
+                        if (userProfileImage.isNotEmpty()) {
+                            Glide.with(binding.root.context)
+                                .load(userProfileImage)
+                                .apply(
+                                    RequestOptions()
                                         .circleCrop()  // 이미지를 원형으로 자르기
                                         .override(100, 100)  // 원하는 크기로 조정 (예: 100x100)
-                                    )
-                                    .into(binding.imgRowPostSaleUser)
-                            }
+                                )
+                                .into(binding.imgRowPostSaleUser)
                         }
-                }
+                    }
+                    .addOnFailureListener { exception ->
+                        // 오류 처리
+                        Log.e("SaleViewHolder", "Failed to fetch user data", exception)
+                    }
+            } else {
+                // userId가 비어있을 때의 처리 (예: 빈 텍스트 설정)
+                binding.textRowPostSaleUser.text = "Unknown"
             }
         }
     }

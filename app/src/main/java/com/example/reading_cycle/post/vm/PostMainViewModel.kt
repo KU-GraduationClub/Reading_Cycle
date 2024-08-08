@@ -11,10 +11,9 @@ import com.example.reading_cycle.post.model.SaleBookData
 import com.example.reading_cycle.post.model.SwapBookData
 import com.example.reading_cycle.post.repository.PostMainRepository
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
-class PostMainViewModel(private val postMainRepository: PostMainRepository, private val userId: String) : ViewModel() {
+class PostMainViewModel(private val postMainRepository: PostMainRepository) : ViewModel() {
 
     private val _salePosts = MutableLiveData<List<DocumentSnapshot>>()
     val salePosts: LiveData<List<DocumentSnapshot>> get() = _salePosts
@@ -72,13 +71,11 @@ private fun DocumentSnapshot.toSwapBookData(): SwapBookData {
 }
 
 class PostMainViewModelFactory(
-    private val postMainRepository: PostMainRepository,
-    private val userId: String
+    private val repository: PostMainRepository
 ) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PostMainViewModel::class.java)) {
-            return PostMainViewModel(postMainRepository, userId) as T
+            return PostMainViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

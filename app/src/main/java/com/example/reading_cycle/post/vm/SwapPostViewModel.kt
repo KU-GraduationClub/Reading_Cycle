@@ -13,11 +13,11 @@ import kotlinx.coroutines.launch
 
 class SwapPostViewModel(private val repository: SwapPostRepository) : ViewModel() {
 
-    // LiveData 객체로 SwapBookData를 관리합니다.
+    // LiveData 객체로 Data를 관리
     val swapBookData = MutableLiveData<SwapBookData?>()
     val userData = MutableLiveData<LoginDataClass?>()
 
-    // 데이터 요청 메서드
+    // 특정 도서 데이터를 요청하는 메서드
     fun fetchSwapBookData(documentId: String) {
         Log.d("SwapPostViewModel", "Fetching data for document ID: $documentId")
         viewModelScope.launch(Dispatchers.IO) {
@@ -30,27 +30,32 @@ class SwapPostViewModel(private val repository: SwapPostRepository) : ViewModel(
                     swapBookData.postValue(swapBook)
                 } else {
                     Log.e("SwapPostViewModel", "No data found for document ID: $documentId")
+                    swapBookData.postValue(null)
                 }
             } catch (e: Exception) {
                 Log.e("SwapPostViewModel", "Error fetching data: ${e.message}", e)
+                swapBookData.postValue(null)
             }
         }
     }
 
+    // 사용자 데이터를 요청하는 메서드
     fun fetchUserData() {
+        Log.d("SwapPostViewModel", "Fetching user data")
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 // 데이터를 repository를 통해 가져옵니다.
-                val userId = repository.getUserData()
-                if (userId != null) {
-                    Log.d("SwapPostViewModel", "User data fetched: ${userId.userNickname}")
-                    // UI 스레드에서 LiveData 값 업데이트
-                    userData.postValue(userId)
+                val user = repository.getUserData()
+                if (user != null) {
+                    Log.d("SwapPostViewModel", "User data fetched: ${user.userNickname}")
                 } else {
-
+                    Log.e("SwapPostViewModel", "No user data found")
                 }
+                // UI 스레드에서 LiveData 값 업데이트
+                userData.postValue(user)
             } catch (e: Exception) {
                 Log.e("SwapPostViewModel", "Error fetching user data: ${e.message}", e)
+                userData.postValue(null)
             }
         }
     }

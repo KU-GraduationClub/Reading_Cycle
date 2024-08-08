@@ -7,31 +7,28 @@ import kotlinx.coroutines.tasks.await
 class PostMainRepository {
     private val fireStore = FirebaseFirestore.getInstance()
 
+    // SalePosts 컬렉션에서 모든 게시글을 가져오는 메서드
     suspend fun getSalePosts(): List<DocumentSnapshot> {
         return try {
-            fireStore.collection("posts")
-                .document("salePosts")
-                .collection("posts")
+            fireStore.collection("SalePosts")
                 .get()
                 .await()
                 .documents
         } catch (e: Exception) {
-            // Handle error (e.g., log error, return empty list, etc.)
+            // 오류 처리 (예: 로그 기록, 빈 리스트 반환 등)
             emptyList()
         }
     }
 
-    // 모든 swapPosts를 가져오는 메서드
+    // SwapPosts 컬렉션에서 모든 게시글을 가져오는 메서드
     suspend fun getSwapPosts(): List<DocumentSnapshot> {
         return try {
-            fireStore.collection("posts")
-                .document("swapPosts")
-                .collection("posts")
+            fireStore.collection("SwapPosts")
                 .get()
                 .await()
                 .documents
         } catch (e: Exception) {
-            // Handle error (e.g., log error, return empty list, etc.)
+            // 오류 처리 (예: 로그 기록, 빈 리스트 반환 등)
             emptyList()
         }
     }

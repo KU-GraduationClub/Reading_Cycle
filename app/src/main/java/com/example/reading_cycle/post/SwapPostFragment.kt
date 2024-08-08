@@ -23,7 +23,9 @@ import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.DialogPostDetailsTextBinding
 import com.example.reading_cycle.databinding.FragmentSwapPostBinding
 import com.example.reading_cycle.post.model.SwapBookData
+import com.example.reading_cycle.post.repository.SalePostRepository
 import com.example.reading_cycle.post.repository.SwapPostRepository
+import com.example.reading_cycle.post.vm.SalePostViewModel
 import com.example.reading_cycle.post.vm.SwapPostViewModel
 
 class SwapPostFragment : Fragment() {
@@ -47,8 +49,10 @@ class SwapPostFragment : Fragment() {
             Log.d("SwapPostFragment", "전달받은 문서 ID: $documentId")
         }
 
-        val repository = userViewModel.userIdx?.let { SwapPostRepository(it) }
-        viewModelFactory = repository?.let { SwapPostViewModel.Factory(it) }!!
+        userViewModel.userIdx?.let { userIdx ->
+            val repository = SwapPostRepository(userIdx)
+            viewModelFactory = SwapPostViewModel.Factory(repository)
+        }
 
         documentId?.let {
             swapPostViewModel.fetchSwapBookData(it)
