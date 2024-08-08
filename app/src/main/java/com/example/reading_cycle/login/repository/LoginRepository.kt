@@ -7,7 +7,7 @@ class LoginRepository {
     private val db = FirebaseFirestore.getInstance()
 
     fun uploadUserDataToFirestore(userData: LoginDataClass, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        val userRef = db.collection("users").document(userData.userIdx)
+        val userRef = db.collection("Users").document(userData.userIdx)
         userRef.set(userData)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
@@ -19,13 +19,32 @@ class LoginRepository {
         onUserNotExists: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        db.collection("users").whereEqualTo("userPhoneNumber", userPhoneNumber).get()
+        db.collection("Users").whereEqualTo("userPhoneNumber", userPhoneNumber).get()
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {
                     val userData = documents.documents[0].toObject(LoginDataClass::class.java)
                     onUserExists(userData!!)
                 } else {
                     onUserNotExists()
+                }
+            }
+            .addOnFailureListener { exception ->
+                onError(exception)
+            }
+    }
+
+    fun checkIfNicknameExists(
+        nickname: String,
+        onNicknameExists: () -> Unit,
+        onNicknameNotExists: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        db.collection("Users").whereEqualTo("userNickname", nickname).get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    onNicknameExists()
+                } else {
+                    onNicknameNotExists()
                 }
             }
             .addOnFailureListener { exception ->

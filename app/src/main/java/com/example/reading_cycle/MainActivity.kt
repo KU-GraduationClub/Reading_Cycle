@@ -9,8 +9,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.chat.ChatListFragment
@@ -18,6 +16,8 @@ import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
 import com.example.reading_cycle.library.LibraryMainFragment
 import com.example.reading_cycle.location.LocSetFragment
+import com.example.reading_cycle.login.EditUserFragment
+import com.example.reading_cycle.login.ListSettingsFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.MsgAuthFragment
 import com.example.reading_cycle.login.SetProfileFragment
@@ -30,6 +30,7 @@ import com.example.reading_cycle.post.SwapPostFragment
 import com.google.firebase.Firebase
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.initialize
 
 class MainActivity : AppCompatActivity() {
@@ -49,6 +50,8 @@ class MainActivity : AppCompatActivity() {
         const val LOGIN_MAIN_FRAGMENT = "LoginMainFragment"
         const val MSG_AUTH_FRAGMENT = "MsgAuthFragment"
         const val SET_PROFILE_FRAGMENT = "SetProfileFragment"
+        const val EDIT_USER_FRAGMENT = "EditUserFragment"
+        const val LIST_SETTINGS_FRAGMENT = "ListSettingsFragment"
         const val CHAT_LIST_FRAGMENT = "ChatListFragment"
         const val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
         const val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
@@ -61,6 +64,12 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         val view = mainBinding.root
         setContentView(view)
+
+        //로그인된 사용자 정보 가져오기
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            userViewModel.userIdx = currentUser.uid
+        }
 
         // Initialize Firebase
         Firebase.initialize(context = this)
@@ -83,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.bottom_chat -> replaceFragment(CHAT_LIST_FRAGMENT, true)
                 R.id.bottom_frd -> replaceFragment(FRIEND_MAIN_FRAGMENT, true)
                 R.id.bottom_lib -> replaceFragment(LIBRARY_MY_FRAGMENT, true)
+                R.id.bottom_set -> replaceFragment(LIST_SETTINGS_FRAGMENT, true)
             }
             true
         }
@@ -109,6 +119,8 @@ class MainActivity : AppCompatActivity() {
             LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
             MSG_AUTH_FRAGMENT -> MsgAuthFragment()
             SET_PROFILE_FRAGMENT -> SetProfileFragment()
+            EDIT_USER_FRAGMENT -> EditUserFragment()
+            LIST_SETTINGS_FRAGMENT -> ListSettingsFragment()
             CHAT_LIST_FRAGMENT -> ChatListFragment()
             LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
             LIBRARY_MY_FRAGMENT -> LibraryMyFragment()

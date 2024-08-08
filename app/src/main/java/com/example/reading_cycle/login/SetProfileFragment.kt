@@ -57,6 +57,35 @@ class SetProfileFragment : Fragment() {
                 userPhoneNumber = auth.currentUser?.phoneNumber ?: ""
 
                 if (isNicknameValid(userNickname)) {
+                    checkNicknameExistence(userNickname)
+                } else {
+                    showInvalidNicknameAlert()
+                }
+            }
+
+            loginViewModel.uploadSuccess.observe(viewLifecycleOwner) { success ->
+                if (success) {
+                    val userIdx = (activity as MainActivity).userViewModel.userIdx
+
+                    if (userIdx != null) {
+                        val bundle = Bundle().apply {
+                            putString("userIdx", userIdx)
+                        }
+                        mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, bundle)
+                    } else {
+                        Log.e(TAG, "User index is null, cannot proceed to POST_MAIN_FRAGMENT.")
+                    }
+                }
+            }
+
+            loginViewModel.uploadError.observe(viewLifecycleOwner) { exception ->
+                Log.e(TAG, "Failed to upload user data to Firestore", exception)
+            }
+
+            loginViewModel.nicknameExists.observe(viewLifecycleOwner) { exists ->
+                if (exists) {
+                    showNicknameExistsAlert()
+                } else {
                     if (selectedImageUri != null) {
                         uploadImageToFirebaseStorage { imageUrl ->
                             val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
@@ -66,7 +95,7 @@ class SetProfileFragment : Fragment() {
                                 userPhoneNumber = userPhoneNumber,
                                 userProfileImage = imageUrl,
                                 userLocation = "",
-                                regDate = currentDate // 가입일자 추가
+                                regDate = currentDate
                             )
                             loginViewModel.uploadUserData(userData)
                         }
@@ -78,34 +107,11 @@ class SetProfileFragment : Fragment() {
                             userPhoneNumber = userPhoneNumber,
                             userProfileImage = "",
                             userLocation = "",
-                            regDate = currentDate // 가입일자 추가
+                            regDate = currentDate
                         )
                         loginViewModel.uploadUserData(userData)
                     }
-                } else {
-                    showInvalidNicknameAlert()
                 }
-            }
-
-            loginViewModel.uploadSuccess.observe(viewLifecycleOwner) { success ->
-                if (success) {
-                    // userIdx를 ViewModel에서 가져오기
-                    val userIdx = (activity as MainActivity).userViewModel.userIdx
-
-                    if (userIdx != null) {
-                        val bundle = Bundle().apply {
-                            putString("userIdx", userIdx)
-                        }
-                        mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, bundle)
-                    } else {
-                        // userIdx가 null일 경우 처리
-                        Log.e(TAG, "User index is null, cannot proceed to POST_MAIN_FRAGMENT.")
-                    }
-                }
-            }
-
-            loginViewModel.uploadError.observe(viewLifecycleOwner) { exception ->
-                Log.e(TAG, "Failed to upload user data to Firestore", exception)
             }
 
             return root
@@ -139,30 +145,38 @@ class SetProfileFragment : Fragment() {
                         onSuccess(uri.toString())
                     }
                 }
-                .addOnFailureListener { e ->
-                    Log.e(TAG, "Failed to upload image to Firebase Storage", e)
-                    onSuccess("") // 실패한 경우 빈 문자열 반환
+                .addOnFailureListener { exception ->
+                    Log.e(TAG, "Failed to upload image to Firebase Storage", exception)
                 }
-        } ?: onSuccess("") // URI가 null인 경우 빈 문자열 반환
+        }
+    }
+
+    private fun checkNicknameExistence(nickname: String) {
+        loginViewModel.checkNicknameExistence(nickname)
     }
 
     private fun isNicknameValid(nickname: String): Boolean {
-        val nicknamePattern = "^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]{1,12}$"
-        return nickname.matches(nicknamePattern.toRegex())
+        return nickname.isNotBlank()
     }
 
     private fun showInvalidNicknameAlert() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("유효하지 않은 닉네임")
-            .setMessage("사용자 이름은 12자 이내, 특수문자를 포함하지 않고 작성 해 주세요.")
-            .setPositiveButton("확인") { dialog, _ ->
-                dialog.dismiss()
-            }
+        AlertDialog.Builder(mainActivity)
+            .setTitle("부적절한 닉네임")
+            .setMessage("올바른 사용자닉네임을 입력 해 주세요.")
+            .setPositiveButton("확인", null)
+            .show()
+    }
+
+    private fun showNicknameExistsAlert() {
+        AlertDialog.Builder(mainActivity)
+            .setTitle("존재하는 닉네임")
+            .setMessage("사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.")
+            .setPositiveButton("확인", null)
             .show()
     }
 
     companion object {
-        private const val REQUEST_CODE_IMAGE_PICK = 100
+        private const val REQUEST_CODE_IMAGE_PICK = 1000
         private const val TAG = "SetProfileFragment"
     }
 }
