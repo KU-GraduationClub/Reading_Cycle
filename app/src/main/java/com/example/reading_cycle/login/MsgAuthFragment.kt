@@ -1,6 +1,7 @@
 package com.example.reading_cycle.login
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -100,7 +101,6 @@ class MsgAuthFragment : Fragment() {
 
             btnSendAuthCode.setOnClickListener {
                 val phoneNumber = edtPhoneNumber.text.toString().replace("-", "")
-
                 if (!isValidPhoneNumber(phoneNumber)) {
                     showErrorDialog("오류", "올바른 전화번호를 입력해주세요.")
                     return@setOnClickListener

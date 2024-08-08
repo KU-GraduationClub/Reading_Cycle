@@ -42,6 +42,7 @@ class SwapPostFragment : Fragment() {
     private lateinit var closeButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         arguments?.let {

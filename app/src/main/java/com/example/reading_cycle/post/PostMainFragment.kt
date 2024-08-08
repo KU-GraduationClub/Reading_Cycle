@@ -88,7 +88,6 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
                     mainActivity.navigateToNotifyFragment()
                     true
                 }
-
                 else -> false
             }
         }
@@ -138,25 +137,21 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
                     updateSortText("최신 순")
                     true
                 }
-
                 R.id.menuItemSortByDistance -> {
                     // TODO: 거리순 정렬에 대한 로직을 추가.
                     updateSortText("거리 순")
                     true
                 }
-
                 R.id.menuItemSortBySwap -> {
                     // TODO: 교환용 정렬에 대한 로직을 추가.
                     updateSortText("교환 옵션")
                     true
                 }
-
                 R.id.menuItemSortBySale -> {
                     // TODO: 판매용 정렬에 대한 로직을 추가.
                     updateSortText("판매 옵션")
                     true
                 }
-
                 else -> false
             }
         }
@@ -182,7 +177,6 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
                     MainActivity.ADD_SWAP_POST_FRAGMENT,
                     true
                 )
-
                 1 -> (requireActivity() as MainActivity).replaceFragment(
                     MainActivity.ADD_SALE_POST_FRAGMENT,
                     true
@@ -203,6 +197,7 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         val documentId = document.id
         mainActivity.navigateToSalePostFragment(documentId)
     }
+
 
     // UserIdx 미전달 시 초기화면으로 이동
     private fun navigateToLogin() {

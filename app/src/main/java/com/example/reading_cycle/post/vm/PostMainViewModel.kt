@@ -68,6 +68,7 @@ private fun DocumentSnapshot.toSwapBookData(): SwapBookData {
         swapBookExplain = getString("swapBookExplain") ?: "",
         swapBookWriteDate = getLong("swapBookWriteDate") ?: System.currentTimeMillis()
     )
+
 }
 
 class PostMainViewModelFactory(
@@ -79,4 +80,5 @@ class PostMainViewModelFactory(
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
+
 }
