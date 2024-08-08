@@ -6,5 +6,6 @@
     <color name="background">#FFFFFFFF</color>
     <color name="theme_brown">#CB8D45</color>
     <color name="theme_green">#27713C</color>
-  
+    <color name="gray">#B0B0B0</color>
+    <color name="orange">#CF8127</color>
 </resources>

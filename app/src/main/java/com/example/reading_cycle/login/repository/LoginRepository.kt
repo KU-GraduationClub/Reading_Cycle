@@ -27,3 +27,14 @@ class AddLoginRepository {
         private const val TAG = "AddLoginRepository"
     }
 }
+
+class LoginRepository {
+    fun uploadUserDataToFirestore(userData: LoginDataClass, onSuccess: () -> Unit, onFailure: Any) {
+
+    }
+
+    fun checkIfUserExists(userPhoneNumber: String, onUserExists: Any, onUserNotExists: () -> Unit, onError: Any) {
+
+    }
+
+}

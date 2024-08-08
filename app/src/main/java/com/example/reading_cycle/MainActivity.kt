@@ -8,11 +8,13 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.reading_cycle.Library.LibraryMainFragment
-import com.example.reading_cycle.Library.LibraryMyFragment
+//import com.example.reading_cycle.Library.LibraryMainFragment
+//import com.example.reading_cycle.Library.LibraryMyFragment
 import com.example.reading_cycle.chat.ui.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
+import com.example.reading_cycle.library.LibraryMainFragment
+import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.location.LocSetFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.MsgAuthFragment

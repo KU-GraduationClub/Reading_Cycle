@@ -1,13 +1,13 @@
 package com.example.reading_cycle.post.model
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.RowPostMainSaleBinding
 import com.example.reading_cycle.databinding.RowPostMainSwapBinding
+import com.example.reading_cycle.post.PostMainFragment
+import com.google.firebase.firestore.DocumentSnapshot
 
 data class SwapBookData(
     val swapIdx: Long = 0, // 교환 도서 IDX
@@ -70,7 +70,7 @@ enum class BookState {
 
 
 
-class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PostMainAdapter(postMainFragment: PostMainFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val swapBookList = mutableListOf<SwapBookData>()
     private val saleBookList = mutableListOf<SaleBookData>()
@@ -120,13 +120,17 @@ class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return if (position < swapBookList.size) VIEW_TYPE_SWAP else VIEW_TYPE_SALE
     }
 
-    fun setSwapPosts(swapPosts: List<SwapBookData>) {
+    fun setSwapPosts(swapPosts: List<DocumentSnapshot>) {
         this.swapBookList.clear()
-        this.swapBookList.addAll(swapPosts)
+        val addAll = if (this.swapBookList.addAll(swapPosts)) {
+            true
+        } else {
+            false
+        }
         notifyDataSetChanged()
     }
 
-    fun setSalePosts(salePosts: List<SaleBookData>) {
+    fun setSalePosts(salePosts: List<DocumentSnapshot>) {
         this.saleBookList.clear()
         this.saleBookList.addAll(salePosts)
         notifyDataSetChanged()
@@ -167,4 +171,16 @@ class PostMainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 .into(binding.imgRowPostSalePoster)
         }
     }
+
+    open class OnPostItemClickListener {
+
+        open fun onSwapItemClick(document: DocumentSnapshot) {}
+        open fun onSaleItemClick(document: DocumentSnapshot) {}
+    }
 }
+
+private fun <E> MutableList<E>.addAll(elements: List<DocumentSnapshot>): Boolean {
+
+    return TODO("Provide the return value")
+}
+

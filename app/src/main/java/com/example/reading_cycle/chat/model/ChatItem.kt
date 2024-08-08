@@ -3,11 +3,11 @@ package com.example.reading_cycle.chat.model
 data class ChatItem(
     val chatRoomId: String,
     val profileImage: Int,
-    val name: Int,
+    val name: String,
     val lastMessage: String,
     val lastMessageTime: String
 ) {
-    constructor(name: Int, lastMessage: String, profileImage: String, lastMessageTime: String) : this("",0, name, lastMessage, "")
+    constructor(name: String, lastMessage: String, profileImage: Int, lastMessageTime: String) : this("",0, name, lastMessage, "")
 }
 data class ChatRoom(
     val chatRoomId: String? = null,

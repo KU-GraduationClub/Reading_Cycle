@@ -88,10 +88,10 @@ class SalePostFragment : Fragment() {
         fragmentSalePostBinding.apply {
             textSalePostTitle.text = data.saleBookTitle
             textSalePostAuthor.text = data.saleBookAuthor
-            btnSalePostType.text = data.saleBookType.displayName
+            btnSalePostType.text = data.saleBookType.name
             btnSalePostPrice.text = data.saleBookPrice
             textSalePostRegPrice.text = data.saleBookRegPrice
-            textSalePostState.text = data.saleBookState.displayName
+            textSalePostState.text = data.saleBookState.name
             textSalePostExplain.text = data.saleBookExplain
 
             // 대표 이미지 설정 (첫 번째 이미지)

@@ -1,25 +1,24 @@
 package com.example.reading_cycle.location.repository
 
-
-import android.content.Context
-import android.widget.Toast
+import android.util.Log
 import com.example.reading_cycle.location.model.LocDataClass
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
-class LocRepository(private val context: Context) {
+class LocRepository {
+    private val firestore = FirebaseFirestore.getInstance()
 
-    private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
-
-    fun saveLocation(location: LocDataClass, onSuccess: () -> Unit, onFailure: () -> Unit) {
-        database.child("locations").push().setValue(location)
-            .addOnSuccessListener {
-                Toast.makeText(context, "위치가 저장되었습니다.", Toast.LENGTH_SHORT).show()
-                onSuccess()
-            }
-            .addOnFailureListener {
-                Toast.makeText(context, "위치 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                onFailure()
-            }
+    suspend fun saveUserLocation(userId: String, locationData: LocDataClass): Result<Unit> {
+        return try {
+            firestore.collection("users")
+                .document(userId)
+                .collection("userLocations")
+                .add(locationData.toMap())
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e("LocRepository", "위치 저장 중 오류 발생", e)
+            Result.failure(e)
+        }
     }
 }
