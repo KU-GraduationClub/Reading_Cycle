@@ -16,6 +16,8 @@ import com.example.reading_cycle.friend.FriendMainFragment
 import com.example.reading_cycle.library.LibraryMainFragment
 import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.location.LocSetFragment
+import com.example.reading_cycle.login.EditUserFragment
+import com.example.reading_cycle.login.ListSettingsFragment
 import com.example.reading_cycle.login.LoginMainFragment
 import com.example.reading_cycle.login.MsgAuthFragment
 import com.example.reading_cycle.login.SetProfileFragment
@@ -25,7 +27,11 @@ import com.example.reading_cycle.post.AddSwapPostFragment
 import com.example.reading_cycle.post.PostMainFragment
 import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
-import com.google.firebase.FirebaseApp
+import com.google.firebase.Firebase
+import com.google.firebase.appcheck.appCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.initialize
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +48,8 @@ class MainActivity : AppCompatActivity() {
         const val LOGIN_MAIN_FRAGMENT = "LoginMainFragment"
         const val MSG_AUTH_FRAGMENT = "MsgAuthFragment"
         const val SET_PROFILE_FRAGMENT = "SetProfileFragment"
+        const val EDIT_USER_FRAGMENT = "EditUserFragment"
+        const val LIST_SETTINGS_FRAGMENT = "ListSettingsFragment"
         const val CHAT_LIST_FRAGMENT = "ChatListFragment"
         const val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
         const val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
@@ -54,6 +62,13 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         val view = mainBinding.root
         setContentView(view)
+
+        //로그인된 사용자 정보 가져오기
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            userViewModel.userIdx = currentUser.uid
+        }
+
         // Initialize Firebase
         FirebaseApp.initializeApp(this)
 
@@ -69,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.bottom_chat -> replaceFragment(CHAT_LIST_FRAGMENT, true)
                 R.id.bottom_frd -> replaceFragment(FRIEND_MAIN_FRAGMENT, true)
                 R.id.bottom_lib -> replaceFragment(LIBRARY_MY_FRAGMENT, true)
+                R.id.bottom_set -> replaceFragment(LIST_SETTINGS_FRAGMENT, true)
             }
             true
         }
@@ -81,28 +97,35 @@ class MainActivity : AppCompatActivity() {
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 
+        // 새로운 Fragment 담을 변수
+        newFragment = when (name) {
+            POST_MAIN_FRAGMENT -> PostMainFragment()
+            ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
+            ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
+            SALE_POST_FRAGMENT -> SalePostFragment().apply {
+                arguments = bundle
+            }
+            SWAP_POST_FRAGMENT -> SwapPostFragment().apply {
+                arguments = bundle
+            }
+            LOC_SET_FRAGMENT -> LocSetFragment()
+            LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
+            MSG_AUTH_FRAGMENT -> MsgAuthFragment()
+            SET_PROFILE_FRAGMENT -> SetProfileFragment()
+            EDIT_USER_FRAGMENT -> EditUserFragment()
+            LIST_SETTINGS_FRAGMENT -> ListSettingsFragment()
+            CHAT_LIST_FRAGMENT -> ChatListFragment()
+            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
+            LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
+            FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+            NOTIFY_FRAGMENT -> NotifyFragment()
+            else -> Fragment()
+        }
 
-            // 새로운 Fragment 담을 변수
-            newFragment = when(name){
-                POST_MAIN_FRAGMENT -> PostMainFragment()
-                ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
-                ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
-                SALE_POST_FRAGMENT -> SalePostFragment().apply {
-                    arguments = bundle
-                }
-                SWAP_POST_FRAGMENT -> SwapPostFragment().apply {
-                    arguments = bundle
-                }
-                LOC_SET_FRAGMENT -> LocSetFragment()
-                LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
-                MSG_AUTH_FRAGMENT -> MsgAuthFragment()
-                SET_PROFILE_FRAGMENT -> SetProfileFragment()
-                CHAT_LIST_FRAGMENT -> ChatListFragment()
-                LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
-                LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
-                FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
-                NOTIFY_FRAGMENT -> NotifyFragment()
-                else -> Fragment()
+        newFragment?.arguments = newFragment?.arguments?.apply {
+            putString("userIdx", userViewModel.userIdx)
+        } ?: Bundle().apply {
+            putString("userIdx", userViewModel.userIdx)
         }
 
         newFragment?.arguments = bundle

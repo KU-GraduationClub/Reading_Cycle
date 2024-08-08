@@ -1,6 +1,5 @@
 package com.example.reading_cycle.chat.ui
 
-import ChatListAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
+import com.example.reading_cycle.chat.adapter.ChatListAdapter
 import com.example.reading_cycle.chat.model.ChatItem
 import com.example.reading_cycle.chat.model.ChatRoom
 import com.example.reading_cycle.chat.vm.ChatRoomActivity
@@ -96,5 +96,4 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
         intent.putExtra("chatRoomId", chatRoomId)
         startActivity(intent)
     }
-
 }

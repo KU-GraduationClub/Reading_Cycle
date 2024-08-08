@@ -48,6 +48,25 @@ class LoginViewModel : ViewModel() {
             )
         }
     }
+
+    private val _nicknameExists = MutableLiveData<Boolean>()
+    val nicknameExists: LiveData<Boolean>
+        get() = _nicknameExists
+
+    fun checkNicknameExistence(nickname: String) {
+        repository.checkIfNicknameExists(
+            nickname,
+            onNicknameExists = {
+                _nicknameExists.value = true
+            },
+            onNicknameNotExists = {
+                _nicknameExists.value = false
+            },
+            onError = { e ->
+                _uploadError.value = e
+            }
+        )
+    }
 }
 
 class LoginRepository {

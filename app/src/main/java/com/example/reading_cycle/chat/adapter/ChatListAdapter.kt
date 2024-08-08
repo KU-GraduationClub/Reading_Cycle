@@ -1,4 +1,7 @@
+package com.example.reading_cycle.chat.adapter
+
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reading_cycle.chat.model.ChatItem
@@ -18,6 +21,13 @@ class ChatListAdapter(private val chatList: List<ChatItem>, private val listener
                 textUsername.text = chatItem.name.toString()
                 textLastMessage.text = chatItem.lastMessage
                 textLastMessageTime.text = chatItem.lastMessageTime
+
+                if (chatItem.unreadMessageCount > 0) {
+                    textUnseenCount.text = chatItem.unreadMessageCount.toString()
+                    textUnseenCount.visibility = View.VISIBLE
+                } else {
+                    textUnseenCount.visibility = View.GONE
+                }
             }
         }
     }
@@ -36,7 +46,6 @@ class ChatListAdapter(private val chatList: List<ChatItem>, private val listener
         }
     }
 
-    override fun getItemCount(): Int {
-        return chatList.size
-    }
+    override fun getItemCount(): Int = chatList.size
 }
+

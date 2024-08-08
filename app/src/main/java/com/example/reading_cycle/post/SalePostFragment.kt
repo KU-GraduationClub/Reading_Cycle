@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -15,8 +16,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
+import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.DialogPostDetailsTextBinding
 import com.example.reading_cycle.databinding.FragmentSalePostBinding
 import com.example.reading_cycle.post.model.SaleBookData
@@ -30,6 +33,7 @@ class SalePostFragment : Fragment() {
     private lateinit var viewModelFactory: SalePostViewModel.Factory
     private lateinit var dialogPostDetailsTextBinding: DialogPostDetailsTextBinding
     private val salePostViewModel: SalePostViewModel by viewModels { viewModelFactory }
+    private val userViewModel: UserViewModel by activityViewModels()
     private var documentId: String? = null
     private lateinit var viewPager: ViewPager2
     private lateinit var adapter: SalePostPagerAdapter
@@ -43,8 +47,10 @@ class SalePostFragment : Fragment() {
             Log.d("SalePostFragment", "전달받은 문서 ID: $documentId")
         }
 
-        val repository = SalePostRepository()
-        viewModelFactory = SalePostViewModel.Factory(repository)
+        userViewModel.userIdx?.let { userIdx ->
+            val repository = SalePostRepository(userIdx)
+            viewModelFactory = SalePostViewModel.Factory(repository)
+        }
 
         documentId?.let {
             salePostViewModel.fetchSaleBookData(it)
@@ -78,6 +84,24 @@ class SalePostFragment : Fragment() {
         salePostViewModel.saleBookData.observe(viewLifecycleOwner) { saleBookData ->
             saleBookData?.let { data ->
                 bindSalePostData(data)
+            }
+        }
+
+        salePostViewModel.fetchUserData()
+        salePostViewModel.userData.observe(viewLifecycleOwner) { userData ->
+            userData?.let { data ->
+                fragmentSalePostBinding.textSalePostUser.text = data.userNickname
+                if (data.userProfileImage.isNotEmpty()) {
+                    Glide.with(fragmentSalePostBinding.root.context)
+                        .load(data.userProfileImage)
+                        .apply(
+                            RequestOptions()
+                            .centerCrop()  // 이미지를 중앙에 맞춤
+                            .circleCrop()  // 이미지를 원형으로 자르기
+                            .override(100, 100)  // 원하는 크기로 조정 (예: 100x100)
+                        )
+                        .into(fragmentSalePostBinding.imgSalePostUser)
+                }
             }
         }
 
@@ -154,9 +178,9 @@ class SalePostFragment : Fragment() {
 
     private fun showSalePostDetailsDialog(title: String, author: String, description: String) {
         dialogPostDetailsTextBinding = DialogPostDetailsTextBinding.inflate(layoutInflater)
-        dialogPostDetailsTextBinding.dialogSalePostTitle.text = title
-        dialogPostDetailsTextBinding.dialogSalePostAuthor.text = author
-        dialogPostDetailsTextBinding.dialogSalePostDescription.text = description
+        dialogPostDetailsTextBinding.dialogPostTitle.text = title
+        dialogPostDetailsTextBinding.dialogPostAuthor.text = author
+        dialogPostDetailsTextBinding.dialogPostDescription.text = description
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogPostDetailsTextBinding.root)
