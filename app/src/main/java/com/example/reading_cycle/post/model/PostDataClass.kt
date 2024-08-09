@@ -226,7 +226,7 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
                 trimTextIfNeeded(binding.textRowPostSwapAuthor, swapData.swapBookAuthor)
             binding.btnRowPostSwapType.text = swapData.swapBookType.toKorean()
             binding.btnRowPostSwapType2.text = swapData.bookSwapType.toKorean()
-            binding.textRowPostSwapPrice.text = swapData.swapBookRegPrice
+            binding.textRowPostSwapRegPrice.text = swapData.swapBookRegPrice
             binding.textRowPostSwapState.text = swapData.swapBookState.toKorean()
 
             val emoji = when (swapData.swapBookState) {
