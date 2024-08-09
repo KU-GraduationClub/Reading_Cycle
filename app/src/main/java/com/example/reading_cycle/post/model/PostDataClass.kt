@@ -80,12 +80,12 @@ enum class BookState(val displayName: String) {
 class PostMainAdapter(private val userViewModel: UserViewModel, private val listener: OnPostItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnPostItemClickListener {
-        fun onSwapItemClick(document: DocumentSnapshot)
         fun onSaleItemClick(document: DocumentSnapshot)
+        fun onSwapItemClick(document: DocumentSnapshot)
     }
 
-    private val swapBookList = mutableListOf<DocumentSnapshot>()
     private val saleBookList = mutableListOf<DocumentSnapshot>()
+    private val swapBookList = mutableListOf<DocumentSnapshot>()
 
     companion object {
         private const val VIEW_TYPE_SWAP = 1
@@ -94,33 +94,24 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_SWAP -> {
-                val binding = RowPostMainSwapBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-                )
-                SwapViewHolder(binding)
-            }
-
             VIEW_TYPE_SALE -> {
                 val binding = RowPostMainSaleBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
                 SaleViewHolder(binding)
             }
-
+            VIEW_TYPE_SWAP -> {
+                val binding = RowPostMainSwapBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+                SwapViewHolder(binding)
+            }
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            VIEW_TYPE_SWAP -> {
-                val document = swapBookList[position]
-                (holder as SwapViewHolder).bind(document)
-                holder.itemView.setOnClickListener {
-                    listener.onSwapItemClick(document)
-                }
-            }
             VIEW_TYPE_SALE -> {
                 val document = saleBookList[position - swapBookList.size]
                 (holder as SaleViewHolder).bind(document)
@@ -128,7 +119,13 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
                     listener.onSaleItemClick(document)
                 }
             }
-
+            VIEW_TYPE_SWAP -> {
+                val document = swapBookList[position]
+                (holder as SwapViewHolder).bind(document)
+                holder.itemView.setOnClickListener {
+                    listener.onSwapItemClick(document)
+                }
+            }
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
@@ -141,16 +138,82 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
         return if (position < swapBookList.size) VIEW_TYPE_SWAP else VIEW_TYPE_SALE
     }
 
+    fun setSalePosts(salePosts: List<DocumentSnapshot>) {
+        saleBookList.clear()
+        saleBookList.addAll(salePosts)
+        notifyDataSetChanged()
+    }
+
     fun setSwapPosts(swapPosts: List<DocumentSnapshot>) {
         swapBookList.clear()
         swapBookList.addAll(swapPosts)
         notifyDataSetChanged()
     }
 
-    fun setSalePosts(salePosts: List<DocumentSnapshot>) {
-        saleBookList.clear()
-        saleBookList.addAll(salePosts)
-        notifyDataSetChanged()
+
+    inner class SaleViewHolder(private val binding: RowPostMainSaleBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(document: DocumentSnapshot) {
+            val saleData = document.toSaleBookData()
+            binding.textRowPostSaleTitle.text =
+                trimTextIfNeeded(binding.textRowPostSaleTitle, saleData.saleBookTitle)
+            binding.textRowPostSaleAuthor.text =
+                trimTextIfNeeded(binding.textRowPostSaleAuthor, saleData.saleBookAuthor)
+            binding.btnRowPostSaleType.text = saleData.saleBookType.toKorean()
+            binding.btnRowPostSalePrice.text = saleData.saleBookPrice
+            binding.textRowPostSaleRegPrice.text = saleData.saleBookRegPrice
+            binding.textRowPostSaleState.text = saleData.saleBookState.toKorean()
+
+            val emoji = when (saleData.saleBookState) {
+                BookState.VERY_BAD -> R.drawable.round_sentiment_very_dissatisfied_10
+                BookState.BAD -> R.drawable.baseline_sentiment_very_dissatisfied_10
+                BookState.COMMON -> R.drawable.baseline_sentiment_neutral_10
+                BookState.GOOD -> R.drawable.baseline_sentiment_satisfied_alt_10
+                BookState.VERY_GOOD -> R.drawable.sharp_sentiment_very_satisfied_10
+            }
+
+            binding.imgRowPostSaleState.setImageResource(emoji)
+
+            Glide.with(binding.root.context)
+                .load(saleData.saleBookPostImg)
+                .into(binding.imgRowPostSalePoster)
+
+            // 1단계: SalePosts 문서에서 userId를 가져옵니다.
+            val userId = saleData.userId
+            if (userId.isNotEmpty()) {
+                // 2단계: users 컬렉션에서 해당 userId 문서의 사용자 정보를 가져옵니다.
+                FirebaseFirestore.getInstance().collection("Users")
+                    .document(userId)
+                    .get()
+                    .addOnSuccessListener { userDocument ->
+                        val userNickname = userDocument.getString("userNickname") ?: ""
+                        val userProfileImage = userDocument.getString("userProfileImage") ?: ""
+
+                        Log.d("SaleViewHolder", "UserNickname: $userNickname") // 닉네임 로그 출력
+                        Log.d("SaleViewHolder", "UserProfileImage: $userProfileImage") // 프로필 이미지 URL 로그 출력
+
+                        binding.textRowPostSaleUser.text = userNickname
+
+                        if (userProfileImage.isNotEmpty()) {
+                            Glide.with(binding.root.context)
+                                .load(userProfileImage)
+                                .apply(
+                                    RequestOptions()
+                                        .circleCrop()  // 이미지를 원형으로 자르기
+                                        .override(100, 100)  // 원하는 크기로 조정 (예: 100x100)
+                                )
+                                .into(binding.imgRowPostSaleUser)
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        // 오류 처리
+                        Log.e("SaleViewHolder", "Failed to fetch user data", exception)
+                    }
+            } else {
+                // userId가 비어있을 때의 처리 (예: 빈 텍스트 설정)
+                binding.textRowPostSaleUser.text = "Unknown"
+            }
+        }
     }
 
     inner class SwapViewHolder(private val binding: RowPostMainSwapBinding) :
@@ -184,7 +247,7 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
             val userId = swapData.userId
             if (userId.isNotEmpty()) {
                 // 2단계: users 컬렉션에서 해당 userId 문서의 사용자 정보를 가져옵니다.
-                FirebaseFirestore.getInstance().collection("users")
+                FirebaseFirestore.getInstance().collection("Users")
                     .document(userId)
                     .get()
                     .addOnSuccessListener { userDocument ->
@@ -215,71 +278,28 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
         }
     }
 
-    inner class SaleViewHolder(private val binding: RowPostMainSaleBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(document: DocumentSnapshot) {
-            val saleData = document.toSaleBookData()
-            binding.textRowPostSaleTitle.text =
-                trimTextIfNeeded(binding.textRowPostSaleTitle, saleData.saleBookTitle)
-            binding.textRowPostSaleAuthor.text =
-                trimTextIfNeeded(binding.textRowPostSaleAuthor, saleData.saleBookAuthor)
-            binding.btnRowPostSaleType.text = saleData.saleBookType.toKorean()
-            binding.btnRowPostSalePrice.text = saleData.saleBookPrice
-            binding.textRowPostSaleRegPrice.text = saleData.saleBookRegPrice
-            binding.textRowPostSaleState.text = saleData.saleBookState.toKorean()
-
-            val emoji = when (saleData.saleBookState) {
-                BookState.VERY_BAD -> R.drawable.round_sentiment_very_dissatisfied_10
-                BookState.BAD -> R.drawable.baseline_sentiment_very_dissatisfied_10
-                BookState.COMMON -> R.drawable.baseline_sentiment_neutral_10
-                BookState.GOOD -> R.drawable.baseline_sentiment_satisfied_alt_10
-                BookState.VERY_GOOD -> R.drawable.sharp_sentiment_very_satisfied_10
-            }
-
-            binding.imgRowPostSaleState.setImageResource(emoji)
-
-            Glide.with(binding.root.context)
-                .load(saleData.saleBookPostImg)
-                .into(binding.imgRowPostSalePoster)
-
-            // 1단계: SalePosts 문서에서 userId를 가져옵니다.
-            val userId = saleData.userId
-            if (userId.isNotEmpty()) {
-                // 2단계: users 컬렉션에서 해당 userId 문서의 사용자 정보를 가져옵니다.
-                FirebaseFirestore.getInstance().collection("users")
-                    .document(userId)
-                    .get()
-                    .addOnSuccessListener { userDocument ->
-                        val userNickname = userDocument.getString("userNickname") ?: ""
-                        val userProfileImage = userDocument.getString("userProfileImage") ?: ""
-
-                        binding.textRowPostSaleUser.text = userNickname
-
-                        if (userProfileImage.isNotEmpty()) {
-                            Glide.with(binding.root.context)
-                                .load(userProfileImage)
-                                .apply(
-                                    RequestOptions()
-                                        .circleCrop()  // 이미지를 원형으로 자르기
-                                        .override(100, 100)  // 원하는 크기로 조정 (예: 100x100)
-                                )
-                                .into(binding.imgRowPostSaleUser)
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        // 오류 처리
-                        Log.e("SaleViewHolder", "Failed to fetch user data", exception)
-                    }
-            } else {
-                // userId가 비어있을 때의 처리 (예: 빈 텍스트 설정)
-                binding.textRowPostSaleUser.text = "Unknown"
-            }
-        }
+    // DocumentSnapshot을 SaleBookData로 변환하는 확장 함수 추가
+    private fun DocumentSnapshot.toSaleBookData(): SaleBookData {
+        return SaleBookData(
+            userId = getString("userId") ?: "",
+            saleBookTitle = getString("saleBookTitle") ?: "",
+            saleBookAuthor = getString("saleBookAuthor") ?: "",
+            saleBookPostImg = getString("saleBookPostImg") ?: "",
+            saleBookImg = (get("saleBookImg") as? List<*>)?.map { it as? String ?: "" }
+                ?: emptyList(),
+            saleBookType = BookType.valueOf(getString("saleBookType") ?: BookType.OTHER.name),
+            saleBookPrice = get("saleBookPrice")?.toString() ?: "",
+            saleBookRegPrice = get("saleBookRegPrice")?.toString() ?: "",
+            saleBookState = BookState.valueOf(getString("saleBookState") ?: BookState.COMMON.name),
+            saleBookExplain = getString("saleBookExplain") ?: "",
+            saleBookWriteDate = getLong("saleBookWriteDate") ?: System.currentTimeMillis()
+        )
     }
 
     // DocumentSnapshot을 데이터 클래스로 변환하는 확장 함수 추가
     private fun DocumentSnapshot.toSwapBookData(): SwapBookData {
         return SwapBookData(
+            userId = getString("userId") ?: "",
             swapBookTitle = getString("swapBookTitle") ?: "",
             swapBookAuthor = getString("swapBookAuthor") ?: "",
             swapBookPostImg = getString("swapBookPostImg") ?: "",
@@ -294,22 +314,7 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
         )
     }
 
-    // DocumentSnapshot을 SaleBookData로 변환하는 확장 함수 추가
-    private fun DocumentSnapshot.toSaleBookData(): SaleBookData {
-        return SaleBookData(
-            saleBookTitle = getString("saleBookTitle") ?: "",
-            saleBookAuthor = getString("saleBookAuthor") ?: "",
-            saleBookPostImg = getString("saleBookPostImg") ?: "",
-            saleBookImg = (get("saleBookImg") as? List<*>)?.map { it as? String ?: "" }
-                ?: emptyList(),
-            saleBookType = BookType.valueOf(getString("saleBookType") ?: BookType.OTHER.name),
-            saleBookPrice = get("saleBookPrice")?.toString() ?: "",
-            saleBookRegPrice = get("saleBookRegPrice")?.toString() ?: "",
-            saleBookState = BookState.valueOf(getString("saleBookState") ?: BookState.COMMON.name),
-            saleBookExplain = getString("saleBookExplain") ?: "",
-            saleBookWriteDate = getLong("saleBookWriteDate") ?: System.currentTimeMillis()
-        )
-    }
+
 
     // 확장 함수로 변환 작업 추가
     fun BookType.toKorean(): String {
