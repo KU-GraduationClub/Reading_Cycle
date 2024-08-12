@@ -342,12 +342,9 @@ class AddSwapPostFragment : Fragment() {
     }
 
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // 다중 선택 허용
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-            AddSalePostFragment.REQUEST_PICK_IMAGE
-        )
+        startActivityForResult(intent, REQUEST_PICK_IMAGE)
     }
 
     private fun openCamera() {
@@ -358,11 +355,11 @@ class AddSwapPostFragment : Fragment() {
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(android.Manifest.permission.CAMERA),
-                AddSalePostFragment.REQUEST_IMAGE_CAPTURE
+               REQUEST_IMAGE_CAPTURE
             )
         } else {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(intent, AddSalePostFragment.REQUEST_IMAGE_CAPTURE)
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
         }
     }
 
