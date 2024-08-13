@@ -1,20 +1,35 @@
 package com.example.reading_cycle.location.vm
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.reading_cycle.location.model.LocDataClass
 import com.example.reading_cycle.location.repository.LocRepository
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class LocViewModel(private val repository: LocRepository) : ViewModel() {
 
-    fun saveUserLocation(userId: String, locationData: LocDataClass) = viewModelScope.launch {
-        val result = repository.saveUserLocation(userId, locationData)
-        // 결과를 처리하는 로직
-        if (result.isSuccess) {
-            // 성공 처리
-        } else {
-            // 실패 처리
+    private val _saveLocationResult = MutableLiveData<Result<Boolean>>()
+    val saveLocationResult: LiveData<Result<Boolean>> get() = _saveLocationResult
+
+    suspend fun saveLocation(userId: String, location: LocDataClass) {
+        withContext(Dispatchers.IO) {
+            try {
+                repository.saveLocation(userId, location, {
+                    _saveLocationResult.postValue(Result.success(true))
+                }) { e ->
+                    _saveLocationResult.postValue(Result.failure(e))
+                }
+            } catch (e: Exception) {
+                _saveLocationResult.postValue(Result.failure(e))
+            }
         }
     }
 }
+
+
+
+
+
+
