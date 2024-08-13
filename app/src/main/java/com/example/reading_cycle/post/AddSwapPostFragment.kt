@@ -54,7 +54,8 @@ class AddSwapPostFragment : Fragment() {
     private lateinit var viewModel: AddSwapPostViewModel
     private var selectedCardIndex: Int? = null
     private var selectedFrameId: Int? = null
-    private var selectedBookType: BookType? = null
+    private var selectedBookType1: BookType? = null
+    private var selectedBookType2: BookType? = null
     private var selectedBookState: BookState? = null
     private val selectedImages = mutableListOf<Bitmap>()
     private val userViewModel: UserViewModel by activityViewModels()
@@ -157,8 +158,8 @@ class AddSwapPostFragment : Fragment() {
     private suspend fun collectInputData(): SwapBookData {
         val title =  fragmentAddSwapPostBinding.edtAddSwapPostTitle.text.toString()
         val author =  fragmentAddSwapPostBinding.edtAddSwapPostAuthor.text.toString()
-        val bookType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
-        val bookSwapType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
+        val bookType = selectedBookType1 ?: throw IllegalStateException("Book type must be selected")
+        val bookSwapType = selectedBookType2 ?: throw IllegalStateException("Book type must be selected")
         val regPrice = fragmentAddSwapPostBinding.edtAddSwapPostRegPrice.text.toString()
         val bookState = determineBookState()
         val description =  fragmentAddSwapPostBinding.edtAddSwapPostExplain.text.toString()
@@ -369,7 +370,7 @@ class AddSwapPostFragment : Fragment() {
         popupMenu.menuInflater.inflate(R.menu.popup_menu_add_post_book_type, popupMenu.menu)
 
         popupMenu.setOnMenuItemClickListener { menuItem ->
-            selectedBookType = when (menuItem.itemId) {
+            val selectedBookType = when (menuItem.itemId) {
                 R.id.menuNovel -> BookType.NOVEL
                 R.id.menuPoetry -> BookType.POETRY
                 R.id.menuEssay -> BookType.ESSAY
@@ -392,6 +393,12 @@ class AddSwapPostFragment : Fragment() {
                 R.id.menuOther -> BookType.OTHER
                 else -> null
             }
+
+            when (buttonId) {
+                R.id.btnAddSwapPostType1 -> selectedBookType1 = selectedBookType
+                R.id.btnAddSwapPostType2 -> selectedBookType2 = selectedBookType
+            }
+
             selectedBookType?.let {
                 updateButtonText(showBookTypeText(it), buttonId)
             }

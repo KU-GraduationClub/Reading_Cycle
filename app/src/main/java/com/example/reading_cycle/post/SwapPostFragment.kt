@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -24,9 +23,7 @@ import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.DialogPostDetailsTextBinding
 import com.example.reading_cycle.databinding.FragmentSwapPostBinding
 import com.example.reading_cycle.post.model.SwapBookData
-import com.example.reading_cycle.post.repository.SalePostRepository
 import com.example.reading_cycle.post.repository.SwapPostRepository
-import com.example.reading_cycle.post.vm.SalePostViewModel
 import com.example.reading_cycle.post.vm.SwapPostViewModel
 
 class SwapPostFragment : Fragment() {
@@ -43,7 +40,6 @@ class SwapPostFragment : Fragment() {
     private lateinit var closeButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
         arguments?.let {
@@ -174,9 +170,7 @@ class SwapPostFragment : Fragment() {
     private fun loadImageView(imageView: ImageView, imageUrl: String?) {
         Glide.with(this@SwapPostFragment)
             .load(imageUrl)
-            .centerCrop()
-            .downsample(DownsampleStrategy.AT_MOST)
-            .format(DecodeFormat.PREFER_ARGB_8888)
+            .centerCrop() // 이미지를 원본 비율을 유지하면서 이미지뷰를 꽉 채우도록 설정
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(imageView)
     }

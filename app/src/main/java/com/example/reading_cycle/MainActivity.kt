@@ -163,7 +163,6 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(LOC_SET_FRAGMENT, true)
     }
 
-
     fun navigateToPostMainFragment() {
         replaceFragment(POST_MAIN_FRAGMENT, true)
     }
@@ -173,7 +172,7 @@ class MainActivity : AppCompatActivity() {
             putString("documentId", documentId)
             Log.d("MainActivity", "Navigating to SwapPostFragment with documentId: $documentId")
         }
-        replaceFragment(SWAP_POST_FRAGMENT, true)
+        replaceFragment(SWAP_POST_FRAGMENT, true, bundle)
     }
 
     fun navigateToSalePostFragment(documentId: String) {
