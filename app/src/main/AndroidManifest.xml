@@ -46,6 +46,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" android:exported="true"> </activity>
+        <activity android:name=".chat.vm.ChatRoomActivity" android:exported="true"></activity>
     </application>
 
 </manifest>
