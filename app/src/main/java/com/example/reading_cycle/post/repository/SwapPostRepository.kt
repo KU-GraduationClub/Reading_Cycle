@@ -24,8 +24,8 @@ class SwapPostRepository(private val userId: String) {
         }
     }
 
-    // 사용자 데이터를 가져오는 메소드
-    suspend fun getUserData(): LoginDataClass? {
+    // 게시글 작성자 데이터를 가져오는 메서드
+    suspend fun getUserData(userId: String): LoginDataClass? {
         return try {
             val snapshot = db.collection("Users")
                 .document(userId)

@@ -84,10 +84,13 @@ class SwapPostFragment : Fragment() {
         swapPostViewModel.swapBookData.observe(viewLifecycleOwner) { swapBookData ->
             swapBookData?.let { data ->
                 bindSwapPostData(data)
+                // SaleBookData에서 userId를 추출하고 fetchUserData 호출
+                data.userId?.let { userId ->
+                    swapPostViewModel.fetchUserData(userId)
+                }
             }
         }
 
-        swapPostViewModel.fetchUserData()
         swapPostViewModel.userData.observe(viewLifecycleOwner) { userData ->
             userData?.let { data ->
                 fragmentSwapPostBinding.textSwapPostUser.text = data.userNickname
@@ -96,9 +99,9 @@ class SwapPostFragment : Fragment() {
                         .load(data.userProfileImage)
                         .apply(
                             RequestOptions()
-                                .centerCrop()  // 이미지를 중앙에 맞춤
-                                .circleCrop()  // 이미지를 원형으로 자르기
-                                .override(100, 100)  // 원하는 크기로 조정 (예: 100x100)
+                                .centerCrop()
+                                .circleCrop()
+                                .override(100, 100)
                         )
                         .into(fragmentSwapPostBinding.imgSwapPostUser)
                 }
