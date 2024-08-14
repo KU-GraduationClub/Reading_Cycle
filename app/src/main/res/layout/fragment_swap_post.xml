@@ -107,6 +107,7 @@
                 tools:background="@drawable/border_add_post_gray">
 
                 <ImageView
+                    android:scaleType="centerInside"
                     android:id="@+id/imgSwapPostPoster"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -303,10 +304,11 @@
 
                 <ImageView
                     android:id="@+id/imgSwapPostBook1"
-                    android:layout_width="63dp"
-                    android:layout_height="63dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_margin="2dp"
+                    android:layout_margin="1.2dp"
+                    android:scaleType="centerInside"
                     android:src="@drawable/baseline_image_24" />
 
             </FrameLayout>
@@ -326,10 +328,11 @@
 
                 <ImageView
                     android:id="@+id/imgSwapPostBook2"
-                    android:layout_width="63dp"
-                    android:layout_height="63dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_margin="2dp"
+                    android:layout_margin="1.2dp"
+                    android:scaleType="centerInside"
                     android:src="@drawable/baseline_image_24" />
 
             </FrameLayout>
@@ -349,10 +352,11 @@
 
                 <ImageView
                     android:id="@+id/imgSwapPostBook3"
-                    android:layout_width="63dp"
-                    android:layout_height="63dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_margin="2dp"
+                    android:layout_margin="1.2dp"
+                    android:scaleType="centerInside"
                     android:src="@drawable/baseline_image_24" />
 
             </FrameLayout>
@@ -372,10 +376,11 @@
 
                 <ImageView
                     android:id="@+id/imgSwapPostBook4"
-                    android:layout_width="63dp"
-                    android:layout_height="63dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_margin="2dp"
+                    android:layout_margin="1.2dp"
+                    android:scaleType="centerInside"
                     android:src="@drawable/baseline_image_24" />
 
             </FrameLayout>
@@ -495,14 +500,14 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerSwapPostImages"
-        android:layout_width="350dp"
-        android:layout_height="500dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="45dp"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/border_dark_brown"
-        android:padding="1.5dp"
+        android:background="@drawable/border_dark_brown_viewpager"
+        android:padding="3dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

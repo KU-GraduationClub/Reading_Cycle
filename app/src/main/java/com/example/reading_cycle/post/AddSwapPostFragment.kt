@@ -1,6 +1,7 @@
 package com.example.reading_cycle.post
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -196,7 +197,7 @@ class AddSwapPostFragment : Fragment() {
 
         images.forEachIndexed { index, bitmap ->
             val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
             val data = byteArrayOutputStream.toByteArray()
             val filePath = "images/${System.currentTimeMillis()}_$index.jpg"
             val ref = storage.child(filePath)
@@ -250,39 +251,55 @@ class AddSwapPostFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            AddSwapPostFragment.REQUEST_PICK_IMAGE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val selectedImageUris = data?.clipData
-                    selectedImageUris?.let { clipData ->
-                        for (i in 0 until minOf(clipData.itemCount, cardViewIds.size)) { // 최대 5개까지만 처리
-                            val imageUri = clipData.getItemAt(i).uri
-                            val imageBitmap = uriToBitmap(imageUri)
-                            imageBitmap?.let { bitmap ->
-                                val resizedBitmap = resizeBitmap(bitmap)
-                                selectedImages.add(resizedBitmap)
-                                val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(
-                                    cardViewIds[i])
+            REQUEST_PICK_IMAGE -> {
+                if (resultCode == RESULT_OK) {
+                    val imageUri = data?.data
+                    imageUri?.let { uri ->
+                        val imageBitmap = uriToBitmap(uri)
+                        imageBitmap?.let { bitmap ->
+                            val resizedBitmap = resizeBitmap(bitmap)
+                            selectedCardIndex?.let { index ->
+                                // 이미지를 대체하거나 추가하는 경우
+                                if (index < selectedImages.size) {
+                                    // 이미지를 대체하는 경우, 기존 이미지를 삭제하고 새 이미지를 추가함
+                                    selectedImages.removeAt(index)
+                                    selectedImages.add(index, resizedBitmap)
+                                } else {
+                                    // 선택한 인덱스가 리스트의 범위를 넘어가는 경우 새로운 이미지를 추가함
+                                    selectedImages.add(resizedBitmap)
+                                }
+                                val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(cardViewIds[index])
                                     .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                                     .id
                                 fragmentAddSwapPostBinding.root.findViewById<ImageView>(imageViewId).setImageBitmap(resizedBitmap)
                                 // 다음 번호의 카드뷰를 보여줌
-                                if (i < cardViewIds.size - 1) {
-                                    val nextCardViewId = cardViewIds[i + 1]
-                                    fragmentAddSwapPostBinding.root.findViewById<CardView>(
-                                        nextCardViewId
-                                    ).visibility = View.VISIBLE
+                                if (index < cardViewIds.size - 1) {
+                                    val nextCardViewId = cardViewIds[index + 1]
+                                    fragmentAddSwapPostBinding.root.findViewById<CardView>(nextCardViewId).visibility = View.VISIBLE
                                 }
                             }
+                        } ?: run {
+                            showSnackbar("이미지를 가져오는 데 문제가 발생했습니다.")
                         }
+                    } ?: run {
+                        showSnackbar("이미지를 가져오는 데 문제가 발생했습니다.")
                     }
                 }
             }
-            AddSwapPostFragment.REQUEST_IMAGE_CAPTURE -> {
-                if (resultCode == Activity.RESULT_OK) {
+            REQUEST_IMAGE_CAPTURE -> {
+                if (resultCode == RESULT_OK) {
                     val imageBitmap = data?.extras?.get("data") as Bitmap
                     val resizedBitmap = resizeBitmap(imageBitmap)
-                    selectedImages.add(resizedBitmap)
                     selectedCardIndex?.let { index ->
+                        // 이미지를 대체하거나 추가하는 경우
+                        if (index < selectedImages.size) {
+                            // 이미지를 대체하는 경우, 기존 이미지를 삭제하고 새 이미지를 추가함
+                            selectedImages.removeAt(index)
+                            selectedImages.add(index, resizedBitmap)
+                        } else {
+                            // 선택한 인덱스가 리스트의 범위를 넘어가는 경우 새로운 이미지를 추가함
+                            selectedImages.add(resizedBitmap)
+                        }
                         val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(cardViewIds[index])
                             .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                             .id

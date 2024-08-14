@@ -112,7 +112,7 @@ class SalePostFragment : Fragment() {
         fragmentSalePostBinding.apply {
             textSalePostTitle.text = data.saleBookTitle
             textSalePostAuthor.text = data.saleBookAuthor
-            btnSalePostType.text = data.saleBookType.name
+            btnSalePostType.text = data.saleBookType.displayName
             btnSalePostPrice.text = data.saleBookPrice
             textSalePostRegPrice.text = data.saleBookRegPrice
             textSalePostState.text = data.saleBookState.name
