@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentLibraryMainBinding
-import com.example.reading_cycle.library.model.LibraryMainAdapter
 
 class LibraryMainFragment : Fragment() {
 
@@ -69,7 +68,7 @@ class LibraryMainFragment : Fragment() {
         )
 
         // LibraryAdapter를 사용하여 RecyclerView에 어댑터 설정
-        val adapter = LibraryMainAdapter(requireContext(), imageList)
+        val adapter = LibraryAdapter(requireContext(), imageList)
         fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = adapter
     }
 }
