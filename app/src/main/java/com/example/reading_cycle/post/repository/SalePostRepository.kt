@@ -24,8 +24,8 @@ class SalePostRepository(private val userId: String) {
         }
     }
 
-    // 사용자 데이터를 가져오는 메소드
-    suspend fun getUserData(): LoginDataClass? {
+    // 게시글 작성자 데이터를 가져오는 메서드
+    suspend fun getUserData(userId: String): LoginDataClass? {
         return try {
             val snapshot = db.collection("Users")
                 .document(userId)
@@ -35,6 +35,19 @@ class SalePostRepository(private val userId: String) {
         } catch (e: Exception) {
             Log.e("SalePostRepository", "Error fetching user data", e)
             null
+        }
+    }
+
+    // 게시글 삭제하기
+    suspend fun deleteSalePost(documentId: String) {
+        try {
+            db.collection("SalePosts")  // SalePosts 컬렉션을 사용합니다.
+                .document(documentId)
+                .delete()
+                .await()
+            Log.d("SalePostRepository", "Post deleted successfully for document ID: $documentId")
+        } catch (e: Exception) {
+            Log.e("SalePostRepository", "Error deleting sale post", e)
         }
     }
 }

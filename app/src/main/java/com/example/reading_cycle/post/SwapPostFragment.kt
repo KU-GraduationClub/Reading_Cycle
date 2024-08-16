@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -24,9 +23,7 @@ import com.example.reading_cycle.UserViewModel
 import com.example.reading_cycle.databinding.DialogPostDetailsTextBinding
 import com.example.reading_cycle.databinding.FragmentSwapPostBinding
 import com.example.reading_cycle.post.model.SwapBookData
-import com.example.reading_cycle.post.repository.SalePostRepository
 import com.example.reading_cycle.post.repository.SwapPostRepository
-import com.example.reading_cycle.post.vm.SalePostViewModel
 import com.example.reading_cycle.post.vm.SwapPostViewModel
 
 class SwapPostFragment : Fragment() {
@@ -43,7 +40,6 @@ class SwapPostFragment : Fragment() {
     private lateinit var closeButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
         arguments?.let {
@@ -88,10 +84,13 @@ class SwapPostFragment : Fragment() {
         swapPostViewModel.swapBookData.observe(viewLifecycleOwner) { swapBookData ->
             swapBookData?.let { data ->
                 bindSwapPostData(data)
+                // SaleBookData에서 userId를 추출하고 fetchUserData 호출
+                data.userId?.let { userId ->
+                    swapPostViewModel.fetchUserData(userId)
+                }
             }
         }
 
-        swapPostViewModel.fetchUserData()
         swapPostViewModel.userData.observe(viewLifecycleOwner) { userData ->
             userData?.let { data ->
                 fragmentSwapPostBinding.textSwapPostUser.text = data.userNickname
@@ -100,25 +99,14 @@ class SwapPostFragment : Fragment() {
                         .load(data.userProfileImage)
                         .apply(
                             RequestOptions()
-                                .centerCrop()  // 이미지를 중앙에 맞춤
-                                .circleCrop()  // 이미지를 원형으로 자르기
-                                .override(100, 100)  // 원하는 크기로 조정 (예: 100x100)
+                                .centerCrop()
+                                .circleCrop()
+                                .override(100, 100)
                         )
                         .into(fragmentSwapPostBinding.imgSwapPostUser)
                 }
             }
         }
-
-        // 타이틀 아이콘 및 텍스트 설정
-        val iconDrawable = ContextCompat.getDrawable(requireContext(),
-            R.drawable.baseline_sync_40_blue
-        )
-        fragmentSwapPostBinding.toolbarTitleSwapPost.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
-        fragmentSwapPostBinding.toolbarTitleSwapPost.compoundDrawablePadding = resources.getDimensionPixelSize(
-            R.dimen.icon_text_padding
-        )
-        fragmentSwapPostBinding.toolbarTitleSwapPost.text = "도서 교환"
-
         return fragmentSwapPostBinding.root
     }
 
@@ -185,9 +173,7 @@ class SwapPostFragment : Fragment() {
     private fun loadImageView(imageView: ImageView, imageUrl: String?) {
         Glide.with(this@SwapPostFragment)
             .load(imageUrl)
-            .centerCrop()
-            .downsample(DownsampleStrategy.AT_MOST)
-            .format(DecodeFormat.PREFER_ARGB_8888)
+            .centerCrop() // 이미지를 원본 비율을 유지하면서 이미지뷰를 꽉 채우도록 설정
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(imageView)
     }
