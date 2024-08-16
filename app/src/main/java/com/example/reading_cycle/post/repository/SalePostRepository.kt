@@ -37,4 +37,17 @@ class SalePostRepository(private val userId: String) {
             null
         }
     }
+
+    // 게시글 삭제하기
+    suspend fun deleteSalePost(documentId: String) {
+        try {
+            db.collection("SalePosts")  // SalePosts 컬렉션을 사용합니다.
+                .document(documentId)
+                .delete()
+                .await()
+            Log.d("SalePostRepository", "Post deleted successfully for document ID: $documentId")
+        } catch (e: Exception) {
+            Log.e("SalePostRepository", "Error deleting sale post", e)
+        }
+    }
 }

@@ -497,6 +497,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textSalePost4" />
 
+            <Button
+                android:id="@+id/btnSalePostChatRequest"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="#27713C"
+                android:elevation="3dp"
+                android:fontFamily="@font/soyo_maple_bold"
+                android:padding="1dp"
+                android:text="채팅 요청"
+                android:textColor="#F9FBF4"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSalePostExplain" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

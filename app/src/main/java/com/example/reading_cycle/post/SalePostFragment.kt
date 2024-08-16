@@ -4,6 +4,9 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -109,6 +112,64 @@ class SalePostFragment : Fragment() {
         }
 
         return fragmentSalePostBinding.root
+    }
+
+    // 상단 메뉴를 생성
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar_post, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    // 메뉴 항목의 가시성 제어
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val deleteMenuItem = menu.findItem(R.id.postMenuItemPostDelete)
+
+        salePostViewModel.saleBookData.observe(viewLifecycleOwner) { saleBookData ->
+            saleBookData?.userId?.let { postOwnerId ->
+                deleteMenuItem.isVisible = userViewModel.userIdx == postOwnerId
+            }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.postMenuItemPostDelete -> {
+                showDeleteConfirmationDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun checkOwnership(postOwnerId: String) {
+        if (userViewModel.userIdx != postOwnerId) {
+            fragmentSalePostBinding.btnSalePostChatRequest.visibility = View.VISIBLE
+            fragmentSalePostBinding.btnSalePostChatRequest.setOnClickListener {
+                // 채팅 요청 로직 추가
+                startChatWithPostOwner(postOwnerId)
+            }
+        } else {
+            fragmentSalePostBinding.btnSalePostChatRequest.visibility = View.GONE
+        }
+    }
+
+    private fun showDeleteConfirmationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setMessage("게시글을 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { _, _ ->
+                // 삭제 로직 추가
+                salePostViewModel.deleteSalePost(documentId)
+                mainActivity.removeFragment(MainActivity.SALE_POST_FRAGMENT)
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
+    private fun startChatWithPostOwner(postOwnerId: String) {
+        // 여기에 게시글 작성자와 채팅을 시작하는 로직을 추가
+        // 예를 들어, 채팅 화면으로 이동하거나 채팅을 시작하는 기능을 구현할 수 있습니다.
+        Log.d("SalePostFragment", "채팅 요청: 게시글 작성자 ID = $postOwnerId")
     }
 
     private fun bindSalePostData(data: SaleBookData) {
@@ -244,3 +305,4 @@ class SalePostPagerAdapter(private var images: List<String>) : RecyclerView.Adap
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
     }
 }
+
