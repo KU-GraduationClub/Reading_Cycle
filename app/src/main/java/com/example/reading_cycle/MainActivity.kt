@@ -14,7 +14,6 @@ import com.example.reading_cycle.chat.ChatListFragment
 import com.example.reading_cycle.databinding.ActivityMainBinding
 import com.example.reading_cycle.friend.FriendMainFragment
 import com.example.reading_cycle.library.LibraryMainFragment
-import com.example.reading_cycle.library.LibraryMyFragment
 import com.example.reading_cycle.location.LocSetFragment
 import com.example.reading_cycle.login.EditUserFragment
 import com.example.reading_cycle.login.ListSettingsFragment
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         const val LIST_SETTINGS_FRAGMENT = "ListSettingsFragment"
         const val CHAT_LIST_FRAGMENT = "ChatListFragment"
         const val LIBRARY_MAIN_FRAGMENT = "LibraryMainFragment"
-        const val LIBRARY_MY_FRAGMENT = "LibraryMyFragment"
         const val FRIEND_MAIN_FRAGMENT = "FriendMainFragment"
         const val NOTIFY_FRAGMENT = "NotifyFragment"
     }
@@ -81,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.bottom_main -> replaceFragment(POST_MAIN_FRAGMENT, true)
                 R.id.bottom_chat -> replaceFragment(CHAT_LIST_FRAGMENT, true)
                 R.id.bottom_frd -> replaceFragment(FRIEND_MAIN_FRAGMENT, true)
-                R.id.bottom_lib -> replaceFragment(LIBRARY_MY_FRAGMENT, true)
+                R.id.bottom_lib -> replaceFragment(LIBRARY_MAIN_FRAGMENT, true)
                 R.id.bottom_set -> replaceFragment(LIST_SETTINGS_FRAGMENT, true)
             }
             true
@@ -114,7 +112,6 @@ class MainActivity : AppCompatActivity() {
             LIST_SETTINGS_FRAGMENT -> ListSettingsFragment()
             CHAT_LIST_FRAGMENT -> ChatListFragment()
             LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
-            LIBRARY_MY_FRAGMENT -> LibraryMyFragment()
             FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
             NOTIFY_FRAGMENT -> NotifyFragment()
             else -> Fragment()

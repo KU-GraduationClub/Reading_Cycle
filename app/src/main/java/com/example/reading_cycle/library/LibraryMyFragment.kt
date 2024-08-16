@@ -12,11 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentLibraryMyBinding
+import com.example.reading_cycle.library.model.LibraryMainAdapter
+import com.example.reading_cycle.library.model.SaleBooknameDataClass
+import com.example.reading_cycle.library.model.SwapBooknameDataClass
 
 class LibraryMyFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentLibraryMyBinding: FragmentLibraryMyBinding
+    private lateinit var libraryMainAdapter: LibraryMainAdapter
 
     companion object {
         fun newInstance(bundle: Bundle?): LibraryMyFragment {
@@ -35,7 +39,7 @@ class LibraryMyFragment : Fragment() {
         mainActivity.showBottomNavigation()
 
         // 타이틀 아이콘 작업
-        ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
+        val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
         fragmentLibraryMyBinding.toolbarLibraryMyTitle.setCompoundDrawablesWithIntrinsicBounds(
             null,
             null,
@@ -50,12 +54,33 @@ class LibraryMyFragment : Fragment() {
         // 텍스트 설정
         fragmentLibraryMyBinding.toolbarLibraryMyTitle.text = "라이브러리"
 
+        // 이미지 버튼 클릭 이벤트 처리
+        fragmentLibraryMyBinding.imgBtnLibraryMy.setOnClickListener {
+            showPostTypeDialog()
+        }
 
+        // 데이터 생성(임시)
+        val swapBooknameList = listOf(
+            SwapBooknameDataClass("책 제목1"),
+            SwapBooknameDataClass("책 제목2"),
+            SwapBooknameDataClass("책 제목3")
+        )
+        val saleBooknameList = listOf(
+            SaleBooknameDataClass("책 제목4"),
+            SaleBooknameDataClass("책 제목5")
+        )
+
+
+
+        // 어댑터 초기화
+        libraryMainAdapter = LibraryMainAdapter(swapBooknameList, saleBooknameList)
 
         // RecyclerView 설정
         val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         fragmentLibraryMyBinding.recyclerViewLibraryMy.layoutManager = layoutManager
 
+        //어댑터 설정
+        fragmentLibraryMyBinding.recyclerViewLibraryMy.adapter = libraryMainAdapter
 
         // 툴바 알림 메뉴 클릭 이벤트 처리
         fragmentLibraryMyBinding.toolbarLayoutLibraryMy.setOnMenuItemClickListener { menuItem ->
@@ -71,6 +96,14 @@ class LibraryMyFragment : Fragment() {
         return fragmentLibraryMyBinding.root
     }
 
+    private fun createPostMainAdapter(): LibraryMainAdapter {
+        // TODO: SwapBooknameDataClass, SaleBooknameDataClass에 맞는 데이터를 생성하여 어댑터에 전달
+        val swapBooknameList = mutableListOf<SwapBooknameDataClass>() // ... 스왑 데이터 생성
+        val saleBooknameList = mutableListOf<SaleBooknameDataClass>() // ... 판매 데이터 생성
+        // TODO:데이터 추가
+        return  LibraryMainAdapter(swapBooknameList, saleBooknameList)
+
+    }
 
     private fun showPostTypeDialog() {
         val builder = AlertDialog.Builder(requireContext())
@@ -97,6 +130,5 @@ class LibraryMyFragment : Fragment() {
     }
 
 }
-
 
 
