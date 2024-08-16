@@ -10,6 +10,7 @@
 
     <item
         android:id="@+id/postMenuItemPostDelete"
-        android:title="" />
+        android:title="게시글 삭제"
+        android:visible="false"/>
 
 </menu>

@@ -1,6 +1,7 @@
 package com.example.reading_cycle.post
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -54,7 +55,8 @@ class AddSwapPostFragment : Fragment() {
     private lateinit var viewModel: AddSwapPostViewModel
     private var selectedCardIndex: Int? = null
     private var selectedFrameId: Int? = null
-    private var selectedBookType: BookType? = null
+    private var selectedBookType1: BookType? = null
+    private var selectedBookType2: BookType? = null
     private var selectedBookState: BookState? = null
     private val selectedImages = mutableListOf<Bitmap>()
     private val userViewModel: UserViewModel by activityViewModels()
@@ -157,8 +159,8 @@ class AddSwapPostFragment : Fragment() {
     private suspend fun collectInputData(): SwapBookData {
         val title =  fragmentAddSwapPostBinding.edtAddSwapPostTitle.text.toString()
         val author =  fragmentAddSwapPostBinding.edtAddSwapPostAuthor.text.toString()
-        val bookType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
-        val bookSwapType = selectedBookType ?: throw IllegalStateException("Book type must be selected")
+        val bookType = selectedBookType1 ?: throw IllegalStateException("Book type must be selected")
+        val bookSwapType = selectedBookType2 ?: throw IllegalStateException("Book type must be selected")
         val regPrice = fragmentAddSwapPostBinding.edtAddSwapPostRegPrice.text.toString()
         val bookState = determineBookState()
         val description =  fragmentAddSwapPostBinding.edtAddSwapPostExplain.text.toString()
@@ -195,7 +197,7 @@ class AddSwapPostFragment : Fragment() {
 
         images.forEachIndexed { index, bitmap ->
             val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
             val data = byteArrayOutputStream.toByteArray()
             val filePath = "images/${System.currentTimeMillis()}_$index.jpg"
             val ref = storage.child(filePath)
@@ -249,39 +251,55 @@ class AddSwapPostFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            AddSwapPostFragment.REQUEST_PICK_IMAGE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val selectedImageUris = data?.clipData
-                    selectedImageUris?.let { clipData ->
-                        for (i in 0 until minOf(clipData.itemCount, cardViewIds.size)) { // 최대 5개까지만 처리
-                            val imageUri = clipData.getItemAt(i).uri
-                            val imageBitmap = uriToBitmap(imageUri)
-                            imageBitmap?.let { bitmap ->
-                                val resizedBitmap = resizeBitmap(bitmap)
-                                selectedImages.add(resizedBitmap)
-                                val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(
-                                    cardViewIds[i])
+            REQUEST_PICK_IMAGE -> {
+                if (resultCode == RESULT_OK) {
+                    val imageUri = data?.data
+                    imageUri?.let { uri ->
+                        val imageBitmap = uriToBitmap(uri)
+                        imageBitmap?.let { bitmap ->
+                            val resizedBitmap = resizeBitmap(bitmap)
+                            selectedCardIndex?.let { index ->
+                                // 이미지를 대체하거나 추가하는 경우
+                                if (index < selectedImages.size) {
+                                    // 이미지를 대체하는 경우, 기존 이미지를 삭제하고 새 이미지를 추가함
+                                    selectedImages.removeAt(index)
+                                    selectedImages.add(index, resizedBitmap)
+                                } else {
+                                    // 선택한 인덱스가 리스트의 범위를 넘어가는 경우 새로운 이미지를 추가함
+                                    selectedImages.add(resizedBitmap)
+                                }
+                                val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(cardViewIds[index])
                                     .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                                     .id
                                 fragmentAddSwapPostBinding.root.findViewById<ImageView>(imageViewId).setImageBitmap(resizedBitmap)
                                 // 다음 번호의 카드뷰를 보여줌
-                                if (i < cardViewIds.size - 1) {
-                                    val nextCardViewId = cardViewIds[i + 1]
-                                    fragmentAddSwapPostBinding.root.findViewById<CardView>(
-                                        nextCardViewId
-                                    ).visibility = View.VISIBLE
+                                if (index < cardViewIds.size - 1) {
+                                    val nextCardViewId = cardViewIds[index + 1]
+                                    fragmentAddSwapPostBinding.root.findViewById<CardView>(nextCardViewId).visibility = View.VISIBLE
                                 }
                             }
+                        } ?: run {
+                            showSnackbar("이미지를 가져오는 데 문제가 발생했습니다.")
                         }
+                    } ?: run {
+                        showSnackbar("이미지를 가져오는 데 문제가 발생했습니다.")
                     }
                 }
             }
-            AddSwapPostFragment.REQUEST_IMAGE_CAPTURE -> {
-                if (resultCode == Activity.RESULT_OK) {
+            REQUEST_IMAGE_CAPTURE -> {
+                if (resultCode == RESULT_OK) {
                     val imageBitmap = data?.extras?.get("data") as Bitmap
                     val resizedBitmap = resizeBitmap(imageBitmap)
-                    selectedImages.add(resizedBitmap)
                     selectedCardIndex?.let { index ->
+                        // 이미지를 대체하거나 추가하는 경우
+                        if (index < selectedImages.size) {
+                            // 이미지를 대체하는 경우, 기존 이미지를 삭제하고 새 이미지를 추가함
+                            selectedImages.removeAt(index)
+                            selectedImages.add(index, resizedBitmap)
+                        } else {
+                            // 선택한 인덱스가 리스트의 범위를 넘어가는 경우 새로운 이미지를 추가함
+                            selectedImages.add(resizedBitmap)
+                        }
                         val imageViewId = fragmentAddSwapPostBinding.root.findViewById<CardView>(cardViewIds[index])
                             .getChildAt(0) // 각 카드뷰 안에 있는 ImageView를 가져옴
                             .id
@@ -342,12 +360,9 @@ class AddSwapPostFragment : Fragment() {
     }
 
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // 다중 선택 허용
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-            AddSalePostFragment.REQUEST_PICK_IMAGE
-        )
+        startActivityForResult(intent, REQUEST_PICK_IMAGE)
     }
 
     private fun openCamera() {
@@ -358,11 +373,11 @@ class AddSwapPostFragment : Fragment() {
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(android.Manifest.permission.CAMERA),
-                AddSalePostFragment.REQUEST_IMAGE_CAPTURE
+               REQUEST_IMAGE_CAPTURE
             )
         } else {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(intent, AddSalePostFragment.REQUEST_IMAGE_CAPTURE)
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
         }
     }
 
@@ -372,7 +387,7 @@ class AddSwapPostFragment : Fragment() {
         popupMenu.menuInflater.inflate(R.menu.popup_menu_add_post_book_type, popupMenu.menu)
 
         popupMenu.setOnMenuItemClickListener { menuItem ->
-            selectedBookType = when (menuItem.itemId) {
+            val selectedBookType = when (menuItem.itemId) {
                 R.id.menuNovel -> BookType.NOVEL
                 R.id.menuPoetry -> BookType.POETRY
                 R.id.menuEssay -> BookType.ESSAY
@@ -395,6 +410,12 @@ class AddSwapPostFragment : Fragment() {
                 R.id.menuOther -> BookType.OTHER
                 else -> null
             }
+
+            when (buttonId) {
+                R.id.btnAddSwapPostType1 -> selectedBookType1 = selectedBookType
+                R.id.btnAddSwapPostType2 -> selectedBookType2 = selectedBookType
+            }
+
             selectedBookType?.let {
                 updateButtonText(showBookTypeText(it), buttonId)
             }

@@ -40,17 +40,10 @@ class SwapPostViewModel(private val repository: SwapPostRepository) : ViewModel(
     }
 
     // 사용자 데이터를 요청하는 메서드
-    fun fetchUserData() {
-        Log.d("SwapPostViewModel", "Fetching user data")
+    fun fetchUserData(userId: String)  {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // 데이터를 repository를 통해 가져옵니다.
-                val user = repository.getUserData()
-                if (user != null) {
-                    Log.d("SwapPostViewModel", "User data fetched: ${user.userNickname}")
-                } else {
-                    Log.e("SwapPostViewModel", "No user data found")
-                }
+                val user = repository.getUserData(userId)
                 // UI 스레드에서 LiveData 값 업데이트
                 userData.postValue(user)
             } catch (e: Exception) {

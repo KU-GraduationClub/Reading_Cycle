@@ -16,6 +16,7 @@ class SalePostViewModel(private val repository: SalePostRepository) : ViewModel(
     // LiveData 객체로 Data를 관리
     val saleBookData = MutableLiveData<SaleBookData?>()
     val userData = MutableLiveData<LoginDataClass?>()
+    val deleteSuccess = MutableLiveData<Boolean>()
 
     // 특정 도서 데이터를 요청하는 메서드
     fun fetchSaleBookData(documentId: String) {
@@ -40,22 +41,34 @@ class SalePostViewModel(private val repository: SalePostRepository) : ViewModel(
     }
 
     // 사용자 데이터를 요청하는 메서드
-    fun fetchUserData() {
-        Log.d("SalePostViewModel", "Fetching user data")
+    fun fetchUserData(userId: String)  {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // 데이터를 repository를 통해 가져옵니다.
-                val user = repository.getUserData()
-                if (user != null) {
-                    Log.d("SalePostViewModel", "User data fetched: ${user.userNickname}")
-                } else {
-                    Log.e("SalePostViewModel", "No user data found")
-                }
+                val user = repository.getUserData(userId)
                 // UI 스레드에서 LiveData 값 업데이트
                 userData.postValue(user)
             } catch (e: Exception) {
                 Log.e("SalePostViewModel", "Error fetching user data: ${e.message}", e)
                 userData.postValue(null)
+            }
+        }
+    }
+
+    // 게시글 삭제 메서드
+    fun deleteSalePost(documentId: String?) {
+        if (documentId == null) {
+            Log.e("SalePostViewModel", "Document ID is null. Cannot delete post.")
+            deleteSuccess.postValue(false)  // 삭제 실패로 설정
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.deleteSalePost(documentId)
+                Log.d("SalePostViewModel", "Post deleted successfully for document ID: $documentId")
+                deleteSuccess.postValue(true)  // 삭제 성공으로 설정
+            } catch (e: Exception) {
+                Log.e("SalePostViewModel", "Error deleting post: ${e.message}", e)
+                deleteSuccess.postValue(false)  // 삭제 실패로 설정
             }
         }
     }
