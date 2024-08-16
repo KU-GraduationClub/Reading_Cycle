@@ -93,7 +93,6 @@ class ChatRoomActivity : AppCompatActivity() {
                 }
             })
 
-        // 메시지 제출 로직
         binding.btnSubmit.setOnClickListener {
             submitMessage(chatRoomId, myName)
         }
