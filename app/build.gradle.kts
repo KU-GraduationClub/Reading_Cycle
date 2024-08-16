@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("com.google.gms.google-services")
+
 }
 
 fun getApiKey(propertyKey: String): String {
@@ -55,7 +56,7 @@ android {
         // Firebase Storage
         implementation("com.google.firebase:firebase-storage:21.0.0")
         // Glide 추가 (이미지 로드, 표시)
-        implementation("com.github.bumptech.glide:glide:4.12.0")
+        implementation("com.github.bumptech.glide:glide:4.11.0")
 
 
         implementation("androidx.core:core-ktx:1.12.0")
