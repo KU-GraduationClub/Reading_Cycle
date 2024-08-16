@@ -3,15 +3,15 @@
     android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp">
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp">
 
     <ImageView
         android:id="@+id/profileImage"
         android:layout_width="51dp"
         android:layout_height="43dp"
         android:contentDescription="@string/profile_image"
-        android:src="@drawable/ic_launcher_foreground"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,21 +30,23 @@
 
     <TextView
         android:id="@+id/textMessage"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autoLink="web"
-        android:background="@color/material_dynamic_primary10"
+        android:background="@drawable/background_talk_partner"
+        android:fontFamily="@font/soyo_maple_regular"
         android:gravity="start|center_vertical"
         android:linksClickable="true"
         android:padding="10dp"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:textSize="20sp"
         android:text="안녕하세요."
         android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/profileImage"
         app:layout_constraintTop_toBottomOf="@id/textNickname"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textDate"
@@ -54,9 +56,11 @@
         android:text="오전 10:23"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/textMessage"
         app:layout_constraintTop_toTopOf="@id/textMessage"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textIsShown"
