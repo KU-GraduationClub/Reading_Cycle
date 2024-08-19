@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.reading_cycle.R
 import com.example.reading_cycle.chat.model.DataMessage
 import com.example.reading_cycle.databinding.ChatTalkItemMyBinding
@@ -81,6 +82,7 @@ class MessageAdapter(
             if (userProfileImage.isNotEmpty()) {
                 Glide.with(itemView.context)
                     .load(userProfileImage)
+                    .apply(RequestOptions.circleCropTransform())
                     .placeholder(R.drawable.ic_launcher_foreground) // 대체 이미지
                     .error(R.drawable.baseline_close_24) // 로드 실패 시 이미지
                     .into(binding.profileImage)

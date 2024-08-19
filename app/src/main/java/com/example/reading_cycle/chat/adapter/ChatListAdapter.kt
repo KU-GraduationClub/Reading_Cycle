@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.reading_cycle.chat.model.ChatItem
 import com.example.reading_cycle.databinding.RowChatListBinding
 
@@ -24,6 +25,7 @@ class ChatListAdapter(private var chatList: List<ChatItem>, private val listener
                 textLastMessageTime.text = chatItem.lastMessageTime
                 Glide.with(itemView)
                     .load(chatItem.profileImage)
+                    .apply(RequestOptions.circleCropTransform())
                     .into(imgProfile)
                 if (chatItem.unreadMessageCount > 0) {
                     textUnseenCount.text = chatItem.unreadMessageCount.toString()

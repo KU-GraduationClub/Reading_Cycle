@@ -61,11 +61,6 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
         fragmentChatListBinding.recyclerChatList.layoutManager = LinearLayoutManager(requireContext())
         fragmentChatListBinding.recyclerChatList.adapter = chatListAdapter
 
-        // Firestore에서 userNickname 검색
-        userIdx?.let {
-            fetchUserNickname(it)
-        }
-
         return fragmentChatListBinding.root
     }
 
@@ -76,12 +71,21 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
             showAddRoomDialog()
         }
 
-        // 채팅방 리스트 로드
-        loadChatRooms() // 채팅방 데이터를 초기 로드
+        // Firestore에서 userNickname을 가져온 후 채팅방 로드
+        userIdx?.let {
+            fetchUserNickname(it) {
+                loadChatRooms() // userNickname 로드 후 채팅방 목록 로드
+            }
+        }
     }
 
     // Firebase Database에서 채팅방 리스트를 로드하는 메서드
     private fun loadChatRooms() {
+        // 중복 리스너 체크 및 필요시 제거
+        chatRoomListener?.let {
+            database.removeEventListener(it)
+        }
+
         chatRoomListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 chatRoomList.clear() // 기존 데이터 초기화
@@ -102,23 +106,30 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
                             }
                         }
 
-                        // 상대방의 프로필 이미지 URL을 Firestore에서 가져오기
-                        fetchUserProfileImage(otherUserName ?: "") { profileImageUrl ->
-                            // 상대방의 lastMessage 및 lastMessageTime을 가져오기
-                            val lastMessage = usersSnapshot.child(otherUserName ?: "").child("lastMessage").getValue(String::class.java) ?: "메시지가 존재하지 않습니다."
-                            val lastMessageTime = usersSnapshot.child(otherUserName ?: "").child("lastMessageTime").getValue(String::class.java) ?: ""
+                        // 중복 확인: 이미 존재하는 chatRoomId면 추가하지 않음
+                        if (!chatRoomList.any { it.chatRoomId == chatRoom.chatRoomId }) {
+                            // 상대방의 프로필 이미지 URL을 Firestore에서 가져오기
+                            fetchUserProfileImage(otherUserName ?: "") { profileImageUrl ->
+                                // 상대방의 lastMessage 및 lastMessageTime을 가져오기
+                                val lastMessage = usersSnapshot.child(otherUserName ?: "").child("lastMessage").getValue(String::class.java) ?: "메시지가 존재하지 않습니다."
+                                val lastMessageTime = usersSnapshot.child(otherUserName ?: "").child("lastMessageTime").getValue(String::class.java) ?: ""
 
-                            // 채팅방 정보 업데이트
-                            chatRoom.lastMessage = lastMessage
-                            chatRoom.lastMessageTime = lastMessageTime
+                                // 채팅방 정보 업데이트
+                                chatRoom.lastMessage = lastMessage
+                                chatRoom.lastMessageTime = lastMessageTime
 
-                            chatRoomList.add(chatRoom.copy(profileImage = profileImageUrl, roomName = otherUserName)) // 프로필 이미지 추가
-                            processedRooms++
+                                // 채팅방 추가
+                                chatRoomList.add(chatRoom.copy(profileImage = profileImageUrl, roomName = otherUserName)) // 프로필 이미지 추가
+                                processedRooms++
 
-                            // 모든 방이 처리되면 리스트를 업데이트
-                            if (processedRooms == snapshot.children.count()) {
-                                updateChatList()
+                                // 모든 방이 처리되면 리스트를 업데이트
+                                if (processedRooms == snapshot.children.count()) {
+                                    updateChatList()
+                                    Log.d("ChatListFragment", "Finished loading chat rooms. Total rooms: ${chatRoomList.size}")
+                                }
                             }
+                        } else {
+                            Log.d("ChatListFragment", "Duplicate chat room found: ${chatRoom.chatRoomId}")
                         }
                     }
                 }
@@ -181,7 +192,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
             }
     }
 
-    private fun fetchUserNickname(userIdx: String) {
+    private fun fetchUserNickname(userIdx: String, onComplete: () -> Unit) {
         firestore.collection("Users")
             .whereEqualTo("userIdx", userIdx) // userIdx로 필터링
             .get()
@@ -189,6 +200,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
                 if (result.documents.isNotEmpty()) {
                     myName = result.documents[0].getString("userNickname") // userNickname 가져오기
                     Log.d("ChatListFragment", "Fetched myName: $myName")
+                    onComplete() // 콜백 호출
                 } else {
                     Log.e("ChatListFragment", "No matching user found.")
                     myName = null
@@ -222,38 +234,50 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
         val chatRoomId = chatRoomRef.key
 
         if (chatRoomId != null) {
-            val chatRoom = ChatRoom(
-                chatRoomId = chatRoomId,
-                lastMessage = null,
-                lastMessageTime = null,
-                roomName = null
-            )
+            // 생성할 채팅방의 ID로 중복 여부를 확인
+            database.child(chatRoomId).get().addOnSuccessListener { snapshot ->
+                if (!snapshot.exists()) {
+                    val chatRoom = ChatRoom(
+                        chatRoomId = chatRoomId,
+                        lastMessage = null,
+                        lastMessageTime = null,
+                        roomName = null
+                    )
 
-            // 채팅방 데이터 저장
-            chatRoomRef.setValue(chatRoom)
-                .addOnSuccessListener {
-                    // 사용자의 정보를 users로 저장
-                    val usersRef = chatRoomRef.child("users")
-                    val currentTime = System.currentTimeMillis()
+                    // 채팅방 데이터 저장
+                    chatRoomRef.setValue(chatRoom)
+                        .addOnSuccessListener {
+                            // 사용자의 정보를 users로 저장
+                            val usersRef = chatRoomRef.child("users")
+                            val currentTime = System.currentTimeMillis()
 
-                    // 사용자를 users에 추가
-                    usersRef.child(myName ?: "unknown").setValue(mapOf(
-                        "lastReadTime" to currentTime,
-                        "lastMessage" to null,
-                        "lastMessageTime" to null
-                    ))
-                    usersRef.child(addName).setValue(mapOf(
-                        "lastReadTime" to currentTime,
-                        "lastMessage" to null,
-                        "lastMessageTime" to null
-                    ))
+                            // 사용자를 users에 추가
+                            usersRef.child(myName ?: "unknown").setValue(mapOf(
+                                "lastReadTime" to currentTime,
+                                "lastMessage" to null,
+                                "lastMessageTime" to null
+                            ))
+                            usersRef.child(addName).setValue(mapOf(
+                                "lastReadTime" to currentTime,
+                                "lastMessage" to null,
+                                "lastMessageTime" to null
+                            ))
 
-                    Toast.makeText(requireContext(), "채팅방이 생성되었습니다: $addName", Toast.LENGTH_SHORT).show()
+                            // 채팅방을 생성한 후 다시 로드할 필요가 없게 하려면 아래 코드를 주석 처리
+                            // loadChatRooms() // 채팅방을 생성 후 리스트를 업데이트
+                            Toast.makeText(requireContext(), "채팅방이 생성되었습니다: $addName", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("ChatListFragment", "채팅방 생성에 실패했습니다.", exception)
+                            Toast.makeText(requireContext(), "채팅방 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    // 이미 존재하는 채팅방 ID 처리
+                    Toast.makeText(requireContext(), "이미 존재하는 채팅방입니다.", Toast.LENGTH_SHORT).show()
                 }
-                .addOnFailureListener { exception ->
-                    Log.e("ChatListFragment", "채팅방 생성에 실패했습니다.", exception)
-                    Toast.makeText(requireContext(), "채팅방 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
+            }.addOnFailureListener { exception ->
+                Log.e("ChatListFragment", "채팅방 ID 확인 중 오류 발생: ${exception.message}")
+            }
         } else {
             Toast.makeText(requireContext(), "채팅방 ID를 생성할 수 없습니다.", Toast.LENGTH_SHORT).show()
         }

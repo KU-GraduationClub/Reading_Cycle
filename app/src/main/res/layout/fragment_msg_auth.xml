@@ -46,22 +46,32 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/soyo_maple_bold"
                     android:gravity="center"
-                    android:text="휴대폰 인증"
+                    android:text="Login"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/theme_green"
-                    android:textSize="20sp" />
+                    android:textSize="17dp" />
             </LinearLayout>
 
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
 
+    <View
+        android:id="@+id/dividerMsgAuth"
+        android:layout_width="wrap_content"
+        android:layout_height="1.5dp"
+        android:background="#B2C8AA"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarLayout" />
+
     <Button
         android:id="@+id/btnCheckAuthCode2"
         android:layout_width="360dp"
         android:layout_height="55dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="93dp"
         android:backgroundTint="@color/theme_green"
         android:fontFamily="@font/soyo_maple_regular"
@@ -77,8 +87,8 @@
         android:id="@+id/edtAuthCode3"
         android:layout_width="360dp"
         android:layout_height="44dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/border_dark_brown"
         android:drawablePadding="10dp"
         android:ems="20"
@@ -98,22 +108,19 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="160dp"
         android:layout_marginBottom="29dp"
         android:text="어떤 경우에도 타인에게 공유하지마세요!"
         app:layout_constraintBottom_toTopOf="@+id/btnCheckAuthCode2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/edtAuthCode3"
         app:layout_constraintTop_toBottomOf="@+id/edtAuthCode3" />
 
     <EditText
         android:id="@+id/edtPhoneNumber"
         android:layout_width="360dp"
         android:layout_height="44dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="1dp"
         android:background="@drawable/border_dark_brown"
         android:drawablePadding="10dp"
@@ -134,8 +141,8 @@
         android:id="@+id/btnSendAuthCode"
         android:layout_width="360dp"
         android:layout_height="55dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="60dp"
         android:backgroundTint="@color/theme_green"
         android:fontFamily="@font/soyo_maple_regular"
@@ -151,9 +158,8 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="141dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="70dp"
         android:layout_marginBottom="52dp"
         android:fontFamily="@font/soyo_maple_bold"
         android:text="휴대폰 번호를 인증해주세요."
@@ -161,21 +167,17 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/edtPhoneNumber"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/edtPhoneNumber"
         app:layout_constraintTop_toBottomOf="@+id/toolbarLayout" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="93dp"
         android:layout_marginBottom="14dp"
         android:text="리딩사이클은 휴대폰 번호로 가입해요. \n번호는 안전하게 보관되며 어디에도 공개되지않아요."
         app:layout_constraintBottom_toTopOf="@+id/btnSendAuthCode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/edtPhoneNumber"
         app:layout_constraintTop_toBottomOf="@+id/edtPhoneNumber" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

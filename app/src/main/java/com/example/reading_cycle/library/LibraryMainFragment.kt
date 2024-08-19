@@ -6,66 +6,70 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentLibraryMainBinding
 import com.example.reading_cycle.library.model.LibraryMainAdapter
-import com.example.reading_cycle.library.model.SaleBooknameDataClass
-import com.example.reading_cycle.library.model.SwapBooknameDataClass
 
 class LibraryMainFragment : Fragment() {
 
+    private lateinit var mainActivity: MainActivity
     private lateinit var fragmentLibraryMainBinding: FragmentLibraryMainBinding
-    private lateinit var libraryMainAdapter: LibraryMainAdapter
-
-    companion object {
-        fun newInstance(bundle: Bundle?): LibraryMainFragment {
-            val fragment = LibraryMainFragment()
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentLibraryMainBinding = FragmentLibraryMainBinding.inflate(inflater)
+        mainActivity = activity as MainActivity
+        fragmentLibraryMainBinding = FragmentLibraryMainBinding.inflate(inflater, container, false)
+        mainActivity.showBottomNavigation()
 
-        // 데이터 생성(임시)
-        val swapBooknameList = listOf(
-            SwapBooknameDataClass("책 제목1"),
-            SwapBooknameDataClass("책 제목2"),
-            SwapBooknameDataClass("책 제목3")
+        // 타이틀 아이콘 작업
+        ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)
+        fragmentLibraryMainBinding.toolbarLibraryMainTitle.setCompoundDrawablesWithIntrinsicBounds(
+            null,
+            null,
+            null,
+            null
         )
-        val saleBooknameList = listOf(
-            SaleBooknameDataClass("책 제목4"),
-            SaleBooknameDataClass("책 제목5")
-        )
+        fragmentLibraryMainBinding.toolbarLibraryMainTitle.compoundDrawablePadding =
+            resources.getDimensionPixelSize(
+                R.dimen.icon_text_padding
+            )
+        // 텍스트 설정
+        fragmentLibraryMainBinding.toolbarLibraryMainTitle.text = "라이브러리"
 
-        // 어댑터 초기화
-        libraryMainAdapter = LibraryMainAdapter(swapBooknameList, saleBooknameList)
+        // 툴바 알림 메뉴 클릭 이벤트 처리
+        fragmentLibraryMainBinding.toolbarLayoutLibraryMain.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.libraryMenuItemNotify -> {
+                    mainActivity.navigateToNotifyFragment()
+                    true
+                }
+                else -> false
+            }
+        }
 
         // RecyclerView 설정
-        val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        fragmentLibraryMainBinding.recyclerViewLibraryMain.layoutManager = layoutManager
-
-        //어댑터 설정
-        fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = libraryMainAdapter
+        setupRecyclerView()
 
         return fragmentLibraryMainBinding.root
     }
 
-    private fun createPostMainAdapter(): LibraryMainAdapter {
-        // TODO: SwapBooknameDataClass, SaleBooknameDataClass에 맞는 데이터를 생성하여 어댑터에 전달
-        val swapBooknameList = mutableListOf<SwapBooknameDataClass>() // ... 스왑 데이터 생성
-        val saleBooknameList = mutableListOf<SaleBooknameDataClass>() // ... 판매 데이터 생성
-        // TODO:데이터 추가
-        return  LibraryMainAdapter(swapBooknameList, saleBooknameList)
+    private fun setupRecyclerView() {
+        // RecyclerView에 사용될 GridLayoutManager 설정
+        val layoutManager = GridLayoutManager(requireContext(), 3)
+        fragmentLibraryMainBinding.recyclerViewLibraryMain.layoutManager = layoutManager
 
+        // 어댑터에 사용할 이미지 리스트 (예시)
+        val imageList = listOf(
+            R.drawable.border_add_post_blue,
+            // 필요한 만큼 이미지 추가
+        )
+
+        // LibraryAdapter를 사용하여 RecyclerView에 어댑터 설정
+        val adapter = LibraryMainAdapter(requireContext(), imageList)
+        fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = adapter
     }
-
 }
-
-
