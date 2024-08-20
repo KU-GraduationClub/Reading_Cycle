@@ -80,8 +80,9 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
     }
 
     // Firebase Database에서 채팅방 리스트를 로드하는 메서드
+    // 채팅방 리스트를 로드하는 메서드
     private fun loadChatRooms() {
-        // 중복 리스너 체크 및 필요시 제거
+        // 기존 리스너가 등록되어 있다면 제거
         chatRoomListener?.let {
             database.removeEventListener(it)
         }
@@ -91,13 +92,15 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
                 chatRoomList.clear() // 기존 데이터 초기화
                 var processedRooms = 0 // 처리된 방의 수
 
+                Log.d("ChatListFragment", "Loading chat rooms... Total rooms: ${snapshot.childrenCount}")
+
+                // snapshot의 채팅방을 하나씩 처리
                 for (childSnapshot in snapshot.children) {
                     val chatRoom = childSnapshot.getValue(ChatRoom::class.java)
 
                     // 채팅방에 사용자 정보가 있는지 확인
                     val usersSnapshot = childSnapshot.child("users")
                     if (chatRoom != null && usersSnapshot.hasChild(myName ?: "unknown")) {
-                        // 상대방 이름 찾기
                         var otherUserName: String? = null
                         for (user in usersSnapshot.children) {
                             if (user.key != myName) {
@@ -106,27 +109,20 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
                             }
                         }
 
-                        // 중복 확인: 이미 존재하는 chatRoomId면 추가하지 않음
                         if (!chatRoomList.any { it.chatRoomId == chatRoom.chatRoomId }) {
-                            // 상대방의 프로필 이미지 URL을 Firestore에서 가져오기
                             fetchUserProfileImage(otherUserName ?: "") { profileImageUrl ->
-                                // 상대방의 lastMessage 및 lastMessageTime을 가져오기
                                 val lastMessage = usersSnapshot.child(otherUserName ?: "").child("lastMessage").getValue(String::class.java) ?: "메시지가 존재하지 않습니다."
                                 val lastMessageTime = usersSnapshot.child(otherUserName ?: "").child("lastMessageTime").getValue(String::class.java) ?: ""
 
-                                // 채팅방 정보 업데이트
                                 chatRoom.lastMessage = lastMessage
                                 chatRoom.lastMessageTime = lastMessageTime
 
-                                // 채팅방 추가
                                 chatRoomList.add(chatRoom.copy(profileImage = profileImageUrl, roomName = otherUserName)) // 프로필 이미지 추가
                                 processedRooms++
+                                updateChatList()
 
-                                // 모든 방이 처리되면 리스트를 업데이트
-                                if (processedRooms == snapshot.children.count()) {
-                                    updateChatList()
-                                    Log.d("ChatListFragment", "Finished loading chat rooms. Total rooms: ${chatRoomList.size}")
-                                }
+                                Log.d("ChatListFragment", "Added chat room: ${chatRoom.chatRoomId} with last message: $lastMessage")
+                                Log.d("ChatListFragment", "Finished loading chat rooms. Total rooms: ${chatRoomList.size}")
                             }
                         } else {
                             Log.d("ChatListFragment", "Duplicate chat room found: ${chatRoom.chatRoomId}")
@@ -147,9 +143,10 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         chatRoomListener?.let {
-            database.removeEventListener(it)
+            database.removeEventListener(it) // Fragment 종료 시 리스너 제거
         }
     }
+
 
     private fun showAddRoomDialog() {
         val builder = AlertDialog.Builder(requireContext())
@@ -234,50 +231,40 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
         val chatRoomId = chatRoomRef.key
 
         if (chatRoomId != null) {
-            // 생성할 채팅방의 ID로 중복 여부를 확인
-            database.child(chatRoomId).get().addOnSuccessListener { snapshot ->
-                if (!snapshot.exists()) {
-                    val chatRoom = ChatRoom(
-                        chatRoomId = chatRoomId,
-                        lastMessage = null,
-                        lastMessageTime = null,
-                        roomName = null
-                    )
+            val chatRoom = ChatRoom(
+                chatRoomId = chatRoomId,
+                lastMessage = null,
+                lastMessageTime = null,
+                roomName = null
+            )
 
-                    // 채팅방 데이터 저장
-                    chatRoomRef.setValue(chatRoom)
-                        .addOnSuccessListener {
-                            // 사용자의 정보를 users로 저장
-                            val usersRef = chatRoomRef.child("users")
-                            val currentTime = System.currentTimeMillis()
+            // 채팅방 데이터 저장
+            chatRoomRef.setValue(chatRoom)
+                .addOnSuccessListener {
+                    // 사용자의 정보를 users로 저장
+                    val usersRef = chatRoomRef.child("users")
+                    val currentTime = System.currentTimeMillis()
 
-                            // 사용자를 users에 추가
-                            usersRef.child(myName ?: "unknown").setValue(mapOf(
-                                "lastReadTime" to currentTime,
-                                "lastMessage" to null,
-                                "lastMessageTime" to null
-                            ))
-                            usersRef.child(addName).setValue(mapOf(
-                                "lastReadTime" to currentTime,
-                                "lastMessage" to null,
-                                "lastMessageTime" to null
-                            ))
+                    // 사용자를 users에 추가
+                    usersRef.child(myName ?: "unknown").setValue(mapOf(
+                        "lastReadTime" to currentTime,
+                        "lastMessage" to null,
+                        "lastMessageTime" to null
+                    ))
+                    usersRef.child(addName).setValue(mapOf(
+                        "lastReadTime" to currentTime,
+                        "lastMessage" to null,
+                        "lastMessageTime" to null
+                    ))
 
-                            // 채팅방을 생성한 후 다시 로드할 필요가 없게 하려면 아래 코드를 주석 처리
-                            // loadChatRooms() // 채팅방을 생성 후 리스트를 업데이트
-                            Toast.makeText(requireContext(), "채팅방이 생성되었습니다: $addName", Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener { exception ->
-                            Log.e("ChatListFragment", "채팅방 생성에 실패했습니다.", exception)
-                            Toast.makeText(requireContext(), "채팅방 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                } else {
-                    // 이미 존재하는 채팅방 ID 처리
-                    Toast.makeText(requireContext(), "이미 존재하는 채팅방입니다.", Toast.LENGTH_SHORT).show()
+                    // 채팅방을 생성한 후 다시 로드할 필요가 없게 하려면 다음 주석 처리
+                    loadChatRooms() // 채팅방 추가 후 채팅방 목록을 다시 로드
+                    Toast.makeText(requireContext(), "채팅방이 생성되었습니다: $addName", Toast.LENGTH_SHORT).show()
                 }
-            }.addOnFailureListener { exception ->
-                Log.e("ChatListFragment", "채팅방 ID 확인 중 오류 발생: ${exception.message}")
-            }
+                .addOnFailureListener { exception ->
+                    Log.e("ChatListFragment", "채팅방 생성에 실패했습니다.", exception)
+                    Toast.makeText(requireContext(), "채팅방 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
         } else {
             Toast.makeText(requireContext(), "채팅방 ID를 생성할 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
@@ -349,6 +336,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
         userRef.removeValue()
             .addOnSuccessListener {
                 Toast.makeText(requireContext(), "채팅방에서 나갔습니다.", Toast.LENGTH_SHORT).show()
+                loadChatRooms() // 유저가 나가면 다시 채팅방을 로드하여 UI 업데이트
             }
             .addOnFailureListener { exception ->
                 Log.e("ChatListFragment", "채팅방에서 사용자 제거 실패: ${exception.message}")
