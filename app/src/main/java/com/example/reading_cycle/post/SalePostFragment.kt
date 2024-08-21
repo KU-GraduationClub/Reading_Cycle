@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -28,6 +29,7 @@ import com.example.reading_cycle.databinding.FragmentSalePostBinding
 import com.example.reading_cycle.post.model.SaleBookData
 import com.example.reading_cycle.post.repository.SalePostRepository
 import com.example.reading_cycle.post.vm.SalePostViewModel
+import com.google.android.material.appbar.MaterialToolbar
 
 class SalePostFragment : Fragment() {
 
@@ -44,10 +46,10 @@ class SalePostFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
         arguments?.let {
             documentId = it.getString("documentId")
-            Log.d("SalePostFragment", "전달받은 문서 ID: $documentId")
         }
 
         userViewModel.userIdx?.let { userIdx ->
@@ -57,7 +59,6 @@ class SalePostFragment : Fragment() {
 
         documentId?.let {
             salePostViewModel.fetchSaleBookData(it)
-            Log.d("SalePostFragment", "문서 ID에 대한 데이터 가져오기: $documentId")
         } ?: Log.e("SalePostFragment", "문서 ID가 null입니다.")
     }
 
@@ -69,15 +70,24 @@ class SalePostFragment : Fragment() {
         fragmentSalePostBinding = FragmentSalePostBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
 
-        // 뒤로 가기 버튼 클릭 리스너 설정
-        fragmentSalePostBinding.toolbarLayoutSalePost.setNavigationOnClickListener {
-            mainActivity.removeFragment(MainActivity.SALE_POST_FRAGMENT)
+        // 툴바 설정
+        val toolbar = fragmentSalePostBinding.toolbarLayoutSalePost
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+
+        // 제목을 빈 문자열로 설정
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            title = ""
         }
 
         viewPager = fragmentSalePostBinding.viewPagerSalePostImages
         closeButton = fragmentSalePostBinding.root.findViewById(R.id.btnClose)
         adapter = SalePostPagerAdapter(emptyList())
         viewPager.adapter = adapter
+
+        // 뒤로 가기 버튼 클릭 리스너 설정
+        fragmentSalePostBinding.toolbarLayoutSalePost.setNavigationOnClickListener {
+            mainActivity.removeFragment(MainActivity.SALE_POST_FRAGMENT)
+        }
 
         // 닫기 버튼 클릭 리스너 설정
         closeButton.setOnClickListener {
@@ -90,6 +100,7 @@ class SalePostFragment : Fragment() {
                 // SaleBookData에서 userId를 추출하고 fetchUserData 호출
                 data.userId?.let { userId ->
                     salePostViewModel.fetchUserData(userId)
+                    invalidateOptionsMenuIfNeeded()
                 }
             }
         }
@@ -114,62 +125,40 @@ class SalePostFragment : Fragment() {
         return fragmentSalePostBinding.root
     }
 
-    // 상단 메뉴를 생성
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_post, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    private fun invalidateOptionsMenuIfNeeded() {
+        activity?.invalidateOptionsMenu() // 메뉴를 다시 생성하여 onCreateOptionsMenu를 호출하도록 요청
     }
 
-    // 메뉴 항목의 가시성 제어
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        val deleteMenuItem = menu.findItem(R.id.postMenuItemPostDelete)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        val currentUserId = userViewModel.userIdx
+        val postUserId = salePostViewModel.saleBookData.value?.userId
 
-        salePostViewModel.saleBookData.observe(viewLifecycleOwner) { saleBookData ->
-            saleBookData?.userId?.let { postOwnerId ->
-                deleteMenuItem.isVisible = userViewModel.userIdx == postOwnerId
-            }
+        if (currentUserId == postUserId) {
+            inflater.inflate(R.menu.toolbar_post_my, menu)
+        } else {
+            inflater.inflate(R.menu.toolbar_post, menu)
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.postMenuItemPostDelete -> {
-                showDeleteConfirmationDialog()
+                AlertDialog.Builder(requireContext())
+                    .setTitle("게시글 삭제")
+                    .setMessage("이 게시글을 정말 삭제하시겠습니까?")
+                    .setPositiveButton("삭제") { dialog, _ ->
+                        salePostViewModel.deleteSalePost(documentId)  // 게시글 삭제 요청
+                        dialog.dismiss()
+                        activity?.onBackPressed()  // 삭제 후 뒤로 가기
+                    }
+                    .setNegativeButton("취소") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun checkOwnership(postOwnerId: String) {
-        if (userViewModel.userIdx != postOwnerId) {
-            fragmentSalePostBinding.btnSalePostChatRequest.visibility = View.VISIBLE
-            fragmentSalePostBinding.btnSalePostChatRequest.setOnClickListener {
-                // 채팅 요청 로직 추가
-                startChatWithPostOwner(postOwnerId)
-            }
-        } else {
-            fragmentSalePostBinding.btnSalePostChatRequest.visibility = View.GONE
-        }
-    }
-
-    private fun showDeleteConfirmationDialog() {
-        AlertDialog.Builder(requireContext())
-            .setMessage("게시글을 삭제하시겠습니까?")
-            .setPositiveButton("삭제") { _, _ ->
-                // 삭제 로직 추가
-                salePostViewModel.deleteSalePost(documentId)
-                mainActivity.removeFragment(MainActivity.SALE_POST_FRAGMENT)
-            }
-            .setNegativeButton("취소", null)
-            .show()
-    }
-
-    private fun startChatWithPostOwner(postOwnerId: String) {
-        // 여기에 게시글 작성자와 채팅을 시작하는 로직을 추가
-        // 예를 들어, 채팅 화면으로 이동하거나 채팅을 시작하는 기능을 구현할 수 있습니다.
-        Log.d("SalePostFragment", "채팅 요청: 게시글 작성자 ID = $postOwnerId")
     }
 
     private fun bindSalePostData(data: SaleBookData) {
