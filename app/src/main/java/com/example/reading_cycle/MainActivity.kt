@@ -29,18 +29,11 @@ import com.example.reading_cycle.post.SwapPostFragment
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 
-//로그인 시 위치정보 기반 fragment 변경
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
-import com.example.reading_cycle.location.repository.LocRepository
-import com.google.firebase.firestore.FirebaseFirestore
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
     val userViewModel: UserViewModel by viewModels()
-
 
     companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
@@ -66,8 +59,6 @@ class MainActivity : AppCompatActivity() {
         val view = mainBinding.root
         setContentView(view)
 
-
-
         //로그인된 사용자 정보 가져오기
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
@@ -80,11 +71,7 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        // 사용자의 위치 정보 확인 후 Fragment 전환
-        checkUserLocationAndNavigate()
-
-
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
+        replaceFragment(POST_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -96,32 +83,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.bottom_set -> replaceFragment(LIST_SETTINGS_FRAGMENT, true)
             }
             true
-        }
-    }
-    private fun checkUserLocationAndNavigate() {
-        val userId = userViewModel.userIdx
-
-        if (userId != null) {
-            val db = FirebaseFirestore.getInstance()
-            val locationRef = db.collection("Users").document(userId).collection("location")
-
-            locationRef.get()
-                .addOnSuccessListener { documents ->
-                    if (documents.isEmpty) {
-                        // 위치 정보가 없는 경우
-                        Log.d("MainActivity", "No user location found, navigating to LocSetFragment")
-                        replaceFragment(LOC_SET_FRAGMENT, false)
-                    }
-                }
-                .addOnFailureListener { e ->
-                    Log.e("MainActivity", "Error fetching user location", e)
-                    // 오류가 발생한 경우에도 LocSetFragment로 이동
-                    replaceFragment(LOC_SET_FRAGMENT, false)
-                }
-        } else {
-            // 사용자 ID가 없을 경우(로그인되지 않음)
-            Log.d("MainActivity", "No user ID found, navigating to LoginMainFragment")
-            replaceFragment(LOGIN_MAIN_FRAGMENT, false)
         }
     }
 

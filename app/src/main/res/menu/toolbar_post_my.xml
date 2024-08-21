@@ -9,4 +9,8 @@
         android:title="알림"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/postMenuItemPostDelete"
+        android:title="게시글 삭제" />
+
 </menu>
