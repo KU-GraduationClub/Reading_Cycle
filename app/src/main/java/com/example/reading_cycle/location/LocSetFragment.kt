@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
@@ -32,19 +34,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Locale
-
-
-private val Any.isSuccess: Boolean
-    get() {
-        TODO("Not yet implemented")
-    }
-private val Nothing?.userIdx: Nothing?
-    get() {
-        TODO("Not yet implemented")
-    }
 
 class LocSetFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mainActivity: MainActivity
@@ -56,6 +49,8 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
     private val locViewModel: LocViewModel by activityViewModels {
         LocViewModelFactory(repository)
     }
+    private val userViewModel: UserViewModel by activityViewModels() // userViewModel 초기화
+
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -74,6 +69,13 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         mainActivity = activity as MainActivity
         _binding = FragmentLocSetBinding.inflate(inflater, container, false)
         mainActivity.hideBottomNavigation()
+        // UserViewModel에 사용자 ID 설정
+        val userId = getUserIdFromSomeSource()
+        userViewModel.setUserId(userId)
+
+        val userIdx = userViewModel.userIdx
+        Log.d("PostMainFragment", "User Index: $userIdx")
+
         return binding.root
     }
 
@@ -86,12 +88,28 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        binding.nowlocationLocSet.setOnClickListener {
-            requestLocationPermission()
-        }
+        //binding.nowlocationLocSet.setOnClickListener {
+        //    requestLocationPermission()
+        // }
 
+        // ViewModel에서 사용자 ID를 받아오는 코드 수정
+        val userIdx = userViewModel.userIdx
+        Log.d("LocSetFragment", "User Index: $userIdx")
+
+        // 저장 버튼 클릭 시 위치 저장 및 버튼 비활성화
         binding.btnLocSetFinish.setOnClickListener {
             saveLocationAndDisableButton()
+        }
+        // saveLocationResult를 관찰하여 UI 업데이트
+        locViewModel.saveLocationResult.observe(viewLifecycleOwner) { result ->
+            if (result.isSuccess) {
+                Log.d("LocSetFragment", "Location saved successfully.")
+                Toast.makeText(requireContext(), "위치가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+                disableFinishButton() // 버튼을 비활성화합니다.
+            } else {
+                Log.d("LocSetFragment", "Failed to save location: ${result.exceptionOrNull()?.message}")
+                Toast.makeText(requireContext(), "위치 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -120,6 +138,10 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
         getCurrentLocation()
+        // 지도 클릭 시 위치 확인
+        googleMap.setOnMapClickListener { latLng ->
+            checkAndFetchLocation(latLng.latitude, latLng.longitude)
+        }
     }
 
     private fun requestLocationPermission() {
@@ -138,6 +160,7 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation() {
+        Log.d("LocSetFragment", "Requesting current location")
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -156,20 +179,28 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
             return
         }
 
+        // 현재 위치 가져오기 시 위치 유효성 검사 후 처리
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             if (location != null && googleMap != null) {
+                Log.d("LocSetFragment", "Current location: ${location.latitude}, ${location.longitude}")
+                // Ensure the location is valid and in the correct sequence
                 val currentLatLng = LatLng(location.latitude, location.longitude)
-
                 addMarker(currentLatLng, "현재 위치")
                 moveCamera(currentLatLng)
 
                 val address = getAddressFromLatLng(requireContext(), currentLatLng)
                 binding.textLocSetNow.text = address
             } else {
+                Log.d("LocSetFragment", "Failed to get location")
                 Toast.makeText(requireContext(), "위치를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
+        }.addOnFailureListener { e ->
+            // Handle potential failure here
+            Log.e("LocSetFragment", "위치 조회 실패: ${e.message}", e)
+            Toast.makeText(requireContext(), "위치 조회 실패: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun addMarker(latLng: LatLng, title: String) {
         val markerOptions = MarkerOptions().position(latLng).title(title)
@@ -202,28 +233,68 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         return addressText
     }
 
-    private fun saveLocationAndDisableButton() {
+    private fun saveLocationAndDisableButton() { // 위치 저장 함수
         val currentLocation = LocDataClass(
             latitude = googleMap?.cameraPosition?.target?.latitude ?: 0.0,
             longitude = googleMap?.cameraPosition?.target?.longitude ?: 0.0,
             address = binding.textLocSetNow.text.toString()
         )
-        var userViewModel = null
-        val userId = userViewModel.userIdx ?: return
+        val userId = userViewModel.userIdx
+        Log.d("LocSetFragment", "Saving location for user ID: $userId")  // 로그 추가
+
+        if (userId.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "사용자 ID가 설정되지 않았습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        // 기존 위치 확인 및 저장
         lifecycleScope.launch {
-            val result = locViewModel.saveUserLocation(userId, currentLocation)
-            if (result.isSuccess) {
-                Toast.makeText(requireContext(), "위치가 저장되었습니다.", Toast.LENGTH_SHORT).show()
-                disableFinishButton()
-            } else {
-                Toast.makeText(requireContext(), "위치 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
+            repository.saveLocation(
+                userId,
+                currentLocation,
+                onSuccess = {
+                    Log.d("LocSetFragment", "Location saved successfully.")
+                    Toast.makeText(requireContext(), "위치가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+                    disableFinishButton()
+                },
+                onFailure = { e ->
+                    Log.e("LocSetFragment", "Failed to save location: ${e.message}", e)
+                    Toast.makeText(requireContext(), "위치 저장에 실패했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+    }
+    private fun checkAndFetchLocation(latitude: Double, longitude: Double) {
+        val userId = userViewModel.userIdx
+        if (userId.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "사용자 ID가 설정되지 않았습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        lifecycleScope.launch {
+            repository.getLocation(
+                userId,
+                latitude,
+                longitude,
+                onSuccess = { location ->
+                    Log.d("LocSetFragment", "Location fetched successfully: $location")
+                    // 필요한 경우 location 데이터를 UI에 반영
+                },
+                onFailure = { e ->
+                    Log.e("LocSetFragment", "Failed to fetch location: ${e.message}", e)
+                    // 위치 정보가 없을 경우 다른 처리
+                }
+            )
         }
     }
 
-    private fun disableFinishButton() {
+
+    private fun disableFinishButton() { // 저장 버튼 비활성화 함수
         binding.btnLocSetFinish.isEnabled = false
         binding.btnLocSetFinish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray))
+    }
+
+    private fun getUserIdFromSomeSource(): String {
+        return FirebaseAuth.getInstance().currentUser?.uid ?: ""
     }
 
     companion object {
@@ -232,6 +303,14 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
     }
 }
 
-class UserViewModel {
 
+class UserViewModel : ViewModel() {
+    // 사용자 ID를 저장하는 변수
+    var userIdx: String? = null
+        private set
+
+    fun setUserId(userId: String) {
+        userIdx = userId
+        Log.d("UserViewModel", "User ID set to: $userId")
+    }
 }

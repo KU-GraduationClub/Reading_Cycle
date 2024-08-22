@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarSetProfile"
-        style="@style/Theme.Reading_cycle.ToolbarTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
         android:gravity="center"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
-   >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp">
 
 
             <TextView
@@ -35,7 +38,7 @@
                 android:text="환경 설정"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/theme_green"
-                android:textSize="20dp"
+                android:textSize="19dp"
                 tools:fontFamily="@font/soyo_maple_bold" />
 
         </LinearLayout>
@@ -45,74 +48,97 @@
     <LinearLayout
         android:id="@+id/btn_edit_profile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:textColor="@color/black"
+        android:layout_height="45dp"
+        android:layout_marginTop="30dp"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarSetProfile">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/soyo_maple_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/soyo_maple_bold"
             android:text="프로필 수정"
-            android:textSize="18sp"
-            android:layout_gravity="center_vertical" />
+            android:textSize="17dp" />
     </LinearLayout>
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1.7dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@android:color/darker_gray"
-        android:layout_marginVertical="8dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_edit_profile" />
 
     <LinearLayout
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="6dp"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/soyo_maple_regular"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/soyo_maple_bold"
             android:text="로그아웃"
-            android:textSize="18sp" />
+            android:textSize="17dp" />
     </LinearLayout>
 
     <View
+        android:id="@+id/view2"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1.7dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@android:color/darker_gray"
-        android:layout_marginVertical="8dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_logout" />
 
     <LinearLayout
         android:id="@+id/btn_delete_account"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="6dp"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/soyo_maple_regular"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/soyo_maple_bold"
             android:text="회원탈퇴"
-            android:textSize="18sp" />
+            android:textSize="17dp" />
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

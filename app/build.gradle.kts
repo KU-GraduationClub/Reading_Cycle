@@ -86,3 +86,6 @@ android {
 }
 
 apply(plugin = "com.google.gms.google-services")
+dependencies {
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+}

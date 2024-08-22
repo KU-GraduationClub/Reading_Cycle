@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <item
-        android:id="@+id/postMenuItemNotify"
+        android:id="@+id/libraryMenuItemNotify"
         android:icon="@drawable/baseline_notifications_none_28"
         android:title="알림"
         app:showAsAction="always" />
-
     <item
-        android:id="@+id/postMenuItemPostDelete"
-        android:title="게시글 삭제"
-        android:visible="false"/>
+        android:id="@+id/postMenuItemSearch"
+        android:icon="@drawable/baseline_search_28"
+        android:title="검색"
+        app:showAsAction="always" />
 
 </menu>
+
+

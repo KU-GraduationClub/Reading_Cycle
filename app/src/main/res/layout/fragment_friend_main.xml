@@ -44,6 +44,7 @@
                     android:fontFamily="@font/soyo_maple_bold"
                     android:gravity="center"
                     android:paddingTop="2dp"
+                    android:text="친구 목록"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#27713C"
                     android:textSize="16sp" />

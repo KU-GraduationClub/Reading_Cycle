@@ -57,7 +57,7 @@
                     android:text="리딩 사이클"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#27713C"
-                    android:textSize="16dp" />
+                    android:textSize="13dp" />
             </LinearLayout>
 
 
@@ -96,13 +96,13 @@
                 android:id="@+id/textPostMainLocation"
                 android:layout_width="match_parent"
                 android:layout_height="23dp"
-                android:layout_margin="1dp"
+                android:layout_margin="10dp"
                 android:layout_marginStart="1dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginBottom="1dp"
-                android:fontFamily="@font/soyo_maple_regular"
-                android:gravity="center"
+                android:fontFamily="@font/soyo_maple_bold"
+                android:gravity="center|left"
                 android:text="위치"
                 android:textColor="#80511C"
                 android:textSize="11dp"
@@ -116,9 +116,9 @@
         <View
             android:id="@+id/dividerPostMain2"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:layout_marginTop="4dp"
-            android:background="#B2C8AA"
+            android:background="#DFDFDF"
             android:elevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -163,7 +163,7 @@
                 android:gravity="center|left"
                 android:text="최신 순"
                 android:textColor="#000000"
-                android:textSize="11dp"
+                android:textSize="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iconPostMainSort"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -199,7 +199,7 @@
                 android:layout_marginEnd="2dp"
                 android:fontFamily="@font/soyo_maple_regular"
                 android:gravity="center"
-                android:text="정렬"
+                android:text="필터"
                 android:textColor="#000000"
                 android:textSize="11dp"
                 app:layout_constraintBottom_toBottomOf="parent"

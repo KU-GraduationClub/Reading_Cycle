@@ -10,7 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutLibraryMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -19,8 +19,9 @@
             android:id="@+id/toolbarLayoutLibraryMain"
             style="@style/Theme.Reading_cycle.ToolbarTheme"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="@color/background"
+            android:minHeight="?attr/actionBarSize"
             android:theme="@style/Theme.Reading_cycle.ToolbarTheme"
             app:menu="@menu/toolbar_library">
 
@@ -31,24 +32,47 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/soyo_maple_bold"
                 android:gravity="center"
-                android:text="라이브러리"
+                android:paddingTop="2dp"
+                android:text="Library"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#27713C"
-                android:textSize="16sp" />
+                android:textSize="16dp"/>
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:id="@+id/dividerLibraryMain1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#B2C8AA"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutLibraryMain" />
+
+    <View
+        android:id="@+id/dividerLibraryMain2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#B2C8AA"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileContainer" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profileContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayoutLibraryMain"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayoutLibraryMain">
 
         <ImageView
             android:id="@+id/imgLibraryMainProfile"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="3dp"
             android:src="@drawable/baseline_account_circle_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -126,32 +150,29 @@
 
         <Button
             android:id="@+id/btnLibAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="143dp"
-            android:layout_marginEnd="30dp"
-            android:background="@color/theme_green"
+            android:layout_width="80dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/border_add_post_green"
             android:fontFamily="@font/soyo_maple_regular"
             android:text="친구 추가"
-            android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textColor="@color/theme_green"
+            android:textSize="10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textLibraryMainUser"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/textLibraryMainUser" />
 
         <Button
             android:id="@+id/btnLibChat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="30dp"
-            android:background="@color/theme_green"
+            android:layout_width="80dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/border_add_post_green"
             android:fontFamily="@font/soyo_maple_regular"
             android:text="채팅"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/theme_green"
+            android:textSize="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/btnLibAdd"
             app:layout_constraintStart_toStartOf="@+id/btnLibAdd"
             app:layout_constraintTop_toBottomOf="@+id/btnLibAdd" />
 
@@ -159,31 +180,20 @@
             android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="205dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/soyo_maple_regular"
             android:text="지역 표시"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnLibChat"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/imgLibraryMainProfile"
             app:layout_constraintTop_toBottomOf="@+id/imgLibraryMainProfile" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:id="@+id/dividerLibraryMain"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#B2C8AA"
-        app:layout_constraintTop_toBottomOf="@+id/profileContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewLibraryMain"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/dividerLibraryMain"
+        app:layout_constraintTop_toBottomOf="@id/dividerLibraryMain2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
