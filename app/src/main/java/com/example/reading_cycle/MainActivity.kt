@@ -28,12 +28,15 @@ import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
     val userViewModel: UserViewModel by viewModels()
+    val currentUser: FirebaseUser?
+        get() = FirebaseAuth.getInstance().currentUser
 
     companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
