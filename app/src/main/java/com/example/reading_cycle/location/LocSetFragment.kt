@@ -216,7 +216,7 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
-        val geocoder = Geocoder(context, Locale.getDefault())
+        val geocoder = Geocoder(context, Locale.KOREA)
         var addressText = ""
         try {
             val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)

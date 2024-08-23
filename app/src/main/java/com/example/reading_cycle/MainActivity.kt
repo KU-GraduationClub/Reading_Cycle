@@ -69,8 +69,6 @@ class MainActivity : AppCompatActivity() {
         val view = mainBinding.root
         setContentView(view)
 
-
-
         //로그인된 사용자 정보 가져오기
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
