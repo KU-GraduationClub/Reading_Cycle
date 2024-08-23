@@ -4,9 +4,13 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -41,20 +45,20 @@ class SwapPostFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
         arguments?.let {
             documentId = it.getString("documentId")
             Log.d("SwapPostFragment", "전달받은 문서 ID: $documentId")
         }
 
-        userViewModel.userIdx?.let { userIdx ->
-            val repository = SwapPostRepository(userIdx)
+        userViewModel.userIdx?.let {
+            val repository = SwapPostRepository()
             viewModelFactory = SwapPostViewModel.Factory(repository)
         }
 
         documentId?.let {
             swapPostViewModel.fetchSwapBookData(it)
-            Log.d("SwapPostFragment", "문서 ID에 대한 데이터 가져오기: $documentId")
         } ?: Log.e("SwapPostFragment", "문서 ID가 null입니다.")
     }
 
@@ -66,15 +70,25 @@ class SwapPostFragment : Fragment() {
         fragmentSwapPostBinding = FragmentSwapPostBinding.inflate(inflater)
         mainActivity.hideBottomNavigation()
 
-        // 뒤로 가기 버튼 클릭 리스너 설정
-        fragmentSwapPostBinding.toolbarLayoutSwapPost.setNavigationOnClickListener {
-            mainActivity.removeFragment(MainActivity.SWAP_POST_FRAGMENT)
+        // 툴바 설정
+        val toolbar = fragmentSwapPostBinding.toolbarLayoutSwapPost
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+
+        // 제목을 빈 문자열로 설정
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            title = ""
         }
+
 
         viewPager = fragmentSwapPostBinding.viewPagerSwapPostImages
         closeButton = fragmentSwapPostBinding.root.findViewById(R.id.btnClose)
         adapter = SwapPostPagerAdapter(emptyList())
         viewPager.adapter = adapter
+
+        // 뒤로 가기 버튼 클릭 리스너 설정
+        fragmentSwapPostBinding.toolbarLayoutSwapPost.setNavigationOnClickListener {
+            mainActivity.removeFragment(MainActivity.SWAP_POST_FRAGMENT)
+        }
 
         // 닫기 버튼 클릭 리스너 설정
         closeButton.setOnClickListener {
@@ -87,6 +101,7 @@ class SwapPostFragment : Fragment() {
                 // SaleBookData에서 userId를 추출하고 fetchUserData 호출
                 data.userId?.let { userId ->
                     swapPostViewModel.fetchUserData(userId)
+                    invalidateOptionsMenuIfNeeded()
                 }
             }
         }
@@ -108,6 +123,42 @@ class SwapPostFragment : Fragment() {
             }
         }
         return fragmentSwapPostBinding.root
+    }
+
+    private fun invalidateOptionsMenuIfNeeded() {
+        activity?.invalidateOptionsMenu()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        val currentUserId = userViewModel.userIdx
+        val postUserId = swapPostViewModel.swapBookData.value?.userId
+
+        if (currentUserId == postUserId) {
+            inflater.inflate(R.menu.toolbar_post_my, menu)
+        } else {
+            inflater.inflate(R.menu.toolbar_post, menu)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.postMenuItemPostDelete -> {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("게시글 삭제")
+                    .setMessage("이 게시글을 정말 삭제하시겠습니까?")
+                    .setPositiveButton("삭제") { dialog, _ ->
+                        swapPostViewModel.deleteSwapPost(documentId)
+                        dialog.dismiss()
+                        activity?.onBackPressed()
+                    }
+                    .setNegativeButton("취소") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun bindSwapPostData(data: SwapBookData) {
