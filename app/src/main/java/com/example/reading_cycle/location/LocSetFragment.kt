@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Locale
@@ -50,7 +51,8 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         LocViewModelFactory(repository)
     }
     private val userViewModel: UserViewModel by activityViewModels() // userViewModel 초기화
-
+    // Firestore 인스턴스 초기화
+    private val firestore = FirebaseFirestore.getInstance()
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -246,6 +248,27 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
             Toast.makeText(requireContext(), "사용자 ID가 설정되지 않았습니다.", Toast.LENGTH_SHORT).show()
             return
         }
+        // Firestore의 User 컬렉션 내 사용자 문서에서 location 컬렉션을 참조
+        val userDocRef = firestore.collection("Users").document(userId).collection("location").document("currentLocation")
+
+        // Firestore에 위치 데이터를 업데이트
+        val locationData = mapOf(
+            "address" to currentLocation.address,
+            "latitude" to currentLocation.latitude,
+            "longitude" to currentLocation.longitude
+        )
+
+        // Firestore에 데이터 저장
+        userDocRef.set(locationData)
+            .addOnSuccessListener {
+                Log.d("LocSetFragment", "Firestore location updated successfully.")
+                Toast.makeText(requireContext(), "위치가 업데이트되었습니다.", Toast.LENGTH_SHORT).show()
+                disableFinishButton()
+            }
+            .addOnFailureListener { e ->
+                Log.e("LocSetFragment", "Failed to update Firestore location: ${e.message}", e)
+                Toast.makeText(requireContext(), "위치 업데이트에 실패했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         // 기존 위치 확인 및 저장
         lifecycleScope.launch {
             repository.saveLocation(
@@ -286,6 +309,8 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
             )
         }
     }
+
+
 
 
     private fun disableFinishButton() { // 저장 버튼 비활성화 함수

@@ -28,7 +28,11 @@ import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-//Location 관련
+
+//로그인 시 위치정보 기반 fragment 변경
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import com.example.reading_cycle.location.repository.LocRepository
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
@@ -94,7 +98,6 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
-
     private fun checkUserLocationAndNavigate() {
         val userId = userViewModel.userIdx
 
@@ -104,11 +107,7 @@ class MainActivity : AppCompatActivity() {
 
             locationRef.get()
                 .addOnSuccessListener { documents ->
-                    if (!documents.isEmpty) {
-                        // 위치 정보가 있는 경우
-                        Log.d("MainActivity", "User location found: ${documents.documents.first().data}")
-                        replaceFragment(POST_MAIN_FRAGMENT, false)
-                    } else {
+                    if (documents.isEmpty) {
                         // 위치 정보가 없는 경우
                         Log.d("MainActivity", "No user location found, navigating to LocSetFragment")
                         replaceFragment(LOC_SET_FRAGMENT, false)
