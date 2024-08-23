@@ -6,7 +6,7 @@ import com.example.reading_cycle.post.model.SaleBookData
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-class SalePostRepository(private val userId: String) {
+class SalePostRepository  {
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -41,11 +41,10 @@ class SalePostRepository(private val userId: String) {
     // 게시글 삭제하기
     suspend fun deleteSalePost(documentId: String) {
         try {
-            db.collection("SalePosts")  // SalePosts 컬렉션을 사용합니다.
+            db.collection("SalePosts")
                 .document(documentId)
                 .delete()
                 .await()
-            Log.d("SalePostRepository", "Post deleted successfully for document ID: $documentId")
         } catch (e: Exception) {
             Log.e("SalePostRepository", "Error deleting sale post", e)
         }

@@ -16,17 +16,15 @@ class SalePostViewModel(private val repository: SalePostRepository) : ViewModel(
     // LiveData 객체로 Data를 관리
     val saleBookData = MutableLiveData<SaleBookData?>()
     val userData = MutableLiveData<LoginDataClass?>()
-    val deleteSuccess = MutableLiveData<Boolean>()
+    private val deleteSuccess = MutableLiveData<Boolean>()
 
     // 특정 도서 데이터를 요청하는 메서드
     fun fetchSaleBookData(documentId: String) {
-        Log.d("SalePostViewModel", "Fetching data for document ID: $documentId")
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 // 데이터를 repository를 통해 가져옵니다.
                 val saleBook = repository.getSaleBookData(documentId)
                 if (saleBook != null) {
-                    Log.d("SalePostViewModel", "Data fetched: ${saleBook.saleBookTitle}")
                     // UI 스레드에서 LiveData 값 업데이트
                     saleBookData.postValue(saleBook)
                 } else {

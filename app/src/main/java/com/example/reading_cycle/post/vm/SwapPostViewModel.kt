@@ -16,16 +16,15 @@ class SwapPostViewModel(private val repository: SwapPostRepository) : ViewModel(
     // LiveData 객체로 Data를 관리
     val swapBookData = MutableLiveData<SwapBookData?>()
     val userData = MutableLiveData<LoginDataClass?>()
+    private val deleteSuccess = MutableLiveData<Boolean>()
 
     // 특정 도서 데이터를 요청하는 메서드
     fun fetchSwapBookData(documentId: String) {
-        Log.d("SwapPostViewModel", "Fetching data for document ID: $documentId")
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 // 데이터를 repository를 통해 가져옵니다.
                 val swapBook = repository.getSwapBookData(documentId)
                 if (swapBook != null) {
-                    Log.d("SwapPostViewModel", "Data fetched: ${swapBook.swapBookTitle}")
                     // UI 스레드에서 LiveData 값 업데이트
                     swapBookData.postValue(swapBook)
                 } else {
@@ -49,6 +48,25 @@ class SwapPostViewModel(private val repository: SwapPostRepository) : ViewModel(
             } catch (e: Exception) {
                 Log.e("SwapPostViewModel", "Error fetching user data: ${e.message}", e)
                 userData.postValue(null)
+            }
+        }
+    }
+
+    // 게시글 삭제 메서드
+    fun deleteSwapPost(documentId: String?) {
+        if (documentId == null) {
+            Log.e("SwapPostViewModel", "Document ID is null. Cannot delete post.")
+            deleteSuccess.postValue(false)  // 삭제 실패로 설정
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.deleteSwapPost(documentId)
+                Log.d("SwapPostViewModel", "Post deleted successfully for document ID: $documentId")
+                deleteSuccess.postValue(true)  // 삭제 성공으로 설정
+            } catch (e: Exception) {
+                Log.e("SwapPostViewModel", "Error deleting post: ${e.message}", e)
+                deleteSuccess.postValue(false)  // 삭제 실패로 설정
             }
         }
     }

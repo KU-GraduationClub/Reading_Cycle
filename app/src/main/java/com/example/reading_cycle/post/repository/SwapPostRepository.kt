@@ -6,7 +6,7 @@ import com.example.reading_cycle.post.model.SwapBookData
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-class SwapPostRepository(private val userId: String) {
+class SwapPostRepository {
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -35,6 +35,18 @@ class SwapPostRepository(private val userId: String) {
         } catch (e: Exception) {
             Log.e("SwapPostRepository", "Error fetching user data", e)
             null
+        }
+    }
+
+    // 게시글 삭제하기
+    suspend fun deleteSwapPost(documentId: String) {
+        try {
+            db.collection("SwapPosts")
+                .document(documentId)
+                .delete()
+                .await()
+        } catch (e: Exception) {
+            Log.e("SwapPostRepository", "Error deleting sale post", e)
         }
     }
 }

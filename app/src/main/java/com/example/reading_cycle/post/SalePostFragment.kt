@@ -52,8 +52,8 @@ class SalePostFragment : Fragment() {
             documentId = it.getString("documentId")
         }
 
-        userViewModel.userIdx?.let { userIdx ->
-            val repository = SalePostRepository(userIdx)
+        userViewModel.userIdx?.let {
+            val repository = SalePostRepository()
             viewModelFactory = SalePostViewModel.Factory(repository)
         }
 
@@ -126,7 +126,7 @@ class SalePostFragment : Fragment() {
     }
 
     private fun invalidateOptionsMenuIfNeeded() {
-        activity?.invalidateOptionsMenu() // 메뉴를 다시 생성하여 onCreateOptionsMenu를 호출하도록 요청
+        activity?.invalidateOptionsMenu()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
