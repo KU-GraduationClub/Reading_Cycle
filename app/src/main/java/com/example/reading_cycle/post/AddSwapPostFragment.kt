@@ -146,12 +146,17 @@ class AddSwapPostFragment : Fragment() {
     }
 
     private fun handleCompleteButtonClick() {
+        // 완료 버튼을 비활성화하여 중복 클릭을 방지
+        fragmentAddSwapPostBinding.btnAddSwapPostComplete.isEnabled = false
+
         lifecycleScope.launch {
             try {
                 val swapBookData = collectInputData()
                 viewModel.uploadSwapPost(swapBookData)
             } catch (e: IllegalStateException) {
-                showSnackbar(e.message ?: "알 수 없는 오류가 발생했습니다.")
+                showSnackbar(e.message ?: "오류가 발생했습니다.")
+                // 오류가 발생한 경우 버튼을 다시 활성화
+                fragmentAddSwapPostBinding.btnAddSwapPostComplete.isEnabled = true
             }
         }
     }
@@ -159,16 +164,17 @@ class AddSwapPostFragment : Fragment() {
     private suspend fun collectInputData(): SwapBookData {
         val title =  fragmentAddSwapPostBinding.edtAddSwapPostTitle.text.toString()
         val author =  fragmentAddSwapPostBinding.edtAddSwapPostAuthor.text.toString()
-        val bookType = selectedBookType1 ?: throw IllegalStateException("Book type must be selected")
-        val bookSwapType = selectedBookType2 ?: throw IllegalStateException("Book type must be selected")
+        val bookType = selectedBookType1 ?: throw IllegalStateException("판매 도서 종류를 선택해주세요")
+        val bookSwapType = selectedBookType2 ?: throw IllegalStateException("교환할 도서 종류를 선택해주세요")
         val regPrice = fragmentAddSwapPostBinding.edtAddSwapPostRegPrice.text.toString()
-        val bookState = determineBookState()
+        val bookState = selectedBookState ?: throw IllegalStateException("도서 상태를 선택해주세요")
         val description =  fragmentAddSwapPostBinding.edtAddSwapPostExplain.text.toString()
 
-        if (regPrice.isBlank()) {
-            showSnackbar("빈 칸 없이 작성해주세요.")
-            throw IllegalStateException("Price fields must not be empty.")
-        }
+        if (title.isBlank()) throw IllegalStateException("제목을 입력하세요.")
+        if (author.isBlank()) throw IllegalStateException("작가를 입력하세요.")
+        if (regPrice.isBlank()) throw IllegalStateException("가격을 입력하세요.")
+        if (description.isBlank()) throw IllegalStateException("설명을 입력하세요.")
+        if (selectedImages.isEmpty()) throw IllegalStateException("최소 한 장의 이미지를 등록하세요.")
 
         val imageUrls = withContext(Dispatchers.IO) {
             uploadImagesAndGetUrls(selectedImages)
