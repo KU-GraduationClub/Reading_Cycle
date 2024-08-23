@@ -28,6 +28,7 @@ import com.example.reading_cycle.post.SalePostFragment
 import com.example.reading_cycle.post.SwapPostFragment
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 //로그인 시 위치정보 기반 fragment 변경
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +41,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
     val userViewModel: UserViewModel by viewModels()
+    val currentUser: FirebaseUser?
+        get() = FirebaseAuth.getInstance().currentUser
 
 
     companion object {
@@ -83,7 +86,6 @@ class MainActivity : AppCompatActivity() {
         // 사용자의 위치 정보 확인 후 Fragment 전환
         checkUserLocationAndNavigate()
 
-
         replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
@@ -98,6 +100,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
+    
     private fun checkUserLocationAndNavigate() {
         val userId = userViewModel.userIdx
 
