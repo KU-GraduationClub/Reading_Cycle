@@ -98,10 +98,18 @@ class SwapPostFragment : Fragment() {
         swapPostViewModel.swapBookData.observe(viewLifecycleOwner) { swapBookData ->
             swapBookData?.let { data ->
                 bindSwapPostData(data)
+
                 // SaleBookData에서 userId를 추출하고 fetchUserData 호출
                 data.userId?.let { userId ->
                     swapPostViewModel.fetchUserData(userId)
                     invalidateOptionsMenuIfNeeded()
+
+                    // 현재 사용자의 ID와 게시글 작성자의 ID를 비교하여 버튼의 가시성 조정
+                    val currentUserId = userViewModel.userIdx
+                    if (currentUserId != userId) {
+                        // 현재 사용자가 게시글 작성자가 아닌 경우 버튼을 보이게 설정
+                        fragmentSwapPostBinding.btnSwapPostChatRequest.visibility = View.VISIBLE
+                    }
                 }
             }
         }
