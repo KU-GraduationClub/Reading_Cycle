@@ -38,7 +38,6 @@ class SalePostViewModel(private val repository: SalePostRepository) : ViewModel(
         }
     }
 
-    // 사용자 데이터를 요청하는 메서드
     fun fetchUserData(userId: String)  {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -50,7 +49,8 @@ class SalePostViewModel(private val repository: SalePostRepository) : ViewModel(
                 userData.postValue(null)
             }
         }
-    }
+    }   // 사용자 데이터를 요청하는 메서드
+
 
     // 게시글 삭제 메서드
     fun deleteSalePost(documentId: String?) {
