@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         // 사용자의 위치 정보 확인 후 Fragment 전환
-        checkUserLocationAndNavigate()
+        //checkUserLocationAndNavigate()
 
         replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
 
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
-    
+    /*
     private fun checkUserLocationAndNavigate() {
         val userId = userViewModel.userIdx
 
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             replaceFragment(LOGIN_MAIN_FRAGMENT, false)
         }
     }
-
+*/
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
 
         SystemClock.sleep(100)
@@ -219,6 +219,14 @@ class MainActivity : AppCompatActivity() {
         }
         replaceFragment(SALE_POST_FRAGMENT, true, bundle)
     }
+    fun navigateToLibraryFragment(userId: String) {
+        val bundle = Bundle().apply {
+            putString("userId", userId)
+        }
+        replaceFragment(LIBRARY_MAIN_FRAGMENT, true, bundle)
+    }
+
+
 }
 
 class UserViewModel : ViewModel() {

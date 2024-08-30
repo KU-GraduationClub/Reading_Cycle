@@ -122,6 +122,13 @@ class SwapPostFragment : Fragment() {
                 }
             }
         }
+
+        //Library 이동 관련
+        fragmentSwapPostBinding.btnSwapPostUser.setOnClickListener {
+            swapPostViewModel.swapBookData.value?.userId?.let { userId ->
+                mainActivity.navigateToLibraryFragment(userId)
+            }
+        }
         return fragmentSwapPostBinding.root
     }
 

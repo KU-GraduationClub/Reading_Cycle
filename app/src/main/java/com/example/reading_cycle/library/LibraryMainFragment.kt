@@ -16,50 +16,71 @@ import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentLibraryMainBinding
 import com.example.reading_cycle.library.repository.LibraryRepository
+import com.example.reading_cycle.library.vm.LibraryViewModelFactory
+import com.example.reading_cycle.library.vm.LibraryViewModel
 import kotlinx.coroutines.launch
-import com.example.reading_cycle.login.model.LoginDataClass
 
 class LibraryMainFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
-    private lateinit var fragmentLibraryMainBinding: FragmentLibraryMainBinding
-    private lateinit var libraryRepository: LibraryRepository
+    private lateinit var binding: FragmentLibraryMainBinding
+    private lateinit var libraryViewModel: LibraryViewModel
+
+    private var userId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         mainActivity = activity as MainActivity
-        fragmentLibraryMainBinding = FragmentLibraryMainBinding.inflate(inflater, container, false)
-        libraryRepository = LibraryRepository() // Repository 초기화
+        binding = FragmentLibraryMainBinding.inflate(inflater, container, false)
         mainActivity.showBottomNavigation()
 
-        // ViewModel에서 userIdx 가져오기
-        val userIdx = mainActivity.userViewModel.userIdx
-        Log.d("LibraryMainFragment", "User Index: $userIdx")
+        // ViewModelFactory를 통해 ViewModel 인스턴스 생성
+        val repository = LibraryRepository()
+        val viewModelFactory = LibraryViewModelFactory(repository)
+        libraryViewModel = ViewModelProvider(this, viewModelFactory).get(LibraryViewModel::class.java)
 
         setupToolbar()
         setupRecyclerView()
 
-        // 사용자 데이터와 이미지 로딩
-        userIdx?.let {
+        // Fragment 호출 시 Bundle로 전달된 userId를 가져옴
+        userId = arguments?.getString("userId")
+
+        // userId가 null일 경우, 현재 로그인한 사용자의 userIdx 사용
+        if (userId == null) {
+            userId = mainActivity.userViewModel.userIdx
+        }
+
+        Log.d("LibraryMainFragment", "User Index: $userId")
+
+        userId?.let {
             lifecycleScope.launch {
+                // ViewModel을 통해 이미지 데이터 로드
+                libraryViewModel.fetchUserLibraryImages(it)
                 fetchUserData(it)
-                fetchUserLibraryImages(it)
-                fetchUserPostCount(it) // 사용자 게시물 수 가져오기
+                fetchUserPostCount(it)
             }
         }
 
-        return fragmentLibraryMainBinding.root
+        // Observe changes in LiveData from ViewModel
+        libraryViewModel.images.observe(viewLifecycleOwner) { imageUrlToDocumentIdMap ->
+            val adapter = LibraryMainAdapter(requireContext(), imageUrlToDocumentIdMap) { documentId ->
+                Toast.makeText(requireContext(), "Navigating to post: $documentId", Toast.LENGTH_SHORT).show()
+                mainActivity.navigateToSalePostFragment(documentId)
+            }
+            binding.recyclerViewLibraryMain.adapter = adapter
+        }
+
+        return binding.root
     }
 
     private fun setupToolbar() {
-        fragmentLibraryMainBinding.toolbarLibraryMainTitle.compoundDrawablePadding =
+        binding.toolbarLibraryMainTitle.compoundDrawablePadding =
             resources.getDimensionPixelSize(R.dimen.icon_text_padding)
-        fragmentLibraryMainBinding.toolbarLibraryMainTitle.text = "라이브러리"
+        binding.toolbarLibraryMainTitle.text = "라이브러리"
 
-        // 툴바 알림 메뉴 클릭 이벤트 처리
-        fragmentLibraryMainBinding.toolbarLayoutLibraryMain.setOnMenuItemClickListener { menuItem ->
+        binding.toolbarLayoutLibraryMain.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.libraryMenuItemNotify -> {
                     mainActivity.navigateToNotifyFragment()
@@ -71,48 +92,34 @@ class LibraryMainFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        // RecyclerView에 사용될 GridLayoutManager 설정
         val layoutManager = GridLayoutManager(requireContext(), 3)
-        fragmentLibraryMainBinding.recyclerViewLibraryMain.layoutManager = layoutManager
+        binding.recyclerViewLibraryMain.layoutManager = layoutManager
     }
 
     private suspend fun fetchUserData(userIdx: String) {
-        val userData = libraryRepository.getUserData(userIdx)
+        val userData = LibraryRepository().getUserData(userIdx)
 
-        // 사용자 프로필 이미지와 닉네임을 UI에 설정
         userData?.let { data ->
             Glide.with(this)
                 .load(data.userProfileImage)
-                .circleCrop()  // 이미지를 원형으로 자르기
-                .into(fragmentLibraryMainBinding.imgLibraryMainProfile)
+                .circleCrop()
+                .into(binding.imgLibraryMainProfile)
 
-            fragmentLibraryMainBinding.textLibraryMainUser.text = data.userNickname
+            binding.textLibraryMainUser.text = data.userNickname
 
             // 로그인된 사용자와 라이브러리 주인 사용자 비교하여 버튼 숨기기
             if (userIdx == mainActivity.userViewModel.userIdx) {
-                fragmentLibraryMainBinding.btnLibAdd.visibility = View.GONE
-                fragmentLibraryMainBinding.btnLibChat.visibility = View.GONE
+                binding.btnLibAdd.visibility = View.GONE
+                binding.btnLibChat.visibility = View.GONE
             } else {
-                fragmentLibraryMainBinding.btnLibAdd.visibility = View.VISIBLE
-                fragmentLibraryMainBinding.btnLibChat.visibility = View.VISIBLE
+                binding.btnLibAdd.visibility = View.VISIBLE
+                binding.btnLibChat.visibility = View.VISIBLE
             }
         }
     }
 
-    private suspend fun fetchUserLibraryImages(userIdx: String) {
-        val imageUrlToDocumentIdMap = libraryRepository.getUserLibraryImages(userIdx)
-
-        // Adapter 설정
-        val adapter = LibraryMainAdapter(requireContext(), imageUrlToDocumentIdMap) { documentId ->
-            // 클릭 시 처리할 작업
-            Toast.makeText(requireContext(), "Navigating to post: $documentId", Toast.LENGTH_SHORT).show()
-            mainActivity.navigateToSalePostFragment(documentId)
-        }
-        fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = adapter
-    }
-
     private suspend fun fetchUserPostCount(userIdx: String) {
-        val postCount = libraryRepository.getUserPostCount(userIdx)
-        fragmentLibraryMainBinding.textLibraryMainPostCount.text = postCount.toString()
+        val postCount = LibraryRepository().getUserPostCount(userIdx)
+        binding.textLibraryMainPostCount.text = postCount.toString()
     }
 }

@@ -122,6 +122,13 @@ class SalePostFragment : Fragment() {
             }
         }
 
+        //Library 이동 관련
+        fragmentSalePostBinding.btnSalePostUser.setOnClickListener {
+            salePostViewModel.saleBookData.value?.userId?.let { userId ->
+                mainActivity.navigateToLibraryFragment(userId)
+            }
+        }
+
         return fragmentSalePostBinding.root
     }
 
