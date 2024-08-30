@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -95,6 +96,10 @@ class SwapPostFragment : Fragment() {
             hideViewPager()
         }
 
+        fragmentSwapPostBinding.btnSwapPostChatRequest.setOnClickListener {
+            createChatRoomAndNavigate()
+        }
+
         swapPostViewModel.swapBookData.observe(viewLifecycleOwner) { swapBookData ->
             swapBookData?.let { data ->
                 bindSwapPostData(data)
@@ -131,6 +136,19 @@ class SwapPostFragment : Fragment() {
             }
         }
         return fragmentSwapPostBinding.root
+    }
+
+    private fun createChatRoomAndNavigate() {
+        val userNickname = swapPostViewModel.userData.value?.userNickname
+
+        if (userNickname != null) {
+            val bundle = Bundle().apply {
+                putString("userNickname", userNickname)
+            }
+            mainActivity.replaceFragment(MainActivity.CHAT_LIST_FRAGMENT, true, bundle)
+        } else {
+            Toast.makeText(requireContext(), "Unable to verify user information.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun invalidateOptionsMenuIfNeeded() {

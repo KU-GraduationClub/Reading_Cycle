@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -24,12 +25,14 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.UserViewModel
+import com.example.reading_cycle.chat.ChatListFragment
+import com.example.reading_cycle.chat.model.ChatRoom
 import com.example.reading_cycle.databinding.DialogPostDetailsTextBinding
 import com.example.reading_cycle.databinding.FragmentSalePostBinding
 import com.example.reading_cycle.post.model.SaleBookData
 import com.example.reading_cycle.post.repository.SalePostRepository
 import com.example.reading_cycle.post.vm.SalePostViewModel
-import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.database.FirebaseDatabase
 
 class SalePostFragment : Fragment() {
 
@@ -94,6 +97,10 @@ class SalePostFragment : Fragment() {
             hideViewPager()
         }
 
+        fragmentSalePostBinding.btnSalePostChatRequest.setOnClickListener {
+            createChatRoomAndNavigate()
+        }
+
         salePostViewModel.saleBookData.observe(viewLifecycleOwner) { saleBookData ->
             saleBookData?.let { data ->
                 bindSalePostData(data)
@@ -131,6 +138,19 @@ class SalePostFragment : Fragment() {
         }
 
         return fragmentSalePostBinding.root
+    }
+
+    private fun createChatRoomAndNavigate() {
+        val userNickname = salePostViewModel.userData.value?.userNickname
+
+        if (userNickname != null) {
+            val bundle = Bundle().apply {
+                putString("userNickname", userNickname)
+            }
+            mainActivity.replaceFragment(MainActivity.CHAT_LIST_FRAGMENT, true, bundle)
+        } else {
+            Toast.makeText(requireContext(), "Unable to verify user information.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun invalidateOptionsMenuIfNeeded() {
