@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 class LibraryMainFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
-    private lateinit var binding: FragmentLibraryMainBinding
+    private lateinit var fragmentLibraryMainBinding: FragmentLibraryMainBinding
     private lateinit var libraryViewModel: LibraryViewModel
 
     private var userId: String? = null
@@ -33,7 +33,7 @@ class LibraryMainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mainActivity = activity as MainActivity
-        binding = FragmentLibraryMainBinding.inflate(inflater, container, false)
+        fragmentLibraryMainBinding = FragmentLibraryMainBinding.inflate(inflater, container, false)
         mainActivity.showBottomNavigation()
 
         // ViewModelFactory를 통해 ViewModel 인스턴스 생성
@@ -69,18 +69,18 @@ class LibraryMainFragment : Fragment() {
                 Toast.makeText(requireContext(), "Navigating to post: $documentId", Toast.LENGTH_SHORT).show()
                 mainActivity.navigateToSalePostFragment(documentId)
             }
-            binding.recyclerViewLibraryMain.adapter = adapter
+            fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = adapter
         }
 
-        return binding.root
+        return fragmentLibraryMainBinding.root
     }
 
     private fun setupToolbar() {
-        binding.toolbarLibraryMainTitle.compoundDrawablePadding =
+        fragmentLibraryMainBinding.toolbarLibraryMainTitle.compoundDrawablePadding =
             resources.getDimensionPixelSize(R.dimen.icon_text_padding)
-        binding.toolbarLibraryMainTitle.text = "라이브러리"
+        fragmentLibraryMainBinding.toolbarLibraryMainTitle.text = "라이브러리"
 
-        binding.toolbarLayoutLibraryMain.setOnMenuItemClickListener { menuItem ->
+        fragmentLibraryMainBinding.toolbarLayoutLibraryMain.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.libraryMenuItemNotify -> {
                     mainActivity.navigateToNotifyFragment()
@@ -93,7 +93,7 @@ class LibraryMainFragment : Fragment() {
 
     private fun setupRecyclerView() {
         val layoutManager = GridLayoutManager(requireContext(), 3)
-        binding.recyclerViewLibraryMain.layoutManager = layoutManager
+        fragmentLibraryMainBinding.recyclerViewLibraryMain.layoutManager = layoutManager
     }
 
     private suspend fun fetchUserData(userIdx: String) {
@@ -103,23 +103,27 @@ class LibraryMainFragment : Fragment() {
             Glide.with(this)
                 .load(data.userProfileImage)
                 .circleCrop()
-                .into(binding.imgLibraryMainProfile)
+                .into(fragmentLibraryMainBinding.imgLibraryMainProfile)
 
-            binding.textLibraryMainUser.text = data.userNickname
+            fragmentLibraryMainBinding.textLibraryMainUser.text = data.userNickname
 
             // 로그인된 사용자와 라이브러리 주인 사용자 비교하여 버튼 숨기기
             if (userIdx == mainActivity.userViewModel.userIdx) {
-                binding.btnLibAdd.visibility = View.GONE
-                binding.btnLibChat.visibility = View.GONE
+                fragmentLibraryMainBinding.btnLibAdd.visibility = View.GONE
+                fragmentLibraryMainBinding.btnLibChat.visibility = View.GONE
+                fragmentLibraryMainBinding.btnLibAdd.isEnabled = false
+                fragmentLibraryMainBinding.btnLibChat.isEnabled = false
             } else {
-                binding.btnLibAdd.visibility = View.VISIBLE
-                binding.btnLibChat.visibility = View.VISIBLE
+                fragmentLibraryMainBinding.btnLibAdd.visibility = View.VISIBLE
+                fragmentLibraryMainBinding.btnLibChat.visibility = View.VISIBLE
+                fragmentLibraryMainBinding.btnLibAdd.isEnabled = true
+                fragmentLibraryMainBinding.btnLibChat.isEnabled = true
             }
         }
     }
 
     private suspend fun fetchUserPostCount(userIdx: String) {
         val postCount = LibraryRepository().getUserPostCount(userIdx)
-        binding.textLibraryMainPostCount.text = postCount.toString()
+        fragmentLibraryMainBinding.textLibraryMainPostCount.text = postCount.toString()
     }
 }
