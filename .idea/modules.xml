@@ -2,11 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Reading_Cycle.reading_cycle.iml" filepath="$PROJECT_DIR$/.idea/modules/Reading_Cycle.reading_cycle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Reading_Cycle.reading_cycle.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Reading_Cycle.reading_cycle.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Reading_Cycle.reading_cycle.app.androidTest~1.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Reading_Cycle.reading_cycle.app.androidTest~1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Reading_Cycle.reading_cycle.app.main~1.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Reading_Cycle.reading_cycle.app.main~1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Reading_Cycle.reading_cycle.app.unitTest~1.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Reading_Cycle.reading_cycle.app.unitTest~1.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/reading_cycle.iml" filepath="$PROJECT_DIR$/.idea/modules/reading_cycle.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/reading_cycle.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/reading_cycle.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/reading_cycle.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/reading_cycle.app.androidTest.iml" />

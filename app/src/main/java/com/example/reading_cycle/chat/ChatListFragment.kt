@@ -66,6 +66,20 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // 전달된 번들에서 상대방 닉네임을 확인
+        val userNickname = arguments?.getString("userNickname")
+        fetchUserNickname(userIdx.toString()) {
+            userNickname?.let {
+                checkIfChatRoomExists(it) { roomExists ->
+                    if (!roomExists) {
+                        createChatRoom(it)
+                    } else {
+                        Toast.makeText(requireContext(), "이미 존재하는 채팅방입니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+
+        }
 
         fragmentChatListBinding.roomaddbtn.setOnClickListener {
             showAddRoomDialog()
@@ -77,6 +91,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
                 loadChatRooms() // userNickname 로드 후 채팅방 목록 로드
             }
         }
+
     }
 
     // Firebase Database에서 채팅방 리스트를 로드하는 메서드
@@ -363,7 +378,8 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
         val chatRoomId = chatItem.chatRoomId
         val myName = this.myName ?: return // 현재 사용자 이름 확인
 
-        val userRef = database.child(chatRoomId).child("users").child(myName)
+        // 원래 하던 내이름만 지우기val userRef = database.child(chatRoomId).child("users").child(myName)
+        val userRef = database.child(chatRoomId)
         userRef.removeValue()
             .addOnSuccessListener {
                 Toast.makeText(requireContext(), "채팅방에서 나갔습니다.", Toast.LENGTH_SHORT).show()
