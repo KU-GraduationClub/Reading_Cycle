@@ -26,15 +26,29 @@ class PostMainViewModel(private val postMainRepository: PostMainRepository) : Vi
     }
 
     private fun loadPosts() {
+        // This can be called initially to load both types of posts
+        loadSalePosts()
+        loadSwapPosts()
+    }
+
+    fun loadSalePosts() {
         viewModelScope.launch {
             try {
                 val salePosts = postMainRepository.getSalePosts()
                 _salePosts.value = salePosts
+            } catch (e: Exception) {
+                // Handle failure
+            }
+        }
+    }
 
+    fun loadSwapPosts() {
+        viewModelScope.launch {
+            try {
                 val swapPosts = postMainRepository.getSwapPosts()
                 _swapPosts.value = swapPosts
             } catch (e: Exception) {
-                // 실패 처리
+                // Handle failure
             }
         }
     }

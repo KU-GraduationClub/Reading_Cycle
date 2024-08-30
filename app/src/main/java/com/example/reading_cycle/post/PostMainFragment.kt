@@ -125,6 +125,17 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         return fragmentPostMainBinding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        refreshData()
+    }
+
+    private fun refreshData() {
+        // 데이터를 갱신 로직
+        postMainViewModel.loadSalePosts()
+        postMainViewModel.loadSwapPosts()
+    }
+
     private fun showPopupMenu(view: View) {
         val popup = PopupMenu(requireContext(), view)
         val inflater = popup.menuInflater
