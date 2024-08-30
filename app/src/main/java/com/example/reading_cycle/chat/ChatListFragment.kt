@@ -161,7 +161,14 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
             if (addName.isNotEmpty() && addName != myName) { // 내 이름을 입력하지 못하도록
                 checkUserNicknameExists(addName) { exists ->
                     if (exists) {
-                        createChatRoom(addName)
+                        // 채팅방 존재 여부 확인
+                        checkIfChatRoomExists(addName) { roomExists ->
+                            if (!roomExists) {
+                                createChatRoom(addName)
+                            } else {
+                                Toast.makeText(requireContext(), "이미 존재하는 채팅방입니다.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     } else {
                         Toast.makeText(requireContext(), "존재하지 않는 사용자입니다.", Toast.LENGTH_SHORT).show()
                     }
@@ -173,6 +180,30 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnChatItemClickListener {
 
         builder.setNegativeButton("취소") { dialog, which -> dialog.cancel() }
         builder.show()
+    }
+
+    private fun checkIfChatRoomExists(partnerName: String, callback: (Boolean) -> Unit) {
+        val chatRoomsRef = Firebase.database.reference.child("chatRooms")
+
+        chatRoomsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (chatRoomSnapshot in snapshot.children) {
+                    val usersSnapshot = chatRoomSnapshot.child("users")
+                    val users = usersSnapshot.children.map { it.key }.toSet()
+
+                    if (users.contains(myName) && users.contains(partnerName)) {
+                        callback(true) // 이미 존재하는 채팅방이 있을 경우
+                        return
+                    }
+                }
+                callback(false) // 기존 채팅방이 없을 경우
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("ChatListFragment", "checkIfChatRoomExists: Database error: ${databaseError.message}")
+                callback(false)
+            }
+        })
     }
 
     private fun checkUserNicknameExists(nickname: String, callback: (Boolean) -> Unit) {
