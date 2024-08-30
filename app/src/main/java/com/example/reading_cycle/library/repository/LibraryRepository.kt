@@ -1,13 +1,30 @@
 package com.example.reading_cycle.library.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.tasks.await
 import com.example.reading_cycle.login.model.LoginDataClass
 
 class LibraryRepository {
 
     private val firestore = FirebaseFirestore.getInstance()
+
+    // 사용자 게시물 수를 가져오는 메서드
+    suspend fun getUserPostCount(userIdx: String): Int {
+        val salePostQuery = firestore.collection("SalePosts")
+            .whereEqualTo("userId", userIdx)
+            .get()
+            .await()
+
+        val swapPostQuery = firestore.collection("SwapPosts")
+            .whereEqualTo("userId", userIdx)
+            .get()
+            .await()
+
+        // SalePosts와 SwapPosts의 총 문서 수를 합산
+        val totalPostCount = salePostQuery.size() + swapPostQuery.size()
+
+        return totalPostCount
+    }
 
     suspend fun getUserLibraryImages(userIdx: String): Map<String, String> {
         val imageUrls = mutableMapOf<String, String>()

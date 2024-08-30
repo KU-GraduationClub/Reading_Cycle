@@ -33,7 +33,7 @@
                 android:fontFamily="@font/soyo_maple_bold"
                 android:gravity="center"
                 android:paddingTop="2dp"
-                android:text="Library"
+                android:text="라이브러리"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#27713C"
                 android:textSize="16dp"/>
@@ -124,29 +124,6 @@
             android:textSize="13sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/textLibraryMainPostLabel"
             app:layout_constraintStart_toEndOf="@+id/textLibraryMainPostLabel" />
-
-        <TextView
-            android:id="@+id/textLibraryMainFriendLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:fontFamily="@font/soyo_maple_regular"
-            android:text="친구"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textLibraryMainPostLabel"
-            app:layout_constraintStart_toEndOf="@+id/textLibraryMainPostCount" />
-
-        <TextView
-            android:id="@+id/textLibraryMainFriendCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:fontFamily="@font/soyo_maple_regular"
-            android:text="0"
-            android:textSize="13sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textLibraryMainFriendLabel"
-            app:layout_constraintStart_toEndOf="@+id/textLibraryMainFriendLabel" />
 
         <Button
             android:id="@+id/btnLibAdd"

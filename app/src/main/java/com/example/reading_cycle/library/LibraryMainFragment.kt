@@ -32,6 +32,7 @@ class LibraryMainFragment : Fragment() {
         mainActivity = activity as MainActivity
         fragmentLibraryMainBinding = FragmentLibraryMainBinding.inflate(inflater, container, false)
         libraryRepository = LibraryRepository() // Repository 초기화
+        mainActivity.showBottomNavigation()
 
         // ViewModel에서 userIdx 가져오기
         val userIdx = mainActivity.userViewModel.userIdx
@@ -45,6 +46,7 @@ class LibraryMainFragment : Fragment() {
             lifecycleScope.launch {
                 fetchUserData(it)
                 fetchUserLibraryImages(it)
+                fetchUserPostCount(it) // 사용자 게시물 수 가져오기
             }
         }
 
@@ -52,12 +54,6 @@ class LibraryMainFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        // 타이틀 아이콘 작업
-        ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)?.let {
-            fragmentLibraryMainBinding.toolbarLibraryMainTitle.setCompoundDrawablesWithIntrinsicBounds(
-                null, null, it, null
-            )
-        }
         fragmentLibraryMainBinding.toolbarLibraryMainTitle.compoundDrawablePadding =
             resources.getDimensionPixelSize(R.dimen.icon_text_padding)
         fragmentLibraryMainBinding.toolbarLibraryMainTitle.text = "라이브러리"
@@ -87,6 +83,7 @@ class LibraryMainFragment : Fragment() {
         userData?.let { data ->
             Glide.with(this)
                 .load(data.userProfileImage)
+                .circleCrop()  // 이미지를 원형으로 자르기
                 .into(fragmentLibraryMainBinding.imgLibraryMainProfile)
 
             fragmentLibraryMainBinding.textLibraryMainUser.text = data.userNickname
@@ -95,6 +92,9 @@ class LibraryMainFragment : Fragment() {
             if (userIdx == mainActivity.userViewModel.userIdx) {
                 fragmentLibraryMainBinding.btnLibAdd.visibility = View.GONE
                 fragmentLibraryMainBinding.btnLibChat.visibility = View.GONE
+            } else {
+                fragmentLibraryMainBinding.btnLibAdd.visibility = View.VISIBLE
+                fragmentLibraryMainBinding.btnLibChat.visibility = View.VISIBLE
             }
         }
     }
@@ -109,5 +109,10 @@ class LibraryMainFragment : Fragment() {
             mainActivity.navigateToSalePostFragment(documentId)
         }
         fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = adapter
+    }
+
+    private suspend fun fetchUserPostCount(userIdx: String) {
+        val postCount = libraryRepository.getUserPostCount(userIdx)
+        fragmentLibraryMainBinding.textLibraryMainPostCount.text = postCount.toString()
     }
 }
