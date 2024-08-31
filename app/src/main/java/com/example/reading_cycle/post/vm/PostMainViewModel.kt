@@ -11,6 +11,7 @@ import com.example.reading_cycle.post.model.SaleBookData
 import com.example.reading_cycle.post.model.SwapBookData
 import com.example.reading_cycle.post.repository.PostMainRepository
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.launch
 
 class PostMainViewModel(private val postMainRepository: PostMainRepository) : ViewModel() {
@@ -21,34 +22,33 @@ class PostMainViewModel(private val postMainRepository: PostMainRepository) : Vi
     private val _swapPosts = MutableLiveData<List<DocumentSnapshot>>()
     val swapPosts: LiveData<List<DocumentSnapshot>> get() = _swapPosts
 
-    init {
-        loadPosts()
+    // 사용자 위치를 기반으로 게시글을 가져오는 메서드
+    fun loadNearbyPosts(userLocation: GeoPoint, radiusInKm: Double) {
+        // 근처 게시글을 가져오는 메서드를 호출
+        loadNearbySalePosts(userLocation, radiusInKm)
+        loadNearbySwapPosts(userLocation, radiusInKm)
     }
 
-    private fun loadPosts() {
-        // This can be called initially to load both types of posts
-        loadSalePosts()
-        loadSwapPosts()
-    }
-
-    fun loadSalePosts() {
+    // 위치 정보를 기반으로 근처의 SalePosts를 가져오는 메서드
+    private fun loadNearbySalePosts(userLocation: GeoPoint, radiusInKm: Double) {
         viewModelScope.launch {
             try {
-                val salePosts = postMainRepository.getSalePosts()
+                val salePosts = postMainRepository.getNearbySalePosts(userLocation, radiusInKm)
                 _salePosts.value = salePosts
             } catch (e: Exception) {
-                // Handle failure
+                // 실패 처리
             }
         }
     }
 
-    fun loadSwapPosts() {
+    // 위치 정보를 기반으로 근처의 SwapPosts를 가져오는 메서드
+    private fun loadNearbySwapPosts(userLocation: GeoPoint, radiusInKm: Double) {
         viewModelScope.launch {
             try {
-                val swapPosts = postMainRepository.getSwapPosts()
+                val swapPosts = postMainRepository.getNearbySwapPosts(userLocation, radiusInKm)
                 _swapPosts.value = swapPosts
             } catch (e: Exception) {
-                // Handle failure
+                // 실패 처리
             }
         }
     }
@@ -94,7 +94,5 @@ class PostMainViewModelFactory(
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
-
-
 
 }
