@@ -5,9 +5,9 @@
         android:id="@+id/menuItemSortByRecent"
         android:title="최신 순"/>
 
-    <item
-        android:id="@+id/menuItemSortByDistance"
-        android:title="거리 순"/>
+<!--    <item-->
+<!--        android:id="@+id/menuItemSortByDistance"-->
+<!--        android:title="거리 순"/>-->
 
     <item
         android:id="@+id/menuItemSortBySwap"

@@ -226,12 +226,12 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
                     true
                 }
 
-                R.id.menuItemSortByDistance -> {
-                    // 거리순 정렬
-                    getLastLocationAndLoadPosts()
-                    updateSortText("거리 순")
-                    true
-                }
+//                R.id.menuItemSortByDistance -> {
+//                    // 거리순 정렬
+//                    getLastLocationAndLoadPosts()
+//                    updateSortText("거리 순")
+//                    true
+//                }
 
                 R.id.menuItemSortBySwap -> {
                     // 교환 게시글 필터링
