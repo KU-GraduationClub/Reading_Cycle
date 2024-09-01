@@ -1,18 +1,24 @@
 package com.example.reading_cycle.post
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.pm.PackageManager
+import android.health.connect.datatypes.ExerciseRoute
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
@@ -23,8 +29,14 @@ import com.example.reading_cycle.post.repository.PostMainRepository
 import com.example.reading_cycle.post.vm.PostMainViewModel
 import com.example.reading_cycle.post.vm.PostMainViewModelFactory
 import com.example.reading_cycle.post.vm.PostSheetViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.GeoPoint
+import kotlinx.coroutines.launch
+import java.util.jar.Manifest
+
 
 class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
 
@@ -34,7 +46,20 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var bottomSheetViewModel: PostSheetViewModel
     private lateinit var postMainViewModel: PostMainViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val userViewModel: UserViewModel by activityViewModels()
+
+    // 권한 요청 결과 처리
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            getLastLocationAndLoadPosts()
+        } else {
+            // 권한이 거부된 경우 처리 (예: 사용자에게 알림)
+            Log.e("PostMainFragment", "Location permission denied")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +75,9 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
 
         // BottomSheetViewModel 초기화
         bottomSheetViewModel = ViewModelProvider(this)[PostSheetViewModel::class.java]
+
+        // FusedLocationProviderClient 초기화
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         // UserIdx 확인 및 로그인 화면으로 이동
         val userIdx = userViewModel.userIdx
@@ -73,12 +101,9 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         }
 
         // LiveData 관찰
-        postMainViewModel.salePosts.observe(viewLifecycleOwner, Observer { salePosts ->
-            postMainAdapter.setSalePosts(salePosts)
-        })
-
-        postMainViewModel.swapPosts.observe(viewLifecycleOwner, Observer { swapPosts ->
-            postMainAdapter.setSwapPosts(swapPosts)
+        postMainViewModel.combinedPosts.observe(viewLifecycleOwner, Observer { combinedPosts ->
+            val (salePosts, swapPosts) = combinedPosts
+            postMainAdapter.submitList(salePosts, swapPosts)
         })
 
         // 툴바 알림 메뉴 클릭 이벤트 처리
@@ -112,17 +137,79 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
             }
         }
 
-        // 정렬 팝업 메뉴
-        fragmentPostMainBinding.conPostMainSort.setOnClickListener {
-            showPopupMenu(it)
-        }
-
         // 이미지 버튼 클릭 이벤트 처리
         fragmentPostMainBinding.imgBtnPostMain.setOnClickListener {
             showPostTypeDialog()
         }
 
+        // 위치 기반 데이터 로드
+        checkLocationPermissionAndLoadPosts()
+
         return fragmentPostMainBinding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 위치가 변경되었을 수 있으므로 데이터를 갱신
+        checkLocationPermissionAndLoadPosts()
+
+        // 정렬 팝업 메뉴
+        fragmentPostMainBinding.conPostMainSort.setOnClickListener {
+            showPopupMenu(it)
+        }
+    }
+
+    private fun checkLocationPermissionAndLoadPosts() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // 권한이 이미 부여됨
+                getLastLocationAndLoadPosts()
+            }
+
+            shouldShowRequestPermissionRationale(  android.Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                // 권한 설명을 보여준 후 다시 요청
+                AlertDialog.Builder(requireContext())
+                    .setTitle("위치 권한 필요")
+                    .setMessage("게시글을 표시하기 위해 위치 권한이 필요합니다.")
+                    .setPositiveButton("허용") { _, _ ->
+                        requestPermissionLauncher.launch(  android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    }
+                    .setNegativeButton("거부") { dialog, _ ->
+                        dialog.dismiss()
+                        Log.e("PostMainFragment", "Location permission denied")
+                    }
+                    .create()
+                    .show()
+            }
+
+            else -> {
+                // 권한 요청
+                requestPermissionLauncher.launch(  android.Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLastLocationAndLoadPosts() {
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val geoPoint = GeoPoint(location.latitude, location.longitude)
+                    val radiusInKm = 10.0 // 원하는 반경 설정 (예: 10km)
+                    Log.d("PostMainFragment", "Location found: $geoPoint")
+                    postMainViewModel.loadNearbyPosts(geoPoint, radiusInKm)
+                } else {
+                    // 위치 정보가 null인 경우 처리
+                    Log.e("PostMainFragment", "Unable to obtain location.")
+                }
+            }
+            .addOnFailureListener {
+                // 위치 획득 실패 처리
+                Log.e("PostMainFragment", "Failed to get location:")
+            }
     }
 
     private fun showPopupMenu(view: View) {
@@ -134,25 +221,32 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuItemSortByRecent -> {
-                    // TODO: 최신순 정렬에 대한 로직을 추가.
+                    postMainViewModel.sortPostsByRecent()
                     updateSortText("최신 순")
                     true
                 }
 
-                R.id.menuItemSortByDistance -> {
-                    // TODO: 거리순 정렬에 대한 로직을 추가.
-                    updateSortText("거리 순")
-                    true
-                }
+//                R.id.menuItemSortByDistance -> {
+//                    // 거리순 정렬
+//                    getLastLocationAndLoadPosts()
+//                    updateSortText("거리 순")
+//                    true
+//                }
 
                 R.id.menuItemSortBySwap -> {
-                    // TODO: 교환용 정렬에 대한 로직을 추가.
+                    // 교환 게시글 필터링
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        postMainViewModel.filterPostsByType(isSwap = true)
+                    }
                     updateSortText("교환 옵션")
                     true
                 }
 
                 R.id.menuItemSortBySale -> {
-                    // TODO: 판매용 정렬에 대한 로직을 추가.
+                    // 판매 게시글 필터링
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        postMainViewModel.filterPostsByType(isSwap = false)
+                    }
                     updateSortText("판매 옵션")
                     true
                 }

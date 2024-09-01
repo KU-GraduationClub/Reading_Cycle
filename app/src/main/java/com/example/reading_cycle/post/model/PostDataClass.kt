@@ -84,8 +84,7 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
         fun onSwapItemClick(document: DocumentSnapshot)
     }
 
-    private val saleBookList = mutableListOf<DocumentSnapshot>()
-    private val swapBookList = mutableListOf<DocumentSnapshot>()
+    private val combinedList = mutableListOf<DocumentSnapshot>()
 
     companion object {
         private const val VIEW_TYPE_SWAP = 1
@@ -111,16 +110,15 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder.itemViewType) {
+        val document = combinedList[position]
+        when (getItemViewType(position)) {
             VIEW_TYPE_SALE -> {
-                val document = saleBookList[position - swapBookList.size]
                 (holder as SaleViewHolder).bind(document)
                 holder.itemView.setOnClickListener {
                     listener.onSaleItemClick(document)
                 }
             }
             VIEW_TYPE_SWAP -> {
-                val document = swapBookList[position]
                 (holder as SwapViewHolder).bind(document)
                 holder.itemView.setOnClickListener {
                     listener.onSwapItemClick(document)
@@ -131,25 +129,35 @@ class PostMainAdapter(private val userViewModel: UserViewModel, private val list
     }
 
     override fun getItemCount(): Int {
-        return swapBookList.size + saleBookList.size
+        return combinedList.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position < swapBookList.size) VIEW_TYPE_SWAP else VIEW_TYPE_SALE
+        val document = combinedList[position]
+
+        // 문서에서 Sale 또는 Swap 데이터의 존재를 검사합니다.
+        return when {
+            document.getString("saleBookTitle") != null -> VIEW_TYPE_SALE
+            document.getString("swapBookTitle") != null -> VIEW_TYPE_SWAP
+            else -> throw IllegalArgumentException("Unknown document type")
+        }
     }
 
-    fun setSalePosts(salePosts: List<DocumentSnapshot>) {
-        saleBookList.clear()
-        saleBookList.addAll(salePosts)
+    fun submitList(salePosts: List<DocumentSnapshot>, swapPosts: List<DocumentSnapshot>) {
+        combinedList.clear()
+        val maxSize = maxOf(salePosts.size, swapPosts.size)
+
+        for (i in 0 until maxSize) {
+            if (i < swapPosts.size) {
+                combinedList.add(swapPosts[i])
+            }
+            if (i < salePosts.size) {
+                combinedList.add(salePosts[i])
+            }
+        }
+
         notifyDataSetChanged()
     }
-
-    fun setSwapPosts(swapPosts: List<DocumentSnapshot>) {
-        swapBookList.clear()
-        swapBookList.addAll(swapPosts)
-        notifyDataSetChanged()
-    }
-
 
     inner class SaleViewHolder(private val binding: RowPostMainSaleBinding) :
         RecyclerView.ViewHolder(binding.root) {

@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         // 사용자의 위치 정보 확인 후 Fragment 전환
         checkUserLocationAndNavigate()
 
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
+        replaceFragment(POST_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -135,24 +135,43 @@ class MainActivity : AppCompatActivity() {
 
         // 새로운 Fragment 담을 변수
         newFragment = when (name) {
-            POST_MAIN_FRAGMENT -> PostMainFragment()
+            POST_MAIN_FRAGMENT -> {
+                mainBinding.bottomNavigation.menu.findItem(R.id.bottom_main).isChecked = true
+                PostMainFragment()
+            }
             ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
             ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
-            SALE_POST_FRAGMENT -> SalePostFragment().apply {
-                arguments = bundle
+            SALE_POST_FRAGMENT -> {
+                SalePostFragment().apply {
+                    arguments = bundle
+                }
             }
-            SWAP_POST_FRAGMENT -> SwapPostFragment().apply {
-                arguments = bundle
+            SWAP_POST_FRAGMENT -> {
+                SwapPostFragment().apply {
+                    arguments = bundle
+                }
             }
             LOC_SET_FRAGMENT -> LocSetFragment()
             LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
             MSG_AUTH_FRAGMENT -> MsgAuthFragment()
             SET_PROFILE_FRAGMENT -> SetProfileFragment()
             EDIT_USER_FRAGMENT -> EditUserFragment()
-            LIST_SETTINGS_FRAGMENT -> ListSettingsFragment()
-            CHAT_LIST_FRAGMENT -> ChatListFragment()
-            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
-            FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+            LIST_SETTINGS_FRAGMENT -> {
+                mainBinding.bottomNavigation.menu.findItem(R.id.bottom_set).isChecked = true
+                ListSettingsFragment()
+            }
+            CHAT_LIST_FRAGMENT -> {
+                mainBinding.bottomNavigation.menu.findItem(R.id.bottom_chat).isChecked = true
+                ChatListFragment()
+            }
+            LIBRARY_MAIN_FRAGMENT -> {
+                mainBinding.bottomNavigation.menu.findItem(R.id.bottom_lib).isChecked = true
+                LibraryMainFragment()
+            }
+            FRIEND_MAIN_FRAGMENT -> {
+                mainBinding.bottomNavigation.menu.findItem(R.id.bottom_frd).isChecked = true
+                FriendMainFragment()
+            }
             NOTIFY_FRAGMENT -> NotifyFragment()
             else -> Fragment()
         }
