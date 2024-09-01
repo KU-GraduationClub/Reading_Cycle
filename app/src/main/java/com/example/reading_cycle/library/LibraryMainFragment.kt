@@ -34,7 +34,14 @@ class LibraryMainFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentLibraryMainBinding = FragmentLibraryMainBinding.inflate(inflater, container, false)
-        mainActivity.showBottomNavigation()
+        mainActivity.hideBottomNavigation()
+
+        fragmentLibraryMainBinding.toolbarLayoutLibraryMain.apply {
+            setNavigationIcon(R.drawable.baseline_arrow_back_ios_28) // 아이콘 설정
+            setNavigationOnClickListener {
+                mainActivity.removeFragment(MainActivity.LIBRARY_MAIN_FRAGMENT) // 뒤로 가기 동작
+            }
+        }
 
         // ViewModelFactory를 통해 ViewModel 인스턴스 생성
         val repository = LibraryRepository()
@@ -110,14 +117,10 @@ class LibraryMainFragment : Fragment() {
             // 로그인된 사용자와 라이브러리 주인 사용자 비교하여 버튼 숨기기
             if (userIdx == mainActivity.userViewModel.userIdx) {
                 fragmentLibraryMainBinding.btnLibAdd.visibility = View.GONE
-                fragmentLibraryMainBinding.btnLibChat.visibility = View.GONE
                 fragmentLibraryMainBinding.btnLibAdd.isEnabled = false
-                fragmentLibraryMainBinding.btnLibChat.isEnabled = false
             } else {
                 fragmentLibraryMainBinding.btnLibAdd.visibility = View.VISIBLE
-                fragmentLibraryMainBinding.btnLibChat.visibility = View.VISIBLE
                 fragmentLibraryMainBinding.btnLibAdd.isEnabled = true
-                fragmentLibraryMainBinding.btnLibChat.isEnabled = true
             }
         }
     }
