@@ -222,6 +222,7 @@ class MainActivity : AppCompatActivity() {
     fun navigateToLibraryFragment(userId: String) {
         val bundle = Bundle().apply {
             putString("userId", userId)
+            Log.d("MainActivity", "Navigating to LibraryFragment with documentId: $userId")
         }
         replaceFragment(LIBRARY_MAIN_FRAGMENT, true, bundle)
     }

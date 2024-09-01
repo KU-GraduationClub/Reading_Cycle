@@ -73,7 +73,7 @@ class LibraryMainFragment : Fragment() {
         // Observe changes in LiveData from ViewModel
         libraryViewModel.images.observe(viewLifecycleOwner) { imageUrlToDocumentIdMap ->
             val adapter = LibraryMainAdapter(requireContext(), imageUrlToDocumentIdMap) { documentId ->
-                Toast.makeText(requireContext(), "Navigating to post: $documentId", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(requireContext(), "Navigating to post: $documentId", Toast.LENGTH_SHORT).show()
                 mainActivity.navigateToSalePostFragment(documentId)
             }
             fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = adapter

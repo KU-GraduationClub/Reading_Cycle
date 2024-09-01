@@ -46,8 +46,19 @@ class LibraryRepository {
         for (snapshot in allSnapshots) {
             for (document in snapshot) {
                 val saleBookImgList = document.get("saleBookImg") as? List<String>
+                val swapBookImgList = document.get("swapBookImg") as? List<String>
+
+                // saleBookImg 필드에 대한 처리
                 if (saleBookImgList != null) {
                     for (imageUrl in saleBookImgList) {
+                        // 예를 들어, imageUrl을 키로 하고 document.id를 값으로 추가
+                        imageUrls[imageUrl] = document.id
+                    }
+                }
+
+                // swapBookImg 필드에 대한 처리
+                if (swapBookImgList != null) {
+                    for (imageUrl in swapBookImgList) {
                         // 예를 들어, imageUrl을 키로 하고 document.id를 값으로 추가
                         imageUrls[imageUrl] = document.id
                     }
