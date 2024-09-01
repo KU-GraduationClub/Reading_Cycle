@@ -29,6 +29,11 @@ import com.example.reading_cycle.post.SwapPostFragment
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+//로그인 시 위치정보 기반 fragment 변경
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import com.example.reading_cycle.location.repository.LocRepository
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
 
@@ -74,7 +79,10 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        replaceFragment(LOGIN_MAIN_FRAGMENT, false, null)
+        // 사용자의 위치 정보 확인 후 Fragment 전환
+        checkUserLocationAndNavigate()
+
+        replaceFragment(POST_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -88,6 +96,33 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
+    
+    private fun checkUserLocationAndNavigate() {
+        val userId = userViewModel.userIdx
+
+        if (userId != null) {
+            val db = FirebaseFirestore.getInstance()
+            val locationRef = db.collection("Users").document(userId).collection("location")
+
+            locationRef.get()
+                .addOnSuccessListener { documents ->
+                    if (documents.isEmpty) {
+                        // 위치 정보가 없는 경우
+                        Log.d("MainActivity", "No user location found, navigating to LocSetFragment")
+                        replaceFragment(LOC_SET_FRAGMENT, false)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("MainActivity", "Error fetching user location", e)
+                    // 오류가 발생한 경우에도 LocSetFragment로 이동
+                    replaceFragment(LOC_SET_FRAGMENT, false)
+                }
+        } else {
+            // 사용자 ID가 없을 경우(로그인되지 않음)
+            Log.d("MainActivity", "No user ID found, navigating to LoginMainFragment")
+            replaceFragment(LOGIN_MAIN_FRAGMENT, false)
+        }
+    }
 
     fun replaceFragment(name: String, addToBackStack: Boolean, bundle: Bundle? = null) {
 
@@ -98,24 +133,43 @@ class MainActivity : AppCompatActivity() {
 
         // 새로운 Fragment 담을 변수
         newFragment = when (name) {
-            POST_MAIN_FRAGMENT -> PostMainFragment()
+            POST_MAIN_FRAGMENT -> {
+                mainBinding.bottomNavigation.menu.findItem(R.id.bottom_main).isChecked = true
+                PostMainFragment()
+            }
             ADD_SALE_POST_FRAGMENT -> AddSalePostFragment()
             ADD_SWAP_POST_FRAGMENT -> AddSwapPostFragment()
-            SALE_POST_FRAGMENT -> SalePostFragment().apply {
-                arguments = bundle
+            SALE_POST_FRAGMENT -> {
+                SalePostFragment().apply {
+                    arguments = bundle
+                }
             }
-            SWAP_POST_FRAGMENT -> SwapPostFragment().apply {
-                arguments = bundle
+            SWAP_POST_FRAGMENT -> {
+                SwapPostFragment().apply {
+                    arguments = bundle
+                }
             }
             LOC_SET_FRAGMENT -> LocSetFragment()
             LOGIN_MAIN_FRAGMENT -> LoginMainFragment()
             MSG_AUTH_FRAGMENT -> MsgAuthFragment()
             SET_PROFILE_FRAGMENT -> SetProfileFragment()
             EDIT_USER_FRAGMENT -> EditUserFragment()
-            LIST_SETTINGS_FRAGMENT -> ListSettingsFragment()
-            CHAT_LIST_FRAGMENT -> ChatListFragment()
-            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
-            FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
+            LIST_SETTINGS_FRAGMENT -> {
+                mainBinding.bottomNavigation.menu.findItem(R.id.bottom_set).isChecked = true
+                ListSettingsFragment()
+            }
+            CHAT_LIST_FRAGMENT -> {
+                mainBinding.bottomNavigation.menu.findItem(R.id.bottom_chat).isChecked = true
+                ChatListFragment()
+            }
+            LIBRARY_MAIN_FRAGMENT -> {
+                mainBinding.bottomNavigation.menu.findItem(R.id.bottom_lib).isChecked = true
+                LibraryMainFragment()
+            }
+            FRIEND_MAIN_FRAGMENT -> {
+                mainBinding.bottomNavigation.menu.findItem(R.id.bottom_frd).isChecked = true
+                FriendMainFragment()
+            }
             NOTIFY_FRAGMENT -> NotifyFragment()
             else -> Fragment()
         }

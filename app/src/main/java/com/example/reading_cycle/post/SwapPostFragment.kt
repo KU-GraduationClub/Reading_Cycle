@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -95,13 +96,25 @@ class SwapPostFragment : Fragment() {
             hideViewPager()
         }
 
+        fragmentSwapPostBinding.btnSwapPostChatRequest.setOnClickListener {
+            createChatRoomAndNavigate()
+        }
+
         swapPostViewModel.swapBookData.observe(viewLifecycleOwner) { swapBookData ->
             swapBookData?.let { data ->
                 bindSwapPostData(data)
+
                 // SaleBookData에서 userId를 추출하고 fetchUserData 호출
                 data.userId?.let { userId ->
                     swapPostViewModel.fetchUserData(userId)
                     invalidateOptionsMenuIfNeeded()
+
+                    // 현재 사용자의 ID와 게시글 작성자의 ID를 비교하여 버튼의 가시성 조정
+                    val currentUserId = userViewModel.userIdx
+                    if (currentUserId != userId) {
+                        // 현재 사용자가 게시글 작성자가 아닌 경우 버튼을 보이게 설정
+                        fragmentSwapPostBinding.btnSwapPostChatRequest.visibility = View.VISIBLE
+                    }
                 }
             }
         }
@@ -123,6 +136,19 @@ class SwapPostFragment : Fragment() {
             }
         }
         return fragmentSwapPostBinding.root
+    }
+
+    private fun createChatRoomAndNavigate() {
+        val userNickname = swapPostViewModel.userData.value?.userNickname
+
+        if (userNickname != null) {
+            val bundle = Bundle().apply {
+                putString("userNickname", userNickname)
+            }
+            mainActivity.replaceFragment(MainActivity.CHAT_LIST_FRAGMENT, true, bundle)
+        } else {
+            Toast.makeText(requireContext(), "Unable to verify user information.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun invalidateOptionsMenuIfNeeded() {

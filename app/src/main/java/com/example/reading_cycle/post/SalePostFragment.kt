@@ -25,11 +25,14 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.UserViewModel
+import com.example.reading_cycle.chat.ChatListFragment
+import com.example.reading_cycle.chat.model.ChatRoom
 import com.example.reading_cycle.databinding.DialogPostDetailsTextBinding
 import com.example.reading_cycle.databinding.FragmentSalePostBinding
 import com.example.reading_cycle.post.model.SaleBookData
 import com.example.reading_cycle.post.repository.SalePostRepository
 import com.example.reading_cycle.post.vm.SalePostViewModel
+import com.google.firebase.database.FirebaseDatabase
 
 class SalePostFragment : Fragment() {
 
