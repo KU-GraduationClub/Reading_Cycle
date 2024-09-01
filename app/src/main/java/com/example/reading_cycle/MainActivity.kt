@@ -29,7 +29,6 @@ import com.example.reading_cycle.post.SwapPostFragment
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-
 //로그인 시 위치정보 기반 fragment 변경
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -43,7 +42,6 @@ class MainActivity : AppCompatActivity() {
     val userViewModel: UserViewModel by viewModels()
     val currentUser: FirebaseUser?
         get() = FirebaseAuth.getInstance().currentUser
-
 
     companion object {
         const val POST_MAIN_FRAGMENT = "PostMainFragment"
