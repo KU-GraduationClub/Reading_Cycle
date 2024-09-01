@@ -17,7 +17,7 @@
         android:id="@+id/bottom_frd"
         android:icon="@drawable/round_people_alt_24"
         android:menuCategory="secondary"
-        android:title="친구" />
+        android:title="팔로잉" />
 
     <item
         android:id="@+id/bottom_lib"

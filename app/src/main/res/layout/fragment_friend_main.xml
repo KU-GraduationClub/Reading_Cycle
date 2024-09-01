@@ -44,7 +44,7 @@
                     android:fontFamily="@font/soyo_maple_bold"
                     android:gravity="center"
                     android:paddingTop="2dp"
-                    android:text="친구 목록"
+                    android:text="팔로잉 목록"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#27713C"
                     android:textSize="16sp" />
@@ -110,7 +110,7 @@
                 app:layout_constraintTop_toBottomOf="@id/textFriendMain" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewFriendMain"
+                android:id="@+id/recyclerViewFriend"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="35dp"

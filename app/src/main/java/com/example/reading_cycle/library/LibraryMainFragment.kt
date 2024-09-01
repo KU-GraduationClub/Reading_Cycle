@@ -15,18 +15,25 @@ import com.bumptech.glide.Glide
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentLibraryMainBinding
+import com.example.reading_cycle.friend.model.FriendDataClass
 import com.example.reading_cycle.library.repository.LibraryRepository
-import com.example.reading_cycle.library.vm.LibraryViewModelFactory
 import com.example.reading_cycle.library.vm.LibraryViewModel
+import com.example.reading_cycle.library.vm.LibraryViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class LibraryMainFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentLibraryMainBinding: FragmentLibraryMainBinding
     private lateinit var libraryViewModel: LibraryViewModel
+    private lateinit var repository: LibraryRepository // 추가된 부분
 
     private var userId: String? = null
+    private var isFollowing: Boolean = false
+    private val handler = android.os.Handler()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +51,7 @@ class LibraryMainFragment : Fragment() {
         }
 
         // ViewModelFactory를 통해 ViewModel 인스턴스 생성
-        val repository = LibraryRepository()
+        repository = LibraryRepository() // 초기화
         val viewModelFactory = LibraryViewModelFactory(repository)
         libraryViewModel = ViewModelProvider(this, viewModelFactory).get(LibraryViewModel::class.java)
 
@@ -63,20 +70,23 @@ class LibraryMainFragment : Fragment() {
 
         userId?.let {
             lifecycleScope.launch {
-                // ViewModel을 통해 이미지 데이터 로드
                 libraryViewModel.fetchUserLibraryImages(it)
                 fetchUserData(it)
                 fetchUserPostCount(it)
+                checkIfFollowing(it) // 팔로우 상태 확인
             }
         }
 
         // Observe changes in LiveData from ViewModel
         libraryViewModel.images.observe(viewLifecycleOwner) { imageUrlToDocumentIdMap ->
             val adapter = LibraryMainAdapter(requireContext(), imageUrlToDocumentIdMap) { documentId ->
-                //Toast.makeText(requireContext(), "Navigating to post: $documentId", Toast.LENGTH_SHORT).show()
                 mainActivity.navigateToSalePostFragment(documentId)
             }
             fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = adapter
+        }
+
+        fragmentLibraryMainBinding.btnLibAdd.setOnClickListener {
+            handleFollowButtonClick()
         }
 
         return fragmentLibraryMainBinding.root
@@ -104,7 +114,7 @@ class LibraryMainFragment : Fragment() {
     }
 
     private suspend fun fetchUserData(userIdx: String) {
-        val userData = LibraryRepository().getUserData(userIdx)
+        val userData = repository.getUserData(userIdx) // 수정된 부분
 
         userData?.let { data ->
             Glide.with(this)
@@ -126,7 +136,81 @@ class LibraryMainFragment : Fragment() {
     }
 
     private suspend fun fetchUserPostCount(userIdx: String) {
-        val postCount = LibraryRepository().getUserPostCount(userIdx)
+        val postCount = repository.getUserPostCount(userIdx) // 수정된 부분
         fragmentLibraryMainBinding.textLibraryMainPostCount.text = postCount.toString()
+    }
+
+    private suspend fun checkIfFollowing(targetUserIdx: String) {
+        val currentUserIdx = mainActivity.userViewModel.userIdx ?: return
+        val friendsCollection = FirebaseFirestore.getInstance()
+            .collection("Users")
+            .document(currentUserIdx)
+            .collection("Friends")
+            .document(targetUserIdx)
+            .get()
+            .await()
+
+        if (friendsCollection.exists()) {
+            isFollowing = friendsCollection.getBoolean("IsFollowing") ?: false
+            updateFollowButtonState(isFollowing)
+        } else {
+            // 사용자가 친구 목록에 없는 경우 기본 상태 설정
+            isFollowing = false
+            updateFollowButtonState(isFollowing)
+        }
+    }
+
+    private fun updateFollowButtonState(isFollowing: Boolean) {
+        if (isFollowing) {
+            fragmentLibraryMainBinding.btnLibAdd.apply {
+                text = "팔로잉"
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.theme_green))
+                backgroundTintList = null // backgroundTint 제거
+            }
+        } else {
+            fragmentLibraryMainBinding.btnLibAdd.apply {
+                text = "팔로우"
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.theme_green)
+            }
+        }
+    }
+
+    private fun handleFollowButtonClick() {
+        val targetUserIdx = userId ?: return
+        val currentUserIdx = mainActivity.userViewModel.userIdx ?: return
+
+        lifecycleScope.launch {
+            if (isFollowing) {
+                // 언팔로우 처리
+                libraryViewModel.removeFriend(currentUserIdx, targetUserIdx)
+                isFollowing = false
+                updateFollowButtonState(isFollowing)
+
+                // 10초 후 팔로잉 리스트에서 제거
+                handler.postDelayed({
+                    libraryViewModel.getFollowingList(currentUserIdx)
+                    val friendsList = libraryViewModel.followingList.value ?: emptyList()
+                    val friendToRemove = friendsList.find { friend ->
+                        friend.userIdx == targetUserIdx
+                    }
+                    friendToRemove?.let {
+                        libraryViewModel.removeFriend(currentUserIdx, targetUserIdx)
+                    }
+                }, 10000)
+            } else {
+                // 팔로우 처리
+                val friendData = FriendDataClass(userIdx = targetUserIdx, IsFollowing = true)
+                val firestore = FirebaseFirestore.getInstance()
+                firestore.collection("Users")
+                    .document(currentUserIdx)
+                    .collection("Friends")
+                    .document(targetUserIdx)
+                    .set(friendData)
+                    .await()
+                isFollowing = true
+                updateFollowButtonState(isFollowing)
+            }
+        }
     }
 }

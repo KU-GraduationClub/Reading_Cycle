@@ -31,10 +31,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 //로그인 시 위치정보 기반 fragment 변경
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
-import com.example.reading_cycle.location.repository.LocRepository
-import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
 
@@ -151,7 +147,9 @@ class MainActivity : AppCompatActivity() {
             EDIT_USER_FRAGMENT -> EditUserFragment()
             LIST_SETTINGS_FRAGMENT -> ListSettingsFragment()
             CHAT_LIST_FRAGMENT -> ChatListFragment()
-            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment()
+            LIBRARY_MAIN_FRAGMENT -> LibraryMainFragment().apply {
+                arguments = bundle
+            }
             FRIEND_MAIN_FRAGMENT -> FriendMainFragment()
             NOTIFY_FRAGMENT -> NotifyFragment()
             else -> Fragment()
