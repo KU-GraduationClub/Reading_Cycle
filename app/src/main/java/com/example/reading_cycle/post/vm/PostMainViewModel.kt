@@ -74,34 +74,38 @@ class PostMainViewModel(private val postMainRepository: PostMainRepository) : Vi
 
     // 최신순 정렬 메서드
     fun sortPostsByRecent() {
-        viewModelScope.launch {
-            updateCombinedPosts()
-        }
+        sortByRecent = true
+        updateCombinedPosts()
     }
 
     private fun updateCombinedPosts() {
         val salePostsList = _salePosts.value ?: emptyList()
         val swapPostsList = _swapPosts.value ?: emptyList()
 
-        _combinedPosts.value = Pair(salePostsList, swapPostsList)
-    }
-
-    fun filterPostsByType(isSwap: Boolean) {
-        viewModelScope.launch {
-            filterSwap = isSwap
-
-            if (isSwap) {
-                // 교환 게시글만 필터링
-                _salePosts.postValue(emptyList())
-            } else {
-                // 판매 게시글만 필터링
-                _swapPosts.postValue(emptyList())
+        val combinedPostsList = (salePostsList + swapPostsList)
+            .sortedByDescending {
+                val timestamp = it.getLong("saleBookWriteDate") ?: it.getLong("swapBookWriteDate")
+                timestamp ?: 0L
             }
 
-            // 필터링 후 결합 작업을 수행
-            updateCombinedPosts()
-        }
+        // 필터링 및 정렬을 적용
+        val filteredSalePosts = if (filterSwap) emptyList() else combinedPostsList.filter { it.toSaleBookData() != null }
+        val filteredSwapPosts = if (filterSwap) combinedPostsList.filter { it.toSwapBookData() != null } else emptyList()
+
+        // 변환된 데이터로 업데이트
+        _combinedPosts.value = Pair(filteredSalePosts, filteredSwapPosts)
     }
+
+    // 타입에 따른 게시글 필터링
+    fun filterPostsByType(isSwap: Boolean) {
+        filterSwap = isSwap
+        val filteredSalePosts = if (isSwap) emptyList() else _salePosts.value ?: emptyList()
+        val filteredSwapPosts = if (isSwap) _swapPosts.value ?: emptyList() else emptyList()
+
+        // 필터링 후 결합 작업을 수행
+        _combinedPosts.value = Pair(filteredSalePosts, filteredSwapPosts)
+    }
+
 }
 
 private fun DocumentSnapshot.toSaleBookData(): SaleBookData {
