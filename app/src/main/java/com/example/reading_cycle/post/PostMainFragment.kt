@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
@@ -33,6 +34,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
+import kotlinx.coroutines.launch
 import java.util.jar.Manifest
 
 
@@ -99,12 +101,9 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         }
 
         // LiveData 관찰
-        postMainViewModel.salePosts.observe(viewLifecycleOwner, Observer { salePosts ->
-            postMainAdapter.setSalePosts(salePosts)
-        })
-
-        postMainViewModel.swapPosts.observe(viewLifecycleOwner, Observer { swapPosts ->
-            postMainAdapter.setSwapPosts(swapPosts)
+        postMainViewModel.combinedPosts.observe(viewLifecycleOwner, Observer { combinedPosts ->
+            val (salePosts, swapPosts) = combinedPosts
+            postMainAdapter.submitList(salePosts, swapPosts)
         })
 
         // 툴바 알림 메뉴 클릭 이벤트 처리
@@ -138,11 +137,6 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
             }
         }
 
-        // 정렬 팝업 메뉴
-        fragmentPostMainBinding.conPostMainSort.setOnClickListener {
-            showPopupMenu(it)
-        }
-
         // 이미지 버튼 클릭 이벤트 처리
         fragmentPostMainBinding.imgBtnPostMain.setOnClickListener {
             showPostTypeDialog()
@@ -158,6 +152,11 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         super.onResume()
         // 위치가 변경되었을 수 있으므로 데이터를 갱신
         checkLocationPermissionAndLoadPosts()
+
+        // 정렬 팝업 메뉴
+        fragmentPostMainBinding.conPostMainSort.setOnClickListener {
+            showPopupMenu(it)
+        }
     }
 
     private fun checkLocationPermissionAndLoadPosts() {
@@ -222,25 +221,32 @@ class PostMainFragment : Fragment(), PostMainAdapter.OnPostItemClickListener {
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuItemSortByRecent -> {
-                    // TODO: 최신순 정렬에 대한 로직을 추가.
+                    postMainViewModel.sortPostsByRecent()
                     updateSortText("최신 순")
                     true
                 }
 
                 R.id.menuItemSortByDistance -> {
-                    // TODO: 거리순 정렬에 대한 로직을 추가.
+                    // 거리순 정렬
+                    getLastLocationAndLoadPosts()
                     updateSortText("거리 순")
                     true
                 }
 
                 R.id.menuItemSortBySwap -> {
-                    // TODO: 교환용 정렬에 대한 로직을 추가.
+                    // 교환 게시글 필터링
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        postMainViewModel.filterPostsByType(isSwap = true)
+                    }
                     updateSortText("교환 옵션")
                     true
                 }
 
                 R.id.menuItemSortBySale -> {
-                    // TODO: 판매용 정렬에 대한 로직을 추가.
+                    // 판매 게시글 필터링
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        postMainViewModel.filterPostsByType(isSwap = false)
+                    }
                     updateSortText("판매 옵션")
                     true
                 }
