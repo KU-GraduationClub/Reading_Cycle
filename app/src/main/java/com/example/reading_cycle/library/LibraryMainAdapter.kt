@@ -11,8 +11,8 @@ import com.example.reading_cycle.R
 
 class LibraryMainAdapter(
     private val context: Context,
-    private val imageUrlToDocumentIdMap: Map<String, String>, // 이미지 URL과 문서 ID를 매핑하는 Map
-    private val onItemClick: (String) -> Unit // 클릭 리스너 콜백
+    private val imageUrlToDocumentIdMap: Map<String, String>,
+    private val onItemClick: (String) -> Unit
 ) : RecyclerView.Adapter<LibraryMainAdapter.LibraryViewHolder>() {
 
     private val imageUrls = imageUrlToDocumentIdMap.keys.toList()

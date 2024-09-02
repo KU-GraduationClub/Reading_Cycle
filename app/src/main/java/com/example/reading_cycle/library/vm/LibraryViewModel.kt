@@ -9,6 +9,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.reading_cycle.library.repository.LibraryRepository
 import com.example.reading_cycle.friend.model.FriendDataClass
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class LibraryViewModel(private val repository: LibraryRepository) : ViewModel() {
 
@@ -17,6 +19,9 @@ class LibraryViewModel(private val repository: LibraryRepository) : ViewModel() 
 
     private val _followingList = MutableLiveData<List<FriendDataClass>>()
     val followingList: LiveData<List<FriendDataClass>> get() = _followingList
+
+    private val _isFollowing = MutableLiveData<Boolean>()
+    val isFollowing: LiveData<Boolean> get() = _isFollowing
 
     fun fetchUserLibraryImages(userIdx: String) {
         viewModelScope.launch {
@@ -44,24 +49,34 @@ class LibraryViewModel(private val repository: LibraryRepository) : ViewModel() 
         }
     }
 
-    fun removeFriend(userIdx: String, friendIdx: String) {
+    fun checkIfFollowing(userIdx: String, currentUserIdx: String) {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
-                    repository.removeFriend(userIdx, friendIdx)
-                }
+                val followingList = repository.getFollowingList(currentUserIdx)
+                _isFollowing.value = followingList.any { it.userIdx == userIdx }
             } catch (exception: Exception) {
                 // 에러 처리
             }
         }
     }
 
-    fun addFriend(userIdx: String, friendData: FriendDataClass) {
+    fun toggleFollow(userIdx: String, currentUserIdx: String) {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
-                    repository.addFriend(userIdx, friendData)
+                val following = _isFollowing.value == true
+                if (following) {
+                    repository.removeFriend(currentUserIdx, userIdx)
+                } else {
+                    val friendData = FriendDataClass(userIdx = userIdx, userNickname = "", userProfileImage = "", isFollowing = true)
+                    val firestore = FirebaseFirestore.getInstance()
+                    firestore.collection("Users")
+                        .document(currentUserIdx)
+                        .collection("Friends")
+                        .document(userIdx)
+                        .set(friendData)
+                        .await()
                 }
+                _isFollowing.value = !following
             } catch (exception: Exception) {
                 // 에러 처리
             }

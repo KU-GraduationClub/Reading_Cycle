@@ -9,10 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.reading_cycle.R
+import com.example.reading_cycle.login.model.LoginDataClass
 
 class FriendAdapter(
     private val context: Context,
-    private val users: List<Map<String, Any>>
+    private val users: List<LoginDataClass>
 ) : RecyclerView.Adapter<FriendAdapter.FriendViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
@@ -22,15 +23,12 @@ class FriendAdapter(
 
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
         val user = users[position]
-        val userProfileImage = user["userProfileImage"] as? String
-        val userNickname = user["userNickname"] as? String
-
         Glide.with(context)
-            .load(userProfileImage)
+            .load(user.userProfileImage)
             .circleCrop()
             .into(holder.imgFriendProfile)
 
-        holder.textFrdUser.text = userNickname
+        holder.textFrdUser.text = user.userNickname
     }
 
     override fun getItemCount(): Int {

@@ -7,48 +7,47 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.reading_cycle.MainActivity
+import com.bumptech.glide.Glide
+import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentFriendMainBinding
-import com.example.reading_cycle.friend.repository.FriendRepository
+import com.example.reading_cycle.friend.model.FriendDataClass
 import com.example.reading_cycle.friend.vm.FriendViewModel
 import com.example.reading_cycle.friend.vm.FriendViewModelFactory
+import com.example.reading_cycle.friend.repository.FriendRepository
 
 class FriendMainFragment : Fragment() {
 
-    private lateinit var mainActivity: MainActivity
-    private lateinit var fragmentFriendMainBinding: FragmentFriendMainBinding
-    private lateinit var friendViewModel: FriendViewModel
-    private lateinit var repository: FriendRepository
-
-    private var userId: String? = null
+    private lateinit var binding: FragmentFriendMainBinding
+    private lateinit var viewModel: FriendViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mainActivity = activity as MainActivity
-        fragmentFriendMainBinding = FragmentFriendMainBinding.inflate(inflater, container, false)
+        binding = FragmentFriendMainBinding.inflate(inflater, container, false)
 
-        // Repository와 ViewModel 초기화
-        repository = FriendRepository()
+        val repository = FriendRepository()
         val viewModelFactory = FriendViewModelFactory(repository)
-        friendViewModel = ViewModelProvider(this, viewModelFactory).get(FriendViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(FriendViewModel::class.java)
 
-        // 사용자 ID 가져오기
-        userId = arguments?.getString("userId") ?: mainActivity.userViewModel.userIdx
+        val userIdx = arguments?.getString("userIdx") ?: return binding.root
 
-        // 사용자 ID가 null이 아닌 경우, 팔로잉 목록을 로드
-        userId?.let {
-            friendViewModel.fetchFollowingUsers(it)
+        setupRecyclerView()
+        observeFollowingUsers()
+
+        viewModel.fetchFollowingUsers(userIdx)
+
+        return binding.root
+    }
+
+    private fun setupRecyclerView() {
+        binding.recyclerViewFriends.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun observeFollowingUsers() {
+        viewModel.followingUsers.observe(viewLifecycleOwner) { friends ->
+            val adapter = FriendListAdapter(friends)
+            binding.recyclerViewFriends.adapter = adapter
         }
-
-        // ViewModel의 LiveData를 관찰하여 데이터 업데이트
-        friendViewModel.followingUsers.observe(viewLifecycleOwner) { users ->
-            val adapter = FriendAdapter(requireContext(), users)
-            fragmentFriendMainBinding.recyclerViewFriends.layoutManager = LinearLayoutManager(requireContext())
-            fragmentFriendMainBinding.recyclerViewFriends.adapter = adapter
-        }
-
-        return fragmentFriendMainBinding.root
     }
 }

@@ -8,34 +8,20 @@ import kotlinx.coroutines.withContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.reading_cycle.friend.repository.FriendRepository
+import com.example.reading_cycle.friend.model.FriendDataClass
 
 class FriendViewModel(private val repository: FriendRepository) : ViewModel() {
 
-    private val _followingUsers = MutableLiveData<List<Map<String, Any>>>()
-    val followingUsers: LiveData<List<Map<String, Any>>> get() = _followingUsers
+    private val _followingUsers = MutableLiveData<List<FriendDataClass>>()
+    val followingUsers: LiveData<List<FriendDataClass>> get() = _followingUsers
 
-    fun fetchFollowingUsers(currentUserIdx: String) {
+    fun fetchFollowingUsers(userIdx: String) {
         viewModelScope.launch {
             try {
-                val followingUserIds = withContext(Dispatchers.IO) {
-                    repository.getFollowingUserIds(currentUserIdx)
+                val followingList = withContext(Dispatchers.IO) {
+                    repository.getFollowingList(userIdx)
                 }
-                val usersData = withContext(Dispatchers.IO) {
-                    repository.getUsersData(followingUserIds)
-                }
-                _followingUsers.value = usersData
-            } catch (exception: Exception) {
-                // 에러 처리
-            }
-        }
-    }
-
-    fun removeFriend(userIdx: String, friendIdx: String) {
-        viewModelScope.launch {
-            try {
-                withContext(Dispatchers.IO) {
-                    repository.removeFriend(userIdx, friendIdx)
-                }
+                _followingUsers.value = followingList
             } catch (exception: Exception) {
                 // 에러 처리
             }

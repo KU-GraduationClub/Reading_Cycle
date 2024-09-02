@@ -1,7 +1,6 @@
 package com.example.reading_cycle.library
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +17,7 @@ import com.example.reading_cycle.friend.model.FriendDataClass
 import com.example.reading_cycle.library.repository.LibraryRepository
 import com.example.reading_cycle.library.vm.LibraryViewModel
 import com.example.reading_cycle.library.vm.LibraryViewModelFactory
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class LibraryMainFragment : Fragment() {
 
@@ -40,23 +37,21 @@ class LibraryMainFragment : Fragment() {
         fragmentLibraryMainBinding = FragmentLibraryMainBinding.inflate(inflater, container, false)
         mainActivity.hideBottomNavigation()
 
-        setupToolbar()
-        setupRecyclerView()
-
         repository = LibraryRepository()
         val viewModelFactory = LibraryViewModelFactory(repository)
         libraryViewModel = ViewModelProvider(this, viewModelFactory).get(LibraryViewModel::class.java)
 
-        userId = arguments?.getString("userId") ?: mainActivity.userViewModel.userIdx
+        setupToolbar()
+        setupRecyclerView()
 
-        Log.d("LibraryMainFragment", "User Index: $userId")
+        userId = arguments?.getString("userId") ?: mainActivity.userViewModel.userIdx
 
         userId?.let {
             lifecycleScope.launch {
                 libraryViewModel.fetchUserLibraryImages(it)
                 fetchUserData(it)
                 fetchUserPostCount(it)
-                checkIfFollowing(it)
+                libraryViewModel.checkIfFollowing(it, mainActivity.userViewModel.userIdx ?: "")
             }
         }
 
@@ -67,24 +62,44 @@ class LibraryMainFragment : Fragment() {
             fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = adapter
         }
 
+        libraryViewModel.isFollowing.observe(viewLifecycleOwner) { isFollowing ->
+            this.isFollowing = isFollowing
+            updateFollowButtonState()
+        }
+
         fragmentLibraryMainBinding.btnLibAdd.setOnClickListener {
-            handleFollowButtonClick()
+            userId?.let { userId ->
+                libraryViewModel.toggleFollow(userId, mainActivity.userViewModel.userIdx ?: "")
+            }
         }
 
         return fragmentLibraryMainBinding.root
     }
 
     private fun setupToolbar() {
-        fragmentLibraryMainBinding.toolbarLayoutLibraryMain.apply {
-            setNavigationIcon(R.drawable.baseline_arrow_back_ios_28)
-            setNavigationOnClickListener {
-                mainActivity.removeFragment(MainActivity.LIBRARY_MAIN_FRAGMENT)
+        fragmentLibraryMainBinding.toolbarLibraryMainTitle.compoundDrawablePadding =
+            resources.getDimensionPixelSize(R.dimen.icon_text_padding)
+        fragmentLibraryMainBinding.toolbarLibraryMainTitle.text = "라이브러리"
+
+        fragmentLibraryMainBinding.toolbarLayoutLibraryMain.setNavigationIcon(R.drawable.baseline_arrow_back_ios_28)
+        fragmentLibraryMainBinding.toolbarLayoutLibraryMain.setNavigationOnClickListener {
+            mainActivity.removeFragment(MainActivity.LIBRARY_MAIN_FRAGMENT)
+        }
+
+        fragmentLibraryMainBinding.toolbarLayoutLibraryMain.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.libraryMenuItemNotify -> {
+                    mainActivity.navigateToNotifyFragment()
+                    true
+                }
+                else -> false
             }
         }
     }
 
     private fun setupRecyclerView() {
-        fragmentLibraryMainBinding.recyclerViewLibraryMain.layoutManager = GridLayoutManager(requireContext(), 3)
+        val layoutManager = GridLayoutManager(requireContext(), 3)
+        fragmentLibraryMainBinding.recyclerViewLibraryMain.layoutManager = layoutManager
     }
 
     private suspend fun fetchUserData(userIdx: String) {
@@ -97,7 +112,8 @@ class LibraryMainFragment : Fragment() {
 
             fragmentLibraryMainBinding.textLibraryMainUser.text = data.userNickname
 
-            if (userIdx == mainActivity.userViewModel.userIdx) {
+            // 로그인된 사용자와 현재 라이브러리 소유자가 같으면 팔로잉 버튼 숨기기
+            if (data.userIdx == mainActivity.userViewModel.userIdx) {
                 fragmentLibraryMainBinding.btnLibAdd.visibility = View.GONE
                 fragmentLibraryMainBinding.btnLibAdd.isEnabled = false
             } else {
@@ -109,51 +125,16 @@ class LibraryMainFragment : Fragment() {
 
     private suspend fun fetchUserPostCount(userIdx: String) {
         val postCount = repository.getUserPostCount(userIdx)
-        fragmentLibraryMainBinding.textLibraryMainPostCount.text = postCount.toString()
+        fragmentLibraryMainBinding.textLibraryMainPostCount.text = "$postCount"
     }
 
-    private suspend fun checkIfFollowing(targetUserIdx: String) {
-        val currentUserIdx = mainActivity.userViewModel.userIdx ?: return
-        val friendsCollection = FirebaseFirestore.getInstance()
-            .collection("Users")
-            .document(currentUserIdx)
-            .collection("Friends")
-            .document(targetUserIdx)
-            .get()
-            .await()
+    private fun updateFollowButtonState() {
+        val buttonText = if (isFollowing) "팔로잉" else "팔로우"
+        val buttonColor = if (isFollowing) R.color.theme_green else R.color.white
+        val backgroundColor = if (isFollowing) R.color.white else R.color.theme_green
 
-        if (friendsCollection.exists()) {
-            isFollowing = friendsCollection.getBoolean("IsFollowing") ?: false
-            updateFollowButtonState(isFollowing)
-        } else {
-            isFollowing = false
-            updateFollowButtonState(isFollowing)
-        }
-    }
-
-    private fun updateFollowButtonState(isFollowing: Boolean) {
-        fragmentLibraryMainBinding.btnLibAdd.apply {
-            text = if (isFollowing) "팔로잉" else "팔로우"
-            setTextColor(ContextCompat.getColor(requireContext(), if (isFollowing) R.color.theme_green else R.color.white))
-            backgroundTintList = if (isFollowing) null else ContextCompat.getColorStateList(requireContext(), R.color.theme_green)
-        }
-    }
-
-    private fun handleFollowButtonClick() {
-        val targetUserIdx = userId ?: return
-        val currentUserIdx = mainActivity.userViewModel.userIdx ?: return
-
-        lifecycleScope.launch {
-            if (isFollowing) {
-                libraryViewModel.removeFriend(currentUserIdx, targetUserIdx)
-                isFollowing = false
-                updateFollowButtonState(isFollowing)
-            } else {
-                val friendData = FriendDataClass(userIdx = targetUserIdx, IsFollowing = true)
-                libraryViewModel.addFriend(currentUserIdx, friendData)
-                isFollowing = true
-                updateFollowButtonState(isFollowing)
-            }
-        }
+        fragmentLibraryMainBinding.btnLibAdd.text = buttonText
+        fragmentLibraryMainBinding.btnLibAdd.setTextColor(ContextCompat.getColor(requireContext(), buttonColor))
+        fragmentLibraryMainBinding.btnLibAdd.backgroundTintList = ContextCompat.getColorStateList(requireContext(), backgroundColor)
     }
 }
