@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide
 import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentLibraryMainBinding
-import com.example.reading_cycle.friend.model.FriendDataClass
 import com.example.reading_cycle.library.repository.LibraryRepository
 import com.example.reading_cycle.library.vm.LibraryViewModel
 import com.example.reading_cycle.library.vm.LibraryViewModelFactory
@@ -69,7 +68,10 @@ class LibraryMainFragment : Fragment() {
 
         fragmentLibraryMainBinding.btnLibAdd.setOnClickListener {
             userId?.let { userId ->
-                libraryViewModel.toggleFollow(userId, mainActivity.userViewModel.userIdx ?: "")
+                val userNickname = fragmentLibraryMainBinding.textLibraryMainUser.text.toString()
+                val userProfileImageUrl = fragmentLibraryMainBinding.imgLibraryMainProfile.tag as? String ?: ""
+
+                libraryViewModel.toggleFollow(userId, mainActivity.userViewModel.userIdx ?: "", userNickname, userProfileImageUrl)
             }
         }
 
@@ -102,23 +104,32 @@ class LibraryMainFragment : Fragment() {
         fragmentLibraryMainBinding.recyclerViewLibraryMain.layoutManager = layoutManager
     }
 
-    private suspend fun fetchUserData(userIdx: String) {
-        val userData = repository.getUserData(userIdx)
-        userData?.let { data ->
-            Glide.with(this)
-                .load(data.userProfileImage)
-                .circleCrop()
-                .into(fragmentLibraryMainBinding.imgLibraryMainProfile)
+    private fun fetchUserData(userIdx: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val userData = repository.getUserData(userIdx) // UserData 객체를 가져옴
+            userData?.let { data ->
+                val userProfileImageUrl = data.userProfileImage
+                val userNickname = data.userNickname
 
-            fragmentLibraryMainBinding.textLibraryMainUser.text = data.userNickname
+                // Glide를 사용하여 이미지 로드
+                Glide.with(this@LibraryMainFragment)
+                    .load(userProfileImageUrl)
+                    .circleCrop()
+                    .into(fragmentLibraryMainBinding.imgLibraryMainProfile)
 
-            // 로그인된 사용자와 현재 라이브러리 소유자가 같으면 팔로잉 버튼 숨기기
-            if (data.userIdx == mainActivity.userViewModel.userIdx) {
-                fragmentLibraryMainBinding.btnLibAdd.visibility = View.GONE
-                fragmentLibraryMainBinding.btnLibAdd.isEnabled = false
-            } else {
-                fragmentLibraryMainBinding.btnLibAdd.visibility = View.VISIBLE
-                fragmentLibraryMainBinding.btnLibAdd.isEnabled = true
+                // 프로필 이미지 URL을 tag로 저장
+                fragmentLibraryMainBinding.imgLibraryMainProfile.tag = userProfileImageUrl
+
+                // 사용자 닉네임을 UI에 설정
+                fragmentLibraryMainBinding.textLibraryMainUser.text = userNickname
+
+                if (data.userIdx == mainActivity.userViewModel.userIdx) {
+                    fragmentLibraryMainBinding.btnLibAdd.visibility = View.GONE
+                    fragmentLibraryMainBinding.btnLibAdd.isEnabled = false
+                } else {
+                    fragmentLibraryMainBinding.btnLibAdd.visibility = View.VISIBLE
+                    fragmentLibraryMainBinding.btnLibAdd.isEnabled = true
+                }
             }
         }
     }

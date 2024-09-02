@@ -9,8 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.reading_cycle.library.repository.LibraryRepository
 import com.example.reading_cycle.friend.model.FriendDataClass
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
 
 class LibraryViewModel(private val repository: LibraryRepository) : ViewModel() {
 
@@ -60,21 +58,20 @@ class LibraryViewModel(private val repository: LibraryRepository) : ViewModel() 
         }
     }
 
-    fun toggleFollow(userIdx: String, currentUserIdx: String) {
+    fun toggleFollow(userIdx: String, currentUserIdx: String, userNickname: String, userProfileImage: Any) {
         viewModelScope.launch {
             try {
                 val following = _isFollowing.value == true
                 if (following) {
                     repository.removeFriend(currentUserIdx, userIdx)
                 } else {
-                    val friendData = FriendDataClass(userIdx = userIdx, userNickname = "", userProfileImage = "", isFollowing = true)
-                    val firestore = FirebaseFirestore.getInstance()
-                    firestore.collection("Users")
-                        .document(currentUserIdx)
-                        .collection("Friends")
-                        .document(userIdx)
-                        .set(friendData)
-                        .await()
+                    val friendData = FriendDataClass(
+                        userIdx = userIdx,
+                        userNickname = userNickname,
+                        userProfileImage = userProfileImage,
+                        isFollowing = true
+                    )
+                    repository.addFriend(currentUserIdx, friendData)
                 }
                 _isFollowing.value = !following
             } catch (exception: Exception) {

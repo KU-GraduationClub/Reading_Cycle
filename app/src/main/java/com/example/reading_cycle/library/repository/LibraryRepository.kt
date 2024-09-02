@@ -20,8 +20,7 @@ class LibraryRepository {
             .get()
             .await()
 
-        val totalPostCount = salePostQuery.size() + swapPostQuery.size()
-        return totalPostCount
+        return salePostQuery.size() + swapPostQuery.size()
     }
 
     suspend fun getUserLibraryImages(userIdx: String): Map<String, String> {
@@ -44,14 +43,14 @@ class LibraryRepository {
                 val saleBookImgList = document.get("saleBookImg") as? List<String>
                 val swapBookImgList = document.get("swapBookImg") as? List<String>
 
-                if (saleBookImgList != null) {
-                    for (imageUrl in saleBookImgList) {
+                saleBookImgList?.let { urls ->
+                    urls.forEach { imageUrl ->
                         imageUrls[imageUrl] = document.id
                     }
                 }
 
-                if (swapBookImgList != null) {
-                    for (imageUrl in swapBookImgList) {
+                swapBookImgList?.let { urls ->
+                    urls.forEach { imageUrl ->
                         imageUrls[imageUrl] = document.id
                     }
                 }
@@ -93,6 +92,19 @@ class LibraryRepository {
                 .collection("Friends")
                 .document(friendIdx)
                 .delete()
+                .await()
+        } catch (e: Exception) {
+            // 에러 처리
+        }
+    }
+
+    suspend fun addFriend(userIdx: String, friendData: FriendDataClass) {
+        try {
+            firestore.collection("Users")
+                .document(userIdx)
+                .collection("Friends")
+                .document(friendData.userIdx)
+                .set(friendData)
                 .await()
         } catch (e: Exception) {
             // 에러 처리
