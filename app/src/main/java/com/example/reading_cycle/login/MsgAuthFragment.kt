@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.concurrent.TimeUnit
 
 class MsgAuthFragment : Fragment() {
@@ -205,9 +206,28 @@ class MsgAuthFragment : Fragment() {
             if (userData != null) {
                 userNickname = userData.userNickname // Assuming userData contains userNickname
 
+                // 위치 정보를 확인하기 위해 Firestore에서 위치를 조회
+                val db = FirebaseFirestore.getInstance()
+                val locationRef = db.collection("Users").document(userIdx).collection("location").document("currentLocation")
+
+                locationRef.get()
+                    .addOnSuccessListener { document ->
+                        if (document.exists()) {
+                            // 위치 정보가 있는 경우 PostMainFragment로 이동
+                            (activity as MainActivity).replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true)
+                        } else {
+                            // 위치 정보가 없는 경우 LocSetFragment로 이동
+                            (activity as MainActivity).replaceFragment(MainActivity.LOC_SET_FRAGMENT, true)
+                        }
+                        showWelcomeSnackbar(userNickname)
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e(TAG, "Error checking user location", e)
+                        // 위치 정보를 확인하는 데 실패한 경우 LocSetFragment로 이동
+                        (activity as MainActivity).replaceFragment(MainActivity.LOC_SET_FRAGMENT, true)
+                        showWelcomeSnackbar(userNickname)
+                    }
                 // 사용자 존재 시 MainActivity의 프래그먼트 교체 메소드 호출
-                (activity as MainActivity).replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true)
-                showWelcomeSnackbar(userNickname)
             } else {
                 // 사용자 없음 시 MainActivity의 프래그먼트 교체 메소드 호출
                 (activity as MainActivity).replaceFragment(MainActivity.SET_PROFILE_FRAGMENT, true)
@@ -217,6 +237,7 @@ class MsgAuthFragment : Fragment() {
             Log.e(TAG, "Failed to check user existence", exception)
         }
     }
+
 
     private fun showWelcomeSnackbar(userNickname: String?) {
         val message = if (userNickname != null) {

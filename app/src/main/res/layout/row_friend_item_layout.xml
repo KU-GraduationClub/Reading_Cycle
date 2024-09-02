@@ -6,99 +6,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textLibraryMyUser"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:text="@{viewModel.userData.value?.get(0)?.nickname ?: `No Data`}"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/imgFriendProfile"
-        app:layout_constraintTop_toTopOf="@+id/imgFriendProfile" />
-
-    <TextView
-        android:id="@+id/textLibraryMyUserMemo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginBottom="1dp"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:text="@{viewModel.userData.value?.get(0)?.memo ?: `No Memo`}"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
-        app:layout_constraintStart_toStartOf="@+id/textLibraryMyUser"
-        app:layout_constraintTop_toBottomOf="@+id/textLibraryMyUser"
-        tools:ignore="HardcodedText,SmallSp" />
-
     <ImageView
         android:id="@+id/imgFriendProfile"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/border_add_post_green"
-        android:padding="0.7dp"
-        app:layout_constraintStart_toEndOf="@+id/imgFriendStar"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imgBtnFriendMain"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="15dp"
-        android:background="@color/background"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imgFriendProfile"
-        app:srcCompat="@drawable/baseline_settings_24"
-        android:contentDescription="@string/todo" />
-
-    <ImageView
-        android:id="@+id/imgFriendStar"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="10dp"
-        android:elevation="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textFrdUser"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textFrdUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/imgFriendProfile"
         app:layout_constraintTop_toTopOf="@+id/imgFriendProfile"
-        app:srcCompat="@drawable/round_star_24" />
+        app:layout_constraintBottom_toBottomOf="@+id/imgFriendProfile"
+        tools:text="User Name" />
 
     <View
         android:id="@+id/dividerRowFriend"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="#CAC3C3"
-        android:elevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgFriendProfile" />
-
-    <Button
-        android:id="@+id/BtnSetProfile"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:backgroundTint="@color/theme_brown"
-        android:elevation="0dp"
-        android:fontFamily="@font/soyo_maple_regular"
-        android:gravity="center"
-        android:padding="1dp"
-        android:text="프로필"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="13dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgFriendStar"
-        app:layout_constraintEnd_toStartOf="@+id/imgBtnFriendMain"
-        app:layout_constraintTop_toTopOf="@+id/imgFriendStar"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

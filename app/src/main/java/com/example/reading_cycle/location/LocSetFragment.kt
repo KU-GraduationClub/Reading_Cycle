@@ -25,6 +25,7 @@ import com.example.reading_cycle.location.model.LocDataClass
 import com.example.reading_cycle.location.vm.LocViewModel
 import com.example.reading_cycle.location.vm.LocViewModelFactory
 import com.example.reading_cycle.location.repository.LocRepository
+import com.example.reading_cycle.post.PostMainFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -93,6 +94,11 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         //binding.nowlocationLocSet.setOnClickListener {
         //    requestLocationPermission()
         // }
+
+        // 툴바의 뒤로 가기 버튼 설정
+        binding.toolbarLayoutLocSet.setNavigationOnClickListener {
+            mainActivity.removeFragment(MainActivity.LOC_SET_FRAGMENT)
+        }
 
         // ViewModel에서 사용자 ID를 받아오는 코드 수정
         val userIdx = userViewModel.userIdx
@@ -216,7 +222,7 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
-        val geocoder = Geocoder(context, Locale.KOREA)
+        val geocoder = Geocoder(context, Locale.getDefault())
         var addressText = ""
         try {
             val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
@@ -264,6 +270,7 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
                 Log.d("LocSetFragment", "Firestore location updated successfully.")
                 Toast.makeText(requireContext(), "위치가 업데이트되었습니다.", Toast.LENGTH_SHORT).show()
                 disableFinishButton()
+                navigateToPostMainFragment() // 위치 저장 성공 시 PostMainFragment로 이동
             }
             .addOnFailureListener { e ->
                 Log.e("LocSetFragment", "Failed to update Firestore location: ${e.message}", e)
@@ -286,6 +293,7 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
             )
         }
     }
+
     private fun checkAndFetchLocation(latitude: Double, longitude: Double) {
         val userId = userViewModel.userIdx
         if (userId.isNullOrEmpty()) {
@@ -310,8 +318,10 @@ class LocSetFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
-
+    private fun navigateToPostMainFragment() {
+        // PostMainFragment로 전환
+        (activity as MainActivity).replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true)
+    }
 
     private fun disableFinishButton() { // 저장 버튼 비활성화 함수
         binding.btnLocSetFinish.isEnabled = false

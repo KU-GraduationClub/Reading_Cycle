@@ -79,9 +79,6 @@ class MainActivity : AppCompatActivity() {
         // 기본 ActionBar 숨깁니다.
         supportActionBar?.hide()
 
-        // 사용자의 위치 정보 확인 후 Fragment 전환
-        checkUserLocationAndNavigate()
-
         replaceFragment(POST_MAIN_FRAGMENT, false, null)
 
         // 네비게이션 바 아이템 클릭 이벤트 처리
@@ -94,33 +91,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.bottom_set -> replaceFragment(LIST_SETTINGS_FRAGMENT, true)
             }
             true
-        }
-    }
-    
-    private fun checkUserLocationAndNavigate() {
-        val userId = userViewModel.userIdx
-
-        if (userId != null) {
-            val db = FirebaseFirestore.getInstance()
-            val locationRef = db.collection("Users").document(userId).collection("location")
-
-            locationRef.get()
-                .addOnSuccessListener { documents ->
-                    if (documents.isEmpty) {
-                        // 위치 정보가 없는 경우
-                        Log.d("MainActivity", "No user location found, navigating to LocSetFragment")
-                        replaceFragment(LOC_SET_FRAGMENT, false)
-                    }
-                }
-                .addOnFailureListener { e ->
-                    Log.e("MainActivity", "Error fetching user location", e)
-                    // 오류가 발생한 경우에도 LocSetFragment로 이동
-                    replaceFragment(LOC_SET_FRAGMENT, false)
-                }
-        } else {
-            // 사용자 ID가 없을 경우(로그인되지 않음)
-            Log.d("MainActivity", "No user ID found, navigating to LoginMainFragment")
-            replaceFragment(LOGIN_MAIN_FRAGMENT, false)
         }
     }
 
@@ -164,7 +134,9 @@ class MainActivity : AppCompatActivity() {
             }
             LIBRARY_MAIN_FRAGMENT -> {
                 mainBinding.bottomNavigation.menu.findItem(R.id.bottom_lib).isChecked = true
-                LibraryMainFragment()
+                LibraryMainFragment().apply {
+                    arguments = bundle
+                }
             }
             FRIEND_MAIN_FRAGMENT -> {
                 mainBinding.bottomNavigation.menu.findItem(R.id.bottom_frd).isChecked = true
@@ -236,8 +208,21 @@ class MainActivity : AppCompatActivity() {
         }
         replaceFragment(SALE_POST_FRAGMENT, true, bundle)
     }
+
+    fun navigateToLibraryFragment(userId: String) {
+        val bundle = Bundle().apply {
+            putString("userId", userId)
+            Log.d("MainActivity", "Navigating to LibraryFragment with documentId: $userId")
+        }
+        replaceFragment(LIBRARY_MAIN_FRAGMENT, true, bundle)
+    }
 }
 
 class UserViewModel : ViewModel() {
     var userIdx: String? = null
+
+    init {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        userIdx = currentUser?.uid
+    }
 }

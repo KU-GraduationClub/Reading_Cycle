@@ -5,6 +5,5 @@ data class LoginDataClass(
     var userNickname: String = "",
     var userPhoneNumber: String = "",
     var userProfileImage: String = "",
-    var userLocation: String = "",
     val regDate: String = ""
 )

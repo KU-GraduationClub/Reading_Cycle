@@ -8,29 +8,74 @@ import kotlinx.coroutines.withContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.reading_cycle.library.repository.LibraryRepository
+import com.example.reading_cycle.friend.model.FriendDataClass
 
 class LibraryViewModel(private val repository: LibraryRepository) : ViewModel() {
 
-    // 이미지를 저장할 LiveData
     private val _images = MutableLiveData<Map<String, String>>()
     val images: LiveData<Map<String, String>> get() = _images
 
+    private val _followingList = MutableLiveData<List<FriendDataClass>>()
+    val followingList: LiveData<List<FriendDataClass>> get() = _followingList
+
+    private val _isFollowing = MutableLiveData<Boolean>()
+    val isFollowing: LiveData<Boolean> get() = _isFollowing
+
     fun fetchUserLibraryImages(userIdx: String) {
-        // 코루틴 시작
         viewModelScope.launch {
             try {
-                // `withContext`를 사용하여 IO 스레드에서 실행
                 val imageList = withContext(Dispatchers.IO) {
                     repository.getUserLibraryImages(userIdx)
                 }
-                // List<Pair<String, String>>를 Map<String, String>으로 변환
-                val imageUrlToDocumentIdMap = imageList.toMap()
-                // 결과를 LiveData에 저장
-                _images.value = imageUrlToDocumentIdMap
+                _images.value = imageList
             } catch (exception: Exception) {
                 // 에러 처리
-                // 예: 로그를 출력하거나, 사용자에게 알림을 표시하는 방법 등을 사용할 수 있습니다.
-                // Log.e("LibraryViewModel", "Error fetching images", exception)
+            }
+        }
+    }
+
+    fun getFollowingList(userIdx: String) {
+        viewModelScope.launch {
+            try {
+                val followingList = withContext(Dispatchers.IO) {
+                    repository.getFollowingList(userIdx)
+                }
+                _followingList.value = followingList
+            } catch (exception: Exception) {
+                // 에러 처리
+            }
+        }
+    }
+
+    fun checkIfFollowing(userIdx: String, currentUserIdx: String) {
+        viewModelScope.launch {
+            try {
+                val followingList = repository.getFollowingList(currentUserIdx)
+                _isFollowing.value = followingList.any { it.userIdx == userIdx }
+            } catch (exception: Exception) {
+                // 에러 처리
+            }
+        }
+    }
+
+    fun toggleFollow(userIdx: String, currentUserIdx: String, userNickname: String, userProfileImage: Any) {
+        viewModelScope.launch {
+            try {
+                val following = _isFollowing.value == true
+                if (following) {
+                    repository.removeFriend(currentUserIdx, userIdx)
+                } else {
+                    val friendData = FriendDataClass(
+                        userIdx = userIdx,
+                        userNickname = userNickname,
+                        userProfileImage = userProfileImage,
+                        isFollowing = true
+                    )
+                    repository.addFriend(currentUserIdx, friendData)
+                }
+                _isFollowing.value = !following
+            } catch (exception: Exception) {
+                // 에러 처리
             }
         }
     }

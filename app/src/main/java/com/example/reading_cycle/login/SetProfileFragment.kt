@@ -71,7 +71,7 @@ class SetProfileFragment : Fragment() {
                         val bundle = Bundle().apply {
                             putString("userIdx", userIdx)
                         }
-                        mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, true, bundle)
+                        mainActivity.replaceFragment(MainActivity.LOC_SET_FRAGMENT, true, bundle)
                     } else {
                         Log.e(TAG, "User index is null, cannot proceed to POST_MAIN_FRAGMENT.")
                     }
@@ -94,7 +94,6 @@ class SetProfileFragment : Fragment() {
                                 userNickname = userNickname,
                                 userPhoneNumber = userPhoneNumber,
                                 userProfileImage = imageUrl,
-                                userLocation = "",
                                 regDate = currentDate
                             )
                             loginViewModel.uploadUserData(userData)
@@ -106,7 +105,6 @@ class SetProfileFragment : Fragment() {
                             userNickname = userNickname,
                             userPhoneNumber = userPhoneNumber,
                             userProfileImage = "",
-                            userLocation = "",
                             regDate = currentDate
                         )
                         loginViewModel.uploadUserData(userData)

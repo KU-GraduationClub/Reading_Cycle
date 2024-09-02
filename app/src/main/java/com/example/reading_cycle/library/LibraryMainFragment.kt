@@ -1,11 +1,9 @@
 package com.example.reading_cycle.library
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,14 +14,19 @@ import com.example.reading_cycle.MainActivity
 import com.example.reading_cycle.R
 import com.example.reading_cycle.databinding.FragmentLibraryMainBinding
 import com.example.reading_cycle.library.repository.LibraryRepository
+import com.example.reading_cycle.library.vm.LibraryViewModel
+import com.example.reading_cycle.library.vm.LibraryViewModelFactory
 import kotlinx.coroutines.launch
-import com.example.reading_cycle.login.model.LoginDataClass
 
 class LibraryMainFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var fragmentLibraryMainBinding: FragmentLibraryMainBinding
-    private lateinit var libraryRepository: LibraryRepository
+    private lateinit var libraryViewModel: LibraryViewModel
+    private lateinit var repository: LibraryRepository
+
+    private var userId: String? = null
+    private var isFollowing: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,20 +34,44 @@ class LibraryMainFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentLibraryMainBinding = FragmentLibraryMainBinding.inflate(inflater, container, false)
-        libraryRepository = LibraryRepository() // Repository 초기화
+        mainActivity.hideBottomNavigation()
 
-        // ViewModel에서 userIdx 가져오기
-        val userIdx = mainActivity.userViewModel.userIdx
-        Log.d("LibraryMainFragment", "User Index: $userIdx")
+        repository = LibraryRepository()
+        val viewModelFactory = LibraryViewModelFactory(repository)
+        libraryViewModel = ViewModelProvider(this, viewModelFactory).get(LibraryViewModel::class.java)
 
         setupToolbar()
         setupRecyclerView()
 
-        // 사용자 데이터와 이미지 로딩
-        userIdx?.let {
+        userId = arguments?.getString("userId") ?: mainActivity.userViewModel.userIdx
+
+        userId?.let {
             lifecycleScope.launch {
+                libraryViewModel.fetchUserLibraryImages(it)
                 fetchUserData(it)
-                fetchUserLibraryImages(it)
+                fetchUserPostCount(it)
+                libraryViewModel.checkIfFollowing(it, mainActivity.userViewModel.userIdx ?: "")
+            }
+        }
+
+        libraryViewModel.images.observe(viewLifecycleOwner) { imageUrlToDocumentIdMap ->
+            val adapter = LibraryMainAdapter(requireContext(), imageUrlToDocumentIdMap) { documentId ->
+                mainActivity.navigateToSalePostFragment(documentId)
+            }
+            fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = adapter
+        }
+
+        libraryViewModel.isFollowing.observe(viewLifecycleOwner) { isFollowing ->
+            this.isFollowing = isFollowing
+            updateFollowButtonState()
+        }
+
+        fragmentLibraryMainBinding.btnLibAdd.setOnClickListener {
+            userId?.let { userId ->
+                val userNickname = fragmentLibraryMainBinding.textLibraryMainUser.text.toString()
+                val userProfileImageUrl = fragmentLibraryMainBinding.imgLibraryMainProfile.tag as? String ?: ""
+
+                libraryViewModel.toggleFollow(userId, mainActivity.userViewModel.userIdx ?: "", userNickname, userProfileImageUrl)
             }
         }
 
@@ -52,17 +79,15 @@ class LibraryMainFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        // 타이틀 아이콘 작업
-        ContextCompat.getDrawable(requireContext(), R.drawable.baseline_sync_40)?.let {
-            fragmentLibraryMainBinding.toolbarLibraryMainTitle.setCompoundDrawablesWithIntrinsicBounds(
-                null, null, it, null
-            )
-        }
         fragmentLibraryMainBinding.toolbarLibraryMainTitle.compoundDrawablePadding =
             resources.getDimensionPixelSize(R.dimen.icon_text_padding)
         fragmentLibraryMainBinding.toolbarLibraryMainTitle.text = "라이브러리"
 
-        // 툴바 알림 메뉴 클릭 이벤트 처리
+        fragmentLibraryMainBinding.toolbarLayoutLibraryMain.setNavigationIcon(R.drawable.baseline_arrow_back_ios_28)
+        fragmentLibraryMainBinding.toolbarLayoutLibraryMain.setNavigationOnClickListener {
+            mainActivity.removeFragment(MainActivity.LIBRARY_MAIN_FRAGMENT)
+        }
+
         fragmentLibraryMainBinding.toolbarLayoutLibraryMain.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.libraryMenuItemNotify -> {
@@ -75,39 +100,52 @@ class LibraryMainFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        // RecyclerView에 사용될 GridLayoutManager 설정
         val layoutManager = GridLayoutManager(requireContext(), 3)
         fragmentLibraryMainBinding.recyclerViewLibraryMain.layoutManager = layoutManager
     }
 
-    private suspend fun fetchUserData(userIdx: String) {
-        val userData = libraryRepository.getUserData(userIdx)
+    private fun fetchUserData(userIdx: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val userData = repository.getUserData(userIdx) // UserData 객체를 가져옴
+            userData?.let { data ->
+                val userProfileImageUrl = data.userProfileImage
+                val userNickname = data.userNickname
 
-        // 사용자 프로필 이미지와 닉네임을 UI에 설정
-        userData?.let { data ->
-            Glide.with(this)
-                .load(data.userProfileImage)
-                .into(fragmentLibraryMainBinding.imgLibraryMainProfile)
+                // Glide를 사용하여 이미지 로드
+                Glide.with(this@LibraryMainFragment)
+                    .load(userProfileImageUrl)
+                    .circleCrop()
+                    .into(fragmentLibraryMainBinding.imgLibraryMainProfile)
 
-            fragmentLibraryMainBinding.textLibraryMainUser.text = data.userNickname
+                // 프로필 이미지 URL을 tag로 저장
+                fragmentLibraryMainBinding.imgLibraryMainProfile.tag = userProfileImageUrl
 
-            // 로그인된 사용자와 라이브러리 주인 사용자 비교하여 버튼 숨기기
-            if (userIdx == mainActivity.userViewModel.userIdx) {
-                fragmentLibraryMainBinding.btnLibAdd.visibility = View.GONE
-                fragmentLibraryMainBinding.btnLibChat.visibility = View.GONE
+                // 사용자 닉네임을 UI에 설정
+                fragmentLibraryMainBinding.textLibraryMainUser.text = userNickname
+
+                if (data.userIdx == mainActivity.userViewModel.userIdx) {
+                    fragmentLibraryMainBinding.btnLibAdd.visibility = View.GONE
+                    fragmentLibraryMainBinding.btnLibAdd.isEnabled = false
+                } else {
+                    fragmentLibraryMainBinding.btnLibAdd.visibility = View.VISIBLE
+                    fragmentLibraryMainBinding.btnLibAdd.isEnabled = true
+                }
             }
         }
     }
 
-    private suspend fun fetchUserLibraryImages(userIdx: String) {
-        val imageUrlToDocumentIdMap = libraryRepository.getUserLibraryImages(userIdx)
+    private suspend fun fetchUserPostCount(userIdx: String) {
+        val postCount = repository.getUserPostCount(userIdx)
+        fragmentLibraryMainBinding.textLibraryMainPostCount.text = "$postCount"
+    }
 
-        // Adapter 설정
-        val adapter = LibraryMainAdapter(requireContext(), imageUrlToDocumentIdMap) { documentId ->
-            // 클릭 시 처리할 작업
-            Toast.makeText(requireContext(), "Navigating to post: $documentId", Toast.LENGTH_SHORT).show()
-            mainActivity.navigateToSalePostFragment(documentId)
-        }
-        fragmentLibraryMainBinding.recyclerViewLibraryMain.adapter = adapter
+    private fun updateFollowButtonState() {
+        val buttonText = if (isFollowing) "팔로잉" else "팔로우"
+        val buttonColor = if (isFollowing) R.color.theme_green else R.color.white
+        val backgroundColor = if (isFollowing) R.color.white else R.color.theme_green
+
+        fragmentLibraryMainBinding.btnLibAdd.text = buttonText
+        fragmentLibraryMainBinding.btnLibAdd.setTextColor(ContextCompat.getColor(requireContext(), buttonColor))
+        fragmentLibraryMainBinding.btnLibAdd.backgroundTintList = ContextCompat.getColorStateList(requireContext(), backgroundColor)
     }
 }

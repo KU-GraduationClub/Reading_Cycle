@@ -28,7 +28,8 @@
             app:layout_constraintEnd_toEndOf="@id/dividerLocSet"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/toolbar_loc">
+            app:menu="@menu/toolbar_loc"
+            app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
 
             <TextView
                 android:id="@+id/toolbarTitleLocSet"
@@ -42,6 +43,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/theme_green"
                 android:textSize="16dp" />
+
 
 
         </com.google.android.material.appbar.MaterialToolbar>
@@ -91,7 +93,7 @@
     <TextView
         android:id="@+id/textLocSetNow"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
