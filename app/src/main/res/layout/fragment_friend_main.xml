@@ -78,7 +78,7 @@
                 android:layout_marginStart="13dp"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/soyo_maple_bold"
-                android:text="친구 수"
+                android:text="친구"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
