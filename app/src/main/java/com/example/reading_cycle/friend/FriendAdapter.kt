@@ -9,11 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.reading_cycle.R
-import com.example.reading_cycle.login.model.LoginDataClass
+import com.example.reading_cycle.friend.model.FriendDataClass
 
 class FriendAdapter(
     private val context: Context,
-    private val users: List<LoginDataClass>
+    private val users: List<FriendDataClass>
 ) : RecyclerView.Adapter<FriendAdapter.FriendViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {

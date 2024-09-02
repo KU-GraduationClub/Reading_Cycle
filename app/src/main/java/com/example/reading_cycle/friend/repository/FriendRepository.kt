@@ -3,7 +3,6 @@ package com.example.reading_cycle.friend.repository
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import com.example.reading_cycle.friend.model.FriendDataClass
-import com.example.reading_cycle.login.model.LoginDataClass
 
 class FriendRepository {
 

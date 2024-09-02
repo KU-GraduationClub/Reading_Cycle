@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
     private var newFragment: Fragment? = null
     val userViewModel: UserViewModel by viewModels()
-    val currentUser: FirebaseUser?
-        get() = FirebaseAuth.getInstance().currentUser
 
 
     companion object {
@@ -230,4 +228,8 @@ class MainActivity : AppCompatActivity() {
 
 class UserViewModel : ViewModel() {
     var userIdx: String? = null
+    init {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        userIdx = currentUser?.uid
+    }
 }
