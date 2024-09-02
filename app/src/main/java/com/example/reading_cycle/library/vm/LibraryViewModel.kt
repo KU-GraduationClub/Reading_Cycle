@@ -12,7 +12,6 @@ import com.example.reading_cycle.friend.model.FriendDataClass
 
 class LibraryViewModel(private val repository: LibraryRepository) : ViewModel() {
 
-    // 이미지를 저장할 LiveData
     private val _images = MutableLiveData<Map<String, String>>()
     val images: LiveData<Map<String, String>> get() = _images
 
@@ -25,8 +24,7 @@ class LibraryViewModel(private val repository: LibraryRepository) : ViewModel() 
                 val imageList = withContext(Dispatchers.IO) {
                     repository.getUserLibraryImages(userIdx)
                 }
-                val imageUrlToDocumentIdMap = imageList
-                _images.value = imageUrlToDocumentIdMap
+                _images.value = imageList
             } catch (exception: Exception) {
                 // 에러 처리
             }
@@ -51,6 +49,18 @@ class LibraryViewModel(private val repository: LibraryRepository) : ViewModel() 
             try {
                 withContext(Dispatchers.IO) {
                     repository.removeFriend(userIdx, friendIdx)
+                }
+            } catch (exception: Exception) {
+                // 에러 처리
+            }
+        }
+    }
+
+    fun addFriend(userIdx: String, friendData: FriendDataClass) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    repository.addFriend(userIdx, friendData)
                 }
             } catch (exception: Exception) {
                 // 에러 처리

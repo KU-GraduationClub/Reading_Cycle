@@ -9,12 +9,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.reading_cycle.R
-import com.example.reading_cycle.friend.model.FriendDataClass
 
 class FriendAdapter(
     private val context: Context,
-    private val userList: List<FriendDataClass>,
-    private val onProfileClick: (String) -> Unit
+    private val users: List<Map<String, Any>>
 ) : RecyclerView.Adapter<FriendAdapter.FriendViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
@@ -23,27 +21,24 @@ class FriendAdapter(
     }
 
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
-        val user = userList[position]
+        val user = users[position]
+        val userProfileImage = user["userProfileImage"] as? String
+        val userNickname = user["userNickname"] as? String
 
-        holder.itemView.setOnClickListener {
-            onProfileClick(user.userIdx)
-        }
-
-        // 프로필 이미지와 사용자 이름 업데이트
         Glide.with(context)
-            .load(user.userProfileImage)
+            .load(userProfileImage)
             .circleCrop()
-            .into(holder.imgProfile)
+            .into(holder.imgFriendProfile)
 
-        holder.txtUserName.text = user.userNickname
+        holder.textFrdUser.text = userNickname
     }
 
     override fun getItemCount(): Int {
-        return userList.size
+        return users.size
     }
 
     inner class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgProfile: ImageView = itemView.findViewById(R.id.imgFriendProfile)
-        val txtUserName: TextView = itemView.findViewById(R.id.textFrdUser)
+        val imgFriendProfile: ImageView = itemView.findViewById(R.id.imgFriendProfile)
+        val textFrdUser: TextView = itemView.findViewById(R.id.textFrdUser)
     }
 }

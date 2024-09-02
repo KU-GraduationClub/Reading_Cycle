@@ -24,14 +24,11 @@ class LibraryMainAdapter(
 
     override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
         val imageUrl = imageUrls[position]
-        // Glide를 사용하여 이미지 로드
         Glide.with(context)
             .load(imageUrl)
             .into(holder.imageView)
 
-        // 클릭 리스너 설정
         holder.itemView.setOnClickListener {
-            // 클릭된 이미지의 URL을 documentId로 사용
             imageUrlToDocumentIdMap[imageUrl]?.let { documentId ->
                 onItemClick(documentId)
             }

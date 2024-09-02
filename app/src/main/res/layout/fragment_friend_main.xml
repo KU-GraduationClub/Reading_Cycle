@@ -110,7 +110,7 @@
                 app:layout_constraintTop_toBottomOf="@id/textFriendMain" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewFriend"
+                android:id="@+id/recyclerViewFriends"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="35dp"
