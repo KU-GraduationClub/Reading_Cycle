@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="@id/dividerAddSalePost"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/toolbar_post"
+            app:menu="@menu/toolbar_add_post"
             app:navigationIcon="@drawable/baseline_arrow_back_ios_28">
 
             <LinearLayout

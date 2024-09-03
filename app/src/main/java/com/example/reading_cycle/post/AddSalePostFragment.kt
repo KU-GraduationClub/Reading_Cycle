@@ -1,5 +1,6 @@
 package com.example.reading_cycle.post
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,6 +21,9 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -39,12 +43,19 @@ import com.example.reading_cycle.post.vm.AddSalePostViewModel
 import com.example.reading_cycle.post.vm.AddSalePostViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.storage.FirebaseStorage
+import com.google.zxing.integration.android.IntentIntegrator
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.http.GET
+import retrofit2.http.Query
 import java.io.ByteArrayOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -59,6 +70,7 @@ class AddSalePostFragment : Fragment() {
     private var selectedBookState: BookState? = null
     private val selectedImages = mutableListOf<Bitmap>()
     private val userViewModel: UserViewModel by activityViewModels()
+    private lateinit var barcodeScannerLauncher: ActivityResultLauncher<Intent>
 
     private val cardViewIds = listOf(
         R.id.cardViewAddSalePostImg1,
@@ -71,6 +83,7 @@ class AddSalePostFragment : Fragment() {
     companion object {
         const val REQUEST_IMAGE_CAPTURE = 1001
         const val REQUEST_PICK_IMAGE = 1002
+        const val REQUEST_BARCODE_SCAN = 1003
     }
 
     override fun onCreateView(
@@ -138,13 +151,95 @@ class AddSalePostFragment : Fragment() {
             }
         }
 
+        // 메뉴 아이템 클릭 리스너 설정
+        fragmentAddSalePostBinding.toolbarLayoutAddSalePost.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.postMenuItemNotify -> {
+                    // 알림 메뉴 아이템 클릭 시 동작
+                    true
+                }
+                R.id.postMenuItemBarcodeScan -> {
+                    // 바코드 스캔 메뉴 아이템 클릭 시 동작
+                    openBarcodeScanner()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        barcodeScannerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            Log.d("BarcodeScanner", "Result code: ${result.resultCode}")
+            Log.d("BarcodeScanner", "Result data: ${result.data}")
+
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                try {
+                    // IntentIntegrator를 사용하여 스캔 결과를 파싱
+                    val scanResult = IntentIntegrator.parseActivityResult(
+                        Activity.RESULT_OK,
+                        result.resultCode,
+                        data
+                    )
+
+                    // scanResult 객체의 상태를 확인
+                    if (scanResult != null) {
+                        Log.d("BarcodeScanner", "ScanResult: $scanResult")
+                        Log.d("BarcodeScanner", "ScanResult contents: ${scanResult.contents}")
+
+                        // scanResult.contents가 null이 아닌지 확인
+                        if (scanResult.contents != null) {
+                            handleBarcodeResult(scanResult.contents)
+                        } else {
+                            showSnackbar("바코드 스캔 결과를 가져오는 데 실패했습니다.")
+                            Log.d("BarcodeScanner", "Scan result contents is null.")
+                        }
+                    } else {
+                        // Intent의 extras를 직접 확인
+                        val extras = data?.extras
+                        Log.d("BarcodeScanner", "Intent Extras: $extras")
+
+                        val scanContent = extras?.getString("SCAN_RESULT")
+                        if (scanContent != null) {
+                            handleBarcodeResult(scanContent)
+                        } else {
+                            showSnackbar("바코드 스캔 결과를 가져오는 데 실패했습니다.")
+                            Log.d("BarcodeScanner", "No scan result found in extras.")
+                        }
+                    }
+                } catch (e: Exception) {
+                    showSnackbar("바코드 스캔 결과를 처리하는 데 문제가 발생했습니다.")
+                    Log.e("BarcodeScanner", "Error processing scan result: ${e.message}")
+                }
+            } else {
+                showSnackbar("바코드 스캔이 취소되었습니다.")
+                Log.d("BarcodeScanner", "Scan result not OK. Result code: ${result.resultCode}")
+            }
+        }
         return fragmentAddSalePostBinding.root
+    }
+
+    // 바코드 스캐너 열기
+    private fun openBarcodeScanner() {
+        try {
+            Log.d("BarcodeScanner", "Opening barcode scanner")
+            val integrator = IntentIntegrator(requireActivity())
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+            integrator.setPrompt("Scan a barcode")
+            integrator.setCameraId(0)  // Use a specific camera of the device
+            integrator.setBeepEnabled(true)
+            integrator.setBarcodeImageEnabled(true)
+
+            val intent = integrator.createScanIntent()
+            barcodeScannerLauncher.launch(intent)
+        } catch (e: Exception) {
+            Log.e("BarcodeScanner", "Error opening barcode scanner: ${e.message}", e)
+            showSnackbar("바코드 스캐너를 열 수 없습니다.")
+        }
     }
 
     private fun handleCompleteButtonClick() {
         // 완료 버튼을 비활성화하여 중복 클릭을 방지
         fragmentAddSalePostBinding.btnAddSalePostComplete.isEnabled = false
-
         lifecycleScope.launch {
             try {
                 val saleBookData = collectInputData()
@@ -253,6 +348,7 @@ class AddSalePostFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Log.d("BarcodeScanner", "onActivityResult called with requestCode: $requestCode, resultCode: $resultCode")
         when (requestCode) {
             REQUEST_PICK_IMAGE -> {
                 if (resultCode == RESULT_OK) {
@@ -317,6 +413,154 @@ class AddSalePostFragment : Fragment() {
             }
         }
     }
+
+    private fun handleBarcodeResult(barcode: String) {
+        Log.d("BarcodeScan", "handleBarcodeResult called with barcode: $barcode")
+
+        // API 호출을 코루틴 내에서 실행
+        CoroutineScope(Dispatchers.Main).launch {
+            val bookInfo = fetchBookInfoFromBarcode(barcode)
+
+            if (bookInfo != null) {
+                Log.d("BarcodeScan", "Book info fetched successfully: $bookInfo")
+                // UI 업데이트 예: Snackbar 표시 및 입력 필드 업데이트
+                updateInputFields(bookInfo)
+            } else {
+                Log.d("BarcodeScan", "Failed to fetch book info")
+                showSnackbar("바코드 스캔 결과를 가져오는 데 실패했습니다.")
+            }
+        }
+    }
+
+    private fun updateInputFields(bookInfo: BookInfo) {
+        // UI를 업데이트하기 위해 메인 스레드에서 실행합니다.
+
+        // 로그: BookInfo 객체의 정보
+        Log.d("UpdateInputFields", "Updating input fields with BookInfo: $bookInfo")
+
+        // 제목 설정
+        fragmentAddSalePostBinding.edtAddSalePostTitle.setText(bookInfo.title)
+        Log.d("UpdateInputFields", "Title set to: ${bookInfo.title}")
+
+        // 저자 설정
+        val authorsText = bookInfo.authors?.joinToString(", ")
+        fragmentAddSalePostBinding.edtAddSalePostAuthor.setText(authorsText)
+        Log.d("UpdateInputFields", "Authors set to: $authorsText")
+
+        // 설명 설정
+        fragmentAddSalePostBinding.edtAddSalePostExplain.setText(bookInfo.description)
+        Log.d("UpdateInputFields", "Description set to: ${bookInfo.description}")
+
+        // coverUrl이 URL 문자열이라면 비트맵으로 변환 후 설정
+        bookInfo.coverUrl?.let { coverUrl ->
+            Log.d("UpdateInputFields", "Cover URL: $coverUrl")
+
+            lifecycleScope.launch {
+                val bitmap = fetchBitmapFromUrl(coverUrl)
+                if (bitmap != null) {
+                    fragmentAddSalePostBinding.imgAddSalePost1.setImageBitmap(bitmap)
+                    Log.d("UpdateInputFields", "Cover image set successfully")
+                } else {
+                    showSnackbar("책 표지 이미지를 로드하는 데 실패했습니다.")
+                    Log.e("UpdateInputFields", "Failed to load cover image from URL: $coverUrl")
+                }
+            }
+        } ?: run {
+            Log.d("UpdateInputFields", "No cover URL provided")
+        }
+    }
+
+    private suspend fun fetchBitmapFromUrl(urlString: String): Bitmap? = withContext(Dispatchers.IO) {
+        try {
+            val url = URL(urlString)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.doInput = true
+            connection.connect()
+            val input = connection.inputStream
+            BitmapFactory.decodeStream(input)
+        } catch (e: Exception) {
+            Log.e("FetchBitmap", "Error fetching bitmap from URL: ${e.message}")
+            null
+        }
+    }
+
+    private suspend fun fetchBookInfoFromBarcode(barcode: String): BookInfo? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = "https://openlibrary.org/api/books?bibkeys=ISBN:$barcode&format=json&jscmd=data"
+                val connection = URL(url).openConnection() as HttpURLConnection
+                connection.requestMethod = "GET"
+                connection.connect()
+
+                val responseCode = connection.responseCode
+                Log.d("APIResponse", "Response Code: $responseCode")
+
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                Log.d("APIResponse", "Response Body: $response")
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // JSON 파싱 및 BookInfo 객체 생성
+                    val bookInfo = parseBookInfo(response)
+                    bookInfo
+                } else {
+                    Log.e("APIResponse", "Failed with response code: $responseCode")
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e("FetchBookInfo", "Error fetching book info: ${e.message}")
+                null
+            }
+        }
+    }
+
+    private fun parseBookInfo(jsonString: String): BookInfo? {
+        return try {
+            val jsonObject = JSONObject(jsonString)
+            val bookData = jsonObject.keys().asSequence().firstOrNull()?.let { jsonObject.getJSONObject(it) }
+
+            val title = bookData?.optString("title")
+            val authors = bookData?.optJSONArray("authors")?.let { jsonArray ->
+                List(jsonArray.length()) { i ->
+                    jsonArray.getJSONObject(i).optString("name")
+                }
+            }
+            val coverObject = bookData?.optJSONObject("cover")
+            val coverUrl = coverObject?.optString("large")
+            val description = when {
+                bookData?.has("description") == true -> {
+                    bookData.optString("description") // 단순 문자열
+                        ?: bookData.optJSONObject("description")?.optString("value") // 객체의 value 필드
+                }
+                else -> null
+            }
+            Log.d("ParseBookInfo", "Description: $description")
+
+            BookInfo(title, authors, coverUrl, description)
+        } catch (e: Exception) {
+            Log.e("JSONParse", "Error parsing JSON: ${e.message}")
+            null
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_BARCODE_SCAN -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("BarcodeScan", "Camera permission granted")
+                    openBarcodeScanner() // 권한이 허용되면 스캐너 열기
+                } else {
+                    Log.w("BarcodeScan", "Camera permission denied")
+                    Toast.makeText(requireContext(), "Camera permission is required for scanning", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     // 촬영 / 갤러리 선택 이미지 크기 조정
     private fun resizeBitmap(bitmap: Bitmap): Bitmap {
         val targetWidth = fragmentAddSalePostBinding.imgAddSalePost1.width
@@ -483,4 +727,32 @@ class AddSalePostFragment : Fragment() {
     private fun showSnackbar(message: String) {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
+
+    // Retrofit 인터페이스
+    interface BookApiService {
+        @GET("api/books")
+        suspend fun getBookInfo(
+            @Query("bibkeys") bibkeys: String,
+            @Query("format") format: String = "json",
+            @Query("jscmd") jscmd: String = "data"
+        ): Map<String, BookInfoResponse>
+    }
+
+    data class BookInfoResponse(
+        val title: String,
+        val authors: List<Author>,
+        val number_of_pages: Int?,
+        val cover: Cover?
+    ) {
+        data class Author(val name: String)
+        data class Cover(val large: String?)
+    }
+
+    // 도서 정보 데이터 클래스
+    data class BookInfo(
+        val title: String?,
+        val authors: List<String>?,
+        val coverUrl: String?,
+        val description: String?
+    )
 }
